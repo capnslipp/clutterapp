@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<title><%= "OrgClut[2] #{controller.controller_name} #{controller.action_name} #{params[:id]}" %></title>
+	<%= javascript_include_tag :defaults %>
+</head>
+<body>
+
+<p style="color: #39f"><%= flash[:message] %></p>
+<p style="color: #93f"><%= flash[:notice] %></p>
+<p style="color: #933"><%= flash[:warning] %></p>
+
+<div style="float: right;">
+	<%= render :partial => 'users/user_bar' %>
+</div>
+
+
+<%= yield  %>
+
+
+</body>
+</html>
