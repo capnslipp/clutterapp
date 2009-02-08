@@ -1,0 +1,22 @@
+<h1>New Invite</h1>
+
+<% if logged_in? -%>
+	<p>Invite a friend using the form below. You have <%= current_users_invites_remaining -%> invitations left to share.</p>
+<% else -%>
+	<p>We are currently in private beta. Please submit your email address below, and we will notify you when we are ready to accept more users.</p>
+<% end -%>
+
+
+<% form_for @invite do |f| %>
+	<%= f.error_messages %>
+	<p>
+		<% if logged_in? -%>
+			<%= f.label :recipient_email %><br />
+		<% else -%>
+			<%= f.label :recipient_email %><br />
+		<% end -%>
+		<%= f.text_field :recipient_email %>
+	</p>
+	
+	<p><%= f.submit "Submit" %></p>
+<% end %>
