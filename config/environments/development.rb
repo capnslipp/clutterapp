@@ -22,11 +22,12 @@ require 'yp'
 
 
 if File.exists?(File.join(RAILS_ROOT,'tmp', 'debug.txt'))
-  #File.open('/Users/slippyd/.rdebugrc', File::CREAT|File::EXCL) do
-  #  puts 'set autoeval'
-  #  puts 'set autolist'
-  #  puts 'set autoreload'
-  #end unless File.exists?('/Users/slippyd/.rdebugrc')
+  File.open('/Users/slippyd/.rdebugrc', File::CREAT|File::EXCL) do
+    puts 'set autoeval'
+    puts 'set autolist'
+    puts 'set autoreload'
+  end unless File.exists?('/Users/slippyd/.rdebugrc')
+  
   require 'ruby-debug'
   Debugger.wait_connection = true
   Debugger.start_remote
