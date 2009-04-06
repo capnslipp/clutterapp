@@ -14,26 +14,39 @@
 #
 # And be sure to use new-style password hashing:
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
-development:
-  adapter: mysql
-  encoding: utf8
-  database: orgclut2_development
-  pool: 5
-  username: rails_dev
-  password: _fill_in_
-  host: localhost
 
-# Warning: The database defined as "test" will be erased and
-# re-generated from your development database when you run "rake".
-# Do not set this db to the same as development or production.
-test:
+
+## Defaults
+
+defaults: &silver-bullet-mamp
   adapter: mysql
   encoding: utf8
-  database: orgclut2_test
-  pool: 5
-  username: rails_dev
+  socket: /Applications/MAMP/tmp/mysql/mysql.sock
+  username: root
   password: _fill_in_
   host: localhost
+  timeout: 5000
+
+defaults: &silver-bullet-xampp
+  adapter: mysql
+  encoding: utf8
+  socket: /Applications/xampp/xamppfiles/var/mysql/mysql.sock
+  username: root
+  password: _fill_in_
+  host: localhost
+  timeout: 5000
+
+
+# Environments
+
+development:
+  database: orgclut2_development
+  <<: *silver-bullet-xampp
+
+# Warning: The database defined as "test" will be erased and re-generated from your development database when you run "rake". Do not set this db to the same as development or production.
+test:
+  database: orgclut2_test
+  <<: *silver-bullet-xampp
 
 production:
   adapter: mysql
@@ -41,5 +54,5 @@ production:
   database: orgclut2
   pool: 5
   username: orgclut2
-  password:
+  password: _fill_in_
   host: localhost
