@@ -1,0 +1,287 @@
+html {
+	background-color: #fff;
+	color: #000;
+}
+
+body {
+	font-size: 12px;
+	line-height: 1.25;
+	font-family: Helvetica, Arial, sans-serif;
+	margin: 8px;
+}
+
+a { color: #000; }
+a:hover { color: #fff; background-color: #000; }
+
+h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; }
+h1 { font-size: 2.25em; }
+h2 { font-size: 1.625em; }
+h3 { font-size: 1.5em; }
+h4 { font-size: 1.375em; }
+h5 { font-size: 1.25em; }
+h6 { font-size: 1.125em; }
+
+input[type="checkbox"] { margin-top: -1em !important; /* for Firefox */ }
+
+
+/* general-purpose: box */
+
+.box {
+	background: #ccc;
+	border: 1px solid #999;
+}
+
+
+/* flash messages, notices, and warnings */
+
+.flash.message { color: #39f; }
+.flash.notice { color: #ff3; }
+.flash.warning { color: #f66; }
+
+
+/* item list (old) */
+
+#base-item-text { margin: -4px; border: 2px solid transparent; }
+#base-item-text.hover { border-color: #39f; background: #9cf; }
+
+/*ul { margin: 0; padding: 0; padding-left: 2em; }
+li { margin: 0; padding: 0; }*/
+
+#main-list > .main-list-wrap > ul.main-list {
+	border: none;
+	padding-left: 0;
+}
+
+ul.main-list {
+	border-left: 1px solid #eee;
+	padding-left: 2em;
+	margin-left: -1em;
+}
+li.main-item {
+	list-style-type: inherit;
+	margin-left: 1em;
+	/*clear: left;*/ /* clear was originally needed for keeping floating item content from destroying the view; this shouldn't be possible eventually */
+}
+li.main-item > .body {
+	font-size: 1.0em; font-weight: normal;
+	color: #000;
+}
+
+#main-list li.main-item.sub.group { margin-left: 0; }
+#main-list li.main-item.sub.group > .body > .content {
+	font-size: 1.15em; font-weight: bold;
+	color: #111;
+}
+
+ul.main-list.group { padding-left: 0; margin-left: 0; }
+li.main-item.group { list-style-type: none; margin-left: 0; }
+li.main-item.group > .body > .content {
+	font-size: 1.625em; font-weight: bold;
+	color: #666;
+	/*margin-top: 0.5em;*/
+}
+
+ul.main-list.group ul.main-list.group { padding-left: 2em; }
+li.main-item.group li.main-item.group { list-style-type: none; margin-left: 0; }
+li.main-item.group li.main-item.group > .body > .content {
+	font-size: 1.5em; font-weight: bold;
+	color: #c20;
+}
+
+/*ul.main-list.group ul.main-list.group ul.main-list.group { padding-left: 2em; }
+li.main-item.group li.main-item.group li.main-item.group { list-style-type: none; margin-left: 0; }*/
+li.main-item.group li.main-item.group li.main-item.group > .body > .content {
+	font-size: 1.375em; font-weight: bold;
+	color: #5e5e5e;
+	/*margin-top: 0;*/
+}
+
+/*ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group { padding-left: 2em; }
+li.main-item.group li.main-item.group li.main-item.group li.main-item.group { list-style-type: none; margin-left: 0; }*/
+li.main-item.group li.main-item.group li.main-item.group li.main-item.group > .body > .content {
+	font-size: 1.25em; font-weight: bold;
+	/*margin-top: 0;*/
+	color: #c20;
+}
+
+/*ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group { padding-left: 2em; }
+li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group { list-style-type: none; margin-left: 0; }*/
+li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group > .body > .content {
+	font-size: 1.125em; font-weight: bold;
+	color: #555;
+	/*margin-top: 0;*/
+}
+
+/*ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group { padding-left: 2em; }
+li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group { list-style-type: none; margin-left: 0; }*/
+li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group > .body > .content {
+	font-size: 1.0em; font-weight: bold;
+	/*margin-top: 0;*/
+	color: #c20;
+}
+
+/*ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group { padding-left: 2em; }
+li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group { list-style-type: none; margin-left: 0; }*/
+li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group li.main-item.group > .body > .content {
+	font-size: 1.0em; font-weight: bold;
+	/*margin-top: 0;*/
+	color: #4d4d4d;
+}
+
+li.main-item > .body {
+	margin-bottom: 0.25em;
+	margin: -4px;
+	border: 2px solid transparent;
+	position: relative; /* for .buttons */
+}
+li.main-item > .body.hover { border-color: #39f; background: #9cf; }
+
+.main-item .buttons {
+	position: absolute;
+	width: 14em;
+	left: -14em; top: 0;
+	background: #eee;
+	border: 1px solid #ccc;
+	direction: rtl; text-align: right;
+}
+.main-item .buttons > img.icon { height: 1.5em; width: 1.5em; line-height: 1em; vertical-align: middle; cursor: pointer; } /* should be at least line-height */
+.main-item .buttons > img, .main-item .buttons > a { white-space: nowrap; }
+
+
+.main-item div.checkbox { display: inline; }
+.main-item div.checkbox > input { display: inline; margin: 1px; }
+
+#main-list li.main-item.checkbox { margin-left: 0; }
+ul.main-list.checkbox { padding-left: 0; margin-left: 0; }
+li.main-item.checkbox { list-style-type: none; margin-left: 0; }
+ul.main-list ul.main-list.checkbox { padding-left: 2em; }
+li.main-item li.main-item.checkbox { list-style-type: none; margin-left: 0; }
+
+.main-item.checkbox > .body > .content { display: inline; }
+
+.main-item.disabled > .body > .content, .main-item.disabled > .body > .checkbox { text-decoration: line-through; opacity: 0.5; }
+
+.main-item .trimmed {
+	opacity: 0.25;
+}
+
+#item-area {
+	margin-left: 17em;
+}
+
+
+/* topbar */
+
+#topbar {
+	background: #666;
+	margin: -8px -8px 8px -8px;
+	height: 24px;
+}
+
+#topbar, #topbar a {
+	color: #fff;
+}
+
+/* contain-float-after */
+#topbar:after { content: ""; display: block; height: 0; clear: both; visibility: hidden; /* (FF, S2, O9) */ }
+
+#topbar > .logo {
+	float: left;
+	background: #c20;
+	padding: 4px;
+	padding-right: 6px;
+	font-size: 16px;
+	height: 16px;
+}
+
+#topbar > .logo .badge.box {
+	display: inline-block;
+	position: relative;
+	top: -0.5em;
+	font-size: 0.75em;
+	width: 1em;
+	height: 1em;
+	margin-left: 0.125em;
+	text-align: center;
+	/*border-color: #444;
+	background-color: #fff;*/
+	border-color: #d00;
+	background-color: #f42;
+	color: #000;
+}
+
+#topbar > .content {
+	float: left;
+	position: relative;
+	z-index: 1;
+	padding: 4px;
+}
+
+#topbar > .corner {
+	float: right;
+	position: relative;
+	z-index: 1;
+	padding: 4px;
+}
+
+
+/* scope sidebar and list */
+
+/* scope sidebar */
+#scope-box {
+	float: left; clear: left;
+	width: 15em;
+	margin: 1em;
+}
+/* root-level scope-list */
+#scope-list > ul.scope-list {
+	margin-left: 0;
+	border: none;
+	padding-left: 0.5em; /* 0em - scope-item's indent */
+}
+
+/* all nested scope-lists */
+ul.scope-list {
+	margin-left: -0.5em; /* 0em + scope-item's indent */
+	border-left: 1px solid #eee;
+	padding-left: 1.5em; /* 1em - scope-item's indent */
+}
+ul.scope-list > li.scope-item {
+	list-style-type: none;
+	margin-left: 0;
+	text-indent: -0.5em;
+}
+.scope-list > .scope-item > .body { font-size: 1.0em; font-weight: bold; }
+.scope-list > .scope-item > .body * { color: #666; }
+.scope-list > .scope-item.current > .body { color: #c20; }
+
+
+#sidebar-right {
+	float: right; clear: right;
+	position: relative; z-index: 1;
+}
+
+
+/* pile list */
+
+#pile-box {
+	float: left; clear: left;
+	width: 15em;
+	margin: 1em;
+}
+
+#pile-box > .pile { font-weight: bold; color: #666; }
+#pile-box > .current.pile { color: #c20; }
+#pile-box > .action {}
+
+
+#view-options-box {
+	float: left; clear: left;
+	width: 15em;
+	margin: 1em;
+}
+
+
+/* user-bar */
+
+#user-bar-greeting, #user-bar-action, #user-bar-greeting form { display: inline; }

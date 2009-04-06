@@ -1,0 +1,27 @@
+/* CSS effects file for slippyd.com (version 2)
+ * 
+ * author: Slippy Douglas <{ES-EL-EYE-PEE-PEE-WHY-DEE} -webdesign-2 {at} {['d','y','p','p','i','l','s'].reverse.join} .com>
+ * creation date: 2007-06-02
+ */
+
+
+/* @group float containing methods */
+.contain-float-overflow-zoom { overflow: auto; zoom: 1; /* (FF, IE5.5-7, S2, O9) */ }
+.contain-float-overflow-width { overflow: auto; width: 100%; /* (FF, IE5-7, S2, O9) */ }
+
+.contain-float-after:after { content: ""; display: block; height: 0; clear: both; visibility: hidden; /* (FF, S2, O9) */ }
+
+/* after/inline-block (FF, IE5.5-7, S2, O9) */
+.contain-float-after-inline-block:after { content: ""; display: block; height: 0; clear: both; visibility: hidden; }
+.contain-float-after-inline-block { display: inline-block; }
+.contain-float-after-inline-block { display: block; }
+
+/* after/inline-block/haslayout/IE Mac (FF, IE5-7, IEMac, S2, O9) */
+.contain-float-after-inline-block-haslayout-iemac:after { content: ""/* "."? */; display: block; height: 0; clear: both; visibility: hidden; }
+.contain-float-after-inline-block-haslayout-iemac { display: inline-block; _height: 1%; }
+/* IE Mac hide \*/
+.contain-float-after-inline-block-haslayout-iemac { display: block; }
+/* end IE Mac hide */
+/* @end */
+
+.full-height { height: 100%; /*expression(this.parentNode.offsetHeight + 'px');*//* expression to fix IE bug; maybe use scrollHeight, clientHeight, and/or offestParent if causing problems? */ }
