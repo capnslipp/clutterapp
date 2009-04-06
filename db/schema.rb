@@ -13,11 +13,11 @@ ActiveRecord::Schema.define(:version => 20090208061008) do
 
   create_table "invites", :force => true do |t|
     t.integer  "sender_id"
-    t.string   "recipient_email", :default => "", :null => false
-    t.string   "token",           :default => "", :null => false
+    t.string   "recipient_email", :null => false
+    t.string   "token",           :null => false
     t.datetime "sent_at"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   create_table "nodes", :force => true do |t|
