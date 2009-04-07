@@ -1,0 +1,10 @@
+<li>
+	<div><%= h @node.id %></div>
+	<% unless @children.empty? -%>
+ 		<ul>
+			<% @children.each do |child| -%>
+				<%= render_cell :node, :show, :node => child %>
+			<% end -%>
+		</ul>
+	<% end -%>
+</li>
