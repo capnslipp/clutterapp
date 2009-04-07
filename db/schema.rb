@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090208061008) do
+ActiveRecord::Schema.define(:version => 20090407034501) do
 
   create_table "invites", :force => true do |t|
     t.integer  "sender_id"
@@ -24,6 +24,13 @@ ActiveRecord::Schema.define(:version => 20090208061008) do
     t.integer  "parent_id"
     t.integer  "lft"
     t.integer  "rgt"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "piles", :force => true do |t|
+    t.integer  "owner_id"
+    t.integer  "root_node_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

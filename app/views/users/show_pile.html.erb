@@ -1,0 +1,5 @@
+<% unless @root_node.nil? -%>
+	<ul>
+		<%= render_cell :node, :show, :node => @root_node %>
+	</ul>
+<% end -%>

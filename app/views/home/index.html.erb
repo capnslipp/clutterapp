@@ -1,11 +1,5 @@
-<h6>Throw away your anti-depressants. It's high time you organize your life with OrgClut.</h6>
-
-<p>Welcome to Organized Clutter. If you have an account already, you can sign in to the right. Otherwise, you can <%= link_to 'sign up', :controller => 'invites', :action => 'new' %> to be invited when we're ready for you.</p>
-
-<p>Need support? Considering this in development by an army of one, your best bet is to talk to or <a href="ma&#105;lt&#111;:s&#108;ip&#112;&#121;&#100;.o%72g%63&#108;ut2@&#54;b%69&#116;&#116;.%63&#111;&#109;">e-mail</a> your buddy Slippy.</p>
-
-<ul>
-	<% Node.roots.each do |root| -%>
-		<%= render_cell :node, :show, :node => root %>
-	<% end -%>
-</ul>
+<% if logged_in? -%>
+	<%= render :partial => 'user_home' %>
+<% else -%>
+	<%= render :partial => 'intro' %>
+<% end -%>

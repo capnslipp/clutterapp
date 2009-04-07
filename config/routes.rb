@@ -37,7 +37,7 @@ ActionController::Routing::Routes.draw do |map|
   
   
   map.root :controller => 'home'
-  #map.home '', :controller => 'home', :action => 'index'
+  map.home '/', :controller => 'home'
   
   
   map.resources :invites
@@ -47,15 +47,18 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session
   map.login   '/login',     :controller => 'sessions',  :action => 'create'
   map.logout  '/logout',    :controller => 'sessions',  :action => 'destroy'
-  map.register '/register', :controller => 'users',     :action => 'create'
+  map.register '/reg',      :controller => 'users',     :action => 'create'
   #map.signup  '/signup',    :controller => 'users',     :action => 'new'
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
   map.signup '/signup/:invite_token', :controller => 'users', :action => 'new'
   
   
+  map.user '/:user_login',   :controller => 'users',  :action => 'show_pile'
+  
+  
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing the them or commenting them out if you're using named routes and resources.
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  #map.connect ':controller/:action/:id'
+  #map.connect ':controller/:action/:id.:format'
 end

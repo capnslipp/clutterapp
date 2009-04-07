@@ -26,4 +26,18 @@ class UsersController < ApplicationController
     end
   end
   
+  
+  # render show_pile.rhtml
+  def show_pile
+    @piles_owner = User.find_by_login(params[:user_login])
+    if @piles_owner.nil?
+      flash[:error] = "Sorry, we know of no such user."
+      redirect_to home_url
+    elsif current_user == @piles_owner
+      @root_node = current_user.pile.root_node
+    else
+      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
+    end
+  end
+  
 end
