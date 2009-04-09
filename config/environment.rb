@@ -74,6 +74,18 @@ Rails::Initializer.run do |config|
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
   
   
+  # Configure ActionMailer for Mailer extension
+  #ActionMailer::Base.smtp_settings = {
+  #  :address => "localhost",
+  #  :port => 25,
+  #  :domain => "orgclut.com"
+  #}
+  #
+  #ActionMailer::Base.raise_delivery_errors = true
+  #ActionMailer::Base.delivery_method = :sendmail # use the sendmail command instead of an smtp connection
+  #ActionMailer::Base.perform_deliveries = true # actually deliver mails
+  
+  
   INFINITY = (+1.0/0.0)
   
 end
