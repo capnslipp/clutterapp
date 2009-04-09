@@ -6,5 +6,7 @@ class Node < ActiveRecord::Base
   has_one :pile, :foreign_key => 'root_node_id'
   
   
-  validates_presence_of :prop
+  validates_presence_of :prop, :unless => :root?
+  validates_inclusion_of :root?, :in => [true], :unless => :prop
+  validates_inclusion_of :root?, :in => [false], :if => :prop
 end

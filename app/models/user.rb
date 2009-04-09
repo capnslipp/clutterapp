@@ -31,6 +31,9 @@ class User < ActiveRecord::Base
   before_create :set_invite_limit
   
   
+  before_validation_on_create :create_default_pile_if_not_exists
+  
+  
   
   has_one :pile, :foreign_key => 'owner_id'
   
@@ -95,6 +98,10 @@ class User < ActiveRecord::Base
   
   def set_invite_limit
     self.invite_limit = DEFAULT_INVITATION_LIMIT
+  end
+  
+  def create_default_pile_if_not_exists
+    self.create_pile! unless self.pile
   end
   
 end
