@@ -11,7 +11,7 @@
 
 ActiveRecord::Schema.define(:version => 20090408062205) do
 
-  create_table "check_properties", :force => true do |t|
+  create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -32,11 +32,11 @@ ActiveRecord::Schema.define(:version => 20090408062205) do
     t.integer  "rgt"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "property_id"
-    t.string   "property_type"
+    t.integer  "prop_id"
+    t.string   "prop_type"
   end
 
-  create_table "note_properties", :force => true do |t|
+  create_table "note_props", :force => true do |t|
     t.text     "note",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -49,25 +49,25 @@ ActiveRecord::Schema.define(:version => 20090408062205) do
     t.datetime "updated_at"
   end
 
-  create_table "priority_properties", :force => true do |t|
+  create_table "priority_props", :force => true do |t|
     t.integer  "priority",   :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "tag_properties", :force => true do |t|
+  create_table "tag_props", :force => true do |t|
     t.string   "text",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "text_properties", :force => true do |t|
+  create_table "text_props", :force => true do |t|
     t.string   "text",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "time_properties", :force => true do |t|
+  create_table "time_props", :force => true do |t|
     t.datetime "time",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
