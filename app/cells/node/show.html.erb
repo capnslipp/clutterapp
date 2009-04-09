@@ -1,5 +1,22 @@
 <li>
-	<div><%= h @node.id %></div>
+	<div><%=
+if @prop_type == TextProp
+	h @prop.text
+elsif @prop_type == CheckProp
+	check_box_tag "check_prop_#{@prop.id}", '1', @prop.checked?
+elsif @prop_type == NoteProp
+	h @prop.note
+elsif @prop_type == PriorityProp
+	@prop.priority
+elsif @prop_type == TagProp
+	@prop.tag
+elsif @prop_type == TimeProp
+	@prop.time
+else
+	# @debug: for noticing unknown props
+	h @prop.inspect
+end
+%></div>
 	<% unless @children.empty? -%>
  		<ul>
 			<% @children.each do |child| -%>

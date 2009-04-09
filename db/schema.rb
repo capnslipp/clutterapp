@@ -9,7 +9,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090407034501) do
+ActiveRecord::Schema.define(:version => 20090408062205) do
+
+  create_table "check_properties", :force => true do |t|
+    t.boolean  "checked",    :default => false, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "invites", :force => true do |t|
     t.integer  "sender_id"
@@ -26,11 +32,43 @@ ActiveRecord::Schema.define(:version => 20090407034501) do
     t.integer  "rgt"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "property_id"
+    t.string   "property_type"
+  end
+
+  create_table "note_properties", :force => true do |t|
+    t.text     "note",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "piles", :force => true do |t|
     t.integer  "owner_id"
     t.integer  "root_node_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "priority_properties", :force => true do |t|
+    t.integer  "priority",   :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tag_properties", :force => true do |t|
+    t.string   "text",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "text_properties", :force => true do |t|
+    t.string   "text",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "time_properties", :force => true do |t|
+    t.datetime "time",       :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
