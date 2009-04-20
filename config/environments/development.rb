@@ -18,7 +18,6 @@ config.action_mailer.raise_delivery_errors = false
 
 
 require 'pp'
-require 'yp'
 
 
 if File.exists?(File.join(RAILS_ROOT,'tmp', 'debug.txt'))
