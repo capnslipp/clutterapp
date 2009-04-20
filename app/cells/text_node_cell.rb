@@ -1,0 +1,2 @@
+class TextNodeCell < NodeCell
+end

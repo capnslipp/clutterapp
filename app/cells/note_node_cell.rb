@@ -1,0 +1,2 @@
+class NoteNodeCell < NodeCell
+end

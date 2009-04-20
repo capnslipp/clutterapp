@@ -1,5 +1,5 @@
 <% unless @root_node.nil? -%>
-	<ul>
-		<%= render_cell :node, :show, :node => @root_node %>
+	<ul class="main-list">
+		<%= render_cell cell_for_node(@root_node), :show_item, :node => @root_node %>
 	</ul>
 <% end -%>

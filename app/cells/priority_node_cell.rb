@@ -1,0 +1,2 @@
+class PriorityNodeCell < NodeCell
+end

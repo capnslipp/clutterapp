@@ -1,0 +1,2 @@
+class CheckNodeCell < NodeCell
+end

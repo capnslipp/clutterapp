@@ -1,0 +1,2 @@
+class TagNodeCell < NodeCell
+end
