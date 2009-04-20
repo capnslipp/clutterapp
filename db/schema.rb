@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(:version => 20090408062205) do
   end
 
   create_table "tag_props", :force => true do |t|
-    t.string   "text",       :null => false
+    t.string   "tag",        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
