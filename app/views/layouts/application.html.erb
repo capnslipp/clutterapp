@@ -5,11 +5,14 @@
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 	<title><%= "OrgClut[2] #{controller.controller_name} #{controller.action_name} #{params[:id]}" %></title>
 	<%= javascript_include_tag :defaults %>
+	<%= stylesheet_link_tag 'reset', :media => 'all' %>
 	<%= stylesheet_link_tag 'main', :media => 'all' %>
 </head>
 <body>
 
-<div id="topbar">
+<div id="topbar" class="shadowable">
+	<div class="bordered shadow"></div>
+	
 	<h1 class="logo">
 		<a href="<%= url_for :action => "index", :controller => "home" %>" style="text-decoration: none; background: none; color: #fff;">OrgClut<span class="badge box">2</sub></a>
 	</h1>
@@ -26,7 +29,9 @@
 </div>
 
 
-<%= yield  %>
+<div id="page">
+	<%= yield  %>
+</div>
 
 
 </body>
