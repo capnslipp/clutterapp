@@ -7,3 +7,8 @@ task :restart do
     system("rm -f tmp/debug.txt")
   end
 end
+
+task :debug do
+  ENV["DEBUG"] = 'true'
+  Rake.invoke :restart
+end
