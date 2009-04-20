@@ -1,3 +1,5 @@
-class NoteProp < ActiveRecord::Base
+class NoteProp < Prop
   has_one :node, :as => :prop
+  
+  validates_presence_of :node
 end
