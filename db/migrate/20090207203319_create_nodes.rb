@@ -4,9 +4,6 @@ class CreateNodes < ActiveRecord::Migration
       t.integer :parent_id
       t.integer :lft
       t.integer :rgt
-      t.datetime :created_at
-      t.datetime :updated_at
-      
       t.timestamps
     end
   end
