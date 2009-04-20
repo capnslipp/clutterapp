@@ -101,7 +101,7 @@ class User < ActiveRecord::Base
   end
   
   def create_default_pile_if_not_exists
-    self.create_pile! unless self.pile
+    self.create_pile unless self.pile
   end
   
 end
