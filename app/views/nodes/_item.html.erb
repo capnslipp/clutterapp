@@ -1,15 +1,8 @@
-<li class="main-item">
+<% content_tag_for(:li, item, :main, :class => 'main-item') do -%>
 	<div class="body">
-		<div class="manipulate buttons shadowable">
-			<div class="shadow"></div>
-			<a href="#" class="sym"><%# ✖ %>&#10006;</a>
-			<a href="#" class="sym"><%# ◄ %>&#9668;</a>
-			<a href="#" class="sym"><%# ▲ %>&#9650;</a>
-			<a href="#" class="sym"><%# ▼ %>&#9660;</a>
-			<a href="#" class="sym"><%# ► %>&#9658;</a>
-			<a href="#" class="sym"><%# ◉ %>&#9673;</a>
-		</div>
-		<%= yield -%>
+		<% div_for(item, :'main-content') do -%>
+			<%= yield -%>
+		<% end -%>
 	</div>
 	<% unless item.children.empty? -%>
  		<ul class="main-list">
@@ -27,4 +20,4 @@
 		<a href="#"><span class="sym"><%# ✚ %>&#10010;</span></span>tag</a>
 		<a href="#"><span class="sym"><%# ✚ %>&#10010;</span></span>time</a>
 	</div>
-</li>
+<% end -%>

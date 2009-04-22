@@ -1,3 +1,4 @@
-<%= node_cell_with_content(
-  @prop.time
-) -%>
+<% render_node_cell_layout(self) do -%>
+	<%= render :partial => '../views/nodes/buttons' %>
+	<%= @prop.time %>
+<% end -%>
