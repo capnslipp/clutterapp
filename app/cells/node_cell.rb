@@ -9,4 +9,8 @@ class NodeCell < Cell::Base
     
     nil
   end
+  
+  def new
+    html_escape(args.inspect)
+  end
 end

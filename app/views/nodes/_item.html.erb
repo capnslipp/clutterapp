@@ -1,23 +1,25 @@
-<% content_tag_for(:li, item, :main, :class => 'main-item') do -%>
+<% content_tag_for(:li, item, 'item', :class => 'item') do -%>
 	<div class="body">
-		<% div_for(item, :'main-content') do -%>
+		<% div_for(item, 'item-content', :class => 'item-content') do -%>
 			<%= yield -%>
 		<% end -%>
 	</div>
 	<% unless item.children.empty? -%>
- 		<ul class="main-list">
+ 		<ul class="node list">
 			<% item.children.each do |child| -%>
 				<%= render_child.call(child) %>
 			<% end -%>
+			<li id="<%= dom_id(item, 'item-new') %>" class="<%= "#{dom_class(item)} item-new" %>">
+				<div class="new buttons shadowable">
+					<div class="shadow"></div>
+					<%= link_to_remote %{<span class="sym">&#10010;</span>text}, :update => %{main_node__new}, :url => new_node_url(:parent => item.id, :type => :text), :method => :get %>
+					<%= link_to_remote %{<span class="sym">&#10010;</span>check}, :update => %{main_node__new}, :url => new_node_url(:parent => item.id, :type => :check), :method => :get %>
+					<%= link_to_remote %{<span class="sym">&#10010;</span>note}, :update => %{main_node__new}, :url => new_node_url(:parent => item.id, :type => :note), :method => :get %>
+					<%= link_to_remote %{<span class="sym">&#10010;</span>priority}, :update => %{main_node__new}, :url => new_node_url(:parent => item.id, :type => :priority), :method => :get %>
+					<%= link_to_remote %{<span class="sym">&#10010;</span>tag}, :update => %{main_node__new}, :url => new_node_url(:parent => item.id, :type => :tag), :method => :get %>
+					<%= link_to_remote %{<span class="sym">&#10010;</span>time}, :update => %{main_node__new}, :url => new_node_url(:parent => item.id, :type => :time), :method => :get %>
+				</div>
+			</li>
 		</ul>
 	<% end -%>
-	<div class="new buttons shadowable">
-		<div class="shadow"></div>
-		<a href="#"><span class="sym"><%# ✚ %>&#10010;</span>text</a>
-		<a href="#"><span class="sym"><%# ✚ %>&#10010;</span></span>check</a>
-		<a href="#"><span class="sym"><%# ✚ %>&#10010;</span></span>note</a>
-		<a href="#"><span class="sym"><%# ✚ %>&#10010;</span></span>priority</a>
-		<a href="#"><span class="sym"><%# ✚ %>&#10010;</span></span>tag</a>
-		<a href="#"><span class="sym"><%# ✚ %>&#10010;</span></span>time</a>
-	</div>
 <% end -%>
