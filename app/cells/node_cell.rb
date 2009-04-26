@@ -6,11 +6,13 @@ class NodeCell < Cell::Base
     @node = @opts[:node]
     @children = @node.children || []
     @prop = @node.prop
-    
-    nil
   end
   
-  def new
-    html_escape(args.inspect)
+  def create
+    parent = Node.find @opts[:parent_id]
+    @node = parent.create_child :prop => Prop.rand
+    
+    @children = []
+    @prop = @node.prop
   end
 end

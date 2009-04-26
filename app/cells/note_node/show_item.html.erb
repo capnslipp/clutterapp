@@ -1,4 +1,6 @@
 <% render_node_cell_layout(self) do -%>
-	<%= render :partial => '../views/nodes/buttons' %>
-	<%= h @prop.note %>
+	<div class="shadowable" style="background: #fff;">
+		<div class="shadow"></div>
+		<%= h @prop.note %>
+	</div>
 <% end -%>

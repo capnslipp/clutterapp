@@ -1,89 +1,99 @@
 class NodesController < ApplicationController
-  #helper_method :cell_for_node # why not needed?
-  #helper_method :render_node_cell # why not needed?
+  include NodesHelper
+  layout nil
   
   
   # GET /nodes
   # GET /nodes.xml
-  def index
-    @nodes = Node.all
-    
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @nodes }
-    end
-  end
+  #def index
+  #  @nodes = Node.all
+  #  
+  #  respond_to do |format|
+  #    format.html # index.html.erb
+  #    format.xml  { render :xml => @nodes }
+  #  end
+  #end
   
   # GET /nodes/1
   # GET /nodes/1.xml
-  def show
-    @node = Node.find(params[:id])
-    
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @node }
-    end
-  end
+  #def show
+  #  @node = Node.find(params[:id])
+  #  
+  #  respond_to do |format|
+  #    format.html # show.html.erb
+  #    format.xml  { render :xml => @node }
+  #  end
+  #end
   
   # GET /nodes/new
   # GET /nodes/new.xml
-  def new
-    @node = Node.new
-    
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @node }
-    end
-  end
+  #def new
+  #  @node = Node.new
+  #  
+  #  respond_to do |format|
+  #    format.html # new.html.erb
+  #    format.xml  { render :xml => @node }
+  #  end
+  #end
   
   # GET /nodes/1/edit
-  def edit
-    @node = Node.find(params[:id])
-  end
+  #def edit
+  #  @node = Node.find(params[:id])
+  #end
   
   # POST /nodes
   # POST /nodes.xml
   def create
-    @node = Node.new(params[:node])
+    node_creation_args = params[:node] || {}
+    node_creation_args.update(
+      :prop => Prop.class_from_type(params[:type]).rand
+    ) unless params[:type].nil?
     
-    respond_to do |format|
-      if @node.save
-        flash[:notice] = 'Node was successfully created.'
-        format.html { redirect_to(@node) }
-        format.xml  { render :xml => @node, :status => :created, :location => @node }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @node.errors, :status => :unprocessable_entity }
-      end
-    end
+    @node = Node.find( params[:parent_id] ).create_child!( node_creation_args )
+    render :inline => render_cell_to_string(cell_for_node(@node), :show_item, :node => @node)
+  #rescue
+    #flash[:error] = %{Couldn't find parent Node.}
+    #redirect_to home_url
+    
+    
+    #respond_to do |format|
+    #  if @node.save
+    #    flash[:notice] = 'Node was successfully created.'
+    #    format.html { redirect_to(@node) }
+    #    format.xml  { render :xml => @node, :status => :created, :location => @node }
+    #  else
+    #    format.html { render :action => "new" }
+    #    format.xml  { render :xml => @node.errors, :status => :unprocessable_entity }
+    #  end
+    #end
   end
   
   # PUT /nodes/1
   # PUT /nodes/1.xml
-  def update
-    @node = Node.find(params[:id])
-    
-    respond_to do |format|
-      if @node.update_attributes(params[:node])
-        flash[:notice] = 'Node was successfully updated.'
-        format.html { redirect_to(@node) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @node.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+  #def update
+  #  @node = Node.find(params[:id])
+  #  
+  #  respond_to do |format|
+  #    if @node.update_attributes(params[:node])
+  #      flash[:notice] = 'Node was successfully updated.'
+  #      format.html { redirect_to(@node) }
+  #      format.xml  { head :ok }
+  #    else
+  #      format.html { render :action => "edit" }
+  #      format.xml  { render :xml => @node.errors, :status => :unprocessable_entity }
+  #    end
+  #  end
+  #end
   
   # DELETE /nodes/1
   # DELETE /nodes/1.xml
-  def destroy
-    @node = Node.find(params[:id])
-    @node.destroy
-    
-    respond_to do |format|
-      format.html { redirect_to(nodes_url) }
-      format.xml  { head :ok }
-    end
-  end
+  #def destroy
+  #  @node = Node.find(params[:id])
+  #  @node.destroy
+  #  
+  #  respond_to do |format|
+  #    format.html { redirect_to(nodes_url) }
+  #    format.xml  { head :ok }
+  #  end
+  #end
 end

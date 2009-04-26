@@ -1,11 +1,12 @@
 module NodesHelper
+  
   def cell_for_node(node)
     cell = /(.+)Prop/.match( node.prop.class.to_s )
     ((cell ? cell[1] : '') + 'Node').underscore.to_sym
   end
   
-  def render_child_node(view, child_node)
-    view.render_cell(cell_for_node(child_node), :show_item, :node => child_node)
+  def render_child_node(action_view, child_node)
+    action_view.render_cell(cell_for_node(child_node), :show_item, :node => child_node)
   end
   
   def render_node_cell_layout(cell_view, &block)
@@ -20,4 +21,14 @@ module NodesHelper
       &block
     )
   end
+  
+  def link_to_create_node(action_view, parent_node_id, type, update_dom_id)
+    type = type.to_s
+    action_view.link_to_remote %{<span class="sym">&#10010;</span>#{type}},
+      :update => update_dom_id,
+      :position => :before,
+      :url => {:action => 'create', :controller => 'nodes', :parent_id => parent_node_id, :type => type},
+      :method => :post
+  end
+  
 end

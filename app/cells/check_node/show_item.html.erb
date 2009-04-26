@@ -1,4 +1,3 @@
 <% render_node_cell_layout(self) do -%>
-	<%= render :partial => '../views/nodes/buttons' %>
 	<%= check_box_tag "check_prop_#{@prop.id}", '1', @prop.checked? %>
 <% end -%>

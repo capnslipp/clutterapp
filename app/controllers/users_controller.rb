@@ -35,8 +35,10 @@ class UsersController < ApplicationController
       redirect_to home_url
     elsif current_user == @piles_owner
       @root_node = current_user.pile.root_node
+      render :partial => 'users/show_pile', :layout => 'application'
     else
       flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
+      redirect_to home_url
     end
   end
   
