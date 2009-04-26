@@ -49,11 +49,17 @@ class NodesController < ApplicationController
     
     @parent = Node.find(params[:parent_id])
     @node = @parent.create_child!(node_creation_args)
+    @left_sibling = @node.left_sibling
+    
+    @node_sel = dom_id(@node, 'item')
+    @left_sibling_manip_buttons_sel = "##{dom_id(@left_sibling, 'item-content')} > .manipulate.buttons" unless @left_sibling.nil?
     
     respond_to do |format|
       format.js do
         render :update do |page|
           page.insert_html :before, dom_id(@parent, 'item-new'), render_cell(cell_for_node(@node), :show_item, :node => @node)
+          page.replace @left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @left_sibling} unless @left_sibling.nil?
+          page.visual_effect :highlight, @node_sel
         end
       end # format.js
     end # respond_to
@@ -74,12 +80,14 @@ class NodesController < ApplicationController
     
     @node_sel = dom_id(@node, 'item')
     @orig_left_sibling_sel = dom_id(@orig_left_sibling, 'item')
+    @orig_left_sibling_manip_buttons_sel = "##{dom_id(@orig_left_sibling, 'item-content')} > .manipulate.buttons"
     
     respond_to do |format|
       format.js do
         render :update do |page|
           page.remove @node_sel
           page.insert_html :before, @orig_left_sibling_sel, render_cell(cell_for_node(@node), :show_item, :node => @node)
+          page.replace @orig_left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_left_sibling}
           page.visual_effect :highlight, @node_sel
         end
       end # format.js
@@ -101,12 +109,14 @@ class NodesController < ApplicationController
     
     @node_sel = dom_id(@node, 'item')
     @orig_right_sibling_sel = dom_id(@orig_right_sibling, 'item')
+    @orig_right_sibling_manip_buttons_sel = "##{dom_id(@orig_right_sibling, 'item-content')} > .manipulate.buttons"
     
     respond_to do |format|
       format.js do
         render :update do |page|
           page.remove @node_sel
           page.insert_html :after, @orig_right_sibling_sel, render_cell(cell_for_node(@node), :show_item, :node => @node)
+          page.replace @orig_right_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_right_sibling}
           page.visual_effect :highlight, @node_sel
         end
       end # format.js
@@ -128,12 +138,14 @@ class NodesController < ApplicationController
     
     @node_sel = dom_id(@node, 'item')
     @orig_left_sibling_list_sel = "##{dom_id(@orig_left_sibling, 'item')} > .node.list"
+    @orig_left_sibling_manip_buttons_sel = "##{dom_id(@orig_left_sibling, 'item-content')} > .manipulate.buttons"
     
     respond_to do |format|
       format.js do
         render :update do |page|
           page.remove @node_sel
           page.insert_html :bottom, @orig_left_sibling_list_sel, render_cell(cell_for_node(@node), :show_item, :node => @node)
+          page.replace @orig_left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_left_sibling}
           page.visual_effect :highlight, @node_sel
         end
       end # format.js
@@ -155,12 +167,14 @@ class NodesController < ApplicationController
     
     @node_sel = dom_id(@node, 'item')
     @orig_parent_sel = dom_id(@orig_parent, 'item')
+    @orig_parent_manip_buttons_sel = "##{dom_id(@orig_parent, 'item-content')} > .manipulate.buttons"
     
     respond_to do |format|
       format.js do
         render :update do |page|
           page.remove @node_sel
           page.insert_html :after, @orig_parent_sel, render_cell(cell_for_node(@node), :show_item, :node => @node)
+          page.replace @orig_parent_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_parent}
           page.visual_effect :highlight, @node_sel
         end
       end # format.js
@@ -188,14 +202,21 @@ class NodesController < ApplicationController
   # DELETE /nodes/1.xml
   def destroy
     @node = Node.find(params[:id])
+    @orig_left_sibling = @node.left_sibling
+    @orig_right_sibling = @node.right_sibling
     @node.destroy
     
     @node_sel = dom_id(@node, 'item')
+    
+    @orig_left_sibling_manip_buttons_sel = "##{dom_id(@orig_left_sibling, 'item-content')} > .manipulate.buttons" unless @orig_left_sibling.nil?
+    @orig_right_sibling_manip_buttons_sel = "##{dom_id(@orig_right_sibling, 'item-content')} > .manipulate.buttons" unless @orig_right_sibling.nil?
     
     respond_to do |format|
       format.js do
         render :update do |page|
           page.remove @node_sel
+          page.replace @orig_left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_left_sibling} unless @orig_left_sibling.nil?
+          page.replace @orig_right_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_right_sibling} unless @orig_right_sibling.nil?
         end
       end # format.js
     end # respond_to
