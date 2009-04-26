@@ -186,13 +186,19 @@ class NodesController < ApplicationController
   
   # DELETE /nodes/1
   # DELETE /nodes/1.xml
-  #def destroy
-  #  @node = Node.find(params[:id])
-  #  @node.destroy
-  #  
-  #  respond_to do |format|
-  #    format.html { redirect_to(nodes_url) }
-  #    format.xml  { head :ok }
-  #  end
-  #end
+  def destroy
+    @node = Node.find(params[:id])
+    @node.destroy
+    
+    @node_sel = dom_id(@node, 'item')
+    
+    respond_to do |format|
+      format.js do
+        render :update do |page|
+          page.remove @node_sel
+        end
+      end # format.js
+    end # respond_to
+  end
+  
 end
