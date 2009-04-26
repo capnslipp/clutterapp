@@ -146,7 +146,7 @@ class NodesController < ApplicationController
     @node = Node.find(params[:id])
     @orig_parent = @node.parent
     
-    if @orig_parent.nil?
+    if @orig_parent.nil? || @orig_parent.root?
       render :nothing => true
       return
     end
