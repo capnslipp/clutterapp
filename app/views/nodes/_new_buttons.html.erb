@@ -1,12 +1,11 @@
-<% button_wrapper_dom_id = dom_id(item, 'item-new') -%>
-<li id="<%= button_wrapper_dom_id %>" class="<%= "#{dom_class(item)} item-new" %>" style="display: none;">
+<li id="<%= dom_id(item, 'item-new') %>" class="<%= "#{dom_class(item)} item-new" %>" style="display: none;">
 	<div class="new buttons shadowable">
 		<div class="shadow"></div>
-		<%= link_to_create_node self, item.id, :text, button_wrapper_dom_id %>
-		<%= link_to_create_node self, item.id, :check, button_wrapper_dom_id %>
-		<%= link_to_create_node self, item.id, :note, button_wrapper_dom_id %>
-		<%= link_to_create_node self, item.id, :priority, button_wrapper_dom_id %>
-		<%= link_to_create_node self, item.id, :tag, button_wrapper_dom_id %>
-		<%= link_to_create_node self, item.id, :time, button_wrapper_dom_id %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>text},	:url => create_node_url(self, item, :text) %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>check},	:url => create_node_url(self, item, :check) %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>note},	:url => create_node_url(self, item, :note) %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>priority},:url => create_node_url(self, item, :priority) %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>tag},		:url => create_node_url(self, item, :tag) %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>time},	:url => create_node_url(self, item, :time) %>
 	</div>
 </li>
