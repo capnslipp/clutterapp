@@ -36,6 +36,15 @@ defaults: &silver-bullet-xampp
   host: localhost
   timeout: 5000
 
+defaults: &snaotn
+  adapter: mysql
+  encoding: utf8
+  socket: /var/run/mysqld/mysqld.sock
+  username: orgclut2
+  password: _fill_in_
+  host: localhost
+  timeout: 5000
+
 
 # Environments
 
@@ -49,10 +58,5 @@ test:
   <<: *silver-bullet-xampp
 
 production:
-  adapter: mysql
-  encoding: utf8
   database: orgclut2
-  pool: 5
-  username: orgclut2
-  password: _fill_in_
-  host: localhost
+  <<: *snaotn
