@@ -1,7 +1,7 @@
 <% content_tag_for(:li, item, 'item', :class => 'item') do -%>
 	<div class="body">
 		<% div_for(item, 'item-content', :class => 'item-content') do -%>
-			<%= render :partial => '../views/nodes/action_buttons', :locals => {:item => item} %>
+			<%= render :partial => 'nodes/action_buttons', :locals => {:item => item} %>
 			<%= yield -%>
 		<% end -%>
 	</div>
@@ -11,6 +11,6 @@
 				<%= render_child.call(child) %>
 			<% end -%>
 		<% end -%>
-		<%= render :partial => '../views/nodes/new_buttons', :locals => {:item => item} %>
+		<%= render :partial => 'nodes/new_buttons', :locals => {:item => item} %>
 	</ul>
 <% end -%>

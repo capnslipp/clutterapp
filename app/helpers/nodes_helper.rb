@@ -11,7 +11,7 @@ module NodesHelper
   
   def render_node_cell_layout(cell_view, &block)
     cell_view.render(
-      :layout => '../views/nodes/item',
+      :layout => 'nodes/item',
       :object => cell_view.assigns['node'],
       :locals => {
         :render_child => proc {|child_node|
