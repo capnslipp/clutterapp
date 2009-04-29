@@ -1,3 +1,3 @@
 <% render_node_cell_layout(self) do -%>
-	<i><%= @prop.time %></i>
+	<div class="time prop"><%= in_place_editor_field @prop, :time, {:tag => :div} %></div>
 <% end -%>

@@ -1,3 +1,3 @@
 <% render_node_cell_layout(self) do -%>
-	<sup><b>[<%= @prop.priority %>]</b></sup>
+	<div class="priority prop">[<%= in_place_editor_field @prop, :priority, {:tag => :span} %>]</div>
 <% end -%>

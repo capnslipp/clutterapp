@@ -1,3 +1,10 @@
 <% render_node_cell_layout(self) do -%>
-	<%= check_box_tag "check_prop_#{@prop.id}", '1', @prop.checked? %>
+	<div class="check prop">
+		<%= check_box_tag "check_prop_#{@prop.id}", '1', @prop.checked? %>
+		<%= observe_field "check_prop_#{@prop.id}",
+			:url => "/#{:nodes}/#{:update_check_prop_checked}/#{@prop.id}",
+			:before => "preUpdateCheckPropField('check_prop_#{@prop.id}');",
+			:with => 'checked',
+			:method => :put %>
+	</div>
 <% end -%>

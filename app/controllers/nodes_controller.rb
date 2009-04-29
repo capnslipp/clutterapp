@@ -1,18 +1,96 @@
 class NodesController < ApplicationController
   include NodesHelper
+  include ERB::Util
   layout nil
   
   
+  #in_place_edit_for :check_prop, :checked
+  #def set_check_prop_checked
+  #  prop = CheckProp.find(params[:id]) 
+  #  prop.checked = params[:value]
+  #  prop.save!
+  #  render :text => check_box_tag("check_prop_#{prop.id}", '1', prop.checked?)
+  #end
+  
+  # PUT /items/1/update_checkbox
+  def update_check_prop_checked
+    logger.debug logger_prefix('update_check_prop_checked', 31) + 'params: ' + params.inspect
+    prop = CheckProp.find(params[:id])
+    prop.checked = params[:checked]
+    prop.save!
+    render :update do |page|
+      page.call 'updateCheckPropField', "check_prop_#{prop.id}", prop.checked?
+    end
+  end
+  
+  in_place_edit_for :note_prop, :note
+  def set_note_prop_note
+    logger.debug logger_prefix('set_note_prop_note', 31) + 'params: ' + params.inspect
+    prop = NoteProp.find(params[:id]) 
+    prop.note = params[:value]
+    prop.save!
+    render :text => html_escape(prop.note)
+  end
+  
+  in_place_edit_for :priority_prop, :priority
+  def set_priority_prop_priority
+    logger.debug logger_prefix('set_priority_prop_priority', 31) + 'params: ' + params.inspect
+    prop = PriorityProp.find(params[:id]) 
+    prop.priority = params[:value]
+    prop.save!
+    render :text => prop.priority
+  end
+  
+  in_place_edit_for :tag_prop, :tag
+  def set_tag_prop_tag
+    logger.debug logger_prefix('set_tag_prop_tag', 31) + 'params: ' + params.inspect
+    prop = TagProp.find(params[:id]) 
+    prop.tag = params[:value].upcase
+    prop.save!
+    render :text => prop.tag
+  end
+  
+  in_place_edit_for :text_prop, :text
+  def set_text_prop_text
+    logger.debug logger_prefix('set_text_prop_text', 31) + 'params: ' + params.inspect
+    prop = TextProp.find(params[:id]) 
+    prop.text = params[:value]
+    prop.save!
+    render :text => html_escape(prop.text)
+  end
+  
+  in_place_edit_for :time_prop, :time
+  def set_time_prop_time
+    logger.debug logger_prefix('set_time_prop_time', 31) + 'params: ' + params.inspect
+    prop = TimeProp.find(params[:id]) 
+    prop.time = Time.zone.parse(params[:value])
+    prop.save!
+    render :text => prop.time
+  end
+  
   # GET /nodes
   # GET /nodes.xml
-  #def index
-  #  @nodes = Node.all
-  #  
-  #  respond_to do |format|
-  #    format.html # index.html.erb
-  #    format.xml  { render :xml => @nodes }
-  #  end
-  #end
+  def index
+    @piles_owner = User.find_by_login(params[:user_login]) unless params[:user_login].nil?
+    @piles_owner = User.find(params[:user_id]) if @piles_owner.nil?
+    
+    if @piles_owner.nil?
+      flash[:error] = "Sorry, we know of no such user."
+      redirect_to home_url
+    elsif current_user == @piles_owner
+      @root_node = current_user.pile.root_node
+      render :partial => 'users/show_pile', :layout => 'application'
+    else
+      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
+      redirect_to home_url
+    end
+    #@nodes = Node.all
+    #
+    #respond_to do |format|
+    #  format.html # index.html.erb
+    #  format.xml  { render :xml => @nodes }
+    #end
+  end
   
   # GET /nodes/1
   # GET /nodes/1.xml

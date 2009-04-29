@@ -43,12 +43,15 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :invites
   
   
-  map.resources :users
+  #map.resources :users
   map.resource :session
-  map.resources :nodes, :member => {  :move_up => :put,
-                                      :move_down => :put,
-                                      :move_in => :put,
-                                      :move_out => :put }
+  map.resources :users do |user| 
+    user.resources :nodes, :member => { :move_up => :put,
+                                        :move_down => :put,
+                                        :move_in => :put,
+                                        :move_out => :put,
+                                        :update_check_prop_checked => :put }
+  end
   map.login   '/login',     :controller => 'sessions',  :action => 'create'
   map.logout  '/logout',    :controller => 'sessions',  :action => 'destroy'
   map.register '/reg',      :controller => 'users',     :action => 'create'
@@ -57,12 +60,12 @@ ActionController::Routing::Routes.draw do |map|
   map.signup '/signup/:invite_token', :controller => 'users', :action => 'new'
   
   
-  map.user '/:user_login',   :controller => 'users',  :action => 'show_pile'
+  #map.user '/:user_login',   :controller => 'users',  :action => 'show_pile'
   
   
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing the them or commenting them out if you're using named routes and resources.
-  #map.connect ':controller/:action/:id'
-  #map.connect ':controller/:action/:id.:format'
+  map.connect ':controller/:action/:id'
+  map.connect ':controller/:action/:id.:format'
 end

@@ -1,3 +1,3 @@
 <% render_node_cell_layout(self) do -%>
-	<sub style="text-transform: uppercase"><b><%= @prop.tag %></b></sub>
+	<div class="tag prop"><%= in_place_editor_field @prop, :tag, {:tag => :div} %></div>
 <% end -%>
