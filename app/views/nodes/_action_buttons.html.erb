@@ -1,10 +1,22 @@
 <div class="manipulate buttons shadowable">
 	<div class="shadow"></div>
-	<% unless item.root?							%><span class="sym"><%# ✖ %><%= link_to_remote '&#10006;',	:url => { :action => 'destroy',		:controller => 'nodes', :id => item.id }, :method => 'delete'	%></span><% end %>
-	<% unless item.parent.nil? || item.parent.root?	%><span class="sym"><%# ◄ %><%= link_to_remote '&#9668;',	:url => { :action => 'move_out',	:controller => 'nodes', :id => item.id }, :method => 'put'		%></span><% end %>
-	<% unless item.left_sibling.nil?				%><span class="sym"><%# ▲ %><%= link_to_remote '&#9650;',	:url => { :action => 'move_up',		:controller => 'nodes', :id => item.id }, :method => 'put'		%></span><% end %>
-	<% unless item.right_sibling.nil?				%><span class="sym"><%# ▼ %><%= link_to_remote '&#9660;',	:url => { :action => 'move_down',	:controller => 'nodes', :id => item.id }, :method => 'put'		%></span><% end %>
-	<% unless item.left_sibling.nil?				%><span class="sym"><%# ► %><%= link_to_remote '&#9658;',	:url => { :action => 'move_in',		:controller => 'nodes', :id => item.id }, :method => 'put'		%></span><% end %>
-	<% unless item.root?							%><span class="sym"><%# ◉ %>&#9673;</span><% end %>
+	<% unless item.root? %>
+		<span class="sym"><%# ✖ %><%= link_to_remote '&#10006;',	:url => { :action => 'destroy',		:controller => 'nodes', :id => item.id }, :method => 'delete'	%></span>
+	<% end %>
+	<% unless item.parent.nil? || item.parent.root? %>
+		<span class="sym"><%# ◄ %><%= link_to_remote '&#9668;',		:url => { :action => 'move_out',	:controller => 'nodes', :id => item.id }, :method => 'put'		%></span>
+	<% end %>
+	<% unless item.left_sibling.nil? %>
+		<span class="sym"><%# ▲ %><%= link_to_remote '&#9650;',		:url => { :action => 'move_up',		:controller => 'nodes', :id => item.id }, :method => 'put'		%></span>
+	<% end %>
+	<% unless item.right_sibling.nil? %>
+		<span class="sym"><%# ▼ %><%= link_to_remote '&#9660;',		:url => { :action => 'move_down',	:controller => 'nodes', :id => item.id }, :method => 'put'		%></span>
+	<% end %>
+	<% unless item.left_sibling.nil? %>
+		<span class="sym"><%# ► %><%= link_to_remote '&#9658;',		:url => { :action => 'move_in',		:controller => 'nodes', :id => item.id }, :method => 'put'		%></span>
+	<% end %>
+	<% unless item.root? %>
+		<span class="sym"><%# ◉ %>&#9673;</span>
+	<% end %>
 	<span class="sym"><%# ✚ %><%= link_to_function '&#10010;', "$('##{dom_id(item, 'item-new')}').toggle();" %></span>
 </div>

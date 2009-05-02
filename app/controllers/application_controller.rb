@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   # Be sure to include AuthenticationSystem in Application Controller instead (of originally in the UsersController)
   include AuthenticatedSystem
   
+  include ApplicationHelper
   helper :all # include all helpers, all the time
 
   # See ActionController::RequestForgeryProtection for details
@@ -15,14 +16,5 @@ class ApplicationController < ActionController::Base
   # Uncomment this to filter the contents of submitted sensitive data parameters
   # from your application log (in this case, all fields with names like "password"). 
   # filter_parameter_logging :password
-  
-  
-  def logger_prefix(text, color_code = nil, use_bright_shade = true)
-    if color_code.nil?
-      "  #{text}   "
-    else
-      "  [4;#{color_code.to_i};#{color_code ? 1 : 0}m#{text}[0m   "
-    end
-  end
   
 end

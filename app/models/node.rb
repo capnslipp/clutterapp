@@ -1,6 +1,11 @@
 class Node < ActiveRecord::Base
   acts_as_nested_set
   
+  # must be specified first (at least before any associations)
+  after_save :increment_version
+  before_move :increment_parent_version
+  after_move :increment_version
+  
   belongs_to :prop, :polymorphic => true
   
   has_one :pile, :foreign_key => 'root_node_id'
@@ -11,14 +16,15 @@ class Node < ActiveRecord::Base
       child = self.class.new(*attributes)
       child.save_with_validation(false)
       child.move_to_child_of(self)
+      self.increment_version
       raise ActiveRecord::RecordInvalid.new(child) unless child.valid?
       child
     end
   end
   
   
-  def self.rand
-    self.build :prop => Prop.rand
+  def self::rand
+    self::new :prop => Prop.rand
   end
   
   def create_rand_child
@@ -26,7 +32,16 @@ class Node < ActiveRecord::Base
   end
   
   def create_rand_descendant
-    self.self_and_descendants.rand.create_rand_child
+    self_and_descendants.rand.create_rand_child
+  end
+  
+  
+  def after_prop_save
+    increment_version
+  end
+  
+  def after_child_destroy
+    increment_version
   end
   
   
@@ -35,6 +50,15 @@ protected
   def validate
     errors.add('', "If this #{self.class.to_s} is root, it must exist have a Pile pointing back to it and vice-versa.") unless root? ^ !pile.nil? == false
     errors.add(:prop, "must exist or #{self.class.to_s} must be root but not both") unless root? ^ !prop.nil?
+  end
+  
+  def increment_version
+    Node::increment_counter(:version, self.id)
+    increment_parent_version
+  end
+  
+  def increment_parent_version
+    parent.increment_version unless parent.nil?
   end
   
 end

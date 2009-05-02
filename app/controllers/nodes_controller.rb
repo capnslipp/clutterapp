@@ -14,7 +14,7 @@ class NodesController < ApplicationController
   
   # PUT /items/1/update_checkbox
   def update_check_prop_checked
-    logger.debug logger_prefix('update_check_prop_checked', 31) + 'params: ' + params.inspect
+    logger.debug logger.prefix('update_check_prop_checked', 31) + 'params: ' + params.inspect
     prop = CheckProp.find(params[:id])
     prop.checked = params[:checked]
     prop.save!
@@ -25,7 +25,7 @@ class NodesController < ApplicationController
   
   in_place_edit_for :note_prop, :note
   def set_note_prop_note
-    logger.debug logger_prefix('set_note_prop_note', 31) + 'params: ' + params.inspect
+    logger.debug logger.prefix('set_note_prop_note', 31) + 'params: ' + params.inspect
     prop = NoteProp.find(params[:id]) 
     prop.note = params[:value]
     prop.save!
@@ -34,7 +34,7 @@ class NodesController < ApplicationController
   
   in_place_edit_for :priority_prop, :priority
   def set_priority_prop_priority
-    logger.debug logger_prefix('set_priority_prop_priority', 31) + 'params: ' + params.inspect
+    logger.debug logger.prefix('set_priority_prop_priority', 31) + 'params: ' + params.inspect
     prop = PriorityProp.find(params[:id]) 
     prop.priority = params[:value]
     prop.save!
@@ -43,7 +43,7 @@ class NodesController < ApplicationController
   
   in_place_edit_for :tag_prop, :tag
   def set_tag_prop_tag
-    logger.debug logger_prefix('set_tag_prop_tag', 31) + 'params: ' + params.inspect
+    logger.debug logger.prefix('set_tag_prop_tag', 31) + 'params: ' + params.inspect
     prop = TagProp.find(params[:id]) 
     prop.tag = params[:value].upcase
     prop.save!
@@ -52,7 +52,7 @@ class NodesController < ApplicationController
   
   in_place_edit_for :text_prop, :text
   def set_text_prop_text
-    logger.debug logger_prefix('set_text_prop_text', 31) + 'params: ' + params.inspect
+    logger.debug logger.prefix('set_text_prop_text', 31) + 'params: ' + params.inspect
     prop = TextProp.find(params[:id]) 
     prop.text = params[:value]
     prop.save!
@@ -61,7 +61,7 @@ class NodesController < ApplicationController
   
   in_place_edit_for :time_prop, :time
   def set_time_prop_time
-    logger.debug logger_prefix('set_time_prop_time', 31) + 'params: ' + params.inspect
+    logger.debug logger.prefix('set_time_prop_time', 31) + 'params: ' + params.inspect
     prop = TimeProp.find(params[:id]) 
     prop.time = Time.zone.parse(params[:value])
     prop.save!
@@ -128,6 +128,7 @@ class NodesController < ApplicationController
     @parent = Node.find(params[:parent_id])
     @node = @parent.create_child!(node_creation_args)
     @left_sibling = @node.left_sibling
+    @left_sibling.reload :select => :version unless @left_sibling.nil?
     
     @node_sel = dom_id(@node, 'item')
     @left_sibling_manip_buttons_sel = "##{dom_id(@left_sibling, 'item-content')} > .manipulate.buttons" unless @left_sibling.nil?
@@ -155,6 +156,8 @@ class NodesController < ApplicationController
     end
     
     @node.move_to_left_of @orig_left_sibling
+    @orig_left_sibling.reload :select => :version
+    @node.reload :select => :version
     
     @node_sel = dom_id(@node, 'item')
     @orig_left_sibling_sel = dom_id(@orig_left_sibling, 'item')
@@ -184,6 +187,8 @@ class NodesController < ApplicationController
     end
     
     @node.move_to_right_of @orig_right_sibling
+    @orig_right_sibling.reload :select => :version
+    @node.reload :select => :version
     
     @node_sel = dom_id(@node, 'item')
     @orig_right_sibling_sel = dom_id(@orig_right_sibling, 'item')
@@ -213,6 +218,8 @@ class NodesController < ApplicationController
     end
     
     @node.move_to_child_of @orig_left_sibling
+    @orig_left_sibling.reload :select => :version
+    @node.reload :select => :version
     
     @node_sel = dom_id(@node, 'item')
     @orig_left_sibling_list_sel = "##{dom_id(@orig_left_sibling, 'item')} > .node.list"
@@ -242,6 +249,8 @@ class NodesController < ApplicationController
     end
     
     @node.move_to_right_of @orig_parent
+    @orig_parent.reload :select => :version
+    @node.reload :select => :version
     
     @node_sel = dom_id(@node, 'item')
     @orig_parent_sel = dom_id(@orig_parent, 'item')
@@ -280,9 +289,11 @@ class NodesController < ApplicationController
   # DELETE /nodes/1.xml
   def destroy
     @node = Node.find(params[:id])
+    @orig_parent = @node.parent
     @orig_left_sibling = @node.left_sibling
     @orig_right_sibling = @node.right_sibling
     @node.destroy
+    @orig_parent.after_child_destroy
     
     @node_sel = dom_id(@node, 'item')
     

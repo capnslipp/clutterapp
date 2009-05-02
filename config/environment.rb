@@ -88,7 +88,9 @@ Rails::Initializer.run do |config|
   
   
   config.after_initialize do
-    Cell::Base.view_paths << RAILS_ROOT+"/app/views"
+    Cell::Base.view_paths << RAILS_ROOT + '/app/views'
+    
+    require 'logger_extension' # extends ActiveSupport::BufferedLogger
   end
   
   INFINITY = (+1.0/0.0)

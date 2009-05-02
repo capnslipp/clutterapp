@@ -368,7 +368,7 @@ ul.scope-list > li.scope-item {
 .prop { display: inline-block; }
 
 .check.prop {}
-.note.prop { display: table-cell; border: 1px solid #ddd; background-color: #eee; white-space: pre; }
+.note.prop { display: table-cell; border: 1px solid #ddd; background-color: #eee; }
 .priority.prop { font-weight: bold; font-size: 0.8em; display: inline-block; position: relative; top: -0.5em; }
 .tag.prop { text-transform: uppercase; font-size: 0.8em; }
 .text.prop {}
