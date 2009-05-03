@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   # Be sure to include AuthenticationSystem in Application Controller instead (of originally in the UsersController)
   include AuthenticatedSystem
   
-  include ApplicationHelper
   helper :all # include all helpers, all the time
 
   # See ActionController::RequestForgeryProtection for details
