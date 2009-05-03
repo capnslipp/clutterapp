@@ -23,6 +23,10 @@ class Prop < ActiveRecord::Base
     [TextProp, CheckProp, NoteProp, PriorityProp, TagProp, TimeProp].rand.rand # 1st rand: choose from array; 2nd rand: create random instance
   end
   
+  def self::filler
+    raise NotImplementedError
+  end
+  
   def increment_node_version
     unless node.nil?
       # independent of the current instance and hopefully leaner and safer, too
