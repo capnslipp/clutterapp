@@ -5,12 +5,5 @@
 			<%= yield -%>
 		<% end -%>
 	</div>
-	<ul class="node list">
-		<% unless item.children.empty? -%>
-			<% item.children.each do |child| -%>
-				<%= render_child.call(child) %>
-			<% end -%>
-		<% end -%>
-		<%= render :partial => 'nodes/new_buttons', :locals => {:item => item} %>
-	</ul>
+	<%= render :partial => 'nodes/item_list', :locals => {:item => item, :render_child => render_child} %>
 <% end -%>
