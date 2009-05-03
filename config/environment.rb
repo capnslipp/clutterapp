@@ -87,6 +87,9 @@ Rails::Initializer.run do |config|
   #ActionMailer::Base.perform_deliveries = true # actually deliver mails
   
   
+  config.action_controller.allow_forgery_protection = false
+  
+  
   config.after_initialize do
     Cell::Base.view_paths << RAILS_ROOT + '/app/views'
     
