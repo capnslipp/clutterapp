@@ -5,8 +5,7 @@
 var OrgClut = {};
 
 
-function preUpdateCheckPropField(checkbox, setToOrigState)
-{
+function preUpdateCheckPropField(checkbox, setToOrigState) {
 	checkbox = $('#' + checkbox);
 	
 	if (setToOrigState == undefined || setToOrigState)
@@ -16,8 +15,7 @@ function preUpdateCheckPropField(checkbox, setToOrigState)
 }
 
 
-function updateCheckPropField(checkbox, checked)
-{
+function updateCheckPropField(checkbox, checked) {
 	checkbox = $('#' + checkbox);
 	
 	checkbox.attr('checked', checked);
@@ -27,8 +25,7 @@ function updateCheckPropField(checkbox, checked)
 
 
 OrgClut.kPageMinWidth = 320;
-function OrgClut.writePageMinWidthAdjustment()
-{
+OrgClut.writePageMinWidthAdjustment = function() {
 	// if the screen's width is smaller than the page's width (i.e. a zoomable mobile device like the iPhone)
 	if (window.screen.width < window.innerWidth) {
 		// set the meta-data to the larger of the device's width or the minimum the site needs!
