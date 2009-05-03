@@ -261,16 +261,20 @@ li.item li.item.checkbox { list-style-type: none; margin-left: 0; }
 }
 
 
-/* buttons */
-.buttons {
+/* buttons/bars */
+.bar { display: inline-block; }
+
+.buttons, .widget {
 	background: #666;
 	/*font-weight: bold;*/
 	display: inline-block;
 }
 
 .buttons, .buttons a { color: #fff; }
-
 .manipulate.buttons { background: #c20; }
+
+.widget, .widget a { color: #ddd; }
+.manipulate.widget { background: #fff; }
 
 /*.new.buttons { margin-left: 2em; }*/
 
