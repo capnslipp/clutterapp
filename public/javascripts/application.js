@@ -2,6 +2,9 @@
 // This file is automatically included by javascript_include_tag :defaults
 
 
+var OrgClut = {};
+
+
 function preUpdateCheckPropField(checkbox, setToOrigState)
 {
 	checkbox = $('#' + checkbox);
@@ -21,3 +24,21 @@ function updateCheckPropField(checkbox, checked)
 	checkbox.checked = checked;
 	checkbox.attr('disabled', false);
 }
+
+
+OrgClut.kPageMinWidth = 320;
+function OrgClut.writePageMinWidthAdjustment()
+{
+	// if the screen's width is smaller than the page's width (i.e. a zoomable mobile device like the iPhone)
+	if (window.screen.width < window.innerWidth) {
+		// set the meta-data to the larger of the device's width or the minimum the site needs!
+		
+		newWidth = window.screen.width;
+		if (newWidth < OrgClut.kPageMinWidth)
+			newWidth = OrgClut.kPageMinWidth;
+		
+		// will write the meta tag right into the <head/>
+		document.write('<meta name="viewport" content="width=' + newWidth + '"/>');
+	}
+}
+OrgClut.writePageMinWidthAdjustment();
