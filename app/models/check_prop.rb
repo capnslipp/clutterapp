@@ -3,7 +3,11 @@ class CheckProp < Prop
   
   validates_presence_of :node
   
-  def self.rand
-    new :checked => (Kernel.rand(1 + 1) == 1)
+  def self::rand
+    new :checked => (Kernel.rand(2) == 1)
+  end
+  
+  def self::filler
+    new :checked => false
   end
 end

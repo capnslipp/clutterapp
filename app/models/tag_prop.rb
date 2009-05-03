@@ -4,7 +4,11 @@ class TagProp < Prop
   validates_presence_of :node
   validates_length_of :tag, :within => 1..26
   
-  def self.rand
+  def self::rand
     new :tag => String.rand_alphanum(4)
+  end
+  
+  def self::filler
+    new :tag => 'tag'
   end
 end

@@ -3,7 +3,11 @@ class PriorityProp < Prop
   
   validates_presence_of :node
   
-  def self.rand
+  def self::rand
     new :priority => Kernel.rand(5 + 1)
+  end
+  
+  def self::filler
+    new :priority => 3
   end
 end
