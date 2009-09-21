@@ -18,23 +18,27 @@
 
 ## Defaults
 
-defaults: &silver-bullet-mamp
+defaults: &dev
   adapter: mysql
   encoding: utf8
-  socket: /Applications/MAMP/tmp/mysql/mysql.sock
   username: root
-  password: _fill_in_
   host: localhost
   timeout: 5000
 
-defaults: &silver-bullet-xampp
-  adapter: mysql
-  encoding: utf8
-  socket: /Applications/xampp/xamppfiles/var/mysql/mysql.sock
-  username: root
+defaults: &silver-bullet-mamp
+  socket: /Applications/MAMP/tmp/mysql/mysql.sock
   password: _fill_in_
-  host: localhost
-  timeout: 5000
+  <<: *dev
+
+defaults: &silver-bullet-xampp
+  socket: /Applications/xampp/xamppfiles/var/mysql/mysql.sock
+  password: _fill_in_
+  <<: *dev
+
+defaults: &silver-delicious-xampp
+  socket: /Applications/XAMPP/xamppfiles/var/mysql/mysql.sock
+  password: _fill_in_
+  <<: *dev
 
 defaults: &snaotn
   adapter: mysql
@@ -50,12 +54,12 @@ defaults: &snaotn
 
 development:
   database: orgclut2_development
-  <<: *silver-bullet-xampp
+  <<: *silver-delicious-xampp
 
 # Warning: The database defined as "test" will be erased and re-generated from your development database when you run "rake". Do not set this db to the same as development or production.
 test:
   database: orgclut2_test
-  <<: *silver-bullet-xampp
+  <<: *silver-delicious-xampp
 
 production:
   database: orgclut2
