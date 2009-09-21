@@ -40,6 +40,11 @@ defaults: &silver-delicious-xampp
   password: _fill_in_
   <<: *dev
 
+defaults: &silver-delicious-built-in
+  socket: /tmp/mysql.sock
+  password: 
+  <<: *dev
+
 defaults: &snaotn
   adapter: mysql
   encoding: utf8
@@ -54,12 +59,12 @@ defaults: &snaotn
 
 development:
   database: orgclut2_development
-  <<: *silver-delicious-xampp
+  <<: *silver-delicious-built-in
 
 # Warning: The database defined as "test" will be erased and re-generated from your development database when you run "rake". Do not set this db to the same as development or production.
 test:
   database: orgclut2_test
-  <<: *silver-delicious-xampp
+  <<: *silver-delicious-built-in
 
 production:
   database: orgclut2
