@@ -23,6 +23,8 @@ class NodeCell < Cell::Base
     @node = @opts[:node]
     @children = @node.children || []
     @prop = @node.prop
+    
+    render
   end
   
   #def create
