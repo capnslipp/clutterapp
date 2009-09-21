@@ -6,7 +6,7 @@ class Node < ActiveRecord::Base
   before_move :increment_parent_version
   after_move :increment_version
   
-  belongs_to :prop, :polymorphic => true
+  belongs_to :prop, :polymorphic => true, :autosave => true
   
   has_one :pile, :foreign_key => 'root_node_id'
   
