@@ -4,6 +4,10 @@ require File.dirname(__FILE__) + '/testing_helper'
 # usually done by rails' autoloading:
 require File.dirname(__FILE__) + '/cells/test_cell'
 
+### NOTE: add 
+###   config.action_controller.cache_store = :memory_store
+###   config.action_controller.perform_caching = true
+### to config/environments/test.rb to make this tests work.
 
 class CellsCachingTest < Test::Unit::TestCase
   include CellsTestMethods
@@ -14,12 +18,10 @@ class CellsCachingTest < Test::Unit::TestCase
     @cc = CachingCell.new(@controller)
     @c2 = AnotherCachingCell.new(@controller)
   end
-  
-  def cache_configured?; ActionController::Base.cache_configured?; end
-  
-  def self.path_to_test_views
-    RAILS_ROOT + "/vendor/plugins/cells/test/views/"
-  end
+    
+  #def self.path_to_test_views
+  #  RAILS_ROOT + "/vendor/plugins/cells/test/views/"
+  #end
   
   
   def test_state_cached?
@@ -27,17 +29,52 @@ class CellsCachingTest < Test::Unit::TestCase
     assert ! @cc.state_cached?(:not_cached_state)
   end
   
-  def test_version_proc_for_state
-    assert_kind_of Proc, @cc.version_proc_for_state(:cached_state)
-    assert ! @cc.version_proc_for_state(:not_cached_state)
+  def test_cache_without_options
+    # :cached_state is cached without any options:
+    assert_nil      @cc.version_procs[:cached_state]
+    assert_nil      @cc.version_procs[:not_cached_state]
+    
+    # cache_options must at least return an empty hash for a cached state:
+    assert_equal(  {},   @cc.cache_options[:cached_state])
+    assert_nil      @cc.cache_options[:not_cached_state]
   end
+  
+  
+  def test_cache_with_proc_only
+    CachingCell.class_eval do
+      cache :my_state, Proc.new {}
+    end
+    
+    assert_kind_of  Proc, @cc.version_procs[:my_state]
+    assert_equal(   {},   @cc.cache_options[:my_state])
+  end
+  
+  
+  def test_cache_with_proc_and_cache_options
+    CachingCell.class_eval do
+      cache :my_state, Proc.new{}, {:expires_in => 10.seconds}
+    end
+    
+    assert_kind_of  Proc, @cc.version_procs[:my_state]
+    assert_equal(   {:expires_in => 10.seconds}, @cc.cache_options[:my_state])
+  end
+  
+  
+  def test_cache_with_cache_options_only
+    CachingCell.class_eval do
+      cache :my_state, :expires_in => 10.seconds
+    end
+    
+    assert          @cc.version_procs.has_key?(:my_state)
+    assert_nil      @cc.version_procs[:my_state]
+    assert_equal(   {:expires_in => 10.seconds}, @cc.cache_options[:my_state])
+  end
+  
+  
   
   def test_if_caching_works
     c = @cc.render_state(:cached_state)
     assert_equal c, "1 should remain the same forever!"
-    
-    ### FIXME: somehow this returns false, although there IS a cache store set.
-    #return unless cache_configured?
     
     c = @cc.render_state(:cached_state)
     assert_equal c, "1 should remain the same forever!", ":cached_state was invoked again"
@@ -105,6 +142,27 @@ class CellsCachingTest < Test::Unit::TestCase
     c = @c2.render_state(:cheers)
     assert_equal c, "prost!"
   end
+
+  def test_caching_one_of_two_same_named_states
+    ### DISCUSS with drogus: the problem was that CachingCell and AnotherCachingCell keep
+    ### overwriting their version_procs, wasn't it? why don't we test that with different
+    ### version_procs in each cell?
+    @cc = CachingCell.new(@controller, :str => "foo1")
+    c = @cc.render_state(:another_state)
+    assert_equal c, "foo1"
+
+    @c2 = AnotherCachingCell.new(@controller, :str => "foo2")
+    c = @c2.render_state(:another_state)
+    assert_equal c, "foo2"
+
+    @cc = CachingCell.new(@controller, :str => "bar1")
+    c = @cc.render_state(:another_state)
+    assert_equal c, "foo1"
+
+    @c2 = AnotherCachingCell.new(@controller, :str => "bar2")
+    c = @c2.render_state(:another_state)
+    assert_equal c, "bar2"
+  end
   
   def test_expire_cache_key
     k = @cc.cache_key(:cached_state)
@@ -117,6 +175,12 @@ class CellsCachingTest < Test::Unit::TestCase
     @cc.render_state(:cached_state)
     assert Cell::Base.cache_store.read(k)
     @controller.expire_cell_state(:caching, :cached_state)
+    assert ! Cell::Base.cache_store.read(k)
+    
+    # ..and additionally test if passing cache key args works:
+    k = @cc.cache_key(:cached_state, :more => :yes)
+    assert Cell::Base.cache_store.write(k, "test content")
+    @controller.expire_cell_state(:caching, :cached_state, :more => :yes)
     assert ! Cell::Base.cache_store.read(k)
   end
   
@@ -161,11 +225,20 @@ class CachingCell < Cell::Base
   def cheers
     "cheers!"
   end
+
+  cache :another_state
+  def another_state
+    @opts[:str]
+  end
 end
 
 class AnotherCachingCell < Cell::Base
   cache :cheers
   def cheers
     "prost!"
+  end
+
+  def another_state
+    @opts[:str]
   end
 end

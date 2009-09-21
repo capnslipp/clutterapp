@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/../../../../test/test_helper'
 require File.dirname(__FILE__) + '/testing_helper'
 
+
 # this would usually happen by rails' autoloading -
 # anyway, we don't test loading but rendering in this file.
 require File.dirname(__FILE__) + '/cells/cells_test_one_cell'
@@ -17,10 +18,6 @@ end
 class JustOneViewCell < Cell::Base
   def some_state
     return
-  end
-
-  def view_for_state(state)
-    CellsTestMethods.views_path + "just_one_view.html.erb"
   end
 end
 
@@ -71,6 +68,9 @@ class MyTestCell < Cell::Base
   
   def missing_view
   end
+  
+  def state_with_link_to_function
+  end
 end
 
 # fixtures for view inheritance -------------------------------
@@ -109,13 +109,37 @@ module ReallyModule
 end
 
 
+# render_test ------------------------------------------------------------------
+class GalleryCell < Cell::Base
+  # prerequisites:
+  # there is NO current layout (?)
+  
+  def content_without_layout
+    # ...
+    render
+  end
+  
+  def content_with_layout
+    # ...
+    render  :layout           => 'metal',
+            :template_format  => :html,
+            :view             => 'another_view'
+  end
+  
+end
+# /render_test #################################################################
+
+
 class CellsTest < ActionController::TestCase
   include CellsTestMethods
   
-  Cell::Base.view_paths << "#{RAILS_ROOT}/vendor/plugins/cells/test/cells"
+
   ### FIXME:
   #Cell::View.warn_cache_misses = true
-  
+  def setup
+    super
+    MyTestCell.default_template_format = :html
+  end
 
   def test_controller_render_methods
     get :call_render_cell_with_strings  # render_cell("test", "state")
@@ -133,7 +157,6 @@ class CellsTest < ActionController::TestCase
   
   # test simple rendering cycle -------------------------------------------------
   
-  # ok
   def test_render_state_which_returns_a_string
     cell = MyTestCell.new(@controller)
     
@@ -144,13 +167,16 @@ class CellsTest < ActionController::TestCase
     #assert_raises (NoMethodError) { cell.render_state("non_existing_state") }
   end
   
-  # ok
-  def test_render_state_which_needs_a_view
+  def test_render_state_with_view_file
     cell = MyTestCell.new(@controller)
     
     c= cell.render_state(:view_with_instance_var)
     assert_selekt c, "#one", "yeah"
     assert_selekt c, "#two", "wow"
+  end
+  
+  def test_render_state_with_layout
+    
   end
   
   
@@ -195,8 +221,15 @@ class CellsTest < ActionController::TestCase
     assert_selekt c, "#partialContained>#partial"
   end
   
+  # test advanced views (prototype_helper, ...) --------------------------------
+  ### TODO: fix CellTestController to allow rendering views with #link_to_function-
+  def dont_test_view_with_link_to_function
+    cell = MyTestCell.new(@controller)
+    c = cell.render_state(:state_with_link_to_function)
+    assert_selekt c, "#partialContained>#partial"
+  end
   
-  # test view inheritance -------------------------------------------------------
+  # test view inheritance ------------------------------------------------------
   
   def test_possible_paths_for_state
     t = MyChildCell.new(@controller)
@@ -222,20 +255,10 @@ class CellsTest < ActionController::TestCase
   
   # test Cell::View -------------------------------------------------------------
   
-  # ok
   def test_find_family_view_for_state
     t = MyChildCell.new(@controller)
     tpl = t.find_family_view_for_state(:bye, Cell::View.new(["#{RAILS_ROOT}/vendor/plugins/cells/test/cells"], {}, @controller))
     assert_equal "my_mother/bye.html.erb", tpl.path
-  end
-  
-  
-  
-  # view for :instance_view is provided directly by #view_for_state.
-  def test_view_for_state
-    t = CellsTestOneCell.new(@controller)
-    c = t.render_state(:instance_view)
-    assert_selekt c, "#renamedInstanceView"
   end
   
 
@@ -247,14 +270,36 @@ class CellsTest < ActionController::TestCase
     assert_equal CellsTestOneCell.cell_name, "cells_test_one"
   end
   
-  def test_cell_name_suffix
-    assert_equal Cell::Base.name_suffix, "_cell"
-  end
 
   def test_class_from_cell_name
     assert_equal Cell::Base.class_from_cell_name("cells_test_one"), CellsTestOneCell
   end
-
+  
+  def test_default_template_format
+    # test getter
+    u = MyTestCell.new(@controller)
+    assert_equal :html, Cell::Base.default_template_format
+    assert_equal :html, u.class.default_template_format
+    
+    # test setter
+    MyTestCell.default_template_format = :js
+    assert_equal :html, Cell::Base.default_template_format
+    assert_equal :js, u.class.default_template_format
+  end
+  
+  def test_defaultize_render_options_for
+    u = MyTestCell.new(@controller)
+    assert_equal( {:template_format => :html, :view => :do_it}, 
+      u.defaultize_render_options_for(nil, :do_it))
+    assert_equal( {:template_format => :html, :view => :do_it}, 
+      u.defaultize_render_options_for({}, :do_it))
+    assert_equal( {:template_format => :js, :view => :do_it},
+      u.defaultize_render_options_for({:template_format => :js}, :do_it))
+    assert_equal( {:template_format => :html, :layout => :metal, :view => :do_it},
+      u.defaultize_render_options_for({:layout => :metal}, :do_it))
+    assert_equal( {:template_format => :js, :layout => :metal, :view => :do_it}, 
+      u.defaultize_render_options_for({:layout => :metal, :template_format => :js}, :do_it))
+  end
 
   def test_new_directory_hierarchy
     cell = ReallyModule::NestedCell.new(@controller)
@@ -281,7 +326,7 @@ class CellsTest < ActionController::TestCase
   end
   
   
-  def test_modified_view_finding_for_testing    
+  def test_modified_view_finding_for_testing
     t = MyTestCell.new(@controller)
     c = t.render_state(:view_in_local_test_views_dir)
     assert_selekt c, "#localView"
@@ -290,10 +335,14 @@ class CellsTest < ActionController::TestCase
   
   def test_params_in_a_cell_state
     @controller.params = {:my_param => "value"}
-    t = MyTestCell.new(@controller)
+    t = TestCell.new(@controller)
     c = t.render_state(:state_using_params)
     assert_equal c, "value"
   end
+  
+  
+  
+  
   
   ### functional tests: ---------------------------------------------------------
 

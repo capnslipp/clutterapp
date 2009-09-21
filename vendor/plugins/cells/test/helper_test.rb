@@ -7,9 +7,9 @@ require File.dirname(__FILE__) + '/cells/test_cell'
 class CellsHelperTest < ActionController::TestCase
   include CellsTestMethods
   
-  def self.path_to_test_views
-    RAILS_ROOT + "/vendor/plugins/cells/test/views/"
-  end
+  #def self.path_to_test_views
+  #  RAILS_ROOT + "/vendor/plugins/cells/test/views/"
+  #end
   
   
   def test_helper
@@ -59,7 +59,7 @@ class CellsHelperTest < ActionController::TestCase
     # this cell doesn't include the helper, but uses it anyway, which should
     # produce an error:
 
-    cell = MyTestCell.new(@controller)
+    cell = TestCell.new(@controller)
 
 #    assert_raises (NameError) do
      assert_raises (ActionView::TemplateError) do
