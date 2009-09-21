@@ -230,22 +230,6 @@ li.item li.item.checkbox { list-style-type: none; margin-left: 0; }
 	height: 16px;
 }
 
-#topbar > .logo .badge.box {
-	display: inline-block;
-	position: relative;
-	top: -0.5em;
-	font-size: 0.75em;
-	width: 1em;
-	height: 1em;
-	margin-left: 0.125em;
-	text-align: center;
-	/*border-color: #444;
-	background-color: #fff;*/
-	border-color: #d00;
-	background-color: #f42;
-	color: #000;
-}
-
 #topbar > .content {
 	float: left;
 	position: relative;
