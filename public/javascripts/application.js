@@ -4,6 +4,24 @@
 
 var OrgClut = {};
 
+JOIN = '_'
+NEW = 'new'
+
+function nodeDomClass(prefix) {
+	if (prefix == undefined)
+		return 'node'
+	else
+		return prefix + JOIN + 'node'
+}
+
+
+function nodeDomID(recordID, prefix) {
+	if (recordID != '')
+		return nodeDomClass(prefix) + JOIN + recordID
+	else
+		return (prefix == undefined) ? nodeDomClass(NEW) : nodeDomClass(prefix)
+}
+
 
 function preUpdateCheckPropField(checkbox, setToOrigState) {
 	checkbox = $('#' + checkbox);
@@ -22,6 +40,35 @@ function updateCheckPropField(checkbox, checked) {
 	checkbox.checked = checked;
 	checkbox.attr('disabled', false);
 }
+
+
+function expandActionBar(nodeID) {
+	// hide everything else first
+	$('.' + nodeDomClass('item-action')).children('.buttons').hide();
+	$('.' + nodeDomClass('item-action')).children('.widget').show();
+	$('.' + nodeDomClass('item-new')).hide();
+	
+ 	$('#' + nodeDomID(nodeID, 'item-action')).children('.widget').hide();
+ 	$('#' + nodeDomID(nodeID, 'item-action')).children('.buttons').show();
+}
+
+
+function collapseActionBar(nodeID) {
+ 	$('#' + nodeDomID(nodeID, 'item-action')).children('.buttons').hide();
+ 	$('#' + nodeDomID(nodeID, 'item-action')).children('.widget').show();
+	hideItemNewBar(nodeID);
+}
+
+
+function toggleItemNewBar(nodeID) {
+	$('#' + nodeDomID(nodeID, 'item-new')).toggle();
+}
+
+
+function hideItemNewBar(nodeID) {
+	$('#' + nodeDomID(nodeID, 'item-new')).hide();
+}
+
 
 
 OrgClut.kPageMinWidth = 320;

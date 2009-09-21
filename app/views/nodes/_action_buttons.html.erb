@@ -1,10 +1,10 @@
-<div class="action bar">
+<div id="<%= dom_id(item, 'item-action') %>" class="<%= "#{dom_class(item, 'item-action')} item-action" %> action bar">
 	<div class="manipulate widget">
-		<span class="sym"><%# ► %><%= link_to_function '&#9658;', "$(this).closest('.action.bar').children().toggle();" %></span>
+		<span class="sym"><%# ► %><%= link_to_function '&#9658;', "expandActionBar('#{item.id}');" %></span>
 	</div>
 	<div class="manipulate buttons shadowable" style="display: none;">
 		<div class="shadow"></div>
-		<span class="sym"><%# ◄ %><%= link_to_function '&#9668;', "$(this).closest('.action.bar').children().toggle();" %></span>
+		<span class="sym"><%# ◄ %><%= link_to_function '&#9668;', "collapseActionBar('#{item.id}');" %></span>
 		<% unless item.root? %>
 			<span class="sym"><%# ✖ %><%= link_to_remote '&#10006;',	:url => { :action => 'destroy',		:controller => 'nodes', :id => item.id }, :method => 'delete'	%></span>
 		<% end %>
@@ -23,6 +23,6 @@
 		<% unless item.root? %>
 			<span class="sym"><%# ◉ %>&#9673;</span>
 		<% end %>
-		<span class="sym"><%# ✚ %><%= link_to_function '&#10010;', "$('##{dom_id(item, 'item-new')}').toggle();" %></span>
+		<span class="sym"><%# ✚ %><%= link_to_function '&#10010;', "toggleItemNewBar('#{item.id}');" %></span>
 	</div>
 </div>
