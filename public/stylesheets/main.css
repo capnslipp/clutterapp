@@ -13,7 +13,7 @@ body {
 }
 
 a { color: #000; }
-a:hover { color: #fff; background-color: #000; }
+#a:hover { color: #fff; background-color: #000; }
 
 h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; }
 h1 { font-size: 2.25em; }
@@ -86,6 +86,9 @@ li.item, li.item-new {
 	margin-left: 1em;
 	margin-bottom: 1px;
 	/*clear: left;*/ /* clear was originally needed for keeping floating item content from destroying the view; this shouldn't be possible eventually */
+}
+li.widget {
+	list-style-type: none;
 }
 li.item > .body {
 	margin-bottom: 1px;
@@ -249,16 +252,37 @@ li.item li.item.checkbox { list-style-type: none; margin-left: 0; }
 .bar { display: inline-block; }
 
 .buttons, .widget {
-	background: #666;
 	/*font-weight: bold;*/
 	display: inline-block;
+	padding: 0 2px;
 }
 
-.buttons, .buttons a { color: #fff; }
-.manipulate.buttons { background: #c20; }
-
-.widget, .widget a { color: #ddd; }
 .manipulate.widget { background: #fff; }
+.manipulate.widget, .manipulate.widget a { color: #ddd; }
+.manipulate.widget a:hover { color: #aaa; }
+
+.manipulate.buttons { background: #c20; }
+.manipulate.buttons, .manipulate.buttons a { color: #fff; }
+.manipulate.buttons a:hover { background: #900; }
+
+.new.buttons { background: #666; }
+.new.buttons, .new.buttons a { color: #fff; }
+.new.buttons a:hover { background: #333; }
+
+.buttons, .widget,
+.buttons > .shadow, .widget > .shadow {
+	border-radius: 6px; -webkit-border-radius: 6px; -moz-border-radius: 6px;
+}
+
+.manipulate.widget a:hover, .manipulate.buttons a:hover, .new.buttons a:hover {
+	border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px;
+}
+
+/*.widget, .widget a { color: #ddd; }
+.widget a:hover {  }
+
+.buttons, .buttons a { color: #fff; }
+.buttons a:hover { background: #b10; }*/
 
 /*.new.buttons { margin-left: 2em; }*/
 
