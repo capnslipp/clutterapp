@@ -25,7 +25,7 @@ h6 { font-size: 1.125em; }
 
 
 input, textarea {
-	border: 1px dotted #f20;
+	border: 1px solid #f20;
 	padding: 1px;
 	margin: 1px
 }
