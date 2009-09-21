@@ -36,7 +36,7 @@ set :repository,  "http://svn.6bitt.com/orgclut2/trunk"
 # If you aren't using Subversion to manage your source code, specify
 # your SCM below:
 # set :scm, :subversion
-set :scm_username, "slippyd"
+set :scm_username, "rails"
 set :scm_password, "_fill_in_"
 
 set :checkout, "export" # stops Capistrano from copying SVN-specific files to the app
