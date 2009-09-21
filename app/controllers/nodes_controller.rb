@@ -123,7 +123,10 @@ class NodesController < ApplicationController
   # POST /nodes.xml
   def create
     node_creation_args = params[:node] || {}
-    node_creation_args.update( :prop => Prop.class_from_type(params[:type]).filler ) unless params[:type].nil?
+    unless params[:type].nil?
+      filler_prop = Prop.class_from_type(params[:type]).filler
+      node_creation_args.update( :prop => filler_prop )
+    end
     
     @parent = Node.find(params[:parent_id])
     @node = @parent.create_child!(node_creation_args)

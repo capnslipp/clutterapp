@@ -14,8 +14,8 @@ class Node < ActiveRecord::Base
   def create_child!(*attributes)
     transaction do
       child = self.class.new(*attributes)
-      child.save_with_validation(false)
-      child.move_to_child_of(self)
+      child.save_with_validation false
+      child.move_to_child_of self
       self.increment_version
       raise ActiveRecord::RecordInvalid.new(child) unless child.valid?
       child
@@ -48,7 +48,7 @@ class Node < ActiveRecord::Base
 protected
   
   def validate
-    errors.add('', "If this #{self.class.to_s} is root, it must exist have a Pile pointing back to it and vice-versa.") unless root? ^ !pile.nil? == false
+    errors.add('', "If this #{self.class.to_s} is root, it must exist have a Pile pointing back to it and vice-versa.") unless not (root? ^ !pile.nil?)
     errors.add(:prop, "must exist or #{self.class.to_s} must be root but not both") unless root? ^ !prop.nil?
   end
   
