@@ -2,14 +2,34 @@ module ActiveSupport
   class BufferedLogger
     
     ESCAPE_CHR = 0x1b.chr
+    PREFIX_SPACE = '  '
+    SUFFIX_SPACE = '   '
+    
     
     def prefix(text, color = nil)
       if color.nil?
-        "  #{text}   "
+        "#{PREFIX_SPACE}#{text}   "
       else
-        "  #{ESCAPE_CHR}[4;#{color_code(color).join(';')}m#{text}#{ESCAPE_CHR}[0m   "
+        "#{PREFIX_SPACE}#{ESCAPE_CHR}[4;#{color_code(color).join(';')}m#{text}#{ESCAPE_CHR}[0m#{SUFFIX_SPACE}"
       end
     end
+    
+    
+    def add_with_prefix(severity, message = nil, progname = nil, &block)
+      prefix = case severity
+        when DEBUG:   prefix('DEBUG', :blue)
+        when INFO:    prefix('INFO', :green)
+        when WARN:    prefix('WARN', :yellow)
+        when ERROR:   prefix('ERROR', :red)
+        when FATAL:   prefix('FATAL', :light_red)
+        when UNKNOWN: prefix('UNKNOWN', :light_gray)
+        else          ''
+      end unless message =~ /^  /
+      
+      add_without_prefix(severity, message.nil? ? nil : "#{prefix}#{message}", progname, &block)
+    end
+    
+    alias_method_chain :add, :prefix
     
     
   private
