@@ -14,7 +14,7 @@ class NodesController < ApplicationController
   
   # PUT /items/1/update_checkbox
   def update_check_prop_checked
-    logger.debug logger.prefix('update_check_prop_checked', :light_green) + 'params: ' + params.inspect
+    logger.prefixed 'update_check_prop_checked', :light_green, 'params: ' + params.inspect
     prop = CheckProp.find(params[:id])
     prop.checked = params[:checked]
     prop.save!
@@ -25,7 +25,7 @@ class NodesController < ApplicationController
   
   in_place_edit_for :note_prop, :note
   def set_note_prop_note
-    logger.debug logger.prefix('set_note_prop_note', :light_green) + 'params: ' + params.inspect
+    logger.prefixed 'set_note_prop_note', :light_green, 'params: ' + params.inspect
     prop = NoteProp.find(params[:id]) 
     prop.note = params[:value]
     prop.save!
@@ -34,7 +34,7 @@ class NodesController < ApplicationController
   
   in_place_edit_for :priority_prop, :priority
   def set_priority_prop_priority
-    logger.debug logger.prefix('set_priority_prop_priority', :light_green) + 'params: ' + params.inspect
+    logger.prefixed 'set_priority_prop_priority', :light_green, 'params: ' + params.inspect
     prop = PriorityProp.find(params[:id]) 
     prop.priority = params[:value]
     prop.save!
@@ -43,7 +43,7 @@ class NodesController < ApplicationController
   
   in_place_edit_for :tag_prop, :tag
   def set_tag_prop_tag
-    logger.debug logger.prefix('set_tag_prop_tag', :light_green) + 'params: ' + params.inspect
+    logger.prefixed 'set_tag_prop_tag', :light_green, 'params: ' + params.inspect
     prop = TagProp.find(params[:id]) 
     prop.tag = params[:value].upcase
     prop.save!
@@ -52,7 +52,7 @@ class NodesController < ApplicationController
   
   in_place_edit_for :text_prop, :text
   def set_text_prop_text
-    logger.debug logger.prefix('set_text_prop_text', :light_green) + 'params: ' + params.inspect
+    logger.prefixed 'set_text_prop_text', :light_green, 'params: ' + params.inspect
     prop = TextProp.find(params[:id]) 
     prop.text = params[:value]
     prop.save!
@@ -61,7 +61,7 @@ class NodesController < ApplicationController
   
   in_place_edit_for :time_prop, :time
   def set_time_prop_time
-    logger.debug logger.prefix('set_time_prop_time', :light_green) + 'params: ' + params.inspect
+    logger.prefixed 'set_time_prop_time', :light_green, 'params: ' + params.inspect
     prop = TimeProp.find(params[:id]) 
     prop.time = Time.zone.parse(params[:value])
     prop.save!
