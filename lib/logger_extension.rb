@@ -5,7 +5,7 @@ module ActiveSupport
       if color_code.nil?
         "  #{text}   "
       else
-        "  [4;#{color_code.to_i};#{color_code ? 1 : 0}m#{text}[0m   "
+        "  [4;#{color_code.to_i};#{use_bright_shade ? 1 : 0}m#{text}[0m   "
       end
     end
   
