@@ -7,7 +7,7 @@ var OrgClut = {};
 JOIN = '_'
 NEW = 'new'
 
-function nodeDomClass(prefix) {
+function classForNodeModels(prefix) {
 	if (prefix == undefined)
 		return 'node'
 	else
@@ -15,11 +15,21 @@ function nodeDomClass(prefix) {
 }
 
 
-function nodeDomID(recordID, prefix) {
+function idForNodeModel(recordID, prefix) {
 	if (recordID != '')
-		return nodeDomClass(prefix) + JOIN + recordID
+		return classForNodeModels(prefix) + JOIN + recordID
 	else
-		return (prefix == undefined) ? nodeDomClass(NEW) : nodeDomClass(prefix)
+		return (prefix == undefined) ? classForNodeModels(NEW) : classForNodeModels(prefix)
+}
+
+
+function elementsForNodeModels(prefix) {
+	return $('.' + classForNodeModels(prefix))
+}
+
+
+function elementForNodeModel(recordID, prefix) {
+	return $('#' + idForNodeModel(recordID, prefix))
 }
 
 
@@ -42,31 +52,42 @@ function updateCheckPropField(checkbox, checked) {
 }
 
 
+// currently unused
+OrgClut.kSlideHideArgs = {width: 'hide'};
+OrgClut.kSlideShowArgs = {width: 'show'};
+OrgClut.kSlideToggleArgs = {width: 'toggle'};
+
+
 function expandActionBar(nodeID) {
 	// hide everything else first
-	$('.' + nodeDomClass('item-action')).children('.buttons').hide();
-	$('.' + nodeDomClass('item-action')).children('.widget').show();
-	$('.' + nodeDomClass('item-new')).hide();
+	elementsForNodeModels('item-action').find('.buttons').hide();
+	elementsForNodeModels('item-action').find('.widget.expanded').hide();
+	elementsForNodeModels('item-action').find('.widget.collapsed').show();
+	elementsForNodeModels('item-new').find('.buttons').hide();
+	//$('.initially-hidden').hide();
 	
- 	$('#' + nodeDomID(nodeID, 'item-action')).children('.widget').hide();
- 	$('#' + nodeDomID(nodeID, 'item-action')).children('.buttons').show();
+	
+	elementForNodeModel(nodeID, 'item-action').find('.buttons').show();
+	elementForNodeModel(nodeID, 'item-action').find('.widget.expanded').show();
+	elementForNodeModel(nodeID, 'item-action').find('.widget.collapsed').hide();
 }
 
 
 function collapseActionBar(nodeID) {
- 	$('#' + nodeDomID(nodeID, 'item-action')).children('.buttons').hide();
- 	$('#' + nodeDomID(nodeID, 'item-action')).children('.widget').show();
+ 	elementForNodeModel(nodeID, 'item-action').find('.buttons').hide();
+ 	elementForNodeModel(nodeID, 'item-action').find('.widget.expanded').hide();
+ 	elementForNodeModel(nodeID, 'item-action').find('.widget.collapsed').show();
 	hideItemNewBar(nodeID);
 }
 
 
 function toggleItemNewBar(nodeID) {
-	$('#' + nodeDomID(nodeID, 'item-new')).toggle();
+	elementForNodeModel(nodeID, 'item-new').find('.buttons').toggle();
 }
 
 
 function hideItemNewBar(nodeID) {
-	$('#' + nodeDomID(nodeID, 'item-new')).hide();
+	elementForNodeModel(nodeID, 'item-new').find('.buttons').hide();
 }
 
 

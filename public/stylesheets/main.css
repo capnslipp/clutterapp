@@ -55,6 +55,8 @@ a.sym, a .sym, .sym a {
 	height: 1em;
 }
 
+.initially-hidden { display: none; }
+
 
 /* flash messages, notices, and warnings */
 
@@ -84,7 +86,7 @@ ul.list {
 li.item, li.item-new {
 	list-style-type: disc;
 	margin-left: 1em;
-	margin-bottom: 1px;
+	/*margin-bottom: 1px;*/
 	/*clear: left;*/ /* clear was originally needed for keeping floating item content from destroying the view; this shouldn't be possible eventually */
 }
 li.widget {
@@ -251,10 +253,13 @@ li.item li.item.checkbox { list-style-type: none; margin-left: 0; }
 /* buttons/bars */
 .bar { display: inline-block; }
 
-.buttons, .widget {
+.widget-wrap, .buttons-wrap { display: inline-block; }
+
+.widget, .buttons {
 	/*font-weight: bold;*/
-	display: inline-block;
 	padding: 0 2px;
+	white-space: nowrap;
+	/*overflow: hidden;*/
 }
 
 .manipulate.widget { background: #fff; }

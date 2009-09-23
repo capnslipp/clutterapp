@@ -1,5 +1,5 @@
-<li id="<%= dom_id(item, 'item-new') %>" class="<%= "#{dom_class(item, 'item-new')} item-new" %> widget" style="display: none;">
-	<div class="new buttons shadowable">
+<li id="<%= dom_id(item, 'item-new') %>" class="<%= "#{dom_class(item, 'item-new')} item-new" %> buttons-wrap">
+	<div class="new buttons shadowable initially-hidden">
 		<div class="shadow"></div>
 		<%= link_to_remote %{<span class="sym">&#10010;</span>text},	:url => create_node_url(self, item, :text) %>
 		<%= link_to_remote %{<span class="sym">&#10010;</span>check},	:url => create_node_url(self, item, :check) %>
