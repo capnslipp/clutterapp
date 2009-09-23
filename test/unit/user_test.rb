@@ -8,7 +8,10 @@ class UserTest < ActiveSupport::TestCase
 
   def test_should_create_user
     assert_difference 'User.count' do
-      user = create_user
+      invite = Invite.new(:recipient_email => '')
+      invite.save_with_validation(false)
+      
+      user = create_user(:login => 'abcdef', :invite_token => invite.token)
       assert !user.new_record?, "#{user.errors.full_messages.to_sentence}"
     end
   end
