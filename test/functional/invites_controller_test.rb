@@ -6,15 +6,19 @@ class InvitesControllerTest < ActionController::TestCase
     assert_template 'new'
   end
   
+  def test_create_blank
+    post :create, { :invite => {:recipient_email => ''} }
+    assert_template 'new'
+  end
+  
   def test_create_invalid
-    Invite.any_instance.stubs(:valid?).returns(false)
     post :create
     assert_template 'new'
   end
   
   def test_create_valid
-    Invite.any_instance.stubs(:valid?).returns(true)
-    post :create
-    assert_redirected_to invites_url
+    post :create, { :invite => {:recipient_email => 'InvitesControllerTest@example.com'} }
+    assert_redirected_to root_url
   end
+  
 end
