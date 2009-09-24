@@ -5,15 +5,8 @@ class NodesController < ApplicationController
   
   before_filter :authorize
   
-  #in_place_edit_for :check_prop, :checked
-  #def set_check_prop_checked
-  #  prop = CheckProp.find(params[:id]) 
-  #  prop.checked = params[:value]
-  #  prop.save!
-  #  render :text => check_box_tag("check_prop_#{prop.id}", '1', prop.checked?)
-  #end
   
-  # PUT /items/1/update_checkbox
+  # PUT /items/1/update_check_prop_checked
   def update_check_prop_checked
     logger.prefixed 'update_check_prop_checked', :light_green, 'params: ' + params.inspect
     prop = CheckProp.find(params[:id])
@@ -24,6 +17,7 @@ class NodesController < ApplicationController
     end
   end
   
+  # PUT /items/1/set_note_prop_note
   in_place_edit_for :note_prop, :note
   def set_note_prop_note
     logger.prefixed 'set_note_prop_note', :light_green, 'params: ' + params.inspect
@@ -33,6 +27,7 @@ class NodesController < ApplicationController
     render :text => html_escape(prop.note)
   end
   
+  # PUT /items/1/set_priority_prop_priority
   in_place_edit_for :priority_prop, :priority
   def set_priority_prop_priority
     logger.prefixed 'set_priority_prop_priority', :light_green, 'params: ' + params.inspect
@@ -42,6 +37,7 @@ class NodesController < ApplicationController
     render :text => prop.priority
   end
   
+  # PUT /items/1/set_tag_prop_tag
   in_place_edit_for :tag_prop, :tag
   def set_tag_prop_tag
     logger.prefixed 'set_tag_prop_tag', :light_green, 'params: ' + params.inspect
@@ -51,6 +47,7 @@ class NodesController < ApplicationController
     render :text => prop.tag
   end
   
+  # PUT /items/1/set_text_prop_text
   in_place_edit_for :text_prop, :text
   def set_text_prop_text
     logger.prefixed 'set_text_prop_text', :light_green, 'params: ' + params.inspect
@@ -60,6 +57,7 @@ class NodesController < ApplicationController
     render :text => html_escape(prop.text)
   end
   
+  # PUT /items/1/set_time_prop_time
   in_place_edit_for :time_prop, :time
   def set_time_prop_time
     logger.prefixed 'set_time_prop_time', :light_green, 'params: ' + params.inspect
@@ -93,32 +91,6 @@ class NodesController < ApplicationController
     #end
   end
   
-  # GET /nodes/1
-  # GET /nodes/1.xml
-  #def show
-  #  @node = Node.find(params[:id])
-  #  
-  #  respond_to do |format|
-  #    format.html # show.html.erb
-  #    format.xml  { render :xml => @node }
-  #  end
-  #end
-  
-  # GET /nodes/new
-  # GET /nodes/new.xml
-  #def new
-  #  @node = Node.new
-  #  
-  #  respond_to do |format|
-  #    format.html # new.html.erb
-  #    format.xml  { render :xml => @node }
-  #  end
-  #end
-  
-  # GET /nodes/1/edit
-  #def edit
-  #  @node = Node.find(params[:id])
-  #end
   
   # POST /nodes
   # POST /nodes.xml
@@ -147,6 +119,7 @@ class NodesController < ApplicationController
       end # format.js
     end # respond_to
   end
+  
   
   # PUT /nodes/up/1
   # PUT /nodes/up/1.xml
@@ -179,6 +152,7 @@ class NodesController < ApplicationController
     end # respond_to
   end
   
+  
   # PUT /nodes/down/1
   # PUT /nodes/down/1.xml
   def move_down
@@ -209,6 +183,7 @@ class NodesController < ApplicationController
       end # format.js
     end # respond_to
   end
+  
   
   # PUT /nodes/in/1
   # PUT /nodes/in/1.xml
@@ -241,6 +216,7 @@ class NodesController < ApplicationController
     end # respond_to
   end
   
+  
   # PUT /nodes/out/1
   # PUT /nodes/out/1.xml
   def move_out
@@ -272,22 +248,6 @@ class NodesController < ApplicationController
     end # respond_to
   end
   
-  # PUT /nodes/1
-  # PUT /nodes/1.xml
-  #def update
-  #  @node = Node.find(params[:id])
-  #  
-  #  respond_to do |format|
-  #    if @node.update_attributes(params[:node])
-  #      flash[:notice] = 'Node was successfully updated.'
-  #      format.html { redirect_to(@node) }
-  #      format.xml  { head :ok }
-  #    else
-  #      format.html { render :action => "edit" }
-  #      format.xml  { render :xml => @node.errors, :status => :unprocessable_entity }
-  #    end
-  #  end
-  #end
   
   # DELETE /nodes/1
   # DELETE /nodes/1.xml
