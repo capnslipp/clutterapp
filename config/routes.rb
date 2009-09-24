@@ -46,21 +46,23 @@ ActionController::Routing::Routes.draw do |map|
   #map.resources :users
   map.resource :session
   map.resources :users do |user| 
-    user.resources :nodes, :member => { :move_up => :put,
-                                        :move_down => :put,
-                                        :move_in => :put,
-                                        :move_out => :put,
-                                        :update_check_prop_checked => :put }
+    user.resources :nodes, :member => {
+      :move_up => :put,
+      :move_down => :put,
+      :move_in => :put,
+      :move_out => :put,
+      :update_check_prop_checked => :put
+    }
   end
   map.login   '/login',     :controller => 'sessions',  :action => 'create'
   map.logout  '/logout',    :controller => 'sessions',  :action => 'destroy'
   map.register '/reg',      :controller => 'users',     :action => 'create'
   #map.signup  '/signup',    :controller => 'users',     :action => 'new'
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
-  map.signup '/signup/:invite_token', :controller => 'users', :action => 'new'
+  map.signup '/sup/:invite_token', :controller => 'users', :action => 'new'
   
   
-  #map.user '/:user_login',   :controller => 'users',  :action => 'show_pile'
+  map.user '/:user_login',   :controller => 'nodes',  :action => 'index'
   
   
   # Install the default routes as the lowest priority.
