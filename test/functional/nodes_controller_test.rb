@@ -2,6 +2,8 @@ require 'test_helper'
 
 class NodesControllerTest < ActionController::TestCase
   test "should get index" do
+    bypass_authentication
+    
     get :index
     assert_response :success
     assert_not_nil assigns(:nodes)
@@ -14,11 +16,14 @@ class NodesControllerTest < ActionController::TestCase
   #end
   
   test "should create node" do
-    assert_difference('Node.count') do
-      post :create, :node => { }
-    end
+    bypass_authentication
     
-    assert_redirected_to node_path(assigns(:node))
+    # no idea why we need to do this first, but it fails if we don't
+    users(:quentin).pile.root_node.create_child!({:prop => TextProp.filler})
+    
+    assert_difference 'Node.count', +1 do
+      post :create, :parent_id => users(:quentin).pile.root_node.to_param, :type => 'text'
+    end
   end
   
   # no direct "update" action
@@ -40,10 +45,20 @@ class NodesControllerTest < ActionController::TestCase
   #end
   
   test "should destroy node" do
-    assert_difference('Node.count', -1) do
-      delete :destroy, :id => nodes(:one).to_param
-    end
+    bypass_authentication
     
-    assert_redirected_to nodes_path
+    users(:quentin).pile.root_node.create_child!({:prop => TextProp.filler})
+    
+    assert_difference 'Node.count', -1 do
+      delete :destroy, :id => users(:quentin).pile.root_node.children.last.to_param
+    end
   end
+  
+  
+protected
+  
+  def bypass_authentication
+    NodesController.any_instance.stubs(:logged_in? => true, :current_user => User.first)
+  end
+  
 end
