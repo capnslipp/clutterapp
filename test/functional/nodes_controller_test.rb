@@ -1,12 +1,13 @@
 require 'test_helper'
 
 class NodesControllerTest < ActionController::TestCase
+  
   test "should get index" do
     bypass_authentication
     
-    get :index
+    get :index, :user_id => users(:quentin).to_param
     assert_response :success
-    assert_not_nil assigns(:nodes)
+    assert_not_nil assigns(:root_node)
   end
   
   # no direct "new" action
