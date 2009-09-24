@@ -9,7 +9,11 @@ class InvitesController < ApplicationController
   def create
     @invite = Invite.new(params[:invite])
     @invite.sender = current_user
-    if @invite.save
+    
+    unless @invite.save
+      render :action => 'new'
+    
+    else
       if logged_in?
         Mailer.deliver_invite(@invite, signup_url(@invite.token))
         flash[:notice] = "Thank you, invite sent."
@@ -18,8 +22,6 @@ class InvitesController < ApplicationController
         flash[:notice] = "Thank you, we will notify when we are ready."
         redirect_to root_url
       end
-    else
-      render :action => 'new'
     end
   end
   
