@@ -67,28 +67,28 @@ class NodesController < ApplicationController
     render :text => prop.time
   end
   
+  
   # GET /nodes
   # GET /nodes.xml
   def index
-    @piles_owner = User.find_by_login(params[:user_login]) unless params[:user_login].nil?
-    @piles_owner = User.find(params[:user_id]) if @piles_owner.nil?
+    @pile_owner = User.find_by_login(params[:user_login]) unless params[:user_login].nil?
     
-    if @piles_owner.nil?
-      flash[:error] = "Sorry, we know of no such user."
-      redirect_to home_url
-    elsif current_user == @piles_owner
-      @root_node = current_user.pile.root_node
-      render :partial => 'users/show_pile', :layout => 'application'
-    else
-      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
-      redirect_to home_url
+    if @pile_owner.nil?
+      @pile_owner = User.find(params[:user_id]) unless params[:user_id].nil?
     end
-    #@nodes = Node.all
-    #
-    #respond_to do |format|
-    #  format.html # index.html.erb
-    #  format.xml  { render :xml => @nodes }
-    #end
+    
+    if @pile_owner.nil?
+      #flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
+      flash[:error] = %{would "redirect_to #{user_url}", but can't}
+      redirect_to home_url
+    else
+      @root_node = @pile_owner.pile.root_node
+      
+      respond_to do |format|
+        format.html { render :partial => 'users/show_pile', :layout => 'application' }
+        #format.xml  { render :xml => @nodes }
+      end
+    end
   end
   
   
