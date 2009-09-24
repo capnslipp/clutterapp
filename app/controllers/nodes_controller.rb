@@ -71,16 +71,11 @@ class NodesController < ApplicationController
   # GET /nodes
   # GET /nodes.xml
   def index
-    @pile_owner = User.find_by_login(params[:user_login]) unless params[:user_login].nil?
+    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
     
     if @pile_owner.nil?
-      @pile_owner = User.find(params[:user_id]) unless params[:user_id].nil?
-    end
-    
-    if @pile_owner.nil?
-      #flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
-      flash[:error] = %{would "redirect_to #{user_url}", but can't}
-      redirect_to home_url
+      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
+      redirect_to user_url(current_user)
     else
       @root_node = @pile_owner.pile.root_node
       

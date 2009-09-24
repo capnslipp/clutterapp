@@ -39,21 +39,6 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'home'
   map.home '/', :controller => 'home'
   
-  
-  map.resources :invites
-  
-  
-  #map.resources :users
-  map.resource :session
-  map.resources :users do |user| 
-    user.resources :nodes, :member => {
-      :move_up => :put,
-      :move_down => :put,
-      :move_in => :put,
-      :move_out => :put,
-      :update_check_prop_checked => :put
-    }
-  end
   map.login   '/login',     :controller => 'sessions',  :action => 'create'
   map.logout  '/logout',    :controller => 'sessions',  :action => 'destroy'
   map.register '/reg',      :controller => 'users',     :action => 'create'
@@ -62,7 +47,21 @@ ActionController::Routing::Routes.draw do |map|
   map.signup '/sup/:invite_token', :controller => 'users', :action => 'new'
   
   
-  map.user '/:user_login',   :controller => 'nodes',  :action => 'index'
+  map.resources :invites, :as => 'inv'
+  
+  
+  map.resource :session
+  map.resources :users, :has_many => :nodes
+  map.resources :nodes, :belongs_to => :user, :member => {
+    :move_up => :put,
+    :move_down => :put,
+    :move_in => :put,
+    :move_out => :put,
+    :update_check_prop_checked => :put
+  }
+  
+  
+  #map.user '/:user_login',   :controller => 'nodes',  :action => 'index'
   
   
   # Install the default routes as the lowest priority.

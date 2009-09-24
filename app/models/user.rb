@@ -46,6 +46,12 @@ class User < ActiveRecord::Base
   
   
   
+  def to_param
+    login
+  end
+  
+  
+  
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
   # uff.  this is really an authorization, not authentication routine.
@@ -89,7 +95,6 @@ class User < ActiveRecord::Base
       invite_limit - invite_sent_count
     end
   end
-  
   
   
   protected
