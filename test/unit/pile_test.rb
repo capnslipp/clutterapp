@@ -3,10 +3,10 @@ require 'test_helper'
 class PileTest < ActiveSupport::TestCase
   
   test "2 users should have 2 piles total" do
-    u1 = create_user(:login => 'user1__', :email => 'user1__@example.com')
-    u2 = create_user(:login => 'user2__', :email => 'user2__@example.com')
-    
-    assert_equal 2, Pile.count
+    assert_difference 'Pile.count', +2 do
+      u1 = create_user(:login => 'user1__', :email => 'user1__@example.com')
+      u2 = create_user(:login => 'user2__', :email => 'user2__@example.com')
+    end
   end
   
   test "2 users should each have 1 pile after creation" do
