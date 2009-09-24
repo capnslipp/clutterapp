@@ -3,6 +3,7 @@ class NodesController < ApplicationController
   include ERB::Util
   layout nil
   
+  before_filter :authorize
   
   #in_place_edit_for :check_prop, :checked
   #def set_check_prop_checked
