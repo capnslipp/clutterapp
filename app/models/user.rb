@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   has_many :sent_invites, :class_name => 'Invite', :foreign_key => 'sender_id'
   belongs_to :invite
   
-  before_create :set_invite_limit
+  before_create :set_starting_invite_limit
   
   
   before_validation_on_create :create_default_pile_if_not_exists
@@ -75,6 +75,11 @@ class User < ActiveRecord::Base
   end
   
   
+  def invite_limit=(value)
+    write_attribute :invite_limit, (value == INFINITY ? nil : value)
+  end
+  
+  
   
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
   
@@ -101,7 +106,7 @@ class User < ActiveRecord::Base
   
   DEFAULT_INVITATION_LIMIT = INFINITY
   
-  def set_invite_limit
+  def set_starting_invite_limit
     self.invite_limit = DEFAULT_INVITATION_LIMIT
   end
   
