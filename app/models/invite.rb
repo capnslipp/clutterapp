@@ -10,6 +10,8 @@ class Invite < ActiveRecord::Base
   before_create :generate_token
   before_create :increment_sender_invite_sent_count, :if => :sender
   
+  named_scope :sent, :conditions => 'sent_at IS NOT NULL'
+  named_scope :unsent, :conditions => 'sent_at IS NULL'
   
   
   protected
