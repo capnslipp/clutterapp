@@ -13,7 +13,7 @@ class Node < ActiveRecord::Base
   
   def create_child!(*attributes)
     transaction do
-      child = self.class.new(*attributes)
+      child = pile.nodes.build(*attributes)
       child.save_with_validation false
       child.move_to_child_of self
       self.increment_version
@@ -48,8 +48,8 @@ class Node < ActiveRecord::Base
 protected
   
   def validate
-    errors.add('', "If this #{self.class.to_s} is root, it must have a Pile pointing back to it") unless not (root? ^ !pile.nil?)
-    errors.add(:prop, "must exist or #{self.class.to_s} must be root but not both") unless root? ^ !prop.nil?
+    #errors.add(:node, "either be root and have pile; or it must be neither root ") if root? ^ (pile.root_node != self) # causes stack overflow
+    errors.add(:prop, "must exist or #{self.class.to_s} must be root but not both") unless root? ^ prop
   end
   
   def increment_version
