@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   
   #map.users :users, :only => [:create]
   
-  map.resources :users, :default => true, :except => [:index, :create, :new], :has_many => :nodes, :requirements => { :id => /.{6,}/ } do |users|
+  map.resources :users, :default => true, :except => [:index, :create, :new], :requirements => { :id => /.{6,}/ } do |users|
     users.resources :piles
   end
   
@@ -22,17 +22,21 @@ ActionController::Routing::Routes.draw do |map|
   
 # back-end XHR URLs
   
-  map.resources :nodes, :belongs_to => :user, :member => {
-    :move_up => :put,
-    :move_down => :put,
-    :move_in => :put,
-    :move_out => :put,
-    :update_check_prop_checked => :put,
-    :set_note_prop_note => :put,
-    :set_priority_prop_priority => :put,
-    :set_tag_prop_tag => :put,
-    :set_text_prop_text => :put,
-    :set_time_prop_time => :put
-  }
+  map.resources :piles do |piles|
+    piles.resources :nodes, :member => {
+      :move_up => :put,
+      :move_down => :put,
+      :move_in => :put,
+      :move_out => :put,
+      :update_check_prop_checked => :put,
+      :set_note_prop_note => :put,
+      :set_priority_prop_priority => :put,
+      :set_tag_prop_tag => :put,
+      :set_text_prop_text => :put,
+      :set_time_prop_time => :put
+    }
+    
+    piles.resources :props, :as => 'props/:type'
+  end
   
 end
