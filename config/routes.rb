@@ -37,21 +37,23 @@ ActionController::Routing::Routes.draw do |map|
   
   
   map.root :controller => 'home'
-  map.home '/', :controller => 'home'
   
-  map.login   '/login',     :controller => 'sessions',  :action => 'create'
-  map.logout  '/logout',    :controller => 'sessions',  :action => 'destroy'
-  map.register '/reg',      :controller => 'users',     :action => 'create'
-  #map.signup  '/signup',    :controller => 'users',     :action => 'new'
+  
+  map.login   '/sin',               :controller => 'sessions',  :action => 'create'
+  map.logout  '/sout',              :controller => 'sessions',  :action => 'destroy'
+  map.register '/reg',              :controller => 'users',     :action => 'create'
+  #map.signup  '/signup',            :controller => 'users',     :action => 'new'
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
-  map.signup '/sup/:invite_token', :controller => 'users', :action => 'new'
+  map.signup '/sup/:invite_token',  :controller => 'users',     :action => 'new'
   
   
   map.resources :invites, :as => 'inv'
   
-  
   map.resource :session
+  
   map.resources :users, :has_many => :nodes
+  #map.user '/:id',                :controller => 'users',    :action => 'show',      :has_many => :nodes
+  
   map.resources :nodes, :belongs_to => :user, :member => {
     :move_up => :put,
     :move_down => :put,
@@ -64,12 +66,6 @@ ActionController::Routing::Routes.draw do |map|
     :set_text_prop_text => :put,
     :set_time_prop_time => :put
   }
-  
-  
-  #map.user '/:user_login',   :controller => 'nodes',  :action => 'index'
-  
-  #map.connect 'nodes/:action/:id', :controller => 'nodes'
-  #map.connect 'nodes/:action/:id.:format', :controller => 'nodes'
   
   
   # Install the default routes as the lowest priority.
