@@ -48,7 +48,7 @@ class Node < ActiveRecord::Base
 protected
   
   def validate
-    errors.add('', "If this #{self.class.to_s} is root, it must exist have a Pile pointing back to it and vice-versa.") unless not (root? ^ !pile.nil?)
+    errors.add('', "If this #{self.class.to_s} is root, it must have a Pile pointing back to it") unless not (root? ^ !pile.nil?)
     errors.add(:prop, "must exist or #{self.class.to_s} must be root but not both") unless root? ^ !prop.nil?
   end
   
