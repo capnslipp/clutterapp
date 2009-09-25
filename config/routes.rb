@@ -13,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   
   #map.users :users, :only => [:create]
   
-  map.resources :users, :default => true, :except => [:index, :create, :new], :requirements => { :id => /.{6,}/ } do |users|
+  map.resources :users, :default => true, :except => [:index, :create, :new], :requirements => { :id => /[^\/]{6,}/ } do |users|
     users.resources :piles
   end
   
