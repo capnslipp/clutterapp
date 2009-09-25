@@ -31,11 +31,12 @@ class User < ActiveRecord::Base
   before_create :set_starting_invite_limit
   
   
-  before_validation_on_create :create_default_pile_if_not_exists
+  #before_validation_on_create :create_default_pile!
+  after_create :default_pile # ensures that it's created
   
   
   
-  has_one :pile, :foreign_key => 'owner_id'
+  has_many :piles, :foreign_key => 'owner_id', :dependent => :destroy, :autosave => true
   
   
   
@@ -102,6 +103,12 @@ class User < ActiveRecord::Base
   end
   
   
+  
+  def default_pile
+    @default_pile ||= piles.first || create_default_pile
+  end
+  
+  
 protected
   
   DEFAULT_INVITATION_LIMIT = INFINITY
@@ -110,8 +117,13 @@ protected
     self.invite_limit = DEFAULT_INVITATION_LIMIT
   end
   
-  def create_default_pile_if_not_exists
-    self.create_pile unless self.pile
+  def create_default_pile
+    @default_pile = Pile.create(:owner => self) unless piles.count > 0
+  end
+  
+  def create_default_pile!
+    raise Exception.new 'A default Pile could not be created because one for this User already exists.' if piles.count > 0
+    create_default_pile
   end
   
 end
