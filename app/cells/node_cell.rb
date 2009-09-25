@@ -23,6 +23,7 @@ class NodeCell < Cell::Base
     @node = @opts[:node]
     @children = @node.children || []
     @prop = @node.prop
+    @user = @node.root.pile.owner
     
     render
   end

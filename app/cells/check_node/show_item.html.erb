@@ -2,7 +2,7 @@
 	<div class="check prop">
 		<%= check_box_tag "check_prop_#{@prop.id}", '1', @prop.checked? %>
 		<%= observe_field "check_prop_#{@prop.id}",
-			:url => "/#{:nodes}/#{:update_check_prop_checked}/#{@prop.id}",
+			:url => update_check_prop_checked_user_node_path(:user_id => @user, :id => @prop),
 			:before => "preUpdateCheckPropField('check_prop_#{@prop.id}');",
 			:with => 'checked',
 			:method => :put %>
