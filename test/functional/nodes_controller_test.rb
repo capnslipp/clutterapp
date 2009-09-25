@@ -20,10 +20,10 @@ class NodesControllerTest < ActionController::TestCase
     bypass_authentication
     
     # no idea why we need to do this first, but it fails if we don't
-    users(:quentin).pile.root_node.create_child!({:prop => TextProp.filler})
+    users(:quentin).piles.first.root_node.create_child!({:prop => TextProp.filler})
     
     assert_difference 'Node.count', +1 do
-      post :create, :parent_id => users(:quentin).pile.root_node.to_param, :type => 'text'
+      post :create, :parent_id => users(:quentin).piles.first.root_node.to_param, :type => 'text'
     end
   end
   
@@ -48,10 +48,10 @@ class NodesControllerTest < ActionController::TestCase
   test "should destroy node" do
     bypass_authentication
     
-    users(:quentin).pile.root_node.create_child!({:prop => TextProp.filler})
+    users(:quentin).piles.first.root_node.create_child!({:prop => TextProp.filler})
     
     assert_difference 'Node.count', -1 do
-      delete :destroy, :id => users(:quentin).pile.root_node.children.last.to_param
+      delete :destroy, :id => users(:quentin).piles.first.root_node.children.last.to_param
     end
   end
   
