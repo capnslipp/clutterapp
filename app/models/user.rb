@@ -99,7 +99,7 @@ class User < ActiveRecord::Base
   
   protected
   
-  DEFAULT_INVITATION_LIMIT = 0
+  DEFAULT_INVITATION_LIMIT = INFINITY
   
   def set_invite_limit
     self.invite_limit = DEFAULT_INVITATION_LIMIT
