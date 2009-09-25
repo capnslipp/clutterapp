@@ -2,13 +2,13 @@ require 'test_helper'
 
 class NodesControllerTest < ActionController::TestCase
   
-  test "should get index" do
-    bypass_authentication
-    
-    get :index, :user_id => users(:quentin).to_param
-    assert_response :success
-    assert_not_nil assigns(:root_node)
-  end
+  #test "should get index" do
+  #  bypass_authentication
+  #  
+  #  get :index, :user_id => users(:quentin).to_param
+  #  assert_response :success
+  #  assert_not_nil assigns(:root_node)
+  #end
   
   # no direct "new" action
   #test "should get new" do
@@ -19,11 +19,12 @@ class NodesControllerTest < ActionController::TestCase
   test "should create node" do
     bypass_authentication
     
-    # no idea why we need to do this first, but it fails if we don't
-    users(:quentin).piles.first.root_node.create_child!({:prop => TextProp.filler})
+    # make sure our fixture user has a defpile and a root_node
+    test_pile = users(:quentin).default_pile
+    test_root_node = test_pile.root_node
     
     assert_difference 'Node.count', +1 do
-      post :create, :parent_id => users(:quentin).piles.first.root_node.to_param, :type => 'text'
+      post :create, :pile_id => test_pile.to_param, :parent_id => test_root_node.to_param, :type => 'text'
     end
   end
   
@@ -48,10 +49,10 @@ class NodesControllerTest < ActionController::TestCase
   test "should destroy node" do
     bypass_authentication
     
-    users(:quentin).piles.first.root_node.create_child!({:prop => TextProp.filler})
+    test_should_create_node()
     
     assert_difference 'Node.count', -1 do
-      delete :destroy, :id => users(:quentin).piles.first.root_node.children.last.to_param
+      delete :destroy, :pile_id => users(:quentin).default_pile.to_param, :id => users(:quentin).default_pile.root_node.children.last.to_param
     end
   end
   
