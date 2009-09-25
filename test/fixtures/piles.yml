@@ -2,8 +2,6 @@
 
 one:
   owner_id: 1
-  root_node: 1
 
 two:
   owner_id: 1
-  root_node: 1
