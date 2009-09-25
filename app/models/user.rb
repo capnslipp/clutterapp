@@ -102,7 +102,7 @@ class User < ActiveRecord::Base
   end
   
   
-  protected
+protected
   
   DEFAULT_INVITATION_LIMIT = INFINITY
   
