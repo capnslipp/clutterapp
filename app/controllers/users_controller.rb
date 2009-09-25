@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   
+  before_filter :authorize, :except => [:new, :create]
+  
   # render new.rhtml
   def new
     # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
