@@ -2,7 +2,7 @@ class NodeCell < Cell::Base
   include NodesHelper
   helper_method NodesHelper.public_instance_methods
   
-  cache :show_item, :cache_version unless 
+  cache :show_item, :cache_version
   
   def cache_version
     hash = {
