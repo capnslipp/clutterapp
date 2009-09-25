@@ -94,7 +94,39 @@ class UserTest < ActiveSupport::TestCase
     assert_not_nil users(:quentin).remember_token_expires_at
     assert users(:quentin).remember_token_expires_at.between?(before, after)
   end
-
+  
+  
+  test "creating 2 users should result in 2 additional piles" do
+    assert_difference 'Pile.count', +2 do
+      u1 = create_user(:login => 'user1__', :email => 'user1__@example.com')
+      u2 = create_user(:login => 'user2__', :email => 'user2__@example.com')
+    end
+  end
+  
+  test "creating 2 users should result in each having 1 pile apiece" do
+    u1 = create_user(:login => 'user1__', :email => 'user1__@example.com')
+    u2 = create_user(:login => 'user2__', :email => 'user2__@example.com')
+    
+    assert_equal 1, Pile.find_all_by_owner_id(u1.id).count
+    assert_equal 1, Pile.find_all_by_owner_id(u2.id).count
+  end
+  
+  test "creating 2 users should result in 2 additional nodes" do
+    assert_difference 'Node.count', +2 do
+      u1 = create_user(:login => 'user1__', :email => 'user1__@example.com')
+      u2 = create_user(:login => 'user2__', :email => 'user2__@example.com')
+    end
+  end
+  
+  test "creating 2 users should result in each having 1 node apiece" do
+    u1 = create_user(:login => 'user1__', :email => 'user1__@example.com')
+    u2 = create_user(:login => 'user2__', :email => 'user2__@example.com')
+    
+    assert_equal 1, Node.all.select{|n| n.root.pile.owner == u1 }.count
+    assert_equal 1, Node.all.select{|n| n.root.pile.owner == u2 }.count
+  end
+  
+  
 protected
   def create_user(options = {})
     invite = Invite.new(:recipient_email => '')

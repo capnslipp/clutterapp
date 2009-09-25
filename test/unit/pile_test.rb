@@ -2,21 +2,6 @@ require 'test_helper'
 
 class PileTest < ActiveSupport::TestCase
   
-  test "creating 2 users should result in 2 additional piles" do
-    assert_difference 'Pile.count', +2 do
-      u1 = create_user(:login => 'user1__', :email => 'user1__@example.com')
-      u2 = create_user(:login => 'user2__', :email => 'user2__@example.com')
-    end
-  end
-  
-  test "creating 2 users should result in each having 1 pile apiece" do
-    u1 = create_user(:login => 'user1__', :email => 'user1__@example.com')
-    u2 = create_user(:login => 'user2__', :email => 'user2__@example.com')
-    
-    assert_equal 1, Pile.find_all_by_owner_id(u1.id).count
-    assert_equal 1, Pile.find_all_by_owner_id(u2.id).count
-  end
-  
   
 protected
   
@@ -31,7 +16,7 @@ protected
       :password_confirmation => 'quire69',
       :invite_token => invite.token
     }.merge(options))
-    record.save # normal save to create piles
+    record.save
     record
   end
   
