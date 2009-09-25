@@ -1,21 +1,23 @@
 ActionController::Routing::Routes.draw do |map|
 # friendly user URLs
   
-  map.root :controller => 'home'
-  
   map.login   '/sin',               :controller => 'sessions',  :action => 'create'
   map.logout  '/sout',              :controller => 'sessions',  :action => 'destroy'
   map.resource :session, :as => 'sess'
   
-  map.register '/reg',              :controller => 'users',     :action => 'create'
+  map.users '/reg',              :controller => 'users',     :action => 'create'
   #map.signup  '/sup',               :controller => 'users',     :action => 'new'
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
-  map.signup '/sup/:invite_token',  :controller => 'users',     :action => 'new'
+  map.new_user '/sup/:invite_token',  :controller => 'users',     :action => 'new'
   map.resources :invites, :as => 'inv'
   
-  map.resources :users, :default => true, :has_many => :nodes do |users|
+  #map.users :users, :only => [:create]
+  
+  map.resources :users, :default => true, :except => [:index, :create, :new], :has_many => :nodes, :requirements => { :id => /.{6,}/ } do |users|
     users.resources :piles
   end
+  
+  map.root :controller => 'home'
   
   
 # back-end XHR URLs

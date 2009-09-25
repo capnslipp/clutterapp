@@ -1,5 +1,5 @@
 class Node < ActiveRecord::Base
-  acts_as_nested_set
+  acts_as_nested_set :scope => :pile
   
   # must be specified first (at least before any associations)
   after_save :increment_version
@@ -8,7 +8,7 @@ class Node < ActiveRecord::Base
   
   belongs_to :prop, :polymorphic => true, :autosave => true
   
-  has_one :pile, :foreign_key => 'root_node_id'
+  belongs_to :pile
   
   
   def create_child!(*attributes)
