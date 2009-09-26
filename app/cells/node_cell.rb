@@ -1,8 +1,9 @@
 class NodeCell < Cell::Base
-  include NodesHelper
-  helper_method NodesHelper.public_instance_methods
+  helper :cell
+  helper :route
   
   cache :show, :cache_version
+  
   
   def cache_version
     {
@@ -11,7 +12,6 @@ class NodeCell < Cell::Base
     }
   end
   
-  #helper InPlaceMacrosHelper
   
   def show
     @node = @opts[:node]
@@ -22,6 +22,7 @@ class NodeCell < Cell::Base
     render
   end
   
+  
   #def create
   #  parent = Node.find @opts[:parent_id]
   #  @node = parent.create_child :prop => Prop.rand
@@ -29,4 +30,5 @@ class NodeCell < Cell::Base
   #  @children = []
   #  @prop = @node.prop
   #end
+  
 end

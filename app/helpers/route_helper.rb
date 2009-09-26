@@ -1,35 +1,72 @@
 module RouteHelper
   
+# user -> piles
+  
+  # two scoops
   def piles_url(options = {})
     user_piles_url(options)
   end
-  
   def piles_path(options = {})
     user_piles_path(options)
   end
   
+  # one scoop
   def pile_url(r_h_a, options = {})
     user_pile_url(id_and_user_id_from_pile( devise_record(r_h_a) ), options)
   end
-  
   def pile_path(r_h_a, options = {})
     user_pile_path(id_and_user_id_from_pile( devise_record(r_h_a) ), options)
   end
   
+  # strawberry
   def edit_pile_url(r_h_a, options = {})
     edit_user_pile_url(id_and_user_id_from_pile( devise_record(r_h_a) ), options)
   end
-  
   def edit_pile_path(r_h_a, options = {})
     edit_user_pile_path(id_and_user_id_from_pile( devise_record(r_h_a) ), options)
   end
   
+  # chocolate
   def new_pile_url(options = {})
     new_user_pile_url(options)
   end
-  
   def new_pile_path(options = {})
     new_user_pile_path(options)
+  end
+  
+  
+# user -> pile -> nodes
+  
+  # two waffle cones
+  def nodes_url(options = {})
+    user_pile_nodes_url(options)
+  end
+  def nodes_path(options = {})
+    user_pile_nodes_path(options)
+  end
+  
+  # one waffle cone
+  def node_url(r_h_a, options = {})
+    user_pile_node_url(id_and_pile_id_and_user_id_from_node( devise_record(r_h_a) ), options)
+  end
+  def node_path(r_h_a, options = {})
+    user_pile_node_path(id_and_pile_id_and_user_id_from_node( devise_record(r_h_a) ), options)
+  end
+  
+  # dipped waffle cone
+  def edit_node_url(r_h_a, options = {})
+    edit_user_pile_node_url(id_and_pile_id_and_user_id_from_node( devise_record(r_h_a) ), options)
+  end
+  def edit_node_path(r_h_a, options = {})
+    edit_user_pile_node_path(id_and_pile_id_and_user_id_from_node( devise_record(r_h_a) ), options)
+  end
+  
+  # spinkled waffle cone
+  def new_node_url(options = {})
+    new_user_pile_node_url(options)
+  end
+  def new_node_path(options = {})
+    new_user_pile_node_path(options)
   end
   
   
@@ -45,6 +82,10 @@ protected
   
   def id_and_user_id_from_pile(pile)
     { :id => pile, :user_id => pile.owner }
+  end
+  
+  def id_and_pile_id_and_user_id_from_node(node)
+    { :id => node, :pile_id => node.pile, :user_id => node.pile.owner }
   end
   
 end

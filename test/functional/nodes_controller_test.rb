@@ -25,7 +25,7 @@ class NodesControllerTest < ActionController::TestCase
     test_root_node = test_pile.root_node
     
     assert_difference 'Node.count', +1 do
-      post :create, pile_nodes_url_hash(test_pile).merge( :pile_id => test_pile.to_param, :parent_id => test_root_node.to_param, :type => 'text' )
+      post :create, :user_id => users(:one), :pile_id => test_pile.to_param, :parent_id => test_root_node.to_param, :type => 'text'
     end
   end
   
@@ -55,7 +55,7 @@ class NodesControllerTest < ActionController::TestCase
     test_root_node = test_pile.root_node
     
     assert_difference 'Node.count', -1 do
-      delete :destroy, pile_nodes_url_hash(test_pile).merge( :pile_id => test_pile.to_param, :id => test_root_node.children.last.to_param )
+      delete :destroy, :user_id => users(:one), :pile_id => test_pile.to_param, :id => test_root_node.children.last.to_param
     end
   end
   
