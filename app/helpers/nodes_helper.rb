@@ -6,7 +6,7 @@ module NodesHelper
   end
   
   def render_child_node(action_view, child_node)
-    action_view.render_cell(cell_for_node(child_node), :show_item, :node => child_node)
+    action_view.render_cell(cell_for_node(child_node), :show, :node => child_node)
   end
   
   def render_node_cell_layout(cell_view, &block)
@@ -15,7 +15,7 @@ module NodesHelper
       :object => cell_view.assigns['node'],
       :locals => {
         :render_child => proc {|child_node|
-          cell_view.render_cell(cell_for_node(child_node), :show_item, :node => child_node)
+          cell_view.render_cell(cell_for_node(child_node), :show, :node => child_node)
         }
       },
       &block

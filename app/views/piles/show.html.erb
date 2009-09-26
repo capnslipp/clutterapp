@@ -5,7 +5,7 @@
 	:locals => {
 		:item => @base_node,
 		:render_child => proc {|child_node|
-			render_cell(cell_for_node(child_node), :show_item, :node => child_node)
+			render_cell(cell_for_node(child_node), :show, :node => child_node)
 		}
 	}
 -%>

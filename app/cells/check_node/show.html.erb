@@ -3,7 +3,7 @@
 		<%= check_box_tag "check_prop_#{@prop.id}", '1', @prop.checked? %>
 		<% debugger %>
 		<%= observe_field "check_prop_#{@prop.id}",
-			:url => update_check_prop_checked_node_path(:id => @prop),
+			:url => update_check_prop_checked_user_pile_node_path( pile_nodes_url_hash(@prop.node.pile).merge({:id => @prop}) ),
 			:before => "preUpdateCheckPropField('check_prop_#{@prop.id}');",
 			:with => 'checked',
 			:method => :put %>

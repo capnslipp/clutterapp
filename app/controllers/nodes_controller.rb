@@ -88,7 +88,7 @@ class NodesController < ApplicationController
     respond_to do |format|
       format.js do
         render :update do |page|
-          page.insert_html :before, dom_id(@parent, 'item-new'), render_cell(cell_for_node(@node), :show_item, :node => @node)
+          page.insert_html :before, dom_id(@parent, 'item-new'), render_cell(cell_for_node(@node), :show, :node => @node)
           page.replace @left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @left_sibling} unless @left_sibling.nil?
           page.visual_effect :highlight, @node_sel
         end
@@ -120,7 +120,7 @@ class NodesController < ApplicationController
       format.js do
         render :update do |page|
           page.remove @node_sel
-          page.insert_html :before, @orig_left_sibling_sel, render_cell(cell_for_node(@node), :show_item, :node => @node)
+          page.insert_html :before, @orig_left_sibling_sel, render_cell(cell_for_node(@node), :show, :node => @node)
           page.replace @orig_left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_left_sibling}
           page.visual_effect :highlight, @node_sel
         end
@@ -152,7 +152,7 @@ class NodesController < ApplicationController
       format.js do
         render :update do |page|
           page.remove @node_sel
-          page.insert_html :after, @orig_right_sibling_sel, render_cell(cell_for_node(@node), :show_item, :node => @node)
+          page.insert_html :after, @orig_right_sibling_sel, render_cell(cell_for_node(@node), :show, :node => @node)
           page.replace @orig_right_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_right_sibling}
           page.visual_effect :highlight, @node_sel
         end
@@ -184,7 +184,7 @@ class NodesController < ApplicationController
       format.js do
         render :update do |page|
           page.remove @node_sel
-          page.insert_html :bottom, @orig_left_sibling_list_sel, render_cell(cell_for_node(@node), :show_item, :node => @node)
+          page.insert_html :bottom, @orig_left_sibling_list_sel, render_cell(cell_for_node(@node), :show, :node => @node)
           page.replace @orig_left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_left_sibling}
           page.visual_effect :highlight, @node_sel
         end
@@ -216,7 +216,7 @@ class NodesController < ApplicationController
       format.js do
         render :update do |page|
           page.remove @node_sel
-          page.insert_html :after, @orig_parent_sel, render_cell(cell_for_node(@node), :show_item, :node => @node)
+          page.insert_html :after, @orig_parent_sel, render_cell(cell_for_node(@node), :show, :node => @node)
           page.replace @orig_parent_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_parent}
           page.visual_effect :highlight, @node_sel
         end
