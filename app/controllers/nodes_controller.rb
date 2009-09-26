@@ -19,7 +19,6 @@ class NodesController < ApplicationController
   end
   
   # PUT /items/1/set_note_prop_note
-  in_place_edit_for :note_prop, :note
   def set_note_prop_note
     logger.prefixed 'set_note_prop_note', :light_green, 'params: ' + params.inspect
     node = Node.find(params[:id])
@@ -30,7 +29,6 @@ class NodesController < ApplicationController
   end
   
   # PUT /items/1/set_priority_prop_priority
-  in_place_edit_for :priority_prop, :priority
   def set_priority_prop_priority
     logger.prefixed 'set_priority_prop_priority', :light_green, 'params: ' + params.inspect
     node = Node.find(params[:id])
@@ -41,7 +39,6 @@ class NodesController < ApplicationController
   end
   
   # PUT /items/1/set_tag_prop_tag
-  in_place_edit_for :tag_prop, :tag
   def set_tag_prop_tag
     logger.prefixed 'set_tag_prop_tag', :light_green, 'params: ' + params.inspect
     node = Node.find(params[:id])
@@ -52,7 +49,6 @@ class NodesController < ApplicationController
   end
   
   # PUT /items/1/set_text_prop_text
-  in_place_edit_for :text_prop, :text
   def set_text_prop_text
     logger.prefixed 'set_text_prop_text', :light_green, 'params: ' + params.inspect
     node = Node.find(params[:id])
@@ -63,7 +59,6 @@ class NodesController < ApplicationController
   end
   
   # PUT /items/1/set_time_prop_time
-  in_place_edit_for :time_prop, :time
   def set_time_prop_time
     logger.prefixed 'set_time_prop_time', :light_green, 'params: ' + params.inspect
     node = Node.find(params[:id])
