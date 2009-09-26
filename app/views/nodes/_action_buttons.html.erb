@@ -27,9 +27,6 @@
 			<% unless item.left_sibling.nil? %>
 				<span class="sym"><%# ► %><%= link_to_remote '&#9658;',		:url => "#{node_path(item)}/move?dir=in",	:method => 'put'	%></span>
 			<% end %>
-			<% unless item.root? %>
-				<span class="sym"><%# ◉ %>&#9673;</span>
-			<% end %>
 			<span class="sym"><%# ✚ %><%= link_to_function '&#10010;', "toggleItemNewBar('#{item.id}');" %></span>
 		</div>
 	</div>

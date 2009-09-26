@@ -1,3 +1,6 @@
 <% render_node_cell_layout(self) do -%>
-	<div class="tag prop"><%= h @prop.tag %></div>
+	<div class="tag prop shadowable">
+		<div class="shadow"></div>
+		<div class="content"><%= h @prop.tag %></div>
+	</div>
 <% end -%>

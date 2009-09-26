@@ -78,14 +78,14 @@ li { margin: 0; padding: 0; }*/
 	padding-left: 0;
 }
 
-ul.list {
+ul.list ul.list {
 	border-left: 1px solid #eee;
 	padding-left: 2em;
-	margin-left: -1em;
+	/*margin-left: -1em;*/
 }
 li.item, li.item-new {
-	list-style-type: disc;
-	margin-left: 1em;
+	/*list-style-type: disc;*/
+	/*margin-left: 1em;*/
 	/*margin-bottom: 1px;*/
 	/*clear: left;*/ /* clear was originally needed for keeping floating item content from destroying the view; this shouldn't be possible eventually */
 }
@@ -256,10 +256,9 @@ li.item li.item.checkbox { list-style-type: none; margin-left: 0; }
 .widget-wrap, .buttons-wrap { display: inline-block; }
 
 .widget, .buttons {
-	/*font-weight: bold;*/
 	padding: 0 2px;
 	white-space: nowrap;
-	/*overflow: hidden;*/
+	height: 1.1em;
 }
 
 .manipulate.widget { background: #fff; }
@@ -386,14 +385,17 @@ ul.scope-list > li.scope-item {
 
 .check.prop {
 }
+
 .note.prop {
 	white-space: pre;
-	border: 1px solid #ddd;
-	border-radius: 2px; -webkit-border-radius: 2px; -moz-border-radius: 2px;
+	border: 1px solid #ccc;
 	padding: 1px;
 	background-color: #eee;
 	vertical-align: top;
 }
+.note.prop, .note.prop > .shadow { border-radius: 2px; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
+.note.prop > .shadow { opacity: 0.1; }
+
 .priority.prop {
 	font-weight: bold;
 	font-size: 0.9em;
@@ -406,8 +408,10 @@ ul.scope-list > li.scope-item {
 	width: 1.1em; height: 1.1em;
 	color: #fff;
 	background: #000;
-	border-radius: 1em; -webkit-border-radius: 1em; -moz-border-radius: 1em;
 }
+.priority.prop, .priority.prop > .shadow { border-radius: 1em; -webkit-border-radius: 1em; -moz-border-radius: 1em; }
+.priority.prop > .shadow { opacity: 0.1; }
+
 .tag.prop {
 	font-weight: bold;
 	font-size: 0.8em;
@@ -415,13 +419,16 @@ ul.scope-list > li.scope-item {
 	text-transform: uppercase;
 	
 	margin: 1px;
-	background-color: #666; border: 1px solid transparent;
-	border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px;
-	padding: 1px 2px 1px;
+	background-color: #666;
 	color: #fff;
 }
+.tag.prop, .tag.prop > .shadow { border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
+.tag.prop > .shadow { opacity: 0.1; }
+.tag.prop > .content { display: inline-block; padding: 2px; }
+
 .text.prop {
 }
+
 .time.prop {
 	font-style: oblique;
 }
