@@ -1,3 +1,11 @@
 <% render_node_cell_layout(self) do -%>
-	<div class="priority prop">[<%= h @prop.priority %>]</div>
+	<% color = case @prop.priority 
+		when 1: '#f00'
+		when 2: '#c60'
+		when 3: '#990'
+		when 4: '#0c0'
+		when 5: '#099'
+		else    '#999'
+	end %>
+	<div class="priority prop" style="background-color: <%=color%>;"><%= h @prop.priority %></div>
 <% end -%>
