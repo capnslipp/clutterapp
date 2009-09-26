@@ -99,7 +99,7 @@ class PilesController < ApplicationController
     @pile.destroy
     
     respond_to do |format|
-      format.html { redirect_to(piles_url) }
+      format.html { redirect_to piles_url(@pile) }
       format.xml  { head :ok }
     end
   end

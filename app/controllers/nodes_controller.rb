@@ -9,7 +9,8 @@ class NodesController < ApplicationController
   # PUT /items/1/update_check_prop_checked
   def update_check_prop_checked
     logger.prefixed 'update_check_prop_checked', :light_green, 'params: ' + params.inspect
-    prop = CheckProp.find(params[:id])
+    node = Node.find(params[:id])
+    prop = node.prop
     prop.checked = params[:checked]
     prop.save!
     render :update do |page|
@@ -21,7 +22,8 @@ class NodesController < ApplicationController
   in_place_edit_for :note_prop, :note
   def set_note_prop_note
     logger.prefixed 'set_note_prop_note', :light_green, 'params: ' + params.inspect
-    prop = NoteProp.find(params[:id]) 
+    node = Node.find(params[:id])
+    prop = node.prop
     prop.note = params[:value]
     prop.save!
     render :text => html_escape(prop.note)
@@ -31,7 +33,8 @@ class NodesController < ApplicationController
   in_place_edit_for :priority_prop, :priority
   def set_priority_prop_priority
     logger.prefixed 'set_priority_prop_priority', :light_green, 'params: ' + params.inspect
-    prop = PriorityProp.find(params[:id]) 
+    node = Node.find(params[:id])
+    prop = node.prop
     prop.priority = params[:value]
     prop.save!
     render :text => prop.priority
@@ -41,7 +44,8 @@ class NodesController < ApplicationController
   in_place_edit_for :tag_prop, :tag
   def set_tag_prop_tag
     logger.prefixed 'set_tag_prop_tag', :light_green, 'params: ' + params.inspect
-    prop = TagProp.find(params[:id]) 
+    node = Node.find(params[:id])
+    prop = node.prop
     prop.tag = params[:value].upcase
     prop.save!
     render :text => prop.tag
@@ -51,7 +55,8 @@ class NodesController < ApplicationController
   in_place_edit_for :text_prop, :text
   def set_text_prop_text
     logger.prefixed 'set_text_prop_text', :light_green, 'params: ' + params.inspect
-    prop = TextProp.find(params[:id]) 
+    node = Node.find(params[:id])
+    prop = node.prop
     prop.text = params[:value]
     prop.save!
     render :text => html_escape(prop.text)
@@ -61,7 +66,8 @@ class NodesController < ApplicationController
   in_place_edit_for :time_prop, :time
   def set_time_prop_time
     logger.prefixed 'set_time_prop_time', :light_green, 'params: ' + params.inspect
-    prop = TimeProp.find(params[:id]) 
+    node = Node.find(params[:id])
+    prop = node.prop
     prop.time = Time.zone.parse(params[:value])
     prop.save!
     render :text => prop.time

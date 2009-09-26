@@ -3,11 +3,11 @@ module RouteHelper
 # user -> piles
   
   # two scoops
-  def piles_url(options = {})
-    user_piles_url(options)
+  def piles_url(r_h_a, options = {})
+    user_piles_url(user_id_from_pile( devise_record(r_h_a) ), options)
   end
-  def piles_path(options = {})
-    user_piles_path(options)
+  def piles_path(r_h_a, options = {})
+    user_piles_path(user_id_from_pile( devise_record(r_h_a) ), options)
   end
   
   # one scoop
@@ -38,11 +38,11 @@ module RouteHelper
 # user -> pile -> nodes
   
   # two waffle cones
-  def nodes_url(options = {})
-    user_pile_nodes_url(options)
+  def nodes_url(r_h_a, options = {})
+    user_pile_nodes_url(pile_id_and_user_id_from_node( devise_record(r_h_a) ), options)
   end
-  def nodes_path(options = {})
-    user_pile_nodes_path(options)
+  def nodes_path(r_h_a, options = {})
+    user_pile_nodes_path(pile_id_and_user_id_from_node( devise_record(r_h_a) ), options)
   end
   
   # one waffle cone
@@ -84,8 +84,24 @@ protected
     { :id => pile, :user_id => pile.owner }
   end
   
+  def user_id_from_pile(pile)
+    { :user_id => pile.owner }
+  end
+  
+  def user_id_from_user(user)
+    { :user_id => user }
+  end
+  
   def id_and_pile_id_and_user_id_from_node(node)
     { :id => node, :pile_id => node.pile, :user_id => node.pile.owner }
+  end
+  
+  def pile_id_and_user_id_from_node(node)
+    { :pile_id => node.pile, :user_id => node.pile.owner }
+  end
+  
+  def pile_id_and_user_id_from_pile(pile)
+    { :pile_id => pile, :user_id => pile.owner }
   end
   
 end
