@@ -35,4 +35,8 @@ module NodesHelper
     action_view.url_for :action => 'create', :controller => 'nodes', :pile_id => item.pile, :parent_id => item, :type => type
   end
   
+  def pile_nodes_url_hash(pile)
+    { :user_id => pile.owner, :pile_id => pile, :controller => 'nodes' }
+  end
+  
 end

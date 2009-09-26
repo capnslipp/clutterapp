@@ -1,6 +1,8 @@
 class PilesController < ApplicationController
   before_filter :authorize
   
+  include RouteHelper
+  
   
   # GET /piles
   # GET /piles.xml
@@ -9,7 +11,6 @@ class PilesController < ApplicationController
     
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @piles }
     end
   end
   
@@ -33,7 +34,6 @@ class PilesController < ApplicationController
       
       respond_to do |format|
         format.html # show.html.erb
-        #format.xml  { render :xml => @nodes }
       end
     end
   end
@@ -46,7 +46,6 @@ class PilesController < ApplicationController
     
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @pile }
     end
   end
   
@@ -60,16 +59,16 @@ class PilesController < ApplicationController
   # POST /piles
   # POST /piles.xml
   def create
-    @pile = Pile.new(params[:pile])
+    pile_params = params[:pile] || {}
+    pile_params.update(:owner => current_user)
+    @pile = Pile.new(pile_params)
     
     respond_to do |format|
       if @pile.save
         flash[:notice] = 'Pile was successfully created.'
-        format.html { redirect_to(@pile) }
-        format.xml  { render :xml => @pile, :status => :created, :location => @pile }
+        format.html { redirect_to @pile }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @pile.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -83,7 +82,7 @@ class PilesController < ApplicationController
     respond_to do |format|
       if @pile.update_attributes(params[:pile])
         flash[:notice] = 'Pile was successfully updated.'
-        format.html { redirect_to(@pile) }
+        format.html { redirect_to @pile }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
