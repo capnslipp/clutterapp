@@ -68,25 +68,6 @@ class NodesController < ApplicationController
   end
   
   
-  # GET /nodes
-  # GET /nodes.xml
-  def index
-    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
-    
-    if @pile_owner.nil?
-      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
-      redirect_to user_url(current_user)
-    else
-      @root_node = @pile_owner.pile.root_node
-      
-      respond_to do |format|
-        format.html { render :partial => 'users/show_pile', :layout => 'application' }
-        #format.xml  { render :xml => @nodes }
-      end
-    end
-  end
-  
-  
   # POST /nodes
   # POST /nodes.xml
   def create

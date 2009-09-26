@@ -31,8 +31,8 @@ module NodesHelper
       :method => :post
   end
   
-  def create_node_url(action_view, item, type)
-    action_view.url_for :action => 'create', :controller => 'nodes', :parent_id => item.id, :type => type
+  def create_pile_node_path(action_view, item, type)
+    action_view.url_for :action => 'create', :controller => 'nodes', :pile_id => item.pile, :parent_id => item, :type => type
   end
   
 end

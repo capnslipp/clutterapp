@@ -1,11 +1,11 @@
 <li id="<%= dom_id(item, 'item-new') %>" class="<%= "#{dom_class(item, 'item-new')} item-new" %> buttons-wrap">
 	<div class="new buttons shadowable initially-hidden">
 		<div class="shadow"></div>
-		<%= link_to_remote %{<span class="sym">&#10010;</span>text},	:url => create_node_url(self, item, :text) %>
-		<%= link_to_remote %{<span class="sym">&#10010;</span>check},	:url => create_node_url(self, item, :check) %>
-		<%= link_to_remote %{<span class="sym">&#10010;</span>note},	:url => create_node_url(self, item, :note) %>
-		<%= link_to_remote %{<span class="sym">&#10010;</span>priority},:url => create_node_url(self, item, :priority) %>
-		<%= link_to_remote %{<span class="sym">&#10010;</span>tag},		:url => create_node_url(self, item, :tag) %>
-		<%= link_to_remote %{<span class="sym">&#10010;</span>time},	:url => create_node_url(self, item, :time) %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>text},	:url => create_pile_node_path(self, item, :text) %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>check},	:url => create_pile_node_path(self, item, :check) %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>note},	:url => create_pile_node_path(self, item, :note) %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>priority},:url => create_pile_node_path(self, item, :priority) %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>tag},		:url => create_pile_node_path(self, item, :tag) %>
+		<%= link_to_remote %{<span class="sym">&#10010;</span>time},	:url => create_pile_node_path(self, item, :time) %>
 	</div>
 </li>

@@ -1,0 +1,18 @@
+<h1>Listing piles</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% @piles.each do |pile| %>
+  <tr>
+    <td><%= link_to 'Show', pile %></td>
+    <td><%= link_to 'Edit', edit_pile_path(pile) %></td>
+    <td><%= link_to 'Destroy', pile, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New pile', new_pile_path %>

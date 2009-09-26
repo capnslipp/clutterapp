@@ -1,0 +1,12 @@
+<h1>Editing pile</h1>
+
+<% form_for(@pile) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @pile %> |
+<%= link_to 'Back', piles_path %>
