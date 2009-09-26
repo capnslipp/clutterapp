@@ -88,7 +88,7 @@ class NodesController < ApplicationController
     @left_sibling = @node.left_sibling
     @left_sibling.reload :select => :version unless @left_sibling.nil?
     
-    @node_sel = dom_id(@node, 'item')
+    node_sel = dom_id(@node, 'item')
     @left_sibling_manip_buttons_sel = "##{dom_id(@left_sibling, 'item-content')} > .manipulate.buttons" unless @left_sibling.nil?
     
     respond_to do |format|
@@ -96,135 +96,67 @@ class NodesController < ApplicationController
         render :update do |page|
           page.insert_html :before, dom_id(@parent, 'item-new'), render_cell(cell_for_node(@node), :show, :node => @node)
           page.replace @left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @left_sibling} unless @left_sibling.nil?
-          page.visual_effect :highlight, @node_sel
+          page.visual_effect :highlight, node_sel
         end
       end # format.js
     end # respond_to
   end
   
   
-  # PUT /nodes/up/1
-  # PUT /nodes/up/1.xml
-  def move_up
-    @node = Node.find(params[:id])
-    @orig_left_sibling = @node.left_sibling
+  # PUT /nodes/1/move/:dir
+  def move
+    dir = params[:dir].to_sym
     
-    if @orig_left_sibling.nil?
-      render :nothing => true
-      return
+    @node = Node.find(params[:id])
+    orig_ref_node = case dir
+      when :up:   @node.left_sibling
+      when :down: @node.right_sibling
+      when :in:   @node.left_sibling
+      when :out:  @node.parent
     end
     
-    @node.move_to_left_of @orig_left_sibling
-    @orig_left_sibling.reload :select => :version
+    cant_move = case dir
+      when :up:   orig_ref_node.nil?
+      when :down: orig_ref_node.nil?
+      when :in:   orig_ref_node.nil?
+      when :out:  orig_ref_node.nil? || orig_ref_node.root?
+      else        true
+    end
+    return render :nothing => true if cant_move
+    
+    case dir
+      when :up:   @node.move_to_left_of orig_ref_node
+      when :down: @node.move_to_right_of orig_ref_node
+      when :in:   @node.move_to_child_of orig_ref_node
+      when :out:  @node.move_to_right_of orig_ref_node
+    end
+    
+    orig_ref_node.reload :select => :version
     @node.reload :select => :version
     
-    @node_sel = dom_id(@node, 'item')
-    @orig_left_sibling_sel = dom_id(@orig_left_sibling, 'item')
-    @orig_left_sibling_manip_buttons_sel = "##{dom_id(@orig_left_sibling, 'item-content')} > .manipulate.buttons"
+    node_sel = dom_id(@node, 'item')
+    
+    orig_ref_sel = case dir
+      when :up:   "##{dom_id(orig_ref_node, 'item')}"
+      when :down: "##{dom_id(orig_ref_node, 'item')}"
+      when :in:   "##{dom_id(orig_ref_node, 'item')} > .node.list"
+      when :out:  "##{dom_id(orig_ref_node, 'item')}"
+    end
+    insert_pos = case dir
+      when :up:   :before
+      when :down: :after
+      when :in:   :bottom
+      when :out:  :after
+    end
+    orig_ref_action_buttons_sel = "##{dom_id(orig_ref_node, 'item-content')} > .manipulate.buttons"
     
     respond_to do |format|
       format.js do
         render :update do |page|
-          page.remove @node_sel
-          page.insert_html :before, @orig_left_sibling_sel, render_cell(cell_for_node(@node), :show, :node => @node)
-          page.replace @orig_left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_left_sibling}
-          page.visual_effect :highlight, @node_sel
-        end
-      end # format.js
-    end # respond_to
-  end
-  
-  
-  # PUT /nodes/down/1
-  # PUT /nodes/down/1.xml
-  def move_down
-    @node = Node.find(params[:id])
-    @orig_right_sibling = @node.right_sibling
-    
-    if @orig_right_sibling.nil?
-      render :nothing => true
-      return
-    end
-    
-    @node.move_to_right_of @orig_right_sibling
-    @orig_right_sibling.reload :select => :version
-    @node.reload :select => :version
-    
-    @node_sel = dom_id(@node, 'item')
-    @orig_right_sibling_sel = dom_id(@orig_right_sibling, 'item')
-    @orig_right_sibling_manip_buttons_sel = "##{dom_id(@orig_right_sibling, 'item-content')} > .manipulate.buttons"
-    
-    respond_to do |format|
-      format.js do
-        render :update do |page|
-          page.remove @node_sel
-          page.insert_html :after, @orig_right_sibling_sel, render_cell(cell_for_node(@node), :show, :node => @node)
-          page.replace @orig_right_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_right_sibling}
-          page.visual_effect :highlight, @node_sel
-        end
-      end # format.js
-    end # respond_to
-  end
-  
-  
-  # PUT /nodes/in/1
-  # PUT /nodes/in/1.xml
-  def move_in
-    @node = Node.find(params[:id])
-    @orig_left_sibling = @node.left_sibling
-    
-    if @orig_left_sibling.nil?
-      render :nothing => true
-      return
-    end
-    
-    @node.move_to_child_of @orig_left_sibling
-    @orig_left_sibling.reload :select => :version
-    @node.reload :select => :version
-    
-    @node_sel = dom_id(@node, 'item')
-    @orig_left_sibling_list_sel = "##{dom_id(@orig_left_sibling, 'item')} > .node.list"
-    @orig_left_sibling_manip_buttons_sel = "##{dom_id(@orig_left_sibling, 'item-content')} > .manipulate.buttons"
-    
-    respond_to do |format|
-      format.js do
-        render :update do |page|
-          page.remove @node_sel
-          page.insert_html :bottom, @orig_left_sibling_list_sel, render_cell(cell_for_node(@node), :show, :node => @node)
-          page.replace @orig_left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_left_sibling}
-          page.visual_effect :highlight, @node_sel
-        end
-      end # format.js
-    end # respond_to
-  end
-  
-  
-  # PUT /nodes/out/1
-  # PUT /nodes/out/1.xml
-  def move_out
-    @node = Node.find(params[:id])
-    @orig_parent = @node.parent
-    
-    if @orig_parent.nil? || @orig_parent.root?
-      render :nothing => true
-      return
-    end
-    
-    @node.move_to_right_of @orig_parent
-    @orig_parent.reload :select => :version
-    @node.reload :select => :version
-    
-    @node_sel = dom_id(@node, 'item')
-    @orig_parent_sel = dom_id(@orig_parent, 'item')
-    @orig_parent_manip_buttons_sel = "##{dom_id(@orig_parent, 'item-content')} > .manipulate.buttons"
-    
-    respond_to do |format|
-      format.js do
-        render :update do |page|
-          page.remove @node_sel
-          page.insert_html :after, @orig_parent_sel, render_cell(cell_for_node(@node), :show, :node => @node)
-          page.replace @orig_parent_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_parent}
-          page.visual_effect :highlight, @node_sel
+          page.remove node_sel
+          page.insert_html insert_pos, orig_ref_sel, render_cell(cell_for_node(@node), :show, :node => @node)
+          page.replace orig_ref_action_buttons_sel, :partial => 'action_buttons', :locals => {:item => orig_ref_node}
+          page.visual_effect :highlight, node_sel
         end
       end # format.js
     end # respond_to
@@ -235,23 +167,23 @@ class NodesController < ApplicationController
   # DELETE /nodes/1.xml
   def destroy
     @node = Node.find(params[:id])
-    @orig_parent = @node.parent
-    @orig_left_sibling = @node.left_sibling
-    @orig_right_sibling = @node.right_sibling
+    orig_parent_node = @node.parent
+    orig_left_node = @node.left_sibling
+    orig_right_node = @node.right_sibling
     @node.destroy
-    @orig_parent.after_child_destroy
+    orig_parent_node.after_child_destroy
     
-    @node_sel = dom_id(@node, 'item')
+    node_sel = dom_id(@node, 'item')
     
-    @orig_left_sibling_manip_buttons_sel = "##{dom_id(@orig_left_sibling, 'item-content')} > .manipulate.buttons" unless @orig_left_sibling.nil?
-    @orig_right_sibling_manip_buttons_sel = "##{dom_id(@orig_right_sibling, 'item-content')} > .manipulate.buttons" unless @orig_right_sibling.nil?
+    orig_left_action_buttons_sel = "##{dom_id(orig_left_node, 'item-content')} > .manipulate.buttons" unless orig_left_node.nil?
+    orig_right_action_buttons_sel = "##{dom_id(orig_right_node, 'item-content')} > .manipulate.buttons" unless orig_right_node.nil?
     
     respond_to do |format|
       format.js do
         render :update do |page|
-          page.remove @node_sel
-          page.replace @orig_left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_left_sibling} unless @orig_left_sibling.nil?
-          page.replace @orig_right_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @orig_right_sibling} unless @orig_right_sibling.nil?
+          page.remove node_sel
+          page.replace orig_left_action_buttons_sel, :partial => 'action_buttons', :locals => {:item => orig_left_node} unless orig_left_node.nil?
+          page.replace orig_right_action_buttons_sel, :partial => 'action_buttons', :locals => {:item => orig_right_node} unless orig_right_node.nil?
         end
       end # format.js
     end # respond_to

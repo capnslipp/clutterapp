@@ -13,19 +13,19 @@
 		<div class="manipulate buttons shadowable initially-hidden">
 			<div class="shadow"></div>
 			<% unless item.root? %>
-				<span class="sym"><%# ✖ %><%= link_to_remote '&#10006;',	:url => nodes_path(item, :action => 'destroy'),		:method => 'delete'	%></span>
+				<span class="sym"><%# ✖ %><%= link_to_remote '&#10006;',	:url => node_path(item),					:method => 'delete'	%></span>
 			<% end %>
 			<% unless item.parent.nil? || item.parent.root? %>
-				<span class="sym"><%# ◄ %><%= link_to_remote '&#9668;',		:url => nodes_path(item, :action => 'move_out'),	:method => 'put'	%></span>
+				<span class="sym"><%# ◄ %><%= link_to_remote '&#9668;',		:url => "#{node_path(item)}/move?dir=out",	:method => 'put'	%></span>
 			<% end %>
 			<% unless item.left_sibling.nil? %>
-				<span class="sym"><%# ▲ %><%= link_to_remote '&#9650;',		:url => nodes_path(item, :action => 'move_up'),		:method => 'put'	%></span>
+				<span class="sym"><%# ▲ %><%= link_to_remote '&#9650;',		:url => "#{node_path(item)}/move?dir=up",	:method => 'put'	%></span>
 			<% end %>
 			<% unless item.right_sibling.nil? %>
-				<span class="sym"><%# ▼ %><%= link_to_remote '&#9660;',		:url => nodes_path(item, :action => 'move_down'),	:method => 'put'	%></span>
+				<span class="sym"><%# ▼ %><%= link_to_remote '&#9660;',		:url => "#{node_path(item)}/move?dir=down",	:method => 'put'	%></span>
 			<% end %>
 			<% unless item.left_sibling.nil? %>
-				<span class="sym"><%# ► %><%= link_to_remote '&#9658;',		:url => nodes_path(item, :action => 'move_in'),		:method => 'put'	%></span>
+				<span class="sym"><%# ► %><%= link_to_remote '&#9658;',		:url => "#{node_path(item)}/move?dir=in",	:method => 'put'	%></span>
 			<% end %>
 			<% unless item.root? %>
 				<span class="sym"><%# ◉ %>&#9673;</span>

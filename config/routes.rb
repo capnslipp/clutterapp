@@ -20,10 +20,7 @@ ActionController::Routing::Routes.draw do |map|
       # /:user_id/piles/:pile_id/nodes
       # /:user_id/piles/:pile_id/nodes/...
       piles.resources :nodes, :member => {
-        :move_up => :put,
-        :move_down => :put,
-        :move_in => :put,
-        :move_out => :put,
+        :move => :put,
         :update_check_prop_checked => :put,
         :set_note_prop_note => :put,
         :set_priority_prop_priority => :put,
