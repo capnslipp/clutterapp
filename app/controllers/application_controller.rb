@@ -20,7 +20,11 @@ class ApplicationController < ActionController::Base
 protected
   
   def authorize
-    redirect_to :controller => 'home' unless logged_in?
+    redirect_to :controller => 'front' unless logged_in?
+  end
+  
+  def be_visiting
+    redirect_to :controller => 'home' if logged_in?
   end
   
 end

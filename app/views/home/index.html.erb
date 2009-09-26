@@ -1,1 +1,7 @@
-<%= render :partial => 'intro' %>
+<h2>Welcome Back, <%= h current_user.name %></h2>
+
+<h3>Your Piles</h3>
+
+<% for pile in current_user.piles %>
+	<%= link_to h("P#{pile.id} - N#{pile.root_node.id}"), user_pile_path(:user_id => pile.owner, :id => pile) %>
+<% end %>

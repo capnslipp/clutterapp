@@ -14,7 +14,7 @@
 	<div class="bordered shadow"></div>
 	
 	<h1 class="logo">
-		<a href="<%= url_for :action => "index", :controller => "home" %>" style="text-decoration: none; background: none; color: #fff;">OrgClut</a>
+		<a href="<%= logged_in? ? home_path : root_path %>" style="text-decoration: none; background: none; color: #fff;">OrgClut</a>
 	</h1>
 	
 	<div class="content">

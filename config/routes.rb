@@ -9,10 +9,16 @@ ActionController::Routing::Routes.draw do |map|
   map.new_user '/sup/:invite_token',  :controller => 'users',     :action => 'new'
   map.resources :invites, :as => 'inv'
   
+  map.home '/home', :controller => 'home'
+  
+  # /:user_id
+  # /:user_id/...
   map.resources :users, :default => true, :except => [:index, :create, :new], :requirements => { :id => /[^\/]{6,}/ } do |users|
-    
+    # /:user_id/piles
+    # /:user_id/piles/...
     users.resources :piles do |piles|
-      
+      # /:user_id/piles/:pile_id/nodes
+      # /:user_id/piles/:pile_id/nodes/...
       piles.resources :nodes, :member => {
         :move_up => :put,
         :move_down => :put,
@@ -25,13 +31,16 @@ ActionController::Routing::Routes.draw do |map|
         :set_text_prop_text => :put,
         :set_time_prop_time => :put
       }
-    
+      
+      # /:user_id/piles/:pile_id/props/:type
+      # /:user_id/piles/:pile_id/props/:type/...
       piles.resources :props, :as => 'props/:type'
       
     end
     
   end
   
-  map.root :controller => 'home'
+  map.about '/about', :controller => 'front'
+  map.root :controller => 'front'
   
 end

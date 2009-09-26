@@ -52,6 +52,12 @@ class User < ActiveRecord::Base
   end
   
   
+  def self::find_by_login_if_exists(login)
+    user_list = find_all_by_login(login.to_s)
+    user_list.first
+  end
+  
+  
   
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
@@ -78,6 +84,17 @@ class User < ActiveRecord::Base
   
   def invite_limit=(value)
     write_attribute :invite_limit, (value == INFINITY ? nil : value)
+  end
+  
+  
+  def has_name?
+    !attributes['name'].blank?
+  end
+  
+  
+  def name
+    return attributes['name'] unless attributes['name'].blank?
+    return attributes['login']
   end
   
   

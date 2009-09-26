@@ -31,7 +31,16 @@ class UsersController < ApplicationController
   
   
   def show
+    @user = User.find_by_login_if_exists(params[:id])
     
+    if !@user.nil?
+      @public_piles = @user.piles # @todo: make it actually show only public piles, once they're implemented
+      render # show.html.erb
+      
+    else
+      flash[:error]  = %{Couldn't find user by the name of "#{params[:id]}".}
+      redirect_to home_path
+    end
   end
   
 end
