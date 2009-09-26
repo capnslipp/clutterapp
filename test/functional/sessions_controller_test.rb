@@ -24,7 +24,7 @@ class SessionsControllerTest < ActionController::TestCase
   end
   
   def test_should_logout
-    login_as :quentin
+    login_as :one
     get :destroy
     assert_nil session[:user_id]
     assert_response :redirect
@@ -44,31 +44,31 @@ class SessionsControllerTest < ActionController::TestCase
   end
   
   def test_should_delete_token_on_logout
-    login_as :quentin
+    login_as :one
     get :destroy
     assert @response.cookies["auth_token"].blank?
   end
   
   # There is no "new" action because it's built into the home page.
   #def test_should_login_with_cookie
-  #  users(:quentin).remember_me
-  #  @request.cookies["auth_token"] = cookie_for(:quentin)
+  #  users(:one).remember_me
+  #  @request.cookies["auth_token"] = cookie_for(:one)
   #  get :new
   #  assert @controller.send(:logged_in?)
   #end
   
   # There is no "new" action because it's built into the home page.
   #def test_should_fail_expired_cookie_login
-  #  users(:quentin).remember_me
-  #  users(:quentin).update_attribute :remember_token_expires_at, 5.minutes.ago
-  #  @request.cookies["auth_token"] = cookie_for(:quentin)
+  #  users(:one).remember_me
+  #  users(:one).update_attribute :remember_token_expires_at, 5.minutes.ago
+  #  @request.cookies["auth_token"] = cookie_for(:one)
   #  get :new
   #  assert !@controller.send(:logged_in?)
   #end
   
   # There is no "new" action because it's built into the home page.
   #def test_should_fail_cookie_login
-  #  users(:quentin).remember_me
+  #  users(:one).remember_me
   #  @request.cookies["auth_token"] = auth_token('invalid_auth_token')
   #  get :new
   #  assert !@controller.send(:logged_in?)
