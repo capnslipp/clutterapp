@@ -12,9 +12,9 @@
 	<div class="buttons-wrap">
 		<div class="manipulate buttons shadowable initially-hidden">
 			<div class="shadow"></div>
-			<% unless item.root? %>
-				<span class="sym"><%# ✖ %><%= link_to_remote '&#10006;',	:url => node_path(item),					:method => 'delete'	%></span>
-			<% end %>
+			
+			<span class="sym"><%# ✚ %><%= link_to_function '&#10010;', "toggleItemNewBar('#{item.id}');" %></span>
+			
 			<% unless item.parent.nil? || item.parent.root? %>
 				<span class="sym"><%# ◄ %><%= link_to_remote '&#9668;',		:url => "#{node_path(item)}/move?dir=out",	:method => 'put'	%></span>
 			<% end %>
@@ -27,7 +27,10 @@
 			<% unless item.left_sibling.nil? %>
 				<span class="sym"><%# ► %><%= link_to_remote '&#9658;',		:url => "#{node_path(item)}/move?dir=in",	:method => 'put'	%></span>
 			<% end %>
-			<span class="sym"><%# ✚ %><%= link_to_function '&#10010;', "toggleItemNewBar('#{item.id}');" %></span>
+			
+			<% unless item.root? %>
+				<span class="sym"><%# ✖ %><%= link_to_remote '&#10006;',	:url => node_path(item),					:method => 'delete'	%></span>
+			<% end %>
 		</div>
 	</div>
 	

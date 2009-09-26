@@ -261,6 +261,8 @@ li.item li.item.checkbox { list-style-type: none; margin-left: 0; }
 	height: 1.1em;
 }
 
+.widget a, .buttons a { text-decoration: none; }
+
 .manipulate.widget { background: #fff; }
 .manipulate.widget, .manipulate.widget a { color: #ddd; }
 .manipulate.widget a:hover { color: #aaa; }
