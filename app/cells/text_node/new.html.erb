@@ -1,7 +1,0 @@
-<div class="new text prop">
-	<% remote_form_for :prop, @prop, :url => node_path(@node), :html => { :method => :put, :class => dom_class(@prop, 'new'), :id => dom_id(@prop, 'new') } do |f| %>
-		<%= f.text_field :text, :onblur => "$(this).next('input[type=submit]').click();" %>
-		<%# ✓ %><%= f.submit '&#10003;', :style => 'display: none;' %>
-	<% end %>
-	<script>$('#<%=dom_id(@prop, 'new')%>').children('input:first').focus();</script>
-</div>

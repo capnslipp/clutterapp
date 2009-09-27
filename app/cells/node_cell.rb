@@ -33,7 +33,7 @@ class NodeCell < Cell::Base
     #@node = Node.new(:prop => @prop)
     @prop = @node.prop
     
-    render :layout => 'item'
+    render :view => 'edit', :layout => 'item'
   end
   
   
