@@ -273,6 +273,7 @@ li.item li.item.checkbox { list-style-type: none; margin-left: 0; }
 
 .new.buttons { background: #666; }
 .new.buttons, .new.buttons a { color: #fff; }
+.new.buttons a { padding: 0 2px; }
 .new.buttons a:hover { background: #333; }
 
 .buttons, .widget,
