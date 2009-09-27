@@ -24,13 +24,16 @@ class NodeCell < Cell::Base
   end
   
   
+  # this new action works like "show" because the node has already been created at this point
   def new
     @pile = @opts[:pile]
+    @node = @opts[:node]
     
-    @prop = new_prop
-    @node = Node.new(:prop => @prop)
+    #@prop = new_prop
+    #@node = Node.new(:prop => @prop)
+    @prop = @node.prop
     
-    render
+    render :layout => 'item'
   end
   
   

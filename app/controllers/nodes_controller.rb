@@ -89,7 +89,7 @@ class NodesController < ApplicationController
     respond_to do |format|
       format.js do
         render :update do |page|
-          page.insert_html :before, dom_id(@parent, 'item-new'), render_cell(cell_for_node(@node), :show, :node => @node)
+          page.insert_html :before, dom_id(@parent, 'item-new'), render_cell(cell_for_node(@node), :new, :node => @node)
           page.replace @left_sibling_manip_buttons_sel, :partial => 'action_buttons', :locals => {:item => @left_sibling} unless @left_sibling.nil?
           page.visual_effect :highlight, node_sel
         end
