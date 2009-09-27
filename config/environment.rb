@@ -91,7 +91,7 @@ Rails::Initializer.run do |config|
   
   
   config.after_initialize do
-    Cell::Base.view_paths << RAILS_ROOT + '/app/views'
+    Cell::Base.add_view_path 'app/views'
     
     require 'logger_extension' # extends ActiveSupport::BufferedLogger
   end
