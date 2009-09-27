@@ -63,7 +63,7 @@ function expandActionBar(nodeID) {
 	elementsForNodeModels('item-action').find('.buttons').hide();
 	elementsForNodeModels('item-action').find('.widget.expanded').hide();
 	elementsForNodeModels('item-action').find('.widget.collapsed').show();
-	elementsForNodeModels('item-new').find('.buttons').hide();
+	elementsForNodeModels('item-new').hide();
 	//$('.initially-hidden').hide();
 	
 	
@@ -82,12 +82,12 @@ function collapseActionBar(nodeID) {
 
 
 function toggleItemNewBar(nodeID) {
-	elementForNodeModel(nodeID, 'item-new').find('.buttons').toggle();
+	elementForNodeModel(nodeID, 'item-new').toggle();
 }
 
 
 function hideItemNewBar(nodeID) {
-	elementForNodeModel(nodeID, 'item-new').find('.buttons').hide();
+	elementForNodeModel(nodeID, 'item-new').hide();
 }
 
 
