@@ -1,5 +1,5 @@
 <% render_node_cell_layout(self) do -%>
-	<a href="#" onclick="<%= remote_function(:url => edit_node_path(@node), :method => 'get') %>; return false;">
-		<div class="text prop"><%= h @prop.text %></div>
-	</a>
+	<div class="text prop" onclick="<%= remote_function(:url => edit_node_path(@node), :method => 'get') %>;">
+		<%= h @prop.text %>
+	</div>
 <% end -%>

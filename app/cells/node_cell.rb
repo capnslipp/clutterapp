@@ -14,10 +14,31 @@ class NodeCell < Cell::Base
   
   
   def show
+    @pile = @opts[:pile]
     @node = @opts[:node]
     @children = @node.children || []
+    
     @prop = @node.prop
-    @user = @node.root.pile.owner
+    
+    render
+  end
+  
+  
+  def new
+    @pile = @opts[:pile]
+    
+    @prop = new_prop
+    @node = Node.new(:prop => @prop)
+    
+    render
+  end
+  
+  
+  def edit
+    @pile = @opts[:pile]
+    @node = @opts[:node]
+    
+    @prop = @node.prop
     
     render
   end
@@ -30,5 +51,13 @@ class NodeCell < Cell::Base
   #  @children = []
   #  @prop = @node.prop
   #end
+  
+protected
+  
+  # must override in each derived Cell type
+  def new_prop
+    nil # @pile.build_..._prop OR ...Prop.new(:pile => @pile)
+  end
+  
   
 end

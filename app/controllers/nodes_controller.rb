@@ -1,5 +1,5 @@
 class NodesController < ApplicationController
-  include NodesHelper
+  include CellHelper
   include ERB::Util
   layout nil
   
@@ -117,7 +117,34 @@ class NodesController < ApplicationController
       respond_to do |format|
         format.js do
           render :update do |page|
-            page.replace dom_id(@node, 'item-content'), :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
+            page.replace dom_id(@node, 'item'), :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
+          end
+        end # format.js
+      end # respond_to
+    end
+  end
+  
+  
+  # PUT /nodes/1
+  def update
+    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
+    
+    if @pile_owner.nil?
+      flash[:warning] = "No such user exists."
+      redirect_to user_url(current_user)
+      
+    elsif @pile_owner != current_user
+      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
+      redirect_to user_url(current_user)
+      
+    else
+      @pile = @pile_owner.piles.find(params[:pile_id])
+      @node = @pile.nodes.find(params[:id])
+      
+      respond_to do |format|
+        format.js do
+          render :update do |page|
+            page.replace dom_id(@node, 'item'), :inline => render_cell(cell_for_node(@node), :update, :node => @node, :params => params)
           end
         end # format.js
       end # respond_to
