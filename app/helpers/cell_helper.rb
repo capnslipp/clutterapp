@@ -35,4 +35,15 @@ module CellHelper
     action_view.url_for :action => 'create', :controller => 'nodes', :pile_id => item.pile, :parent_id => item, :type => type
   end
   
+  def css_color_for_priority(priority)
+    case priority 
+      when 1: '#f00'
+      when 2: '#c60'
+      when 3: '#990'
+      when 4: '#0c0'
+      when 5: '#099'
+      else    '#999'
+    end
+  end
+  
 end
