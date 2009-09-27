@@ -14,6 +14,8 @@ class NodeCell < Cell::Base
   
   
   def show
+    logger.prefixed self.class.to_s, :light_blue, "show"
+    
     @pile = @opts[:pile]
     @node = @opts[:node]
     
@@ -26,6 +28,8 @@ class NodeCell < Cell::Base
   
   # this new action works like "show" because the node has already been created at this point
   def new
+    logger.prefixed self.class.to_s, :light_blue, "new"
+    
     @pile = @opts[:pile]
     @node = @opts[:node]
     
@@ -47,6 +51,8 @@ class NodeCell < Cell::Base
   
   
   def edit
+    logger.prefixed self.class.to_s, :light_blue, "edit"
+    
     @pile = @opts[:pile]
     @node = @opts[:node]
     
@@ -57,6 +63,8 @@ class NodeCell < Cell::Base
   
   
   def update
+    logger.prefixed self.class.to_s, :light_blue, "update"
+    
     @pile = @opts[:pile]
     @node = @opts[:node]
     
