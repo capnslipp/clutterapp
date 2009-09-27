@@ -16,8 +16,8 @@ class NodeCell < Cell::Base
   def show
     @pile = @opts[:pile]
     @node = @opts[:node]
-    @children = @node.children || []
     
+    #@children = @node.children || [] # unused
     @prop = @node.prop
     
     render

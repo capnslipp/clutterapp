@@ -19,54 +19,54 @@ class NodesController < ApplicationController
   end
   
   # PUT /items/1/set_note_prop_note
-  def set_note_prop_note
-    logger.prefixed 'set_note_prop_note', :light_green, 'params: ' + params.inspect
-    node = Node.find(params[:id])
-    prop = node.prop
-    prop.note = params[:value]
-    prop.save!
-    render :text => html_escape(prop.note)
-  end
+  #def set_note_prop_note
+  #  logger.prefixed 'set_note_prop_note', :light_green, 'params: ' + params.inspect
+  #  node = Node.find(params[:id])
+  #  prop = node.prop
+  #  prop.note = params[:value]
+  #  prop.save!
+  #  render :text => html_escape(prop.note)
+  #end
   
   # PUT /items/1/set_priority_prop_priority
-  def set_priority_prop_priority
-    logger.prefixed 'set_priority_prop_priority', :light_green, 'params: ' + params.inspect
-    node = Node.find(params[:id])
-    prop = node.prop
-    prop.priority = params[:value]
-    prop.save!
-    render :text => prop.priority
-  end
+  #def set_priority_prop_priority
+  #  logger.prefixed 'set_priority_prop_priority', :light_green, 'params: ' + params.inspect
+  #  node = Node.find(params[:id])
+  #  prop = node.prop
+  #  prop.priority = params[:value]
+  #  prop.save!
+  #  render :text => prop.priority
+  #end
   
   # PUT /items/1/set_tag_prop_tag
-  def set_tag_prop_tag
-    logger.prefixed 'set_tag_prop_tag', :light_green, 'params: ' + params.inspect
-    node = Node.find(params[:id])
-    prop = node.prop
-    prop.tag = params[:value].upcase
-    prop.save!
-    render :text => prop.tag
-  end
+  #def set_tag_prop_tag
+  #  logger.prefixed 'set_tag_prop_tag', :light_green, 'params: ' + params.inspect
+  #  node = Node.find(params[:id])
+  #  prop = node.prop
+  #  prop.tag = params[:value].upcase
+  #  prop.save!
+  #  render :text => prop.tag
+  #end
   
   # PUT /items/1/set_text_prop_text
-  def set_text_prop_text
-    logger.prefixed 'set_text_prop_text', :light_green, 'params: ' + params.inspect
-    node = Node.find(params[:id])
-    prop = node.prop
-    prop.text = params[:value]
-    prop.save!
-    render :text => html_escape(prop.text)
-  end
+  #def set_text_prop_text
+  #  logger.prefixed 'set_text_prop_text', :light_green, 'params: ' + params.inspect
+  #  node = Node.find(params[:id])
+  #  prop = node.prop
+  #  prop.text = params[:value]
+  #  prop.save!
+  #  render :text => html_escape(prop.text)
+  #end
   
   # PUT /items/1/set_time_prop_time
-  def set_time_prop_time
-    logger.prefixed 'set_time_prop_time', :light_green, 'params: ' + params.inspect
-    node = Node.find(params[:id])
-    prop = node.prop
-    prop.time = Time.zone.parse(params[:value])
-    prop.save!
-    render :text => prop.time
-  end
+  #def set_time_prop_time
+  #  logger.prefixed 'set_time_prop_time', :light_green, 'params: ' + params.inspect
+  #  node = Node.find(params[:id])
+  #  prop = node.prop
+  #  prop.time = Time.zone.parse(params[:value])
+  #  prop.save!
+  #  render :text => prop.time
+  #end
   
   
   # POST /nodes
