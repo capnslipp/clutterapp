@@ -1,4 +1,3 @@
-<% render_node_cell_layout(self) do -%>
 	<div class="new text prop">
 		<% remote_form_for :prop, @prop, :url => node_path(@node), :html => { :method => :put, :class => dom_class(@prop, 'edit'), :id => dom_id(@prop, 'edit') } do |f| %>
 			<%= f.text_field :text %>
@@ -6,4 +5,3 @@
 			<%# ✖ %><%= f.submit '&#10006;' %>
 		<% end %>
 	</div>
-<% end -%>

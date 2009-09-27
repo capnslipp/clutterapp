@@ -1,4 +1,3 @@
-<% render_node_cell_layout(self) do -%>
 	<% color = case @prop.priority 
 		when 1: '#f00'
 		when 2: '#c60'
@@ -8,4 +7,3 @@
 		else    '#999'
 	end %>
 	<div class="priority prop shadowable" style="background-color: <%=color%>;"><div class="shadow"></div><%= h @prop.priority %></div>
-<% end -%>

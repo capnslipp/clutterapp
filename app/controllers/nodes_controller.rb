@@ -117,7 +117,7 @@ class NodesController < ApplicationController
       respond_to do |format|
         format.js do
           render :update do |page|
-            page.replace dom_id(@node, 'item'), :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
+            page.replace "##{dom_id(@node, 'item-content')} > .prop", :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
           end
         end # format.js
       end # respond_to
@@ -144,7 +144,7 @@ class NodesController < ApplicationController
       respond_to do |format|
         format.js do
           render :update do |page|
-            page.replace dom_id(@node, 'item'), :inline => render_cell(cell_for_node(@node), :update, :node => @node, :params => params)
+            page.replace "##{dom_id(@node, 'item-content')} > .prop", :inline => render_cell(cell_for_node(@node), :update, :node => @node, :params => params)
           end
         end # format.js
       end # respond_to

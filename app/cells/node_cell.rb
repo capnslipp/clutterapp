@@ -20,7 +20,7 @@ class NodeCell < Cell::Base
     #@children = @node.children || [] # unused
     @prop = @node.prop
     
-    render
+    render :layout => 'item'
   end
   
   
@@ -52,12 +52,12 @@ class NodeCell < Cell::Base
   #  @prop = @node.prop
   #end
   
+  
 protected
   
   # must override in each derived Cell type
   def new_prop
     nil # @pile.build_..._prop OR ...Prop.new(:pile => @pile)
   end
-  
   
 end
