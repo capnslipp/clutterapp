@@ -390,13 +390,13 @@ ul.scope-list > li.scope-item {
 
 .note.prop {
 	white-space: pre;
-	border: 1px solid #ccc;
+	border: 1px solid #eee;
 	padding: 1px;
-	background-color: #eee;
+	background-color: #fff;
 	vertical-align: top;
 }
 .note.prop, .note.prop > .shadow { border-radius: 2px; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
-.note.prop > .shadow { opacity: 0.1; }
+.note.prop > .shadow { opacity: 0.05; }
 
 .priority.prop {
 	font-weight: bold;
