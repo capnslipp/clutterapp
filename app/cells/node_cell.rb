@@ -37,6 +37,15 @@ class NodeCell < Cell::Base
   end
   
   
+  #def create
+  #  parent = Node.find @opts[:parent_id]
+  #  @node = parent.create_child :prop => Prop.rand
+  #  
+  #  @children = []
+  #  @prop = @node.prop
+  #end
+  
+  
   def edit
     @pile = @opts[:pile]
     @node = @opts[:node]
@@ -47,13 +56,17 @@ class NodeCell < Cell::Base
   end
   
   
-  #def create
-  #  parent = Node.find @opts[:parent_id]
-  #  @node = parent.create_child :prop => Prop.rand
-  #  
-  #  @children = []
-  #  @prop = @node.prop
-  #end
+  def update
+    @pile = @opts[:pile]
+    @node = @opts[:node]
+    
+    @prop = @node.prop
+    if @prop.update_attributes(@opts[:params][:prop])
+      render :view => 'show'
+    else
+      render :view => 'edit'
+    end
+  end
   
   
 protected
