@@ -1,4 +1,4 @@
 <div class="note prop shadowable" onclick="<%= remote_function(:url => edit_node_path(@node), :method => 'get') %>;">
 	<div class="bordered shadow"></div>
-	<div class="content"><%= h @prop.note %></div>
+	<div class="content"><%= h(@prop.note).gsub(/\n/, '<br/>') %></div>
 </div>

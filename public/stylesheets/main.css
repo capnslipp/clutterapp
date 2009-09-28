@@ -397,7 +397,6 @@ ul.scope-list > li.scope-item {
 }
 .note.prop, .note.prop > .shadow { border-radius: 2px; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
 .note.prop > .shadow { opacity: 0.05; }
-.note.prop > .content { white-space: pre; }
 
 .priority.prop {
 	font-weight: bold;
