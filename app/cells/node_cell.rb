@@ -64,19 +64,16 @@ class NodeCell < Cell::Base
   end
   
   
-  def update
-    logger.prefixed self.class.to_s, :light_blue, "update"
-    
-    @pile = @opts[:pile]
-    @node = @opts[:node]
-    
-    @prop = @node.prop
-    if @prop.update_attributes(@opts[:params][:prop])
-      render :view => 'show'
-    else
-      render :view => 'edit'
-    end
-  end
+  #def update
+  #  logger.prefixed self.class.to_s, :light_blue, "update"
+  #  
+  #  @pile = @opts[:pile]
+  #  @node = @opts[:node]
+  #  
+  #  @prop = @node.prop
+  #  
+  #  render :view => 'show'
+  #end
   
   
 protected

@@ -140,13 +140,20 @@ class NodesController < ApplicationController
     else
       @pile = @pile_owner.piles.find(params[:pile_id])
       @node = @pile.nodes.find(params[:id])
+      @prop = @node.prop
       
       respond_to do |format|
-        format.js do
-          render :update do |page|
-            page.replace "##{dom_id(@node, 'item-content')} > .prop", :inline => render_cell(cell_for_node(@node), :update, :node => @node, :params => params)
+        
+        if @prop.update_attributes(params[:prop])
+          format.js do
+            render :inline => render_cell(cell_for_node(@node), :show, :node => @node, :params => params)
+          end # format.js
+        else
+          format.js do
+            render :nothing => true, :status => :unprocessable_entity
           end
-        end # format.js
+        end
+        
       end # respond_to
     end
   end

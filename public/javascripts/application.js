@@ -2,10 +2,10 @@
 // This file is automatically included by javascript_include_tag :defaults
 
 
-var OrgClut = {};
 
-JOIN = '_'
-NEW = 'new'
+JOIN = '_';
+NEW = 'new';
+
 
 function classForNodeModels(prefix) {
 	if (prefix == undefined)
@@ -53,9 +53,9 @@ function updateCheckPropField(checkbox, checked) {
 
 
 // currently unused
-OrgClut.kSlideHideArgs = {width: 'hide'};
-OrgClut.kSlideShowArgs = {width: 'show'};
-OrgClut.kSlideToggleArgs = {width: 'toggle'};
+kSlideHideArgs = {width: 'hide'};
+kSlideShowArgs = {width: 'show'};
+kSlideToggleArgs = {width: 'toggle'};
 
 
 function expandActionBar(nodeID) {
@@ -92,18 +92,68 @@ function hideItemNewBar(nodeID) {
 
 
 
-OrgClut.kPageMinWidth = 320;
-OrgClut.writePageMinWidthAdjustment = function() {
+function showFill() {
+	$('#fill').fadeIn(500);
+}
+
+function hideFill() {
+	$('#fill').fadeOut(333);
+}
+
+
+
+function editFormFocus(form) {
+	$(form)
+		.css('position', 'relative').css('z-index', 1000)
+	$(form).children('input:first, textarea:first')
+		.focus();
+	showFill();
+}
+
+function editFormSubmit(form, nodeID) {
+	form = $(form);
+	
+	$.ajax({
+		type: form.attr('method'),
+		url: form.attr('action'),
+		data: form.formSerialize(false),
+		dataType: 'html',
+		success: function(responseData) { return editFormSuccess(nodeID, responseData); },
+		error: function(xhrObj, errStr, expObj) { return editFormError(nodeID, xhrObj, errStr, expObj); }
+	});
+	return false;
+}
+
+function editFormSuccess(nodeID, responseData) {
+	elementForNodeModel(nodeID, 'item').replaceWith(responseData);
+	elementForNodeModel(nodeID, 'item-content').find('form')
+		.css('z-index', 0);
+	elementForNodeModel(nodeID, 'item-content').find('form').children('input:first, textarea:first')
+		.focus();
+	hideFill();
+	return false;
+}
+
+function editFormError(nodeID, xhrObj, errStr, expObj) {
+	elementForNodeModel(nodeID, 'item-content').effect('highlight', {color: '#910'}, 2000);
+	editFormFocus( elementForNodeModel(nodeID, 'item-content').find('form') );
+	return false;
+}
+
+
+
+kPageMinWidth = 320;
+function writePageMinWidthAdjustment() {
 	// if the screen's width is smaller than the page's width (i.e. a zoomable mobile device like the iPhone)
 	if (window.screen.width < window.innerWidth) {
 		// set the meta-data to the larger of the device's width or the minimum the site needs!
 		
 		newWidth = window.screen.width;
-		if (newWidth < OrgClut.kPageMinWidth)
-			newWidth = OrgClut.kPageMinWidth;
+		if (newWidth < kPageMinWidth)
+			newWidth = kPageMinWidth;
 		
 		// will write the meta tag right into the <head/>
 		document.write('<meta name="viewport" content="width=' + newWidth + '"/>');
 	}
 }
-OrgClut.writePageMinWidthAdjustment();
+writePageMinWidthAdjustment();

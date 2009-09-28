@@ -3,14 +3,33 @@
 html {
 	background-color: #fff;
 	color: #000;
+	height: 100%;
 }
 
 body {
 	font-size: 12px;
 	line-height: 1.25;
 	font-family: Helvetica, Arial, sans-serif;
-	margin: 0;
+	margin: 0; padding: 0;
+	height: 100%;
 }
+
+#base {
+	position: relative;
+	height: auto; min-height: 100%;
+}
+
+#base > #fill {
+	position: absolute;
+	width: 100%; height: 100%;
+}
+
+#fill {
+	position: absolute; z-index: 100;
+	background: #fff;
+	opacity: 0.75;
+}
+
 
 a { color: #000; }
 #a:hover { color: #fff; background-color: #000; }
@@ -210,12 +229,15 @@ li.item li.item.checkbox { list-style-type: none; margin-left: 0; }
 /* topbar */
 
 #topbar {
+	position: relative; z-index: 200;
 	background: #666;
 	/*margin-bottom: 8px;*/
 	height: 24px;
 	border-bottom: 1px solid #444;
 	width: 100%;
 }
+
+#topbar > .shadow { display: none; /* @todo: get this working; not overlapping the content */ }
 
 #topbar, #topbar a {
 	color: #fff;
@@ -263,7 +285,7 @@ li.item li.item.checkbox { list-style-type: none; margin-left: 0; }
 
 .widget a, .buttons a { text-decoration: none; }
 
-.manipulate.widget { background: #fff; }
+.manipulate.widget {}
 .manipulate.widget, .manipulate.widget a { color: #ddd; }
 .manipulate.widget a:hover { color: #aaa; }
 

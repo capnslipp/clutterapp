@@ -1,8 +1,8 @@
 <div class="edit tag prop shadowable">
 	<div class="shadow"></div>
-	<% remote_form_for :prop, @prop, :url => node_path(@node), :html => { :method => :put, :class => dom_class(@prop, 'edit'), :id => dom_id(@prop, 'edit') } do |f| %>
-		<%= f.text_field :tag, :onblur => "$(this).next('input[type=submit]').click();" %>
-		<%# ✓ %><%= f.submit '&#10003;', :style => 'display: none;' %>
+	<% remote_form_for :prop, @prop, :url => node_path(@node), :html => { :method => :put, :class => dom_class(@prop, 'edit'), :id => dom_id(@prop, 'edit'), :onsubmit => "return editFormSubmit(this, #{@node.id});" } do |f| %>
+		<%= f.text_field :tag %>
+		<%# ✓ %><%= f.submit '&#10003;', :onclick => "$(this).closest('form').trigger('onclick');" %>
 	<% end %>
-	<script>$('#<%=dom_id(@prop, 'edit')%>').children('input:first').focus();</script>
+	<script>editFormFocus('#<%=dom_id(@prop, 'edit')%>');</script>
 </div>
