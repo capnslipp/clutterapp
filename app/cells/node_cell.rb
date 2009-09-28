@@ -8,6 +8,7 @@ class NodeCell < Cell::Base
   # not getting cached for some reason
   def cache_version
     {
+      :pile_id => @opts[:node].pile.id,
       :node_id => @opts[:node].id,
       :version => @opts[:node].version
     }
