@@ -5,6 +5,7 @@ class NodeCell < Cell::Base
   cache :show, :cache_version
   
   
+  # not getting cached for some reason
   def cache_version
     {
       :node_id => @opts[:node].id,
