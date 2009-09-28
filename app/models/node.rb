@@ -1,5 +1,5 @@
 class Node < ActiveRecord::Base
-  acts_as_nested_set :scope => :pile
+  acts_as_nested_set :scope => :pile, :dependent => :destroy
   
   # must be specified first (at least before any associations)
   after_save :increment_version
