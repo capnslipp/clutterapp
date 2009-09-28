@@ -1,8 +1,6 @@
 <ul class="node list">
-	<% unless item.children.empty? -%>
-		<% item.children.each do |child| -%>
-			<%= render_child.call(child) %>
-		<% end -%>
-	<% end -%>
+	<%- item.children.each do |child| -%>
+		<%= render_child(child) %>
+	<%- end unless item.children.empty? -%>
 	<%= render :partial => 'nodes/new_buttons', :locals => {:item => item} %>
 </ul>

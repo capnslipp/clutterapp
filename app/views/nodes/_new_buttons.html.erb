@@ -9,12 +9,12 @@
 	<div class="buttons-wrap">
 		<div class="new buttons shadowable">
 			<div class="shadow"></div>
-			<%= link_to_remote "text",      :url => create_pile_node_path(self, item, :text) %>
-			<%= link_to_remote "check",     :url => create_pile_node_path(self, item, :check) %>
-			<%= link_to_remote "note",      :url => create_pile_node_path(self, item, :note) %>
-			<%= link_to_remote "priority",  :url => create_pile_node_path(self, item, :priority) %>
-			<%= link_to_remote "tag",       :url => create_pile_node_path(self, item, :tag) %>
-			<%= link_to_remote "time",      :url => create_pile_node_path(self, item, :time) %>
+			<%= link_to_remote "text",      :url => create_pile_node_path(item, :text) %>
+			<%= link_to_remote "check",     :url => create_pile_node_path(item, :check) %>
+			<%= link_to_remote "note",      :url => create_pile_node_path(item, :note) %>
+			<%= link_to_remote "priority",  :url => create_pile_node_path(item, :priority) %>
+			<%= link_to_remote "tag",       :url => create_pile_node_path(item, :tag) %>
+			<%= link_to_remote "time",      :url => create_pile_node_path(item, :time) %>
 		</div>
 	</div>
 	

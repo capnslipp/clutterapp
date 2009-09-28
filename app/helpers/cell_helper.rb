@@ -1,28 +1,13 @@
 module CellHelper
   
-  def cell_for_node(node)
-    cell = /(.+)Prop/.match( node.prop.class.to_s )
-    ((cell ? cell[1] : '') + 'Node').underscore.to_sym
+  def render_child(child_node)
+    render_cell cell_for_node(child_node), :show, :node => child_node
   end
   
   
-  # unused
-  #def render_child_node(action_view, child_node)
-  #  action_view.render_cell(cell_for_node(child_node), :show, :node => child_node)
-  #end
-  
-  
-  def render_node_cell_layout(cell_view, &block)
-    cell_view.render(
-      :layout => 'nodes/item',
-      :object => cell_view.assigns['node'],
-      :locals => {
-        :render_child => proc {|child_node|
-          cell_view.render_cell(cell_for_node(child_node), :show, :node => child_node)
-        }
-      },
-      &block
-    )
+  def cell_for_node(node)
+    cell = /(.+)Prop/.match( node.prop.class.to_s )
+    ((cell ? cell[1] : '') + 'Node').underscore.to_sym
   end
   
   
@@ -37,8 +22,8 @@ module CellHelper
   #end
   
   
-  def create_pile_node_path(action_view, item, type)
-    action_view.url_for :action => 'create', :controller => 'nodes', :pile_id => item.pile, :parent_id => item, :type => type
+  def create_pile_node_path(item, type)
+    url_for :action => 'create', :controller => 'nodes', :pile_id => item.pile, :parent_id => item, :type => type
   end
   
   

@@ -1,11 +1,4 @@
 <h3 style="display: inline-block;"><%= @pile_owner.name.present? ? @pile_owner.name : @pile_owner.login %>'s Pile</h3>
 <div style="display: inline-block"><%= render :partial => 'nodes/action_buttons', :locals => {:item => @base_node} -%></div>
 
-<%= render :partial => 'nodes/item_list',
-	:locals => {
-		:item => @base_node,
-		:render_child => proc {|child_node|
-			render_cell(cell_for_node(child_node), :show, :node => child_node)
-		}
-	}
--%>
+<%= render :partial => 'nodes/item_list', :locals => {:item => @base_node} -%>
