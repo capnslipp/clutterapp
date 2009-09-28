@@ -4,21 +4,39 @@ require 'performance_test_help'
 # Profiling results for each test method are written to tmp/performance.
 class BrowsingTest < ActionController::PerformanceTest
   
-  def test_homepage
-    get '/'
-  end
-  
-  def test_piles
+  def setup
     bypass_authentication
     
     User.all.each do |u|
       u.piles.each do |p|
         p.root_node # create the root node first
         10.times { p.nodes.rand.create_child!(:prop => Prop.rand) }
-        get "/#{u.to_param}/piles/#{p.to_param}"
-        assert_response :success
       end
     end
+  end
+  
+  
+  def test_homepage
+    get '/'
+    
+    bypass_authentication
+    
+    get '/'
+  end
+  
+  
+  def test_piles
+    bypass_authentication
+    
+    u = User.first
+    p = u.piles.first
+    
+    #User.all.each do |u|
+    #  u.piles.each do |p|
+    get "/#{u.to_param}/piles/#{p.to_param}"
+    assert_response :success
+    #  end
+    #end
   end
   
   
