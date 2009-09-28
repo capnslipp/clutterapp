@@ -21,6 +21,7 @@ set :deploy_to, "/var/www/#{application}"
 #############################################################
 
 set :user, "rails" # SSH username, optional if the same as the dev computer username
+set :use_sudo, false
 
 set :domain, "orgclut2.slippyd.com"
 server domain, :app, :web
@@ -31,15 +32,18 @@ role :db, domain, :primary => true
 #	Subversion
 #############################################################
 
-set :repository,  "http://svn.6bitt.com/orgclut2/trunk"
+set :repository,  "git@192.168.0.2:orgclut2.git"
+set :scm, :git
+#set :scm_username, "rails"
+#ssh_options[:forward_agent] = true # needed?
+set :branch, "master"
+set :deploy_via, :remote_cache
 
-# If you aren't using Subversion to manage your source code, specify
-# your SCM below:
-# set :scm, :subversion
-set :scm_username, "rails"
-set :scm_password, "_fill_in_"
 
-set :checkout, "export" # stops Capistrano from copying SVN-specific files to the app
+#set :scm_username, "rails"
+#set :scm_password, "_fill_in_"
+
+#set :checkout, "export" # stops Capistrano from copying SVN-specific files to the app
 
 
 #############################################################
@@ -67,14 +71,14 @@ end
 #	DB Backup
 #############################################################
 
-desc "Update the shared backups directory."
-task :symlink_backups_dir, :roles => :app do
-  run "rm -rf #{shared_path}/backups"
-  run "mv #{release_path}/project/backups #{shared_path}/''"
-  run "ln -sfn #{shared_path}/backups #{release_path}/project/backups"
-end
+#desc "Update the shared backups directory."
+#task :symlink_backups_dir, :roles => :app do
+#  run "rm -rf #{shared_path}/backups"
+#  run "mv #{release_path}/project/backups #{shared_path}/"
+#  run "ln -sfn #{shared_path}/backups #{release_path}/project/backups"
+#end
 
 desc "Do these tasks after you update the code"
 task :after_update_code do
-  symlink_backups_dir
+  #symlink_backups_dir
 end
