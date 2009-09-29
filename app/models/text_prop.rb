@@ -9,6 +9,6 @@ class TextProp < Prop
   end
   
   def self::filler
-    new :text => 'click to edit text'
+    new :text => ''
   end
 end

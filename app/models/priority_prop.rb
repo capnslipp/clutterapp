@@ -8,6 +8,6 @@ class PriorityProp < Prop
   end
   
   def self::filler
-    new :priority => 3
+    new :priority => 1
   end
 end

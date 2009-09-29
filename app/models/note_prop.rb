@@ -8,6 +8,6 @@ class NoteProp < Prop
   end
   
   def self::filler
-    new :note => 'click to edit note'
+    new :note => ''
   end
 end

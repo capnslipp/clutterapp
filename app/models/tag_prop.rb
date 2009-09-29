@@ -9,6 +9,6 @@ class TagProp < Prop
   end
   
   def self::filler
-    new :tag => 'tag'
+    new :tag => ''
   end
 end
