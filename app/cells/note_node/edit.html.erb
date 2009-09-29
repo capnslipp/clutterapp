@@ -1,6 +1,6 @@
 <div class="edit note prop shadowable">
 	<div class="bordered shadow"></div>
-	<%- form_for @node, :url => {:action => 'update'} do |node_form| -%>
+	<%- form_for @node, :url => node_path(@node), :html => {:method => 'put'} do |node_form| -%>
 		
 		<%- node_form.fields_for :prop do |prop_form| -%>
 			<%= prop_form.text_area :note, :class => 'field' %>
@@ -9,5 +9,4 @@
 		<%# ✓ %><%= node_form.submit '&#10003;' %>
 		
 	<%- end -%>
-	<!-- script>editFormFocus($(this).find('form'));</script -->
 </div>

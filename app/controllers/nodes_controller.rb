@@ -116,9 +116,7 @@ class NodesController < ApplicationController
       
       respond_to do |format|
         format.js do
-          render :update do |page|
-            page.replace "##{dom_id(@node, 'item_for')} > .body > .prop", :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
-          end
+          render :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
         end # format.js
       end # respond_to
     end
@@ -146,7 +144,7 @@ class NodesController < ApplicationController
         
         if @node.update_attributes(params[:node])
           format.js do
-            render :inline => render_cell(cell_for_node(@node), :update, :node => @node, :params => params)
+            render :inline => render_cell(cell_for_node(@node), :update, :node => @node)
           end # format.js
         else
           format.js do

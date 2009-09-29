@@ -23,6 +23,7 @@ function idForNodeModel(recordID, prefix) {
 }
 
 
+
 function elementsForNodeModels(prefix) {
 	return $('.' + classForNodeModels(prefix))
 }
@@ -91,26 +92,79 @@ function hideItemNewBar(nodeID) {
 }
 
 
-
-function showFill() {
-	$('#fill').fadeIn(500);
+function nodeIDOfContainingItem(elem) {
+	return nodeIDOfItem( elem.closest('.item_for_node') );
 }
 
-function hideFill() {
-	$('#fill').fadeOut(333);
+function nodeIDOfItem(itemForNode) {
+	return itemForNode.attr('id').substring('item_for_node_'.length);
+}
+
+
+
+function showFill(modalElement) {
+	if (!$('#fill').is(':visible')) {
+		if (modalElement) {
+			modalElement.attr('oc:origPosition', modalElement.css('position'));
+			modalElement
+				.css('position', 'relative')
+				.css('z-index', 1000);
+		}
+	
+		$('#fill').fadeIn(500);
+	}
+}
+
+function hideFill(modalElement) {
+	if ($('#fill').is(':visible')) {
+		$('#fill').fadeOut(333);
+	
+		if (modalElement) {
+			modalElement
+				.css('position', modalElement.attr('oc:origPosition'))
+				.css('z-index', 0);
+		}
+	}
 }
 
 
 function editFormFocus(form) {
-	form
-		.css('position', 'relative')
-		.css('z-index', 1000);
-	
 	form.children('.field:first')
 		.focus();
-	
-	showFill();
 }
+
+function editFormShow(prop) {
+	$.ajax({
+		type: 'get',
+		url: prop.attr('oc:editUrl'),
+		dataType: 'html',
+		success: function(responseData) { handleSuccess(prop, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(prop, xhrObj, errStr, expObj); }
+	});
+	return false;
+	
+	
+	function handleSuccess(prop, responseData) {
+		showFill( prop.parent() );
+		
+		prop
+			.replaceWith(responseData);
+		
+		editFormFocus(prop.find('form'));
+	}
+	
+	function handleError(prop, xhrObj, errStr, expObj) {
+		prop.closest('.body')
+			.effect('highlight', {color: '#910'}, 2000);
+	}
+}
+
+$(function() {
+	$('.show.prop').livequery('click', function() {
+		return editFormShow($(this));
+	});
+});
+
 
 function editFormSubmit(form) {
 	$.ajax({
@@ -118,36 +172,34 @@ function editFormSubmit(form) {
 		url: form.attr('action'),
 		data: form.formSerialize(false),
 		dataType: 'html',
-		success: function(responseData) { return editFormSuccess(form, responseData); }, // return needed?
-		error: function(xhrObj, errStr, expObj) { return editFormError(form, xhrObj, errStr, expObj); } // return needed?
+		success: function(responseData) { handleSuccess(form, responseData); }, // return needed?
+		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); } // return needed?
 	});
-	
 	return false;
+	
+	
+	function handleSuccess(form, responseData) {
+		var prop = form.closest('.edit.prop');
+	
+		hideFill( prop.parent() );
+		
+		prop
+			.replaceWith(responseData);
+	}
+	
+	function handleError(form, xhrObj, errStr, expObj) {
+		form.closest('.edit.prop').closest('.body')
+			.effect('highlight', {color: '#910'}, 2000);
+	
+		editFormFocus(form);
+	}
 }
 
 $(function() {
 	$('form.edit_node').livequery('submit', function() {
-		return editFormSubmit( $(this) );
+		return editFormSubmit($(this));
 	});
 });
-
-function editFormSuccess(form, responseData) {
-	form.closest('.edit.prop')
-		.replaceWith(responseData);
-	
-	hideFill();
-	
-	return false; // needed?
-}
-
-function editFormError(form, xhrObj, errStr, expObj) {
-	form.closest('.edit.prop')
-		.effect('highlight', {color: '#910'}, 2000);
-	
-	editFormFocus(form);
-	
-	return false; // needed?
-}
 
 
 
