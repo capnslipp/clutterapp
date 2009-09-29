@@ -80,8 +80,8 @@ module Cell::Caching
       cache_options[state]  = cache_opts
     end
     
-    def version_procs;  @@version_procs    ||= {}; end
-    def cache_options;  @@cache_options    ||= {}; end
+    def version_procs;  @version_procs    ||= {}; end
+    def cache_options;  @cache_options    ||= {}; end
     
     def cache_store #:nodoc:
       @cache_store ||= ActionController::Base.cache_store
