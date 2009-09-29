@@ -1,13 +1,13 @@
 <div class="edit note prop shadowable">
 	<div class="bordered shadow"></div>
-	<%- form_for :node, @node, :url => node_path(@node), :html => { :method => :put, :class => dom_class(@node, 'edit'), :id => dom_id(@node, 'edit'), :onsubmit => "return editFormSubmit(this, #{@node.id});" } do |node_form| -%>
+	<%- form_for @node, :url => {:action => 'update'} do |node_form| -%>
 		
 		<%- node_form.fields_for :prop do |prop_form| -%>
 			<%= prop_form.text_area :note, :class => 'field' %>
 		<%- end -%>
 		
-		<%# ✓ %><%= node_form.submit '&#10003;', :onclick => "$(this).closest('form').trigger('onclick');" %>
+		<%# ✓ %><%= node_form.submit '&#10003;' %>
 		
 	<%- end -%>
-	<script>editFormFocus('#<%=dom_id(@node, 'edit')%>');</script>
+	<!-- script>editFormFocus($(this).find('form'));</script -->
 </div>

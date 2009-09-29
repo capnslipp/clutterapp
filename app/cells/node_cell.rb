@@ -54,18 +54,18 @@ class NodeCell < Cell::Base
     @pile = @opts[:pile]
     @node = @opts[:node]
     
-    render
+    render :layout => nil
   end
   
   
-  #def update
-  #  logger.prefixed self.class.to_s, :light_blue, "update"
-  #  
-  #  @pile = @opts[:pile]
-  #  @node = @opts[:node]
-  #  
-  #  render :view => 'show'
-  #end
+  def update
+    logger.prefixed self.class.to_s, :light_blue, "update"
+    
+    @pile = @opts[:pile]
+    @node = @opts[:node]
+    
+    render :view => 'show', :layout => nil
+  end
   
   
 protected

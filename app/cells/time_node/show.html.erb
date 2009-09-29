@@ -1,3 +1,3 @@
-<div class="time prop" onclick="<%= remote_function(:url => edit_node_path(@node), :method => 'get') %>;">
+<div class="show time prop" onclick="<%= remote_function(:url => edit_node_path(@node), :method => 'get') %>;">
 	<%= h @node.prop.time.strftime('%B %e, %Y %I:%M:%S %p') %>
 </div>

@@ -146,7 +146,7 @@ class NodesController < ApplicationController
         
         if @node.update_attributes(params[:node])
           format.js do
-            render :inline => render_cell(cell_for_node(@node), :show, :node => @node, :params => params)
+            render :inline => render_cell(cell_for_node(@node), :update, :node => @node, :params => params)
           end # format.js
         else
           format.js do
