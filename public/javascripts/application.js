@@ -125,8 +125,10 @@ function editFormSubmit(form) {
 	return false;
 }
 
-$('form.edit_node').livequery('submit', function() {
-	return editFormSubmit( $(this) );
+$(function() {
+	$('form.edit_node').livequery('submit', function() {
+		return editFormSubmit( $(this) );
+	});
 });
 
 function editFormSuccess(form, responseData) {
