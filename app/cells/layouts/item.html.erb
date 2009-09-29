@@ -1,10 +1,8 @@
 <%- item = assigns['node'] -%>
 <% content_tag_for(:li, item, 'item', :class => 'item') do -%>
 	<div class="body">
-		<% div_for(item, 'item-content', :class => 'item-content') do -%>
-			<%= render :partial => 'nodes/action_buttons', :locals => {:item => item} %>
-			<%= @content_for_layout %>
-		<% end -%>
+		<%= render :partial => 'nodes/action_buttons', :locals => {:item => item} %>
+		<%= @content_for_layout %>
 	</div>
 	<%= render :partial => 'nodes/item_list', :locals => {:item => item} %>
 <% end -%>

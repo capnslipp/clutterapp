@@ -84,7 +84,7 @@ class NodesController < ApplicationController
     @left_sibling.reload :select => :version unless @left_sibling.nil?
     
     node_sel = dom_id(@node, 'item')
-    @left_sibling_manip_buttons_sel = "##{dom_id(@left_sibling, 'item-content')} > .manipulate.buttons" unless @left_sibling.nil?
+    @left_sibling_manip_buttons_sel = "##{dom_id(@left_sibling, 'item')} > .body > .manipulate.buttons" unless @left_sibling.nil?
     
     respond_to do |format|
       format.js do
@@ -117,7 +117,7 @@ class NodesController < ApplicationController
       respond_to do |format|
         format.js do
           render :update do |page|
-            page.replace "##{dom_id(@node, 'item-content')} > .prop", :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
+            page.replace "##{dom_id(@node, 'item')} > .body > .prop", :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
           end
         end # format.js
       end # respond_to
@@ -204,7 +204,7 @@ class NodesController < ApplicationController
       when :in:   :bottom
       when :out:  :after
     end
-    orig_ref_action_buttons_sel = "##{dom_id(orig_ref_node, 'item-content')} > .manipulate.buttons"
+    orig_ref_action_buttons_sel = "##{dom_id(orig_ref_node, 'item')} > .body > .manipulate.buttons"
     
     respond_to do |format|
       format.js do
@@ -231,8 +231,8 @@ class NodesController < ApplicationController
     
     node_sel = dom_id(@node, 'item')
     
-    orig_left_action_buttons_sel = "##{dom_id(orig_left_node, 'item-content')} > .manipulate.buttons" unless orig_left_node.nil?
-    orig_right_action_buttons_sel = "##{dom_id(orig_right_node, 'item-content')} > .manipulate.buttons" unless orig_right_node.nil?
+    orig_left_action_buttons_sel = "##{dom_id(orig_left_node, 'item')} > .body > .manipulate.buttons" unless orig_left_node.nil?
+    orig_right_action_buttons_sel = "##{dom_id(orig_right_node, 'item')} > .body > .manipulate.buttons" unless orig_right_node.nil?
     
     respond_to do |format|
       format.js do
