@@ -188,13 +188,13 @@ class NodesController < ApplicationController
     orig_ref_node.reload :select => :version
     @node.reload :select => :version
     
-    node_sel = dom_id(@node, 'item')
+    node_sel = dom_id(@node, 'item_for')
     
     orig_ref_sel = case dir
-      when :up:   "##{dom_id(orig_ref_node, 'item')}"
-      when :down: "##{dom_id(orig_ref_node, 'item')}"
-      when :in:   "##{dom_id(orig_ref_node, 'item')} > .node.list"
-      when :out:  "##{dom_id(orig_ref_node, 'item')}"
+      when :up:   "##{dom_id(orig_ref_node, 'item_for')}"
+      when :down: "##{dom_id(orig_ref_node, 'item_for')}"
+      when :in:   "##{dom_id(orig_ref_node, 'item_for')} > .node.list"
+      when :out:  "##{dom_id(orig_ref_node, 'item_for')}"
     end
     insert_pos = case dir
       when :up:   :before
