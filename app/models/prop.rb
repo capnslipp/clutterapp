@@ -19,8 +19,12 @@ class Prop < ActiveRecord::Base
   end
   
   
+  def self::types
+    [TextProp, CheckProp, NoteProp, PriorityProp, TagProp, TimeProp]
+  end
+  
   def self::rand
-    [TextProp, CheckProp, NoteProp, PriorityProp, TagProp, TimeProp].rand.rand # 1st rand: choose from array; 2nd rand: create random instance
+    types.rand.rand # 1st rand: choose from array; 2nd rand: create random instance
   end
   
   def self::filler
