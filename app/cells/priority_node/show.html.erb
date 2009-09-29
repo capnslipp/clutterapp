@@ -1,4 +1,4 @@
-<div class="priority prop shadowable" style="background-color: <%=css_color_for_priority(@prop.priority)%>;" onclick="<%= remote_function(:url => edit_node_path(@node), :method => 'get') %>;">
+<div class="priority prop shadowable" style="background-color: <%=css_color_for_priority(@node.prop.priority)%>;" onclick="<%= remote_function(:url => edit_node_path(@node), :method => 'get') %>;">
 	<div class="shadow"></div>
-	<%= h @prop.priority %>
+	<%= h @node.prop.priority %>
 </div>

@@ -22,7 +22,6 @@ class NodeCell < Cell::Base
     @node = @opts[:node]
     
     #@children = @node.children || [] # unused
-    @prop = @node.prop
     
     render :layout => 'item'
   end
@@ -35,9 +34,7 @@ class NodeCell < Cell::Base
     @pile = @opts[:pile]
     @node = @opts[:node]
     
-    #@prop = new_prop
-    #@node = Node.new(:prop => @prop)
-    @prop = @node.prop
+    #@node = Node.new(:prop => new_prop)
     
     render :view => 'edit', :layout => 'item'
   end
@@ -48,7 +45,6 @@ class NodeCell < Cell::Base
   #  @node = parent.create_child :prop => Prop.rand
   #  
   #  @children = []
-  #  @prop = @node.prop
   #end
   
   
@@ -57,8 +53,6 @@ class NodeCell < Cell::Base
     
     @pile = @opts[:pile]
     @node = @opts[:node]
-    
-    @prop = @node.prop
     
     render
   end
@@ -69,8 +63,6 @@ class NodeCell < Cell::Base
   #  
   #  @pile = @opts[:pile]
   #  @node = @opts[:node]
-  #  
-  #  @prop = @node.prop
   #  
   #  render :view => 'show'
   #end
