@@ -105,7 +105,7 @@ function hideFill() {
 function editFormFocus(form) {
 	$(form)
 		.css('position', 'relative').css('z-index', 1000)
-	$(form).children('input:first, textarea:first')
+	$(form).children('.field:first')
 		.focus();
 	showFill();
 }
@@ -128,7 +128,7 @@ function editFormSuccess(nodeID, responseData) {
 	elementForNodeModel(nodeID, 'item').replaceWith(responseData);
 	elementForNodeModel(nodeID, 'item-content').find('form')
 		.css('z-index', 0);
-	elementForNodeModel(nodeID, 'item-content').find('form').children('input:first, textarea:first')
+	elementForNodeModel(nodeID, 'item-content').find('form').children('.field:first')
 		.focus();
 	hideFill();
 	return false;

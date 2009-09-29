@@ -7,6 +7,7 @@ class Node < ActiveRecord::Base
   after_move :increment_version
   
   belongs_to :prop, :polymorphic => true, :autosave => true
+  accepts_nested_attributes_for :prop
   
   belongs_to :pile
   
