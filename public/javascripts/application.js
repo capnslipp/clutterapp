@@ -60,34 +60,34 @@ kSlideToggleArgs = {width: 'toggle'};
 
 function expandActionBar(nodeID) {
 	// hide everything else first
-	elementsForNodeModels('item-action').find('.buttons').hide();
-	elementsForNodeModels('item-action').find('.widget.expanded').hide();
-	elementsForNodeModels('item-action').find('.widget.collapsed').show();
-	elementsForNodeModels('item-new').hide();
+	elementsForNodeModels('item-action_for').find('.buttons').hide();
+	elementsForNodeModels('item-action_for').find('.widget.expanded').hide();
+	elementsForNodeModels('item-action_for').find('.widget.collapsed').show();
+	elementsForNodeModels('item-new_for').hide();
 	//$('.initially-hidden').hide();
 	
 	
-	elementForNodeModel(nodeID, 'item-action').find('.buttons').show();
-	elementForNodeModel(nodeID, 'item-action').find('.widget.expanded').show();
-	elementForNodeModel(nodeID, 'item-action').find('.widget.collapsed').hide();
+	elementForNodeModel(nodeID, 'item-action_for').find('.buttons').show();
+	elementForNodeModel(nodeID, 'item-action_for').find('.widget.expanded').show();
+	elementForNodeModel(nodeID, 'item-action_for').find('.widget.collapsed').hide();
 }
 
 
 function collapseActionBar(nodeID) {
- 	elementForNodeModel(nodeID, 'item-action').find('.buttons').hide();
- 	elementForNodeModel(nodeID, 'item-action').find('.widget.expanded').hide();
- 	elementForNodeModel(nodeID, 'item-action').find('.widget.collapsed').show();
+ 	elementForNodeModel(nodeID, 'item-action_for').find('.buttons').hide();
+ 	elementForNodeModel(nodeID, 'item-action_for').find('.widget.expanded').hide();
+ 	elementForNodeModel(nodeID, 'item-action_for').find('.widget.collapsed').show();
 	hideItemNewBar(nodeID);
 }
 
 
 function toggleItemNewBar(nodeID) {
-	elementForNodeModel(nodeID, 'item-new').toggle();
+	elementForNodeModel(nodeID, 'item-new_for').toggle();
 }
 
 
 function hideItemNewBar(nodeID) {
-	elementForNodeModel(nodeID, 'item-new').hide();
+	elementForNodeModel(nodeID, 'item-new_for').hide();
 }
 
 
