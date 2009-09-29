@@ -27,7 +27,7 @@ body {
 #fill {
 	position: absolute; z-index: 100;
 	background: #fff;
-	opacity: 0.75;
+	opacity: 0.75; filter: alpha(opacity=75);
 }
 
 
@@ -209,10 +209,10 @@ li.item li.item.checkbox { list-style-type: none; margin-left: 0; }
 
 .item.checkbox > .body > .content { display: inline; }
 
-.item.disabled > .body > .content, .item.disabled > .body > .checkbox { text-decoration: line-through; opacity: 0.5; }
+.item.disabled > .body > .content, .item.disabled > .body > .checkbox { text-decoration: line-through; opacity: 0.5; filter: alpha(opacity=50); }
 
 .item .trimmed {
-	opacity: 0.25;
+	opacity: 0.25; filter: alpha(opacity=25);
 }*/
 
 #item-area {
@@ -331,7 +331,7 @@ body { overflow-x: hidden; }
 	left: -1px;
 	right: -1px;
 	background: #000;
-	opacity: 0.2;
+	opacity: 0.2; filter: alpha(opacity=20);
 }
 
 .bordered.shadow {
@@ -412,13 +412,15 @@ ul.scope-list > li.scope-item {
 }
 
 .note.prop {
+	display: block;
 	border: 1px solid #eee;
 	margin: 2px; padding: 2px;
 	background-color: #fff;
 	vertical-align: top;
 }
 .note.prop, .note.prop > .shadow { border-radius: 2px; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
-.note.prop > .shadow { opacity: 0.05; }
+.note.prop > .shadow { opacity: 0.05; filter: alpha(opacity=5); }
+.note.prop textarea { width: 100%; height: 5em; }
 
 .priority.prop {
 	font-weight: bold;
@@ -434,7 +436,7 @@ ul.scope-list > li.scope-item {
 	background: #000;
 }
 .priority.prop, .priority.prop > .shadow { border-radius: 1em; -webkit-border-radius: 1em; -moz-border-radius: 1em; }
-.priority.prop > .shadow { opacity: 0.1; }
+.priority.prop > .shadow { opacity: 0.1; filter: alpha(opacity=10); }
 
 .tag.prop {
 	font-weight: bold;
@@ -447,7 +449,7 @@ ul.scope-list > li.scope-item {
 	color: #fff;
 }
 .tag.prop, .tag.prop > .shadow { border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
-.tag.prop > .shadow { opacity: 0.1; }
+.tag.prop > .shadow { opacity: 0.1; filter: alpha(opacity=10); }
 .tag.prop > .content { display: inline-block; padding: 2px; }
 
 .text.prop {
