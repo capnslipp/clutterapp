@@ -204,6 +204,7 @@ class NodesController < ApplicationController
     respond_to do |format|
       format.js do
         render :update do |page|
+          page.call 'collapseActionBar'
           page.remove node_sel
           page.insert_html insert_pos, orig_ref_sel, render_cell(cell_for_node(@node), :show, :node => @node)
           page.visual_effect :highlight, node_sel
