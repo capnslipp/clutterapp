@@ -1,8 +1,7 @@
-<%- item = assigns['node'] -%>
-<% content_tag_for :li, item, 'item_for', :class => dom_class(item, 'item_for') do -%>
+<% content_tag_for :li, @node, 'item_for', :class => dom_class(@node, 'item_for'), :'oc:url' => node_path(@node), :'oc:editUrl' => edit_node_path(@node), :'oc:moveUrl' => move_node_path(@node) do -%>
 	<div class="body">
-		<%= render :partial => 'nodes/action_buttons', :locals => {:item => item} %>
+		<%= render :partial => 'nodes/action_buttons', :locals => {:item => @node} %>
 		<%= @content_for_layout %>
 	</div>
-	<%= render :partial => 'nodes/item_list', :locals => {:item => item} %>
+	<%= render :partial => 'nodes/item_list', :locals => {:item => @node} %>
 <% end -%>

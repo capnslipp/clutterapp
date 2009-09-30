@@ -69,6 +69,14 @@ module RouteHelper
     new_user_pile_node_path(options)
   end
   
+  # a waffle cone for your little brother
+  def move_node_url(r_h_a, options = {})
+    move_user_pile_node_url(id_and_pile_id_and_user_id_from_node( devise_record(r_h_a) ), options)
+  end
+  def move_node_path(r_h_a, options = {})
+    move_user_pile_node_path(id_and_pile_id_and_user_id_from_node( devise_record(r_h_a) ), options)
+  end
+  
   
 protected
   

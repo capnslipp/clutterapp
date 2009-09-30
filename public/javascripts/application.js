@@ -105,7 +105,7 @@ function nodeIDOfItem(itemForNode) {
 function showFill(modalElement) {
 	if (!$('#fill').is(':visible')) {
 		if (modalElement) {
-			modalElement.attr('oc:origPosition', modalElement.css('position'));
+			modalElement.attr('oc\:origPosition', modalElement.css('position'));
 			modalElement
 				.css('position', 'relative')
 				.css('z-index', 1000);
@@ -121,7 +121,7 @@ function hideFill(modalElement) {
 	
 		if (modalElement) {
 			modalElement
-				.css('position', modalElement.attr('oc:origPosition'))
+				.css('position', modalElement.attr('oc\:origPosition'))
 				.css('z-index', 0);
 		}
 	}
@@ -136,7 +136,7 @@ function editFormFocus(form) {
 function editFormShow(prop) {
 	$.ajax({
 		type: 'get',
-		url: prop.attr('oc:editUrl'),
+		url: prop.closest('.node').attr('oc\:editUrl'),
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(prop, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(prop, xhrObj, errStr, expObj); }
@@ -180,7 +180,7 @@ function editFormSubmit(form) {
 	
 	function handleSuccess(form, responseData) {
 		var prop = form.closest('.edit.prop');
-	
+		
 		hideFill( prop.parent() );
 		
 		prop
@@ -190,7 +190,7 @@ function editFormSubmit(form) {
 	function handleError(form, xhrObj, errStr, expObj) {
 		form.closest('.edit.prop').closest('.body')
 			.effect('highlight', {color: '#910'}, 2000);
-	
+		
 		editFormFocus(form);
 	}
 }
