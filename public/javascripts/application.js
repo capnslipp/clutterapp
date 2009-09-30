@@ -59,37 +59,66 @@ kSlideShowArgs = {width: 'show'};
 kSlideToggleArgs = {width: 'toggle'};
 
 
-function expandActionBar(nodeID) {
-	// hide everything else first
-	elementsForNodeModels('item-action_for').find('.buttons').hide();
-	elementsForNodeModels('item-action_for').find('.widget.expanded').hide();
-	elementsForNodeModels('item-action_for').find('.widget.collapsed').show();
-	elementsForNodeModels('item-new_for').hide();
-	//$('.initially-hidden').hide();
+// for elements that may have been initially-hidden
+function safeShow(elem) {
+	var display = elem.attr('oc\:display');
+	if (display != undefined)
+		elem.css('display', display);
+	else
+		elem.show();
+}
+
+
+function expandActionBar(node) {
+	collapseActionBar();
 	
 	
-	elementForNodeModel(nodeID, 'item-action_for').find('.buttons').show();
-	elementForNodeModel(nodeID, 'item-action_for').find('.widget.expanded').show();
-	elementForNodeModel(nodeID, 'item-action_for').find('.widget.collapsed').hide();
+	node.children('.body').children('.action.stub')
+		.hide();
+	
+	var nodeBody = node.children('.body');
+	if (nodeBody.find('#action-bar').length == 0)
+		$('#action-bar').prependTo(nodeBody);
+	
+	// since it may be initially-hidden
+	safeShow($('#action-bar'));
 }
 
-
-function collapseActionBar(nodeID) {
- 	elementForNodeModel(nodeID, 'item-action_for').find('.buttons').hide();
- 	elementForNodeModel(nodeID, 'item-action_for').find('.widget.expanded').hide();
- 	elementForNodeModel(nodeID, 'item-action_for').find('.widget.collapsed').show();
-	hideItemNewBar(nodeID);
+function collapseActionBar() {
+	hideItemNewBar();
+	
+	$('#action-bar')
+		.hide()
+	
+	var node = $('#action-bar').closest('.item_for_node');
+	node.children('.body').children('.action.stub')
+		.show();
+		
+	$('#action-bar')
+		.appendTo($('.pile:first')); // in case the parent item gets deleted
 }
 
-
-function toggleItemNewBar(nodeID) {
-	elementForNodeModel(nodeID, 'item-new_for').toggle();
+function toggleItemNewBar(node) {
+	if ($('#new-bar').is(':visible'))
+		hideItemNewBar(node);
+	else
+		showItemNewBar(node);
 }
 
-
-function hideItemNewBar(nodeID) {
-	elementForNodeModel(nodeID, 'item-new_for').hide();
+function showItemNewBar(node) {
+	if (node.find('#new-bar').length == 0)
+		$('#new-bar').appendTo(node.children('.list'));
+	
+	// since it may be initially-hidden
+	safeShow($('#new-bar'));
 }
+
+function hideItemNewBar() {
+	$('#new-bar')
+		.hide()
+		.appendTo($('.pile:first')); // in case the parent item gets deleted
+}
+
 
 
 function nodeIDOfContainingItem(elem) {
@@ -203,6 +232,30 @@ $(function() {
 
 
 
+function nodeItemCreate(parentNode, type) {
+	$.ajax({
+		type: 'post',
+		data: {type: type, parent_id: nodeIDOfItem(parentNode)},
+		url: parentNode.closest('.pile').attr('oc\:nodesUrl'),
+		dataType: 'script',
+		success: function(responseData) { handleSuccess(parentNode, responseData); }, // return needed?
+		error: function(xhrObj, errStr, expObj) { handleError(parentNode, xhrObj, errStr, expObj); } // return needed?
+	});
+	return false;
+	
+	
+	function handleSuccess(parentNode, responseData) {
+		// nothing for now; @todo: move the element here
+	}
+	
+	function handleError(parentNode, xhrObj, errStr, expObj) {
+		parentNode.find('#new-bar:first')
+			.effect('highlight', {color: '#910'}, 2000);
+	}
+}
+
+
+
 function nodeItemMove(node, dir) {
 	$.ajax({
 		type: 'post',
@@ -226,16 +279,71 @@ function nodeItemMove(node, dir) {
 }
 
 
+
+function nodeItemDelete(node) {
+	$.ajax({
+		type: 'post',
+		data: {_method: 'delete'},
+		url: node.attr('oc\:url'),
+		dataType: 'script',
+		success: function(responseData) { handleSuccess(node, responseData); }, // return needed?
+		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); } // return needed?
+	});
+	return false;
+	
+	
+	function handleSuccess(node, responseData) {
+		// nothing for now; @todo: move the element here
+	}
+	
+	function handleError(node, xhrObj, errStr, expObj) {
+		node.find('.body:first')
+			.effect('highlight', {color: '#910'}, 2000);
+	}
+}
+
+
 $(function() {
-	var actionButtons = $('.action.buttons');
-	actionButtons.find('.move.out')
-		.click(function() { return nodeItemMove($(this).closest('.node'), 'out'); });
-	actionButtons.find('.move.up')
-		.click(function() { return nodeItemMove($(this).closest('.node'), 'up'); });
-	actionButtons.find('.move.down')
-		.click(function() { return nodeItemMove($(this).closest('.node'), 'down'); });
-	actionButtons.find('.move.in')
-		.click(function() { return nodeItemMove($(this).closest('.node'), 'in'); });
+	$('.action.stub .widget.collapsed a').live('click', function() {
+		return expandActionBar($(this).closest('.item_for_node'));
+	});
+	
+	$('#action-bar .widget.expanded a')
+		.click(function() { return collapseActionBar(); })
+	
+	var actionButtons = $('#action-bar .buttons');
+	actionButtons.find('a.move.out')
+		.click(function() { return nodeItemMove($(this).closest('.item_for_node'), 'out'); });
+	actionButtons.find('a.move.up')
+		.click(function() { return nodeItemMove($(this).closest('.item_for_node'), 'up'); });
+	actionButtons.find('a.move.down')
+		.click(function() { return nodeItemMove($(this).closest('.item_for_node'), 'down'); });
+	actionButtons.find('a.move.in')
+		.click(function() { return nodeItemMove($(this).closest('.item_for_node'), 'in'); });
+	
+	actionButtons.find('a.delete')
+		.click(function() { return nodeItemDelete($(this).closest('.item_for_node')); });
+	
+	actionButtons.find('a.toggle.new-bar')
+		.click(function() { return toggleItemNewBar($(this).closest('.item_for_node')); });
+	
+	
+	$('#new-bar .widget.expanded a')
+		.click(function() { return hideItemNewBar(); })
+	
+	var newButtons = $('#new-bar .buttons');
+	newButtons.find('a.new.text')
+		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'text'); })
+	newButtons.find('a.new.check')
+		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'check'); })
+	newButtons.find('a.new.note')
+		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'note'); })
+	newButtons.find('a.new.priority')
+		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'priority'); })
+	newButtons.find('a.new.tag')
+		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'tag'); })
+	newButtons.find('a.new.time')
+		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'time'); })
 });
 
 

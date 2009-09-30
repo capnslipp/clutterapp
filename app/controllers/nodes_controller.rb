@@ -84,13 +84,11 @@ class NodesController < ApplicationController
     @left_sibling.reload :select => :version unless @left_sibling.nil?
     
     node_sel = dom_id(@node, 'item')
-    @left_sibling_action_buttons_sel = "##{dom_id(@left_sibling, 'item_for')} > .body > .action.buttons" unless @left_sibling.nil?
     
     respond_to do |format|
       format.js do
         render :update do |page|
-          page.insert_html :before, dom_id(@parent, 'item-new_for'), render_cell(cell_for_node(@node), :new, :node => @node)
-          page.replace @left_sibling_action_buttons_sel, :partial => 'action_buttons', :locals => {:item => @left_sibling} unless @left_sibling.nil?
+          page.insert_html :bottom, "##{dom_id(@parent, 'item_for')} > .list", render_cell(cell_for_node(@node), :new, :node => @node)
           page.visual_effect :highlight, node_sel
         end
       end # format.js
@@ -202,14 +200,12 @@ class NodesController < ApplicationController
       when :in:   :bottom
       when :out:  :after
     end
-    orig_ref_action_buttons_sel = "##{dom_id(orig_ref_node, 'item_for')} > .body > .action.buttons"
     
     respond_to do |format|
       format.js do
         render :update do |page|
           page.remove node_sel
           page.insert_html insert_pos, orig_ref_sel, render_cell(cell_for_node(@node), :show, :node => @node)
-          page.replace orig_ref_action_buttons_sel, :partial => 'action_buttons', :locals => {:item => orig_ref_node}
           page.visual_effect :highlight, node_sel
         end
       end # format.js
@@ -227,17 +223,13 @@ class NodesController < ApplicationController
     @node.destroy
     orig_parent_node.after_child_destroy
     
-    node_sel = dom_id(@node, 'item')
-    
-    orig_left_action_buttons_sel = "##{dom_id(orig_left_node, 'item_for')} > .body > .action.buttons" unless orig_left_node.nil?
-    orig_right_action_buttons_sel = "##{dom_id(orig_right_node, 'item_for')} > .body > .action.buttons" unless orig_right_node.nil?
+    node_sel = dom_id(@node, 'item_for')
     
     respond_to do |format|
       format.js do
         render :update do |page|
+          page.call 'collapseActionBar'
           page.remove node_sel
-          page.replace orig_left_action_buttons_sel, :partial => 'action_buttons', :locals => {:item => orig_left_node} unless orig_left_node.nil?
-          page.replace orig_right_action_buttons_sel, :partial => 'action_buttons', :locals => {:item => orig_right_node} unless orig_right_node.nil?
         end
       end # format.js
     end # respond_to

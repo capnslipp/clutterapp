@@ -1,27 +1,20 @@
-<div id="<%= dom_id(item, 'item-action_for') %>" class="<%= "#{dom_class(item, 'item-action_for')} item-action_for" %> action bar">
+<div id="action-bar" class="action bar initially-hidden" oc:display="inline-block">
 	
-	<div class="widget-wrap">
-		<div class="action widget collapsed">
-			<span class="sym"><%# ► %><%= link_to_function '&#9658;', "expandActionBar('#{item.id}');" %></span>
-		</div>
-		<div class="action widget expanded initially-hidden">
-			<span class="sym"><%# ◄ %><%= link_to_function '&#9668;', "collapseActionBar('#{item.id}');" %></span>
-		</div>
+	<div class="widget expanded">
+		<a href="#"><span class="sym"><%# ◄ %>&#9668;</span></a>
 	</div>
 	
-	<div class="buttons-wrap">
-		<div class="action buttons shadowable initially-hidden">
-			<div class="shadow"></div>
-			
-			<span class="sym"><%# ✚ %><%= link_to_function '&#10010;', "toggleItemNewBar('#{item.id}');" %></span>
-			
-			<span class="sym"><%# ◄ %><a href="#" class="move out">&#9668;</a></span>
-			<span class="sym"><%# ▲ %><a href="#" class="move up">&#9650;</a></span>
-			<span class="sym"><%# ▼ %><a href="#" class="move down">&#9660;</a></span>
-			<span class="sym"><%# ► %><a href="#" class="move in">&#9658;</a></span>
-			
-			<span class="sym"><%# ✖ %><a href="#" class="delete">&#10006;</a></span>
-		</div>
+	<div class="buttons shadowable">
+		<div class="shadow"></div>
+		
+		<a href="#" class="toggle new-bar"><span class="sym"><%# ✚ %>&#10010;</span>
+		
+		<a href="#" class="move out"><span class="sym"><%# ◄ %>&#9668;</span></a>
+		<a href="#" class="move up"><span class="sym"><%# ▲ %>&#9650;</span></a>
+		<a href="#" class="move down"><span class="sym"><%# ▼ %>&#9660;</span></a>
+		<a href="#" class="move in"><span class="sym"><%# ► %>&#9658;</span></a>
+		
+		<a href="#" class="delete"><span class="sym"><%# ✖ %>&#10006;</span></a>
 	</div>
 	
 </div>

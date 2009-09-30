@@ -22,11 +22,6 @@ module CellHelper
   #end
   
   
-  def create_pile_node_path(item, type)
-    url_for :action => 'create', :controller => 'nodes', :pile_id => item.pile, :parent_id => item, :type => type
-  end
-  
-  
   def css_color_for_priority(priority)
     case priority 
       when 1: '#c30'
