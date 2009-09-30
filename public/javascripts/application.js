@@ -170,7 +170,6 @@ function editFormShow(prop) {
 		success: function(responseData) { handleSuccess(prop, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(prop, xhrObj, errStr, expObj); }
 	});
-	return false;
 	
 	
 	function handleSuccess(prop, responseData) {
@@ -190,7 +189,13 @@ function editFormShow(prop) {
 
 $(function() {
 	$('.show.prop').live('click', function() {
-		return editFormShow($(this));
+		editFormShow($(this)); return false;
+	});
+	$('.show.prop').live('mouseover', function() {
+		$(this).closest('.body').css('background', '#fff2f0');
+	});
+	$('.show.prop').live('mouseout', function() {
+		$(this).closest('.body').css('background', 'transparent');
 	});
 });
 
@@ -201,10 +206,9 @@ function editFormSubmit(form) {
 		url: form.attr('action'),
 		data: form.formSerialize(false),
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(form, responseData); }, // return needed?
-		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); } // return needed?
+		success: function(responseData) { handleSuccess(form, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
 	});
-	return false;
 	
 	
 	function handleSuccess(form, responseData) {
@@ -226,7 +230,7 @@ function editFormSubmit(form) {
 
 $(function() {
 	$('form.edit_node').live('submit', function() {
-		return editFormSubmit($(this));
+		editFormSubmit($(this)); return false;
 	});
 });
 
@@ -238,10 +242,9 @@ function nodeItemCreate(parentNode, type) {
 		data: {type: type, parent_id: nodeIDOfItem(parentNode)},
 		url: parentNode.closest('.pile').attr('oc\:nodesUrl'),
 		dataType: 'script',
-		success: function(responseData) { handleSuccess(parentNode, responseData); }, // return needed?
-		error: function(xhrObj, errStr, expObj) { handleError(parentNode, xhrObj, errStr, expObj); } // return needed?
+		success: function(responseData) { handleSuccess(parentNode, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(parentNode, xhrObj, errStr, expObj); }
 	});
-	return false;
 	
 	
 	function handleSuccess(parentNode, responseData) {
@@ -262,10 +265,9 @@ function nodeItemMove(node, dir) {
 		data: {_method: 'put', dir: dir},
 		url: node.attr('oc\:moveUrl'),
 		dataType: 'script',
-		success: function(responseData) { handleSuccess(node, responseData); }, // return needed?
-		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); } // return needed?
+		success: function(responseData) { handleSuccess(node, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
 	});
-	return false;
 	
 	
 	function handleSuccess(node, responseData) {
@@ -286,10 +288,9 @@ function nodeItemDelete(node) {
 		data: {_method: 'delete'},
 		url: node.attr('oc\:url'),
 		dataType: 'script',
-		success: function(responseData) { handleSuccess(node, responseData); }, // return needed?
-		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); } // return needed?
+		success: function(responseData) { handleSuccess(node, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
 	});
-	return false;
 	
 	
 	function handleSuccess(node, responseData) {
@@ -305,45 +306,45 @@ function nodeItemDelete(node) {
 
 $(function() {
 	$('.action.stub .widget.collapsed a').live('click', function() {
-		return expandActionBar($(this).closest('.item_for_node'));
+		expandActionBar($(this).closest('.item_for_node')); return false;
 	});
 	
 	$('#action-bar .widget.expanded a')
-		.click(function() { return collapseActionBar(); })
+		.click(function() { collapseActionBar(); return false; })
 	
 	var actionButtons = $('#action-bar .buttons');
 	actionButtons.find('a.move.out')
-		.click(function() { return nodeItemMove($(this).closest('.item_for_node'), 'out'); });
+		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'out'); return false; });
 	actionButtons.find('a.move.up')
-		.click(function() { return nodeItemMove($(this).closest('.item_for_node'), 'up'); });
+		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'up'); return false; });
 	actionButtons.find('a.move.down')
-		.click(function() { return nodeItemMove($(this).closest('.item_for_node'), 'down'); });
+		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'down'); return false; });
 	actionButtons.find('a.move.in')
-		.click(function() { return nodeItemMove($(this).closest('.item_for_node'), 'in'); });
+		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'in'); return false; });
 	
 	actionButtons.find('a.delete')
-		.click(function() { return nodeItemDelete($(this).closest('.item_for_node')); });
+		.click(function() { nodeItemDelete($(this).closest('.item_for_node')); return false; });
 	
 	actionButtons.find('a.toggle.new-bar')
-		.click(function() { return toggleItemNewBar($(this).closest('.item_for_node')); });
+		.click(function() { toggleItemNewBar($(this).closest('.item_for_node')); return false; });
 	
 	
 	$('#new-bar .widget.expanded a')
-		.click(function() { return hideItemNewBar(); })
+		.click(function() { hideItemNewBar(); return false; })
 	
 	var newButtons = $('#new-bar .buttons');
 	newButtons.find('a.new.text')
-		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'text'); })
+		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'text'); return false; })
 	newButtons.find('a.new.check')
-		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'check'); })
+		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'check'); return false; })
 	newButtons.find('a.new.note')
-		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'note'); })
+		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'note'); return false; })
 	newButtons.find('a.new.priority')
-		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'priority'); })
+		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'priority'); return false; })
 	newButtons.find('a.new.tag')
-		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'tag'); })
+		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'tag'); return false; })
 	newButtons.find('a.new.time')
-		.click(function() { return nodeItemCreate($(this).closest('.item_for_node'), 'time'); })
+		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'time'); return false; })
 });
 
 
