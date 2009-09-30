@@ -188,14 +188,14 @@ function editFormShow(prop) {
 }
 
 $(function() {
-	$('.show.prop').live('click', function() {
-		editFormShow($(this)); return false;
+	$('.item_for_node > .body:has(.show.prop)').live('click', function() {
+		editFormShow($(this).children('.show.prop')); return false;
 	});
-	$('.show.prop').live('mouseover', function() {
-		$(this).closest('.body').css('background', '#fff2f0');
+	$('.item_for_node > .body').live('mouseover', function() {
+		$(this).css('background', '#fff2f0');
 	});
-	$('.show.prop').live('mouseout', function() {
-		$(this).closest('.body').css('background', 'transparent');
+	$('.item_for_node > .body').live('mouseout', function() {
+		$(this).css('background', 'transparent');
 	});
 });
 
