@@ -87,10 +87,7 @@ class NodesController < ApplicationController
     
     respond_to do |format|
       format.js do
-        render :update do |page|
-          page.insert_html :bottom, "##{dom_id(@parent, 'item_for')} > .list", render_cell(cell_for_node(@node), :new, :node => @node)
-          page.visual_effect :highlight, node_sel
-        end
+        render :inline => render_cell(cell_for_node(@node), :new, :node => @node), :status => :ok
       end # format.js
     end # respond_to
   end
@@ -114,7 +111,7 @@ class NodesController < ApplicationController
       
       respond_to do |format|
         format.js do
-          render :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
+          render :inline => render_cell(cell_for_node(@node), :edit, :node => @node), :status => :ok
         end # format.js
       end # respond_to
     end
@@ -142,7 +139,7 @@ class NodesController < ApplicationController
         
         if @node.update_attributes(params[:node])
           format.js do
-            render :inline => render_cell(cell_for_node(@node), :update, :node => @node)
+            render :inline => render_cell(cell_for_node(@node), :update, :node => @node), :status => :ok
           end # format.js
         else
           format.js do
@@ -203,6 +200,7 @@ class NodesController < ApplicationController
     
     respond_to do |format|
       format.js do
+        # keeping this as RJS for now, since it will soon be replaced with a drag-and-drop move system
         render :update do |page|
           page.call 'collapseActionBar'
           page.remove node_sel

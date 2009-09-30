@@ -243,14 +243,22 @@ function nodeItemCreate(parentNode, type) {
 		type: 'post',
 		data: {type: type, parent_id: nodeIDOfItem(parentNode)},
 		url: parentNode.closest('.pile').attr('oc\:nodesUrl'),
-		dataType: 'script',
+		dataType: 'html',
 		success: function(responseData) { handleSuccess(parentNode, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(parentNode, xhrObj, errStr, expObj); }
 	});
 	
 	
 	function handleSuccess(parentNode, responseData) {
-		// nothing for now; @todo: move the element here
+		var list = parentNode.children('.list');
+		
+		if (list.children('#new-bar').length != 0)
+			list.children('#new-bar').before(responseData);
+		else
+			list.append(responseData);
+		
+		parentNode.children('.list').children('.li.node:last')
+			.effect('highlight', 2000);
 	}
 	
 	function handleError(parentNode, xhrObj, errStr, expObj) {
@@ -273,7 +281,7 @@ function nodeItemMove(node, dir) {
 	
 	
 	function handleSuccess(node, responseData) {
-		// nothing for now; @todo: move the element here
+		// nothing for now; @todo: do the actual element movement here
 	}
 	
 	function handleError(node, xhrObj, errStr, expObj) {
