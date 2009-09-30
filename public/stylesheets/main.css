@@ -86,36 +86,37 @@ a.sym, a .sym, .sym a {
 
 /* item list (old) */
 
-#base-item-text { margin: -4px; border: 2px solid transparent; }
-#base-item-text.hover { border-color: #39f; background: #9cf; }
+/*#base-item-text { margin: -4px; border: 2px solid transparent; }
+#base-item-text.hover { border-color: #39f; background: #9cf; }*/
 
 /*ul { margin: 0; padding: 0; padding-left: 2em; }
 li { margin: 0; padding: 0; }*/
 
-#main-list > .main-list-wrap > ul.main-list {
+/*#main-list > .main-list-wrap > ul.main-list {
 	border: none;
 	padding-left: 0;
-}
+}*/
 
 ul.list ul.list {
 	border-left: 1px solid #eee;
-	padding-left: 2em;
+	padding-left: 2em;/*
 	/*margin-left: -1em;*/
 }
+
 /*li.item_for_node, li.item-new_for_node {*/
 	/*list-style-type: disc;*/
 	/*margin-left: 1em;*/
 	/*margin-bottom: 1px;*/
 	/*clear: left;*/ /* clear was originally needed for keeping floating item content from destroying the view; this shouldn't be possible eventually */
 /*}*/
-li.widget {
+/*li.widget {
 	list-style-type: none;
-}
-li.item_for_node > .body {
-	margin-bottom: 1px;
+}*/
+/*li.item_for_node > .body {
+	margin-bottom: 1px;*/
 	/*font-size: 1.0em; font-weight: normal;
 	color: #000;*/
-}
+/*}*/
 
 /*#main-list li.item_for_node.sub.group { margin-left: 0; }
 #main-list li.item_for_node.sub.group > .body > .content {
@@ -226,45 +227,64 @@ li.item_for_node li.item_for_node.checkbox { list-style-type: none; margin-left:
 }
 
 
-/* topbar */
+/* top-bar */
 
-#topbar {
+#top-bar {
 	position: relative; z-index: 200;
-	background: #666;
 	/*margin-bottom: 8px;*/
 	height: 24px;
-	border-bottom: 1px solid #444;
 	width: 100%;
 }
 
-#topbar > .shadow { display: none; /* @todo: get this working; not overlapping the content */ }
+#top-bar > .shadow {
+	/* @todo: get this working; not overlapping the content */
+	top: 0;
+	bottom: -3px;
+	left: 0;
+	right: 0;
+	z-index: -2;
+	opacity: 0.15; filter: alpha(opacity=15);
+}
 
-#topbar, #topbar a {
+#top-bar > .shadow.n1 { bottom: -2px; }
+#top-bar > .shadow.n2 { bottom: -3px; }
+
+#top-bar, #top-bar a {
 	color: #fff;
 }
 
 /* contain-float-after */
-#topbar:after { content: ""; display: block; height: 0; clear: both; visibility: hidden; /* (FF, S2, O9) */ }
+#top-bar:after { content: ""; display: block; height: 0; clear: both; visibility: hidden; /* (FF, S2, O9) */ }
 
-#topbar > .logo {
+#top-bar > .back {
+	position: absolute;
+	top: 0; bottom: 0; left: 0; right: 0;
+	background: #666;
+	margin-bottom: -1px;
+	border-bottom: 1px solid #444;
+	z-index: -1;
+}
+
+#top-bar > .logo {
 	float: left;
 	background: #c20;
-	/*margin-bottom: -1px;*/
+	margin-bottom: -1px;
 	border-bottom: 1px solid #a00;
+	border-right: 1px solid #555;
 	padding: 4px;
 	padding-right: 6px;
 	font-size: 16px;
 	height: 16px;
 }
 
-#topbar > .content {
+#top-bar > .content {
 	float: left;
 	position: relative;
 	z-index: 1;
 	padding: 4px;
 }
 
-#topbar > .corner {
+#top-bar > .corner {
 	float: right;
 	position: relative;
 	z-index: 1;
