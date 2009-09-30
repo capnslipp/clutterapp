@@ -79,9 +79,10 @@ a.sym, a .sym, .sym a {
 
 /* flash messages, notices, and warnings */
 
-.flash.message { color: #39f; }
-.flash.notice { color: #ff3; }
-.flash.warning { color: #f66; }
+.flash.message { color: #ddd; }
+.flash.notice { color: #ddd; }
+.flash.warning { color: #fff; font-style: italic; }
+.flash.error { color: #fff; font-weight: bold; }
 
 
 /* item list (old) */
