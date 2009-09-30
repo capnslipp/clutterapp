@@ -86,7 +86,7 @@ class PilesController < ApplicationController
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @pile.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @pile.errors, :status => 418 }
       end
     end
   end
