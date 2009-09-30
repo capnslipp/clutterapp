@@ -173,12 +173,14 @@ function editFormShow(prop) {
 	
 	
 	function handleSuccess(prop, responseData) {
-		showFill( prop.parent() );
+		var body = prop.parent('.body');
+		
+		showFill(body);
 		
 		prop
 			.replaceWith(responseData);
 		
-		editFormFocus(prop.find('form'));
+		editFormFocus(body.find('form'));
 	}
 	
 	function handleError(prop, xhrObj, errStr, expObj) {
@@ -214,7 +216,7 @@ function editFormSubmit(form) {
 	function handleSuccess(form, responseData) {
 		var prop = form.closest('.edit.prop');
 		
-		hideFill( prop.parent() );
+		hideFill( prop.parent('.body') );
 		
 		prop
 			.replaceWith(responseData);
