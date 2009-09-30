@@ -42,7 +42,7 @@ class PilesController < ApplicationController
   # GET /piles/new
   # GET /piles/new.xml
   def new
-    @pile = Pile.new
+    @pile = current_user.piles.build
     
     respond_to do |format|
       format.html # new.html.erb
