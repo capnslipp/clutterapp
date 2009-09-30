@@ -203,6 +203,43 @@ $(function() {
 
 
 
+function nodeItemMove(node, dir) {
+	$.ajax({
+		type: 'post',
+		data: {_method: 'put', dir: dir},
+		url: node.attr('oc\:moveUrl'),
+		dataType: 'script',
+		success: function(responseData) { handleSuccess(node, responseData); }, // return needed?
+		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); } // return needed?
+	});
+	return false;
+	
+	
+	function handleSuccess(node, responseData) {
+		// nothing for now; @todo: move the element here
+	}
+	
+	function handleError(node, xhrObj, errStr, expObj) {
+		node.find('.body:first')
+			.effect('highlight', {color: '#910'}, 2000);
+	}
+}
+
+
+$(function() {
+	var actionButtons = $('.action.buttons');
+	actionButtons.find('.move.out')
+		.click(function() { return nodeItemMove($(this).closest('.node'), 'out'); });
+	actionButtons.find('.move.up')
+		.click(function() { return nodeItemMove($(this).closest('.node'), 'up'); });
+	actionButtons.find('.move.down')
+		.click(function() { return nodeItemMove($(this).closest('.node'), 'down'); });
+	actionButtons.find('.move.in')
+		.click(function() { return nodeItemMove($(this).closest('.node'), 'in'); });
+});
+
+
+
 kPageMinWidth = 320;
 function writePageMinWidthAdjustment() {
 	// if the screen's width is smaller than the page's width (i.e. a zoomable mobile device like the iPhone)

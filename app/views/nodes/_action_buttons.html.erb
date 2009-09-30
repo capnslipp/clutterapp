@@ -15,22 +15,12 @@
 			
 			<span class="sym"><%# ✚ %><%= link_to_function '&#10010;', "toggleItemNewBar('#{item.id}');" %></span>
 			
-			<% unless item.parent.nil? || item.parent.root? %>
-				<span class="sym"><%# ◄ %><%= link_to_remote '&#9668;',		:url => "#{node_path(item)}/move?dir=out",	:method => 'put'	%></span>
-			<% end %>
-			<% unless item.left_sibling.nil? %>
-				<span class="sym"><%# ▲ %><%= link_to_remote '&#9650;',		:url => "#{node_path(item)}/move?dir=up",	:method => 'put'	%></span>
-			<% end %>
-			<% unless item.right_sibling.nil? %>
-				<span class="sym"><%# ▼ %><%= link_to_remote '&#9660;',		:url => "#{node_path(item)}/move?dir=down",	:method => 'put'	%></span>
-			<% end %>
-			<% unless item.left_sibling.nil? %>
-				<span class="sym"><%# ► %><%= link_to_remote '&#9658;',		:url => "#{node_path(item)}/move?dir=in",	:method => 'put'	%></span>
-			<% end %>
+			<span class="sym"><%# ◄ %><a href="#" class="move out">&#9668;</a></span>
+			<span class="sym"><%# ▲ %><a href="#" class="move up">&#9650;</a></span>
+			<span class="sym"><%# ▼ %><a href="#" class="move down">&#9660;</a></span>
+			<span class="sym"><%# ► %><a href="#" class="move in">&#9658;</a></span>
 			
-			<% unless item.root? %>
-				<span class="sym"><%# ✖ %><%= link_to_remote '&#10006;',	:url => node_path(item),					:method => 'delete'	%></span>
-			<% end %>
+			<span class="sym"><%# ✖ %><a href="#" class="delete">&#10006;</a></span>
 		</div>
 	</div>
 	

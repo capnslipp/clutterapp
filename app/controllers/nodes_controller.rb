@@ -176,7 +176,7 @@ class NodesController < ApplicationController
       when :out:  orig_ref_node.nil? || orig_ref_node.root?
       else        true
     end
-    return render :nothing => true if cant_move
+    return render :nothing => true , :status => :unprocessable_entity if cant_move
     
     case dir
       when :up:   @node.move_to_left_of orig_ref_node
