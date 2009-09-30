@@ -30,10 +30,12 @@ module RouteHelper
   
   # chocolate
   def new_pile_url(r_h_a, options = {})
-    new_user_pile_url(user_id_from_user( devise_record(r_h_a).owner ), options)
+    record = devise_record(r_h_a)
+    new_user_pile_url(options.merge user_id_from_user( record.instance_of?(Pile) ? record.owner : record ))
   end
   def new_pile_path(r_h_a, options = {})
-    new_user_pile_path(user_id_from_user( devise_record(r_h_a).owner ), options)
+    record = devise_record(r_h_a)
+    new_user_pile_path(options.merge user_id_from_user( record.instance_of?(Pile) ? record.owner : record ))
   end
   
   
@@ -75,10 +77,12 @@ module RouteHelper
   
   # spinkled waffle cone
   def new_node_url(r_h_a, options = {})
-    new_user_pile_node_url(pile_id_and_user_id_from_pile( devise_record(r_h_a).pile ), options)
+    record = devise_record(r_h_a)
+    new_user_pile_node_url(options.merge pile_id_and_user_id_from_pile( record.instance_of?(Node) ? record.pile : record ))
   end
   def new_node_path(r_h_a, options = {})
-    new_user_pile_node_path(pile_id_and_user_id_from_pile( devise_record(r_h_a).pile ), options)
+    record = devise_record(r_h_a)
+    new_user_pile_node_path(options.merge pile_id_and_user_id_from_pile( record.instance_of?(Node) ? record.pile : record ))
   end
   
   

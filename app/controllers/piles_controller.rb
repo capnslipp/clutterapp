@@ -7,10 +7,22 @@ class PilesController < ApplicationController
   # GET /piles
   # GET /piles.xml
   def index
-    @piles = Pile.all
+    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
     
-    respond_to do |format|
-      format.html # index.html.erb
+    if @pile_owner.nil?
+      flash[:warning] = "No such user exists."
+      redirect_to user_url(current_user)
+      
+    elsif @pile_owner != current_user
+      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
+      redirect_to user_url(current_user)
+      
+    else
+      @piles = @pile_owner.piles
+    
+      respond_to do |format|
+        format.html # index.html.erb
+      end
     end
   end
   
