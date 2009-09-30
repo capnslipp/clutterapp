@@ -281,16 +281,19 @@ li.item_for_node li.item_for_node.checkbox { list-style-type: none; margin-left:
 	float: left;
 	position: relative;
 	z-index: 1;
-	padding: 4px;
+	padding: 2px;
+	height: 20px;
+	line-height: 20px;
 }
 
 #top-bar > .corner {
 	float: right;
 	position: relative;
 	z-index: 1;
-	padding: 4px;
+	padding: 2px;
+	height: 20px;
+	line-height: 20px;
 }
-
 
 /* buttons/bars */
 .widget, .buttons {

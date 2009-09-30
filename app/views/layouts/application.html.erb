@@ -25,10 +25,10 @@
 		</h1>
 		
 		<div class="content">
-			<% if flash[:message]: %><div class="flash message"><%= flash[:message] %></div><% end %>
-			<% if flash[:notice]: %><div class="flash notice"><%= flash[:notice] %></div><% end %>
-			<% if flash[:warning]: %><div class="flash warning"><%= flash[:warning] %></div><% end %>
-			<% if flash[:error]: %><div class="flash error"><%= flash[:error] %></div><% end %>
+			<% if flash[:message]: %><span class="flash message"><%= flash[:message] %></span><% end %>
+			<% if flash[:notice]: %><span class="flash notice"><%= flash[:notice] %></span><% end %>
+			<% if flash[:warning]: %><span class="flash warning"><%= flash[:warning] %></span><% end %>
+			<% if flash[:error]: %><span class="flash error"><%= flash[:error] %></span><% end %>
 		</div>
 		
 		<div class="corner">
