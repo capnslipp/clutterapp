@@ -11,8 +11,8 @@ config.whiny_nils = true
 
 # Show full error reports and disable caching
 config.action_controller.consider_all_requests_local = true
-config.action_controller.perform_caching             = false
-#config.action_controller.perform_caching             = true
+#config.action_controller.perform_caching             = false
+config.action_controller.perform_caching             = true
 
 # Use cache in test in order to test that it actually works!
 #config.cache_store = :memory_store
