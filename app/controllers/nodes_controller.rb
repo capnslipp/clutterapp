@@ -85,11 +85,11 @@ class NodesController < ApplicationController
     
     node_sel = dom_id(@node, 'item')
     
-    respond_to do |format|
-      format.js do
-        render :inline => render_cell(cell_for_node(@node), :new, :node => @node), :status => :ok
-      end # format.js
-    end # respond_to
+    if request.xhr?
+      return render :inline => render_cell(cell_for_node(@node), :new, :node => @node), :status => :ok
+    end
+    
+    render :nothing => true, :status => 418
   end
   
   
@@ -109,11 +109,11 @@ class NodesController < ApplicationController
       @pile = @pile_owner.piles.find params[:pile_id]
       @node = @pile.nodes.find params[:id]
       
-      respond_to do |format|
-        format.js do
-          render :inline => render_cell(cell_for_node(@node), :edit, :node => @node), :status => :ok
-        end # format.js
-      end # respond_to
+      if request.xhr?
+        return render :inline => render_cell(cell_for_node(@node), :edit, :node => @node), :status => :ok
+      end
+      
+      render :nothing => true, :status => 418
     end
   end
   
@@ -135,19 +135,13 @@ class NodesController < ApplicationController
       @node = @pile.nodes.find(params[:id])
       @prop = @node.prop
       
-      respond_to do |format|
-        
-        if @node.update_attributes(params[:node])
-          format.js do
-            render :inline => render_cell(cell_for_node(@node), :update, :node => @node), :status => :ok
-          end # format.js
-        else
-          format.js do
-            render :nothing => true, :status => 418
-          end
+      if @node.update_attributes(params[:node])
+        if request.xhr?
+          return render :inline => render_cell(cell_for_node(@node), :update, :node => @node), :status => :ok
         end
-        
-      end # respond_to
+      end
+      
+      render :nothing => true, :status => 418
     end
   end
   
@@ -224,11 +218,11 @@ class NodesController < ApplicationController
     
     node_sel = dom_id(@node, 'item_for')
     
-    respond_to do |format|
-      format.js do
-        return render :nothing => true, :status => :ok
-      end # format.js
-    end # respond_to
+    if request.xhr?
+      return render :nothing => true, :status => :ok
+    end
+    
+    render :nothing => true , :status => 418
   end
   
 end

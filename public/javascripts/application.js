@@ -3,6 +3,11 @@
 
 
 
+jQuery.ajaxSetup({beforeSend: function(xhr) {
+	xhr.setRequestHeader("Accept", "text/javascript");
+} });
+
+
 JOIN = '_';
 NEW = 'new';
 
@@ -230,11 +235,12 @@ function editFormSubmit(form) {
 	}
 }
 
-$(function() {
-	$('form.edit_node').live('submit', function() {
-		editFormSubmit($(this)); return false;
-	});
-});
+// doesn't seem to work in IE.
+//$(function() {
+//	$('form.edit_node').live('submit', function() {
+//		editFormSubmit($(this)); return false;
+//	});
+//});
 
 
 
