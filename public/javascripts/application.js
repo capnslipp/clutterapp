@@ -160,7 +160,7 @@ function editFormShow(prop) {
 }
 
 $(function() {
-	$('.show.prop').livequery('click', function() {
+	$('.show.prop').live('click', function() {
 		return editFormShow($(this));
 	});
 });
@@ -196,7 +196,7 @@ function editFormSubmit(form) {
 }
 
 $(function() {
-	$('form.edit_node').livequery('submit', function() {
+	$('form.edit_node').live('submit', function() {
 		return editFormSubmit($(this));
 	});
 });
