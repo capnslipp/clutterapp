@@ -228,10 +228,7 @@ class NodesController < ApplicationController
     
     respond_to do |format|
       format.js do
-        render :update do |page|
-          page.call 'collapseActionBar'
-          page.remove node_sel
-        end
+        return render :nothing => true, :status => :ok
       end # format.js
     end # respond_to
   end

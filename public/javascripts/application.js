@@ -289,14 +289,15 @@ function nodeItemDelete(node) {
 		type: 'post',
 		data: {_method: 'delete'},
 		url: node.attr('oc\:url'),
-		dataType: 'script',
+		dataType: 'html',
 		success: function(responseData) { handleSuccess(node, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
 	});
 	
 	
 	function handleSuccess(node, responseData) {
-		// nothing for now; @todo: move the element here
+		collapseActionBar();
+		node.remove();
 	}
 	
 	function handleError(node, xhrObj, errStr, expObj) {
