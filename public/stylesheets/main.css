@@ -34,13 +34,13 @@ body, input, textarea {
 a { color: #000; }
 #a:hover { color: #fff; background-color: #000; }
 
-h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; line-height: 1.25; }
-h1 { font-size: 1.75em; }
-h2 { font-size: 1.625em; }
-h3 { font-size: 1.5em; }
-h4 { font-size: 1.375em; }
-h5 { font-size: 1.25em; }
-h6 { font-size: 1.125em; }
+h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; }
+h1 { font-size: 23px; line-height: 29px; }
+h2 { font-size: 21px; line-height: 26px; }
+h3 { font-size: 19px; line-height: 24px; }
+h4 { font-size: 17px; line-height: 21px; }
+h5 { font-size: 16px; line-height: 20px; }
+h6 { font-size: 15px; line-height: 19px; }
 
 
 form {
@@ -95,8 +95,12 @@ a.sym, a .sym, .sym a {
 
 ul.list ul.list {
 	border-left: 1px solid #eee;
-	padding-left: 1.5em;/*
+	padding-left: 18px;/*
 	/*margin-left: -1em;*/
+}
+
+li {
+	line-height: 20px;
 }
 
 .item_for_node > .body {
@@ -156,6 +160,7 @@ ul.list ul.list {
 	padding-right: 6px;
 	font-size: 16px;
 	height: 16px;
+	line-height: 20px;
 }
 
 #top-bar > .content {
@@ -348,9 +353,9 @@ ul.scope-list > li.scope-item {
 	-moz-border-radius:		2px;
 	-webkit-border-radius:	2px;
 	
-	box-shadow:			0 2px 3px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
-	-webkit-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow:			0 1.333px 2px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.25);
+	-webkit-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.25);
 }
 .note.prop textarea { height: 5em; }
 
@@ -374,9 +379,9 @@ ul.scope-list > li.scope-item {
 	-moz-border-radius:		1em;
 	-webkit-border-radius:	1em;
 	
-	box-shadow:			0 2px 3px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
-	-webkit-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow:			0 1.333px 2px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.25);
+	-webkit-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.25);
 }
 .priority.prop > .shadow { display: inline-block; opacity: 0.1; }
 
@@ -398,9 +403,9 @@ ul.scope-list > li.scope-item {
 	-moz-border-radius:		4px;
 	-webkit-border-radius:	4px;
 	
-	box-shadow:			0 2px 3px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
-	-webkit-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow:			0 1.333px 2px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.25);
+	-webkit-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.25);
 }
 
 .text.prop {
