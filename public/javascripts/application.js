@@ -7,6 +7,20 @@ jQuery.ajaxSetup({beforeSend: function(xhr) {
 	xhr.setRequestHeader("Accept", "text/javascript");
 } });
 
+jQuery.fn.walk = function() {
+	var firstChild = this.children(':first');
+	if (firstChild.length > 0) {
+		return firstChild;
+	} else {
+		var nextSibling = this.next()
+		if (nextSibling.length > 0)
+			return nextSibling;
+		else
+			return this.closest(':not(:last-child)').next();
+	}
+}
+
+
 
 JOIN = '_';
 NEW = 'new';
