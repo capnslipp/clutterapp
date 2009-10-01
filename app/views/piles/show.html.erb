@@ -1,5 +1,5 @@
 <div id="<%= dom_id(@base_node, 'item_for') %>" class="pile <%= dom_class(@base_node, 'item_for') %>" oc:nodesUrl="<%=nodes_path(@base_node)%>">
-	<h3 class="name" style="display: inline-block;"><%= @pile_owner.name.present? ? @pile_owner.name : @pile_owner.login %>'s Pile</h3>
+	<h1 class="name" style="display: inline-block;"><%= @pile_owner.name.present? ? @pile_owner.name : @pile_owner.login %>'s Pile</h1>
 	<div class="body" style="display: inline-block">
 		<%= render :partial => 'nodes/action_stub' %>
 	</div>

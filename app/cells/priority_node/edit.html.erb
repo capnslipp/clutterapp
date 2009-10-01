@@ -1,12 +1,13 @@
-<div class="edit priority prop shadowable" style="background-color: <%=css_color_for_priority(@node.prop.priority)%>;">
-	<div class="shadow"></div>
-	<%- form_for @node, :url => node_path(@node), :html => {:method => 'put', :onsubmit => 'editFormSubmit($(this)); return false;'} do |node_form| -%>
+<div class="edit priority prop">
+	<div class="content" style="background-color: <%=css_color_for_priority(@node.prop.priority)%>;">
+		<%- form_for @node, :url => node_path(@node), :html => {:method => 'put'} do |node_form| -%>
 		
-		<%- node_form.fields_for :prop do |prop_form| -%>
-			<%= prop_form.text_field :priority, :class => 'field' %>
+			<%- node_form.fields_for :prop do |prop_form| -%>
+				<%= prop_form.text_field :priority, :class => 'field' %>
+			<%- end -%>
+		
+			<%# ✓ %><%= node_form.submit '&#10003;' %>
+		
 		<%- end -%>
-		
-		<%# ✓ %><%= node_form.submit '&#10003;' %>
-		
-	<%- end -%>
+	</div>
 </div>

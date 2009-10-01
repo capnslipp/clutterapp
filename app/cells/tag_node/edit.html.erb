@@ -1,6 +1,5 @@
-<div class="edit tag prop shadowable">
-	<div class="shadow"></div>
-	<%- form_for @node, :url => node_path(@node), :html => {:method => 'put', :onsubmit => 'editFormSubmit($(this)); return false;'} do |node_form| -%>
+<div class="edit tag prop">
+	<%- form_for @node, :url => node_path(@node), :html => {:method => 'put'} do |node_form| -%>
 		
 		<%- node_form.fields_for :prop do |prop_form| -%>
 			<%= prop_form.text_field :tag, :class => 'field' %>

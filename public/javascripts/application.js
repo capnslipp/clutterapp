@@ -163,8 +163,10 @@ function hideFill(modalElement) {
 	
 		if (modalElement != undefined) {
 			modalElement
-				.css('position', modalElement.attr('oc\:origPosition'))
-				.css('z-index', 0);
+				.css({
+					position: modalElement.attr('oc\:origPosition'),
+					zIndex: 0
+				});
 		}
 	}
 }
@@ -185,15 +187,15 @@ function editFormShow(prop) {
 	});
 	
 	
-	function handleSuccess(prop, responseData) {
-		var body = prop.parent('.body');
+	function handleSuccess(showProp, responseData) {
+		var body = showProp.parent('.body');
 		
-		showFill(body);
-		
-		prop
+		showProp
 			.replaceWith(responseData);
 		
-		editFormFocus(body.find('form'));
+		var editProp = body.children('.edit.prop');
+		showFill(editProp);
+		editFormFocus(editProp.children('form'));
 	}
 	
 	function handleError(prop, xhrObj, errStr, expObj) {
@@ -203,15 +205,15 @@ function editFormShow(prop) {
 }
 
 $(function() {
-	$('.item_for_node > .body:has(.show.prop)').live('click', function() {
-		editFormShow($(this).children('.show.prop')); return false;
+	$('.item_for_node > .body > .show.prop').live('click', function() {
+		editFormShow($(this)); return false;
 	});
-	$('.item_for_node > .body').live('mouseover', function() {
+	$('.item_for_node > .body > .show.prop').live('mouseover', function() {
 		$(this)
 			.css('background', '#fff2f0')
 			.animate({backgroundColor: '#fff'}, 1000);
 	});
-	$('.item_for_node > .body').live('mouseout', function() {
+	$('.item_for_node > .body > .show.prop').live('mouseout', function() {
 		$(this).css('background', 'transparent');
 	});
 });
@@ -229,11 +231,11 @@ function editFormSubmit(form) {
 	
 	
 	function handleSuccess(form, responseData) {
-		var prop = form.closest('.edit.prop');
+		var editProp = form.closest('.edit.prop');
 		
-		hideFill( prop.parent('.body') );
+		hideFill( editProp.parent('.body') );
 		
-		prop
+		editProp
 			.replaceWith(responseData);
 	}
 	
@@ -245,12 +247,11 @@ function editFormSubmit(form) {
 	}
 }
 
-// doesn't seem to work in IE.
-//$(function() {
-//	$('form.edit_node').live('submit', function() {
-//		editFormSubmit($(this)); return false;
-//	});
-//});
+$(function() {
+	$('form.edit_node').live('submit', function() {
+		editFormSubmit($(this)); return false;
+	});
+});
 
 
 
@@ -375,13 +376,12 @@ $(function() {
 });
 
 
-kIPhoneScreenHeight = 480;
-kIPhoneStatusBarHeight = 20;
-kIPhoneToolBarHeight = 44;
-
-
 // a zoomable mobile device like the iPhone
 if (window.orientation != undefined) {
+	kIPhoneScreenHeight = 480;
+	kIPhoneStatusBarHeight = 20;
+	kIPhoneToolBarHeight = 44;
+	
 	$(window).load(function() {
 		$('body').css('min-height', kIPhoneScreenHeight - kIPhoneStatusBarHeight - kIPhoneToolBarHeight);
 		

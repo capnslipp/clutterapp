@@ -18,15 +18,12 @@
 	
 	<div id="fill" class="initially-hidden"></div>
 	
-	<div id="top-bar" class="shadowable">
-		<div class="shadow n1"></div>
-		<div class="shadow n2"></div>
-		
+	<div id="top-bar">
 		<div class="back"></div>
 		
-		<h1 class="logo">
+		<div class="logo">
 			<a href="<%= logged_in? ? home_path : root_path %>" style="text-decoration: none; background: none; color: #fff;">OrgClut</a>
-		</h1>
+		</div>
 		
 		<div class="content">
 			<% if flash[:message]: %><span class="flash message"><%= flash[:message] %></span><% end %>

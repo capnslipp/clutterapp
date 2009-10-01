@@ -7,11 +7,12 @@ html {
 }
 
 body {
-	font-size: 12px;
-	line-height: 1.25;
-	font-family: Helvetica, Arial, sans-serif;
 	margin: 0; padding: 0;
 	height: 100%;
+}
+
+body, input, textarea {
+	font: 13px/16px Helvetica, Arial, sans-serif;
 }
 
 #base {
@@ -26,16 +27,15 @@ body {
 
 #fill {
 	position: absolute; z-index: 100;
-	background: #fff;
-	opacity: 0.75; filter: alpha(opacity=75);
+	background: rgba(255, 255, 255, 0.75);
 }
 
 
 a { color: #000; }
 #a:hover { color: #fff; background-color: #000; }
 
-h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; }
-h1 { font-size: 2.25em; }
+h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; line-height: 1.25; }
+h1 { font-size: 1.75em; }
 h2 { font-size: 1.625em; }
 h3 { font-size: 1.5em; }
 h4 { font-size: 1.375em; }
@@ -43,10 +43,16 @@ h5 { font-size: 1.25em; }
 h6 { font-size: 1.125em; }
 
 
-input, textarea {
+form {
+	width: 100%;
+}
+
+input[type='text'], textarea {
 	border: 1px solid #f20;
-	padding: 1px;
-	margin: 1px
+	margin: -2px;
+	padding: 2px;
+	display: block;
+	width: 100%;
 }
 input[type='button'], input[type='submit'] {
 	background: #666;
@@ -65,7 +71,7 @@ input[type='button'], input[type='submit'] {
 }
 
 a.sym, a .sym, .sym a {
-	display: inline-block;
+	display: inline;
 	text-align: center;
 	vertical-align: baseline;
 	text-decoration: none;
@@ -87,135 +93,15 @@ a.sym, a .sym, .sym a {
 
 /* item list (old) */
 
-/*#base-item-text { margin: -4px; border: 2px solid transparent; }
-#base-item-text.hover { border-color: #39f; background: #9cf; }*/
-
-/*ul { margin: 0; padding: 0; padding-left: 2em; }
-li { margin: 0; padding: 0; }*/
-
-/*#main-list > .main-list-wrap > ul.main-list {
-	border: none;
-	padding-left: 0;
-}*/
-
 ul.list ul.list {
 	border-left: 1px solid #eee;
-	padding-left: 2em;/*
+	padding-left: 1.5em;/*
 	/*margin-left: -1em;*/
 }
 
-/*li.item_for_node, li.item-new_for_node {*/
-	/*list-style-type: disc;*/
-	/*margin-left: 1em;*/
-	/*margin-bottom: 1px;*/
-	/*clear: left;*/ /* clear was originally needed for keeping floating item content from destroying the view; this shouldn't be possible eventually */
-/*}*/
-/*li.widget {
-	list-style-type: none;
-}*/
-/*li.item_for_node > .body {
-	margin-bottom: 1px;*/
-	/*font-size: 1.0em; font-weight: normal;
-	color: #000;*/
-/*}*/
-
-/*#main-list li.item_for_node.sub.group { margin-left: 0; }
-#main-list li.item_for_node.sub.group > .body > .content {
-	font-size: 1.15em; font-weight: bold;
-	color: #111;
+.item_for_node > .body {
+	width: 100%;
 }
-
-ul.main-list.group { padding-left: 0; margin-left: 0; }
-li.item_for_node.group { list-style-type: none; margin-left: 0; }
-li.item_for_node.group > .body > .content {
-	font-size: 1.625em; font-weight: bold;
-	color: #666;
-	/*margin-top: 0.5em;*//*
-}
-
-ul.main-list.group ul.main-list.group { padding-left: 2em; }
-li.item_for_node.group li.item_for_node.group { list-style-type: none; margin-left: 0; }
-li.item_for_node.group li.item_for_node.group > .body > .content {
-	font-size: 1.5em; font-weight: bold;
-	color: #c20;
-}
-
-/*ul.main-list.group ul.main-list.group ul.main-list.group { padding-left: 2em; }
-li.item_for_node.group li.item_for_node.group li.item_for_node.group { list-style-type: none; margin-left: 0; }*//*
-li.item_for_node.group li.item_for_node.group li.item_for_node.group > .body > .content {
-	font-size: 1.375em; font-weight: bold;
-	color: #5e5e5e;
-	/*margin-top: 0;*//*
-}
-
-/*ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group { padding-left: 2em; }
-li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group { list-style-type: none; margin-left: 0; }*//*
-li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group > .body > .content {
-	font-size: 1.25em; font-weight: bold;
-	/*margin-top: 0;*//*
-	color: #c20;
-}
-
-/*ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group { padding-left: 2em; }
-li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group { list-style-type: none; margin-left: 0; }*//*
-li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group > .body > .content {
-	font-size: 1.125em; font-weight: bold;
-	color: #555;
-	/*margin-top: 0;*//*
-}
-
-/*ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group { padding-left: 2em; }
-li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group { list-style-type: none; margin-left: 0; }*//*
-li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group > .body > .content {
-	font-size: 1.0em; font-weight: bold;
-	/*margin-top: 0;*//*
-	color: #c20;
-}
-
-/*ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group ul.main-list.group { padding-left: 2em; }
-li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group { list-style-type: none; margin-left: 0; }*//*
-li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group li.item_for_node.group > .body > .content {
-	font-size: 1.0em; font-weight: bold;
-	/*margin-top: 0;*//*
-	color: #4d4d4d;
-}
-
-li.item_for_node > .body {
-	margin-bottom: 0.25em;
-	margin: -4px;
-	border: 2px solid transparent;
-	position: relative; /* for .buttons *//*
-}
-li.item_for_node > .body.hover { border-color: #39f; background: #9cf; }
-
-/*.item_for_node .buttons {
-	position: absolute;
-	width: 14em;
-	left: -14em; top: 0;
-	background: #eee;
-	border: 1px solid #ccc;
-	direction: rtl; text-align: right;
-}
-.item_for_node .buttons > img.icon { height: 1.5em; width: 1.5em; line-height: 1em; vertical-align: middle; cursor: pointer; } /* should be at least line-height *//*
-.item_for_node .buttons > img, .item_for_node .buttons > a { white-space: nowrap; }*/
-
-
-/*.item_for_node div.checkbox { display: inline; }
-.item_for_node div.checkbox > input { display: inline; margin: 1px; }
-
-#main-list li.item_for_node.checkbox { margin-left: 0; }
-ul.main-list.checkbox { padding-left: 0; margin-left: 0; }
-li.item_for_node.checkbox { list-style-type: none; margin-left: 0; }
-ul.main-list ul.main-list.checkbox { padding-left: 2em; }
-li.item_for_node li.item_for_node.checkbox { list-style-type: none; margin-left: 0; }
-
-.item_for_node.checkbox > .body > .content { display: inline; }
-
-.item_for_node.disabled > .body > .content, .item_for_node.disabled > .body > .checkbox { text-decoration: line-through; opacity: 0.5; filter: alpha(opacity=50); }
-
-.item_for_node .trimmed {
-	opacity: 0.25; filter: alpha(opacity=25);
-}*/
 
 #item-area {
 	margin-left: 17em;
@@ -224,7 +110,7 @@ li.item_for_node li.item_for_node.checkbox { list-style-type: none; margin-left:
 
 /* page */
 #page {
-	padding: 8px;
+	padding: 12px;
 }
 
 
@@ -235,16 +121,9 @@ li.item_for_node li.item_for_node.checkbox { list-style-type: none; margin-left:
 	/*margin-bottom: 8px;*/
 	height: 24px;
 	width: 100%;
-}
-
-#top-bar > .shadow {
-	/* @todo: get this working; not overlapping the content */
-	top: 0;
-	bottom: -3px;
-	left: 0;
-	right: 0;
-	z-index: -2;
-	opacity: 0.15; filter: alpha(opacity=15);
+	box-shadow:			0 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
 }
 
 #top-bar > .shadow.n1 { bottom: -2px; }
@@ -267,6 +146,7 @@ li.item_for_node li.item_for_node.checkbox { list-style-type: none; margin-left:
 }
 
 #top-bar > .logo {
+	font-weight: bold;
 	float: left;
 	background: #c20;
 	margin-bottom: -1px;
@@ -297,16 +177,39 @@ li.item_for_node li.item_for_node.checkbox { list-style-type: none; margin-left:
 }
 
 /* buttons/bars */
+.widget {
+	margin-right: 0.5em;
+}
+
+.buttons {
+	box-shadow:			0 1.333px 2px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.5);
+	
+	border-radius:			16px;
+	-moz-border-radius:		16px;
+	-webkit-border-radius:	16px;
+}
+
 .widget, .buttons {
-	padding: 0 2px;
 	white-space: nowrap;
-	height: 1.1em;
-	display: inline-block;
+	height: 1.25em;
+	line-height: 1.25em;
 }
 
 .widget a, .buttons a { text-decoration: none; }
 
-.action.stub { display: inline-block; }
+.stub, .bar {
+	font-size: 12px;
+	line-height: 16px;
+	height: 16px;
+	/*width: 16px;*/
+	float: left;
+}
+
+.bar {
+	position: relative;
+}
 
 .action.stub .widget,
  #action-bar .widget,
@@ -318,22 +221,36 @@ li.item_for_node li.item_for_node.checkbox { list-style-type: none; margin-left:
  #action-bar .widget a:hover,
     #new-bar .widget a:hover { color: #aaa; }
 
-#action-bar .buttons { background: #c20; }
+#action-bar .buttons {
+	background: #c20;
+	position: absolute;
+	top: 0; left: 1.25em;
+	padding: 0 0.5em;
+	vertical-align: middle;
+}
 #action-bar .buttons, #action-bar .buttons a { color: #fff; }
-#action-bar .buttons a:hover { background: #900; }
-
-#new-bar .buttons { background: #666; }
-#new-bar .buttons, #new-bar .buttons a { color: #fff; }
-#new-bar .buttons a { padding: 0 2px; }
-#new-bar .buttons a:hover { background: #333; }
-
-.buttons, .widget,
-.buttons > .shadow, .widget > .shadow {
-	border-radius: 6px; -webkit-border-radius: 6px; -moz-border-radius: 6px;
+#action-bar .buttons a {}
+#action-bar .buttons a:hover {
+	text-shadow:	0 2px	3px rgba(0, 0, 0, 1),
+					0 -2px	3px rgba(0, 0, 0, 1),
+					2px 0	3px rgba(0, 0, 0, 1),
+					-2px 0	3px rgba(0, 0, 0, 1);
 }
 
-.action .widget a:hover, .action .buttons a:hover, .new .buttons a:hover {
-	border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px;
+#new-bar .buttons {
+	background: #666;
+	position: absolute;
+	top: 0; left: 1.25em;
+	padding: 0 0.75em;
+	vertical-align: middle;
+}
+#new-bar .buttons, #new-bar .buttons a { color: #fff; }
+#new-bar .buttons a { margin-right: 0.25em; }
+#new-bar .buttons a:hover {
+	text-shadow:	0 2px	3px rgba(0, 0, 0, 1),
+					0 -2px	3px rgba(0, 0, 0, 1),
+					2px 0	3px rgba(0, 0, 0, 1),
+					-2px 0	3px rgba(0, 0, 0, 1);
 }
 
 /*.widget, .widget a { color: #ddd; }
@@ -345,30 +262,8 @@ li.item_for_node li.item_for_node.checkbox { list-style-type: none; margin-left:
 /*.new.buttons { margin-left: 2em; }*/
 
 
-/* shadow/shadowable */
+/* shadow/shadowed */
 body { overflow-x: hidden; }
-
-.shadowable { position: relative; }
-
-.shadow {
-	position: absolute;
-	z-index: -1;
-	/*width: 100%;
-	height: 100%;*/
-	top: 1px;
-	bottom: -1px;
-	left: -1px;
-	right: -1px;
-	background: #000;
-	opacity: 0.2; filter: alpha(opacity=20);
-}
-
-.bordered.shadow {
-	top: 2px;
-	bottom: -2px;
-	left: -2px;
-	right: -2px;
-}
 
 
 /* scope sidebar and list */
@@ -435,7 +330,9 @@ ul.scope-list > li.scope-item {
 
 /* props */
 
-.prop { display: inline-block; }
+.prop {
+	display: block;
+}
 
 .check.prop {
 }
@@ -446,40 +343,65 @@ ul.scope-list > li.scope-item {
 	margin: 2px; padding: 2px;
 	background-color: #fff;
 	vertical-align: top;
+	
+	border-radius:			2px;
+	-moz-border-radius:		2px;
+	-webkit-border-radius:	2px;
+	
+	box-shadow:			0 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
 }
-.note.prop, .note.prop > .shadow { border-radius: 2px; -webkit-border-radius: 2px; -moz-border-radius: 2px; }
-.note.prop > .shadow { opacity: 0.05; filter: alpha(opacity=5); }
-.note.prop textarea { width: 100%; height: 5em; }
+.note.prop textarea { height: 5em; }
 
 .priority.prop {
+}
+.priority.prop > .content {
 	font-weight: bold;
 	font-size: 0.9em;
 	
 	/*vertical-align: middle;*/
 	position: relative;
 	top: -0.25em;
+	display: inline-block;
 	
 	text-align: center;
 	width: 1.1em; height: 1.1em;
 	color: #fff;
 	background: #000;
+	
+	border-radius:			1em;
+	-moz-border-radius:		1em;
+	-webkit-border-radius:	1em;
+	
+	box-shadow:			0 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
 }
-.priority.prop, .priority.prop > .shadow { border-radius: 1em; -webkit-border-radius: 1em; -moz-border-radius: 1em; }
-.priority.prop > .shadow { opacity: 0.1; filter: alpha(opacity=10); }
+.priority.prop > .shadow { display: inline-block; opacity: 0.1; }
 
 .tag.prop {
+}
+.tag.prop > .content {
 	font-weight: bold;
+	text-transform: uppercase;
 	font-size: 0.8em;
 	line-height: 1em;
-	text-transform: uppercase;
 	
+	display: inline-block;
+	padding: 2px;
 	margin: 1px;
 	background-color: #666;
 	color: #fff;
+	
+	border-radius:			4px;
+	-moz-border-radius:		4px;
+	-webkit-border-radius:	4px;
+	
+	box-shadow:			0 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
 }
-.tag.prop, .tag.prop > .shadow { border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
-.tag.prop > .shadow { opacity: 0.1; filter: alpha(opacity=10); }
-.tag.prop > .content { display: inline-block; padding: 2px; }
 
 .text.prop {
 }
@@ -487,3 +409,8 @@ ul.scope-list > li.scope-item {
 .time.prop {
 	font-style: oblique;
 }
+
+    .text.prop input[type='submit'],
+.priority.prop input[type='submit'],
+     .tag.prop input[type='submit'],
+    .time.prop input[type='submit'] { display: none; }
