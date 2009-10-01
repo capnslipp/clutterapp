@@ -134,11 +134,19 @@ function nodeIDOfItem(itemForNode) {
 	return itemForNode.attr('id').substring('item_for_node_'.length);
 }
 
-
+function showGoogleChromeFrame() {
+	$("#top-bar > .corner").fadeOut(1000);
+	
+	$('#fill')
+		.css('z-index', 900)
+		.css('opacity', 0)
+		.show()
+		.animate({opacity: 0.5, easing: 'linear'}, 4000);
+}
 
 function showFill(modalElement) {
 	if (!$('#fill').is(':visible')) {
-		if (modalElement) {
+		if (modalElement != undefined) {
 			modalElement.attr('oc\:origPosition', modalElement.css('position'));
 			modalElement
 				.css('position', 'relative')
@@ -153,7 +161,7 @@ function hideFill(modalElement) {
 	if ($('#fill').is(':visible')) {
 		$('#fill').fadeOut(333);
 	
-		if (modalElement) {
+		if (modalElement != undefined) {
 			modalElement
 				.css('position', modalElement.attr('oc\:origPosition'))
 				.css('z-index', 0);
@@ -199,7 +207,9 @@ $(function() {
 		editFormShow($(this).children('.show.prop')); return false;
 	});
 	$('.item_for_node > .body').live('mouseover', function() {
-		$(this).css('background', '#fff2f0');
+		$(this)
+			.css('background', '#fff2f0')
+			.animate({backgroundColor: '#fff'}, 1000);
 	});
 	$('.item_for_node > .body').live('mouseout', function() {
 		$(this).css('background', 'transparent');

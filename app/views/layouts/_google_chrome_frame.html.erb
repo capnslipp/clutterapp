@@ -1,0 +1,11 @@
+<%- if ActionController::Base.perform_caching: -%>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"> </script>
+<%- else -%>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.js"> </script>
+<%- end -%>
+<script type="text/javascript">$(function() {
+	CFInstall.check({
+		onmissing: showGoogleChromeFrame,
+		cssText: 'z-index: 1000'
+	});
+});</script>
