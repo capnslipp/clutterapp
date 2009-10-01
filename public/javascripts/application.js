@@ -374,20 +374,46 @@ $(function() {
 		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'time'); return false; })
 });
 
+//kOrigViewportWidth = $('meta[name=viewport]').attr('content');
+//kOrigOrientation = window.orientation;
+//lastOrientation = undefined;
+//kPortraitWidth = 320;
+//kLandscapeWidth = 480;
+////kUserScalable = false;
+//
+//$(function() {
+//	function updateOrientation() {
+//		if (lastOrientation != window.orientation) { // just to make sure, since we're basing the new width off the old
+//			//alert('changing…');
+//			var newWidth = (window.orientation == 0) ? kPortraitWidth : kLandscapeWidth;
+//			
+//			//$('meta[name=viewport]').attr(
+//			//	'content',
+//			//	'user-scalable=' + (kUserScalable ? 'yes' : 'no') + ';'
+//			//		+ ' width=' + newWidth
+//			//);
+//			//$('body').css('width', newWidth);
+//			
+//			lastOrientation = window.orientation;
+//		}
+//	}
+//	
+//	window.onorientationchange = updateOrientation;
+//	//updateOrientation();
+//});
 
 
-kPageMinWidth = 320;
-function writePageMinWidthAdjustment() {
-	// if the screen's width is smaller than the page's width (i.e. a zoomable mobile device like the iPhone)
-	if (window.screen.width < window.innerWidth) {
-		// set the meta-data to the larger of the device's width or the minimum the site needs!
-		
-		newWidth = window.screen.width;
-		if (newWidth < kPageMinWidth)
-			newWidth = kPageMinWidth;
-		
-		// will write the meta tag right into the <head/>
-		document.write('<meta name="viewport" content="width=' + newWidth + '"/>');
-	}
-}
-writePageMinWidthAdjustment();
+//function writePageMinWidthAdjustment() {
+//	// if the screen's width is smaller than the page's width (i.e. a zoomable mobile device like the iPhone)
+//	if (window.screen.width < window.innerWidth) {
+//		// set the meta-data to the larger of the device's width or the minimum the site needs!
+//		
+//		newWidth = window.screen.width;
+//		if (newWidth < kPageMinWidth)
+//			newWidth = kPageMinWidth;
+//		
+//		// will write the meta tag right into the <head/>
+//		document.write('');
+//	}
+//}
+//writePageMinWidthAdjustment();

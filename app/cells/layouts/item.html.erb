@@ -1,4 +1,6 @@
-<% content_tag_for :li, @node, 'item_for', :class => dom_class(@node, 'item_for'), :'oc:url' => node_path(@node), :'oc:editUrl' => edit_node_path(@node), :'oc:moveUrl' => move_node_path(@node) do -%>
+<% content_tag_for :li, @node, 'item_for', :class => dom_class(@node, 'item_for'),
+	:'oc:url' => node_path(@node), :'oc:editUrl' => edit_node_path(@node), :'oc:moveUrl' => move_node_path(@node),
+	:onclick => 'void(0)' do -%><%# For MobileSafari with Love -%>
 	<div class="body">
 		<%= render :partial => 'nodes/action_stub' %>
 		<%= @content_for_layout %>
