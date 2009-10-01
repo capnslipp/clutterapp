@@ -374,6 +374,23 @@ $(function() {
 		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'time'); return false; })
 });
 
+
+kIPhoneScreenHeight = 480;
+kIPhoneStatusBarHeight = 20;
+kIPhoneToolBarHeight = 44;
+
+
+// a zoomable mobile device like the iPhone
+if (window.orientation != undefined) {
+	$(window).load(function() {
+		$('body').css('min-height', kIPhoneScreenHeight - kIPhoneStatusBarHeight - kIPhoneToolBarHeight);
+		
+		setTimeout(function() {
+			window.scrollTo(0, 0);
+		}, 0);
+	});
+}
+
 //kOrigViewportWidth = $('meta[name=viewport]').attr('content');
 //kOrigOrientation = window.orientation;
 //lastOrientation = undefined;
