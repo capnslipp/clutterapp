@@ -441,4 +441,5 @@ ul.scope-list > li.scope-item {
 	width: 100%;
 }
 .edit.prop input[type='button'], .edit.prop input[type='submit'] {
+	position: absolute;
 }
