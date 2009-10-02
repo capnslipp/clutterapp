@@ -128,9 +128,6 @@ li {
 	-webkit-box-shadow:	0 2px 3px rgba(0, 0, 0, 0.5);
 }
 
-#top-bar > .shadow.n1 { bottom: -2px; }
-#top-bar > .shadow.n2 { bottom: -3px; }
-
 #top-bar, #top-bar a {
 	color: #fff;
 }
@@ -381,7 +378,6 @@ ul.scope-list > li.scope-item {
 	-moz-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.25);
 	-webkit-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.25);
 }
-.priority.prop > .shadow { display: inline-block; opacity: 0.1; }
 
 .tag.prop {
 }
