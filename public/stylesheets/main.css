@@ -48,15 +48,16 @@ form {
 }
 
 input[type='text'], input[type='password'], textarea {
-	background: #fff;
+	background: #444;
 	border: 2px solid transparent;
+	color: #fff;
 	margin: -2px;
 	padding: 0;
 	border-radius:			4px;
 	-moz-border-radius:		4px;
 	-webkit-border-radius:	4px;
 }
-input[type='text']:focus, input[type='password']:focus, textarea:focus { background: #9cf; border-color: rgba(0, 0, 0, 0.1); }
+input[type='text']:focus, input[type='password']:focus, textarea:focus { background: rgba(51, 153, 255, 0.25); border-color: #39f; }
 input[type='button'], input[type='submit'] {
 	background: #444;
 	border: 2px solid #333;
@@ -444,7 +445,7 @@ ul.scope-list > li.scope-item {
 
 
 .edit.prop {
-	border-color: rgba(0, 0, 0, 0.1); background: #9cf;
+	background: rgba(51, 153, 255, 0.25); border-color: #39f;
 	
 	box-shadow:			0 2px 12px rgba(0, 0, 0, 0.25);
 	-moz-box-shadow:	0 2px 12px rgba(0, 0, 0, 0.25);
@@ -454,6 +455,7 @@ ul.scope-list > li.scope-item {
 .edit.prop input[type='text'], .edit.prop textarea {
 	height: 1em;
 	background: transparent;
+	color: #000;
 	border: none;
 	margin: -1px;
 	padding: 2px;
