@@ -35,12 +35,12 @@ a { color: #000; }
 #a:hover { color: #fff; background-color: #000; }
 
 h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; }
-h1 { font-size: 23px; line-height: 29px; }
-h2 { font-size: 21px; line-height: 26px; }
-h3 { font-size: 19px; line-height: 24px; }
-h4 { font-size: 17px; line-height: 21px; }
-h5 { font-size: 16px; line-height: 20px; }
-h6 { font-size: 15px; line-height: 19px; }
+h1 { font-size: 22px; line-height: 24px; }
+h2 { font-size: 20px; line-height: 22px; }
+h3 { font-size: 18px; line-height: 20px; }
+h4 { font-size: 16px; line-height: 18px; }
+h5 { font-size: 15px; line-height: 17px; }
+h6 { font-size: 14px; line-height: 16px; }
 
 
 form {
@@ -104,13 +104,15 @@ ul.list ul.list {
 	/*margin-left: -1em;*/
 }
 
-li.item_for_node {
-}
+li { list-style-type: none; }
 
-.item_for_node > .body {
-	width: 100%;
-	min-height: 1.5em;
-}
+.pile > .item_for_node > .name { display: inline-block; }
+.pile > .item_for_node > .body { display: inline-block; width: auto; }
+.pile > .item_for_node > .body .stub,
+.pile > .item_for_node > .body .bar { float: none; }
+
+.item_for_node > .body { width: 100%; min-height: 1.5em; }
+.pile > .item_for_node > .body { min-height: 1.5em; }
 
 
 /* page */
