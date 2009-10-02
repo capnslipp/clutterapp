@@ -208,13 +208,15 @@ function editFormShow(prop) {
 			.replaceWith(responseData);
 		
 		var editProp = body.children('.edit.prop');
-		editProp.find('textarea').elastic();
+		
+		editProp.filter('.note.prop').find('textarea').elastic();
+		
 		showFill(editProp);
 		editFormFocus(editProp.children('form'));
 	}
 	
 	function handleError(prop, xhrObj, errStr, expObj) {
-		prop.closest('.body')
+		prop
 			.effect('highlight', {color: '#910'}, 2000);
 	}
 }
@@ -222,41 +224,6 @@ function editFormShow(prop) {
 $(function() {
 	$('.item_for_node > .body > .show.prop').live('click', function() {
 		editFormShow($(this)); return false;
-	});
-});
-
-
-function editFormSubmit(form) {
-	$.ajax({
-		type: form.attr('method'),
-		url: form.attr('action'),
-		data: form.formSerialize(false),
-		dataType: 'html',
-		success: function(responseData) { handleSuccess(form, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
-	});
-	
-	
-	function handleSuccess(form, responseData) {
-		var editProp = form.closest('.edit.prop');
-		
-		hideFill( editProp.parent('.body') );
-		
-		editProp
-			.replaceWith(responseData);
-	}
-	
-	function handleError(form, xhrObj, errStr, expObj) {
-		form.closest('.edit.prop').closest('.body')
-			.effect('highlight', {color: '#910'}, 2000);
-		
-		editFormFocus(form);
-	}
-}
-
-$(function() {
-	$('form.edit_node').live('submit', function() {
-		editFormSubmit($(this)); return false;
 	});
 });
 
@@ -281,8 +248,12 @@ function nodeItemCreate(parentNode, type) {
 		else
 			list.append(responseData);
 		
-		parentNode.children('.list').children('.li.node:last')
-			.effect('highlight', 2000);
+		var editProp = list.children('.item_for_node:last').children('.body').children('.edit.prop');
+		
+		editProp.filter('.note.prop').find('textarea').elastic();
+		
+		showFill(editProp);
+		editFormFocus(editProp.children('form'));
 	}
 	
 	function handleError(parentNode, xhrObj, errStr, expObj) {
@@ -290,6 +261,41 @@ function nodeItemCreate(parentNode, type) {
 			.effect('highlight', {color: '#910'}, 2000);
 	}
 }
+
+
+function editFormSubmit(form) {
+	$.ajax({
+		type: form.attr('method'),
+		url: form.attr('action'),
+		data: form.formSerialize(false),
+		dataType: 'html',
+		success: function(responseData) { handleSuccess(form, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
+	});
+	
+	
+	function handleSuccess(form, responseData) {
+		var editProp = form.closest('.edit.prop');
+		
+		hideFill( editProp.parent('.body') );
+		
+		editProp
+			.replaceWith(responseData);
+	}
+	
+	function handleError(form, xhrObj, errStr, expObj) {
+		form.closest('.edit.prop')
+			.effect('highlight', {color: '#910'}, 2000);
+		
+		editFormFocus(form);
+	}
+}
+
+$(function() {
+	$('form.edit_node').live('submit', function() {
+		editFormSubmit($(this)); return false;
+	});
+});
 
 
 
