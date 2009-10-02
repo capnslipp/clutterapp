@@ -448,11 +448,8 @@ ul.scope-list > li.scope-item {
 	-webkit-box-shadow:	0 2px 12px rgba(0, 0, 0, 0.25);
 }
 
-.edit.prop input {
-	height: 1em;
-}
-
 .edit.prop input[type='text'], .edit.prop textarea {
+	height: 1em;
 	background: transparent;
 	border: none;
 	margin: -1px;
