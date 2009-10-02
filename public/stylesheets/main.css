@@ -12,7 +12,7 @@ body {
 }
 
 body, input, textarea {
-	font: 13px/16px Helvetica, Arial, sans-serif;
+	font: 12px/1.5em Helvetica, Arial, sans-serif;
 }
 
 #base {
@@ -58,6 +58,9 @@ input[type='button'], input[type='submit'] {
 	background: #666;
 	border: 1px solid #444;
 	color: #fff;
+	border-radius:			4px;
+	-moz-border-radius:		4px;
+	-webkit-border-radius:	4px;
 }
 
 
@@ -97,16 +100,12 @@ ul.list ul.list {
 	/*margin-left: -1em;*/
 }
 
-li {
-	line-height: 20px;
+li.item_for_node {
 }
 
 .item_for_node > .body {
 	width: 100%;
-}
-
-#item-area {
-	margin-left: 17em;
+	height: 1.5em;
 }
 
 
@@ -209,6 +208,7 @@ li {
 
 .bar {
 	position: relative;
+	z-index: 1;
 }
 
 .action.stub .widget,
@@ -332,6 +332,13 @@ ul.scope-list > li.scope-item {
 
 .prop {
 	display: block;
+	line-height: 1em;
+	margin-left: 1.5em;
+	
+	border: 2px solid transparent;
+	border-radius:			4px;
+	-moz-border-radius:		4px;
+	-webkit-border-radius:	4px;
 }
 
 .check.prop {
@@ -339,14 +346,12 @@ ul.scope-list > li.scope-item {
 
 .note.prop {
 	display: block;
-	border: 1px solid #eee;
-	margin: 2px; padding: 2px;
-	background-color: #fff;
+	padding: 2px;
 	vertical-align: top;
 	
-	border-radius:			2px;
-	-moz-border-radius:		2px;
-	-webkit-border-radius:	2px;
+	border-radius:			4px;
+	-moz-border-radius:		4px;
+	-webkit-border-radius:	4px;
 	
 	box-shadow:			0 1.333px 2px rgba(0, 0, 0, 0.25);
 	-moz-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.25);
@@ -409,7 +414,27 @@ ul.scope-list > li.scope-item {
 	font-style: oblique;
 }
 
-    .text.prop input[type='submit'],
-.priority.prop input[type='submit'],
-     .tag.prop input[type='submit'],
-    .time.prop input[type='submit'] { display: none; }
+    .edit.text.prop input[type='submit'],
+.edit.priority.prop input[type='submit'],
+     .edit.tag.prop input[type='submit'],
+    .edit.time.prop input[type='submit'] { display: none; }
+
+
+.edit.prop {
+	border-color: #39f; background: #9cf;
+	
+	box-shadow:			0 2px 12px rgba(0, 0, 0, 0.25);
+	-moz-box-shadow:	0 2px 12px rgba(0, 0, 0, 0.25);
+	-webkit-box-shadow:	0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+.edit.prop input[type='text'], .edit.prop textarea {
+	background: transparent;
+	border: none;
+	margin: -1px;
+	padding: 2px;
+	display: block;
+	width: 100%;
+}
+.edit.prop input[type='button'], .edit.prop input[type='submit'] {
+}
