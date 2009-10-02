@@ -237,12 +237,12 @@ function nodeItemCreate(parentNode, type) {
 		data: {type: type, parent_id: nodeIDOfItem(parentNode)},
 		url: parentNode.closest('.pile').attr('oc\:nodesUrl'),
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(parentNode, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(parentNode, xhrObj, errStr, expObj); }
+		success: function(responseData) { handleSuccess(parentNode, type, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(parentNode, type, xhrObj, errStr, expObj); }
 	});
 	
 	
-	function handleSuccess(parentNode, responseData) {
+	function handleSuccess(parentNode, type, responseData) {
 		var list = parentNode.children('.list');
 		
 		if (list.children('#new-bar').length != 0)
@@ -254,11 +254,13 @@ function nodeItemCreate(parentNode, type) {
 		
 		editProp.filter('.note.prop').find('textarea').elastic();
 		
-		showFill(editProp);
-		editFormFocus(editProp.children('form'));
+		if (type != 'check') {
+			showFill(editProp);
+			editFormFocus(editProp.children('form'));
+		}
 	}
 	
-	function handleError(parentNode, xhrObj, errStr, expObj) {
+	function handleError(parentNode, type, xhrObj, errStr, expObj) {
 		parentNode.find('#new-bar:first')
 			.effect('highlight', {color: '#910'}, 2000);
 	}

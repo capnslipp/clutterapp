@@ -106,10 +106,10 @@ ul.list ul.list {
 
 li { list-style-type: none; }
 
-.pile > .item_for_node > .name { display: inline-block; }
-.pile > .item_for_node > .body { display: inline-block; width: auto; }
-.pile > .item_for_node > .body .stub,
-.pile > .item_for_node > .body .bar { float: none; }
+.item_for_node.pile > .name { display: inline-block; }
+.item_for_node.pile > .body { display: inline-block; width: auto; }
+.item_for_node.pile > .body > .stub,
+.item_for_node.pile > .body > .bar { float: none; }
 
 .item_for_node > .body { width: 100%; min-height: 1.5em; }
 .pile > .item_for_node > .body { min-height: 1.5em; }
@@ -360,6 +360,7 @@ ul.scope-list > li.scope-item {
 }
 
 .check.prop {
+	border: none;
 }
 
 .note.prop {
@@ -459,6 +460,6 @@ ul.scope-list > li.scope-item {
 	display: block;
 	width: 100%;
 }
-.edit.prop input[type='button'], .edit.prop input[type='submit'] {
-	position: absolute;
-}
+.edit.prop input[type='button'], .edit.prop input[type='submit'] { position: absolute; }
+
+.prop input[type='checkbox'] { border: none; margin: 0; background: none; }
