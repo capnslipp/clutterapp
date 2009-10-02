@@ -364,8 +364,6 @@ ul.scope-list > li.scope-item {
 .show.note.prop, .edit.note.prop textarea { height: 1em; line-height: 1.25em; }
 
 .priority.prop {
-}
-.priority.prop > .content {
 	font-weight: bold;
 	font-size: 0.9em;
 	
@@ -389,8 +387,6 @@ ul.scope-list > li.scope-item {
 }
 
 .tag.prop {
-}
-.tag.prop > .content {
 	font-weight: bold;
 	text-transform: uppercase;
 	font-size: 0.8em;
