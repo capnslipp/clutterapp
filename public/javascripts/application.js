@@ -223,14 +223,6 @@ $(function() {
 	$('.item_for_node > .body > .show.prop').live('click', function() {
 		editFormShow($(this)); return false;
 	});
-	$('.item_for_node > .body > .show.prop').live('mouseover', function() {
-		$(this)
-			.css('background', '#fff2f0')
-			.animate({backgroundColor: '#fff'}, 1000);
-	});
-	$('.item_for_node > .body > .show.prop').live('mouseout', function() {
-		$(this).css('background', 'transparent');
-	});
 });
 
 
@@ -389,6 +381,7 @@ $(function() {
 	newButtons.find('a.new.time')
 		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'time'); return false; })
 });
+
 
 
 // a zoomable mobile device like the iPhone
