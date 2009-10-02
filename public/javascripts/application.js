@@ -202,6 +202,8 @@ function editFormShow(prop) {
 	
 	
 	function handleSuccess(showProp, responseData) {
+		collapseActionBar();
+		
 		var body = showProp.parent('.body');
 		
 		showProp
