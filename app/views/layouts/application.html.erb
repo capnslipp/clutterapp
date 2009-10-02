@@ -13,7 +13,6 @@
 			{:src => 'jrails'},
 			{:src => 'jquery.form'},
 			{:src => 'jquery.elastic', :min => 'jquery.elastic.min'},
-			{:src => 'jquery.defaultvalue', :min => 'jquery.defaultvalue.min'},
 			{:src => 'application'},
 		] %>
 	<%= javascript_include_tag js_files.collect{|file_h| file_h[:src] } unless ActionController::Base.perform_caching %>
