@@ -189,9 +189,9 @@ li.item_for_node {
 	-moz-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.5);
 	-webkit-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.5);
 	
-	border-radius:			16px;
-	-moz-border-radius:		16px;
-	-webkit-border-radius:	16px;
+	border-radius:			6px;
+	-moz-border-radius:		6px;
+	-webkit-border-radius:	6px;
 }
 
 .widget, .buttons {
@@ -380,9 +380,9 @@ ul.scope-list > li.scope-item {
 	color: #fff;
 	background: #000;
 	
-	border-radius:			1em;
-	-moz-border-radius:		1em;
-	-webkit-border-radius:	1em;
+	border-radius:			6px;
+	-moz-border-radius:		6px;
+	-webkit-border-radius:	6px;
 	
 	box-shadow:			0 1.333px 2px rgba(0, 0, 0, 0.25);
 	-moz-box-shadow:	0 1.333px 2px rgba(0, 0, 0, 0.25);
