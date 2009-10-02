@@ -208,6 +208,7 @@ function editFormShow(prop) {
 			.replaceWith(responseData);
 		
 		var editProp = body.children('.edit.prop');
+		editProp.find('textarea').elastic();
 		showFill(editProp);
 		editFormFocus(editProp.children('form'));
 	}
