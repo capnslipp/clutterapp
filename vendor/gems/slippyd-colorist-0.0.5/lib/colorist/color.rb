@@ -367,7 +367,7 @@ module Colorist
       
       h, s, v = *self.to_hsv
       
-      h = _clamp(h + opts[:h], 0..359) if opts[:h]
+      h = (h + opts[:h]) % 360 if opts[:h]
       s = _clamp(s + opts[:s], 0..1)   if opts[:s]
       v = _clamp(v + opts[:v], 0..1)   if opts[:v]
       
