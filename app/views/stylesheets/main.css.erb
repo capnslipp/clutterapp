@@ -1,14 +1,13 @@
 /* standard tags */
 
-html {
-	background-color: #fff;
-	color: #000;
+html. body {
+	background-color: <%= bg_color %>;
+	color: <%= text_color %>;
 	height: 100%;
 }
 
 body {
 	margin: 0; padding: 0;
-	height: 100%;
 }
 
 body, input, textarea {
@@ -27,12 +26,11 @@ body, input, textarea {
 
 #fill {
 	position: absolute; z-index: 100;
-	background: rgba(255, 255, 255, 0.75);
+	background: <%= fill_color.to_s(:css_rgba)%>;
 }
 
 
-a { color: #000; }
-#a:hover { color: #fff; background-color: #000; }
+a { color: <%= text_color %>; }
 
 h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; }
 h1 { font-size: 18px; line-height: 24px; }
@@ -48,33 +46,33 @@ form {
 }
 
 input[type='text'], input[type='password'], textarea {
-	background: #444;
+	background: <%= wash_color * 0.666 %>;
 	border: 2px solid transparent;
-	color: #fff;
+	color: <%= wash_text_color %>;
 	margin: -2px;
 	padding: 0;
 	border-radius:			4px;
 	-moz-border-radius:		4px;
 	-webkit-border-radius:	4px;
 }
-input[type='text']:focus, input[type='password']:focus, textarea:focus { background: <%=focus_back%>; border-color: <%=focus_border%>; }
+input[type='text']:focus, input[type='password']:focus, textarea:focus { background: <%= focus_back %>; border-color: <%= focus_border %>; }
 input[type='button'], input[type='submit'] {
-	background: #444;
-	border: 2px solid #333;
-	color: #fff;
+	background: <%= wash_color * 0.666 %>;
+	border: 2px solid <%= wash_color * 0.5 %>;
+	color: <%= wash_text_color %>;
 	border-radius:			4px;
 	-moz-border-radius:		4px;
 	-webkit-border-radius:	4px;
 }
-input[type='button']:active, input[type='submit']:active { background: #333; border-color: #f20; }
+input[type='button']:active, input[type='submit']:active { background: <%= wash_color * 0.5 %>; border-color: <%= accent_color %>; }
 
 
 /* general-purpose */
 
-.box {
+/*.box {
 	background: #ccc;
 	border: 1px solid #999;
-}
+}*/
 
 a.sym, a .sym, .sym a {
 	display: inline;
@@ -91,16 +89,16 @@ a.sym, a .sym, .sym a {
 
 /* flash messages, notices, and warnings */
 
-.flash.message { color: #ddd; }
-.flash.notice { color: #ddd; }
-.flash.warning { color: #fff; font-style: italic; }
-.flash.error { color: #fff; font-weight: bold; }
+.flash.message { color: <%= wash_text_color * 0.8 %>; }
+.flash.notice { color: <%= wash_text_color * 0.8 %>; }
+.flash.warning { color: <%= wash_text_color %>; font-style: italic; }
+.flash.error { color: <%= wash_text_color %>; font-weight: bold; }
 
 
 /* item list (old) */
 
 ul.list ul.list {
-	border-left: 1px solid #eee;
+	border-left: 1px solid <%= divider_color %>;
 	padding-left: 18px;/*
 	/*margin-left: -1em;*/
 }
@@ -129,11 +127,11 @@ li { list-style-type: none; }
 	/*margin-bottom: 8px;*/
 	height: 24px;
 	width: 100%;
-	<%=deep_shadow_decl%>
+	<%= deep_shadow_decl %>
 }
 
 #top-bar, #top-bar a {
-	color: #fff;
+	color: <%= wash_color %>;
 }
 
 /* contain-float-after */
@@ -142,19 +140,19 @@ li { list-style-type: none; }
 #top-bar > .back {
 	position: absolute;
 	top: 0; bottom: 0; left: 0; right: 0;
-	background: #666;
+	background: <%= wash_color %>;
 	margin-bottom: -1px;
-	border-bottom: 1px solid #444;
+	border-bottom: 1px solid <%= wash_color * 0.666 %>;
 	z-index: -1;
 }
 
 #top-bar > .logo {
 	font-weight: bold;
 	float: left;
-	background: #c20;
+	background: <%= accent_color %>;
 	margin-bottom: -1px;
-	border-bottom: 1px solid #a00;
-	border-right: 1px solid #555;
+	border-bottom: 1px solid <%= accent_color * 0.75 %>;
+	border-right: 1px solid <%= wash_color * 0.75 %>;
 	padding: 4px;
 	padding-right: 6px;
 	font-size: 16px;
@@ -192,10 +190,10 @@ li { list-style-type: none; }
 }
 
 .buttons {
-	<%=shallow_shadow_decl%>
+	<%= shallow_shadow_decl %>
 	
 	margin: -2px;
-	border: 2px solid rgba(0, 0, 0, 0.1);
+	border: 2px solid <%= generic_border_color.to_s(:css_rgba) %>;
 	border-radius:			6px;
 	-moz-border-radius:		6px;
 	-webkit-border-radius:	6px;
@@ -237,41 +235,41 @@ li { list-style-type: none; }
     #new-bar .widget a:hover { color: #aaa; }
 
 #action-bar .buttons {
-	background: #c20;
+	background: <%= accent_color %>;
 	position: absolute;
 	top: 0; left: 1.25em;
 	padding: 0 0.5em;
 	vertical-align: middle;
 }
-#action-bar .buttons, #action-bar .buttons a { color: #fff; }
+#action-bar .buttons, #action-bar .buttons a { color: <%= wash_color %>; }
 #action-bar .buttons a {}
 #action-bar .buttons a:hover {
-	text-shadow:	0 2px	3px rgba(0, 0, 0, 0.5),
-					0 -2px	3px rgba(0, 0, 0, 0.5),
-					2px 0	3px rgba(0, 0, 0, 0.5),
-					-2px 0	3px rgba(0, 0, 0, 0.5);
+	text-shadow:	0 2px	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
+					0 -2px	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
+					2px 0	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
+					-2px 0	3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
 }
 
 #new-bar .buttons {
-	background: #666;
+	background: <%= wash_color %>;
 	position: absolute;
 	top: 0; left: 1.25em;
 	padding: 0 0.75em;
 	vertical-align: middle;
 }
-#new-bar .buttons, #new-bar .buttons a { color: #fff; }
+#new-bar .buttons, #new-bar .buttons a { color: <%= wash_color %>; }
 #new-bar .buttons a { margin-right: 0.25em; }
 #new-bar .buttons a:hover {
-	text-shadow:	0 2px	3px rgba(0, 0, 0, 1),
-					0 -2px	3px rgba(0, 0, 0, 1),
-					2px 0	3px rgba(0, 0, 0, 1),
-					-2px 0	3px rgba(0, 0, 0, 1);
+	text-shadow:	0 2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
+					0 -2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
+					2px 0	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
+					-2px 0	3px <%= shadow_color(1.0).to_s(:css_rgba) %>;
 }
 
 /*.widget, .widget a { color: #ddd; }
 .widget a:hover {  }
 
-.buttons, .buttons a { color: #fff; }
+.buttons, .buttons a { color: <%= wash_color %>; }
 .buttons a:hover { background: #b10; }*/
 
 /*.new.buttons { margin-left: 2em; }*/
@@ -307,9 +305,9 @@ ul.scope-list > li.scope-item {
 	margin-left: 0;
 	text-indent: -0.5em;
 }
-.scope-list > .scope-item > .body { font-size: 1.0em; font-weight: bold; }
+/*.scope-list > .scope-item > .body { font-size: 1.0em; font-weight: bold; }
 .scope-list > .scope-item > .body * { color: #666; }
-.scope-list > .scope-item.current > .body { color: #c20; }
+.scope-list > .scope-item.current > .body { color: <%= accent_color %>; }*/
 
 
 #sidebar-right {
@@ -326,9 +324,9 @@ ul.scope-list > li.scope-item {
 	margin: 1em;
 }
 
-#pile-box > .pile { font-weight: bold; color: #666; }
-#pile-box > .current.pile { color: #c20; }
-#pile-box > .action {}
+/*#pile-box > .pile { font-weight: bold; color: #666; }
+#pile-box > .current.pile { color: <%= accent_color %>; }
+#pile-box > .action {}*/
 
 
 #view-options-box {
@@ -371,7 +369,7 @@ ul.scope-list > li.scope-item {
 	-moz-border-radius:		4px;
 	-webkit-border-radius:	4px;
 	
-	<%=shallow_shadow_decl(0.125)%>
+	<%= shallow_shadow_decl(0.125)%>
 }
 .show.note.prop, .edit.note.prop textarea { line-height: 1.25em; }
 .edit.note.prop textarea { height: 1em; }
@@ -387,14 +385,14 @@ ul.scope-list > li.scope-item {
 	
 	text-align: center;
 	width: 1em; height: 1em;
-	color: #fff;
-	background: #000;
+	background: <%= wash_color %>;
+	color: <%= wash_text_color %>;
 	
 	border-radius:			6px;
 	-moz-border-radius:		6px;
 	-webkit-border-radius:	6px;
 	
-	<%=shallow_shadow_decl(0.25)%>
+	<%= shallow_shadow_decl(0.25)%>
 }
 .priority.prop, .priority.prop input { font-family: 'Arial Black', sans-serif; font-weight: bold; padding: 0; }
 .priority.prop input { font-size: 1em; }
@@ -406,14 +404,14 @@ ul.scope-list > li.scope-item {
 	display: inline-block;
 	padding: 0;
 	margin: 1px;
-	background-color: #666;
-	color: #fff;
+	background-color: <%= wash_color %>;
+	color: <%= wash_text_color %>;
 	
 	border-radius:			4px;
 	-moz-border-radius:		4px;
 	-webkit-border-radius:	4px;
 	
-	<%=shallow_shadow_decl(0.25)%>
+	<%= shallow_shadow_decl(0.25)%>
 }
 .tag.prop, .tag.prop input { font-weight: bold; text-transform: uppercase; padding: 0; }
 .tag.prop input { font-size: 1em; }
@@ -425,7 +423,7 @@ ul.scope-list > li.scope-item {
 	font-style: oblique;
 }
 
-.note.prop, .priority.prop, .tag.prop { border-color: rgba(0, 0, 0, 0.1); }
+.note.prop, .priority.prop, .tag.prop { border-color: <%= generic_border_color.to_s(:css_rgba) %>; }
 
 
     .edit.text.prop input[type='submit'],
@@ -435,15 +433,15 @@ ul.scope-list > li.scope-item {
 
 
 .edit.prop {
-	background: <%=focus_back%>; border-color: <%=focus_border%>;
+	background: <%= focus_back %>; border-color: <%= focus_border %>;
 	
-	<%=shallow_shadow_decl(0.25)%>
+	<%= shallow_shadow_decl(0.25)%>
 }
 
 .edit.prop input[type='text'], .edit.prop textarea {
 	height: 1em;
 	background: transparent;
-	color: #000;
+	color: <%= text_color %>;
 	border: none;
 	margin: -1px;
 	padding: 2px;
