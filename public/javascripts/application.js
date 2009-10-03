@@ -25,6 +25,8 @@ jQuery.fn.walk = function() {
 JOIN = '_';
 NEW = 'new';
 
+kDefaultTransitionDuration = 125
+
 
 function classForNodeModels(prefix) {
 	if (prefix == undefined)
@@ -167,13 +169,13 @@ function showFill(modalElement) {
 				.css('z-index', 1000);
 		}
 	
-		$('#fill').fadeIn(500);
+		$('#fill').fadeIn(kDefaultTransitionDuration);
 	}
 }
 
 function hideFill(modalElement) {
 	if ($('#fill').is(':visible')) {
-		$('#fill').fadeOut(333);
+		$('#fill').fadeOut(kDefaultTransitionDuration);
 	
 		if (modalElement != undefined) {
 			modalElement
