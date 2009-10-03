@@ -24,12 +24,12 @@ module Colorist
                          "gray"    => 0x808080  }
     
     # Creates a new color with the hex color provided as a number (i.e. 0x112233)
-    def initialize(color=0x000000)
+    def initialize(color = 0x000000, alpha = 1.0)
       string = "%.6x" % color
       @r = string[0..1].hex
       @g = string[2..3].hex
       @b = string[4..5].hex
-      @a = 1.0
+      @a = alpha
     end
     
     # Initialize a color based on RGB values. By default, the values
