@@ -3,6 +3,9 @@ class NoteProp < Prop
   
   validates_presence_of :node
   
+  validates_length_of :note, :minimum => 1
+  validates_format_of :note, :with => /\w+/
+  
   def self::rand
     new :note => String.rand_lorem(50)
   end

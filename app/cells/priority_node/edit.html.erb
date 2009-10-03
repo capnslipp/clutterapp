@@ -2,7 +2,7 @@
 	<%- form_for @node, :url => node_path(@node), :html => {:method => 'put'} do |node_form| -%>
 	
 		<%- node_form.fields_for :prop do |prop_form| -%>
-			<%= prop_form.text_field :priority, :class => 'field' %>
+			<%= prop_form.text_field :priority, :maxlength => 1, :class => 'field' %>
 		<%- end -%>
 	
 		<%# ✓ %><%= node_form.submit '&#10003;' %>
