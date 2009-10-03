@@ -26,7 +26,7 @@ body, input, textarea {
 
 #fill {
 	position: absolute; z-index: 100;
-	background: <%= fill_color.to_s(:css_rgba)%>;
+	background: <%= fill_color.to_s(:css_rgba) %>;
 }
 
 
@@ -241,7 +241,7 @@ li { list-style-type: none; }
 	padding: 0 0.5em;
 	vertical-align: middle;
 }
-#action-bar .buttons, #action-bar .buttons a { color: <%= wash_color %>; }
+#action-bar .buttons, #action-bar .buttons a { color: <%= wash_text_color %>; }
 #action-bar .buttons a {}
 #action-bar .buttons a:hover {
 	text-shadow:	0 2px	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
@@ -257,7 +257,7 @@ li { list-style-type: none; }
 	padding: 0 0.75em;
 	vertical-align: middle;
 }
-#new-bar .buttons, #new-bar .buttons a { color: <%= wash_color %>; }
+#new-bar .buttons, #new-bar .buttons a { color: <%= wash_text_color %>; }
 #new-bar .buttons a { margin-right: 0.25em; }
 #new-bar .buttons a:hover {
 	text-shadow:	0 2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
@@ -369,7 +369,7 @@ ul.scope-list > li.scope-item {
 	-moz-border-radius:		4px;
 	-webkit-border-radius:	4px;
 	
-	<%= shallow_shadow_decl(0.125)%>
+	<%= shallow_shadow_decl(0.125) %>
 }
 .show.note.prop, .edit.note.prop textarea { line-height: 1.25em; }
 .edit.note.prop textarea { height: 1em; }
@@ -392,7 +392,7 @@ ul.scope-list > li.scope-item {
 	-moz-border-radius:		6px;
 	-webkit-border-radius:	6px;
 	
-	<%= shallow_shadow_decl(0.25)%>
+	<%= shallow_shadow_decl(0.25) %>
 }
 .priority.prop, .priority.prop input { font-family: 'Arial Black', sans-serif; font-weight: bold; padding: 0; }
 .priority.prop input { font-size: 1em; }
@@ -411,7 +411,7 @@ ul.scope-list > li.scope-item {
 	-moz-border-radius:		4px;
 	-webkit-border-radius:	4px;
 	
-	<%= shallow_shadow_decl(0.25)%>
+	<%= shallow_shadow_decl(0.25) %>
 }
 .tag.prop, .tag.prop input { font-weight: bold; text-transform: uppercase; padding: 0; }
 .tag.prop input { font-size: 1em; }
@@ -435,7 +435,7 @@ ul.scope-list > li.scope-item {
 .edit.prop {
 	background: <%= focus_back %>; border-color: <%= focus_border %>;
 	
-	<%= shallow_shadow_decl(0.25)%>
+	<%= shallow_shadow_decl(0.25) %>
 }
 
 .edit.prop input[type='text'], .edit.prop textarea {
