@@ -45,10 +45,10 @@ module StylesheetsHelper
     Color.from_rgba(color.r, color.g, color.b, a || color.a)
   end
   def deep_shadow(a = nil)
-  	"0px 2px 3px #{shadow_color(a).to_s(:css_rgba)}"
+  	"0px 3px 5px #{shadow_color(a).to_s(:css_rgba)}"
   end
   def shallow_shadow(a = nil)
-  	"0px 1.333px 2px #{shadow_color(a).to_s(:css_rgba)}"
+  	"0px 2px 3px #{shadow_color(a).to_s(:css_rgba)}"
   end
   def deep_shadow_decl(a = nil)
     %W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{deep_shadow(a)};" }.join(' ')
