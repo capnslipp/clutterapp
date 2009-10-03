@@ -219,7 +219,7 @@ function editFormShow(prop) {
 	
 	function handleError(prop, xhrObj, errStr, expObj) {
 		prop
-			.effect('highlight', {color: '#910'}, 2000);
+			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 	}
 }
 
@@ -262,7 +262,7 @@ function nodeItemCreate(parentNode, type) {
 	
 	function handleError(parentNode, type, xhrObj, errStr, expObj) {
 		parentNode.find('#new-bar:first')
-			.effect('highlight', {color: '#910'}, 2000);
+			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 	}
 }
 
@@ -289,7 +289,7 @@ function editFormSubmit(form) {
 	
 	function handleError(form, xhrObj, errStr, expObj) {
 		form.closest('.edit.prop')
-			.effect('highlight', {color: '#910'}, 2000);
+			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 		
 		editFormFocus(form);
 	}
@@ -320,7 +320,7 @@ function nodeItemMove(node, dir) {
 	
 	function handleError(node, xhrObj, errStr, expObj) {
 		node.find('.body:first')
-			.effect('highlight', {color: '#910'}, 2000);
+			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 	}
 }
 
@@ -344,7 +344,7 @@ function nodeItemDelete(node) {
 	
 	function handleError(node, xhrObj, errStr, expObj) {
 		node.find('.body:first')
-			.effect('highlight', {color: '#910'}, 2000);
+			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 	}
 }
 
