@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = 'colorist'
-  s.version = '0.0.4'
+  s.version = '0.0.5'
 
   s.required_rubygems_version = Gem::Requirement.new('>= 0') if s.respond_to? :required_rubygems_version=
   s.authors = ["Michael Bleigh", "oleg dashevskii", "Slippy Douglas"]
-  s.date = '2009-06-29'
+  s.date = '2009-10-03'
   s.description = %q{Colorist is a library built to handle the easy conversion and manipulation of colors with a special emphasis on W3C standards and CSS-style hex color notation.}
   s.email = %q<michael@intridea.com>
   s.extra_rdoc_files = [
