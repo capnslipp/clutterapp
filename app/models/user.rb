@@ -83,7 +83,7 @@ class User < ActiveRecord::Base
   
   
   def invite_limit=(value)
-    write_attribute :invite_limit, (value == INFINITY ? nil : value)
+    write_attribute :invite_limit, (value.infinite? ? nil : value)
   end
   
   
@@ -113,7 +113,7 @@ class User < ActiveRecord::Base
   
   def invites_remaining
     if invite_limit.nil?
-      INFINITY
+      (1.0/0.0) # infinity
     else
       invite_limit - invite_sent_count
     end
@@ -128,7 +128,7 @@ class User < ActiveRecord::Base
   
 protected
   
-  DEFAULT_INVITATION_LIMIT = INFINITY
+  DEFAULT_INVITATION_LIMIT = (1.0/0.0) # infinity
   
   def set_starting_invite_limit
     self.invite_limit = DEFAULT_INVITATION_LIMIT

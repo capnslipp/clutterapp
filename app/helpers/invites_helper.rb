@@ -6,7 +6,7 @@ module InvitesHelper
     else
       invites_remaining = current_user.invites_remaining
       
-      if invites_remaining == INFINITY
+      if invites_remaining.infinite?
         'unlimited'
       else
         invites_remaining
