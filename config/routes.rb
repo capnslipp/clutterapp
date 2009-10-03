@@ -1,12 +1,14 @@
 ActionController::Routing::Routes.draw do |map|
   
-  map.login   '/in',                 :controller => 'sessions',  :action => 'create'
-  map.logout  '/out',                :controller => 'sessions',  :action => 'destroy'
+  map.stylesheets '/stylesheets/:id.css', :controller => 'stylesheets', :action => 'show'
+  
+  map.login   '/in',                      :controller => 'sessions',    :action => 'create'
+  map.logout  '/out',                     :controller => 'sessions',    :action => 'destroy'
   map.resource :session, :as => 'sess'
   
-  map.users '/reg',                   :controller => 'users',     :action => 'create'
-  map.new_user  '/sup',               :controller => 'users',     :action => 'new'
-  map.new_user '/sup/:invite_token',  :controller => 'users',     :action => 'new'
+  map.users '/reg',                       :controller => 'users',       :action => 'create'
+  map.new_user  '/sup',                   :controller => 'users',       :action => 'new'
+  map.new_user '/sup/:invite_token',      :controller => 'users',       :action => 'new'
   map.resources :invites, :as => 'inv'
   
   map.home '/home', :controller => 'home'
