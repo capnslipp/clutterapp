@@ -10,7 +10,7 @@ module StylesheetsHelper
     bg_color.text_color
   end
   
-  ACCENT_COLOR = Color.new(0xcc2200)
+  ACCENT_COLOR = Color.new(0xcc3300)
   def accent_color
     inverted? ? ACCENT_COLOR.invert : ACCENT_COLOR
   end
@@ -33,7 +33,7 @@ module StylesheetsHelper
     inverted? ? FOCUS_COLOR.invert : FOCUS_COLOR
   end
   def focus_back
-    focus_color.adjust(:v => 0.0).with(:a => 0.25).to_s(:css_rgba)
+    focus_color.with(:a => 0.25).to_s(:css_rgba)
   end
   def focus_border
     focus_color.to_s
