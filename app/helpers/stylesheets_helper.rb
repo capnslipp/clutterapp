@@ -54,7 +54,7 @@ module StylesheetsHelper
     %W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{deep_shadow(a)};" }.join(' ')
   end
   def shallow_shadow_decl(a = nil)
-  	%W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{deep_shadow(a)};" }.join(' ')
+  	%W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{shallow_shadow(a)};" }.join(' ')
   end
   
   FILL_COLOR = Color.new(0xffffff, 0.75)
