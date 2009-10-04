@@ -28,6 +28,11 @@ module StylesheetsHelper
     inverted? ? GENERIC_BORDER_COLOR.invert : GENERIC_BORDER_COLOR
   end
   
+  BORDER_WIDTH = 2
+  def border_width
+    "#{BORDER_WIDTH}px"
+  end
+  
   FOCUS_COLOR = ACCENT_COLOR
   def focus_color
     inverted? ? FOCUS_COLOR.invert : FOCUS_COLOR

@@ -47,9 +47,9 @@ form {
 
 input[type='text'], input[type='password'], textarea {
 	background: <%= wash_color * 0.666 %>;
-	border: 2px solid transparent;
+	border: <%= border_width %> solid transparent;
 	color: <%= wash_text_color %>;
-	margin: -2px;
+	margin: -<%= border_width %>;
 	padding: 0;
 	border-radius:			4px;
 	-moz-border-radius:		4px;
@@ -58,7 +58,7 @@ input[type='text'], input[type='password'], textarea {
 input[type='text']:focus, input[type='password']:focus, textarea:focus { background: <%= focus_back %>; border-color: <%= focus_border %>; }
 input[type='button'], input[type='submit'] {
 	background: <%= wash_color * 0.666 %>;
-	border: 2px solid <%= wash_color * 0.5 %>;
+	border: <%= border_width %> solid <%= wash_color * 0.5 %>;
 	color: <%= wash_text_color %>;
 	border-radius:			4px;
 	-moz-border-radius:		4px;
@@ -141,8 +141,8 @@ li { list-style-type: none; }
 	position: absolute;
 	top: 0; bottom: 0; left: 0; right: 0;
 	background: <%= wash_color %>;
-	margin-bottom: -2px;
-	border-bottom: 2px solid <%= wash_color * 0.5 %>;
+	margin-bottom: -<%= border_width %>;
+	border-bottom: <%= border_width %> solid <%= wash_color * 0.5 %>;
 	z-index: -1;
 }
 
@@ -151,8 +151,8 @@ li { list-style-type: none; }
 	float: left;
 	background: <%= accent_color %>;
 	margin-bottom: -1px;
-	border-bottom: 2px solid <%= accent_color * 0.75 %>;
-	border-right: 2px solid <%= wash_color * 0.75 %>;
+	border-bottom: <%= border_width %> solid <%= accent_color * 0.75 %>;
+	border-right: <%= border_width %> solid <%= wash_color * 0.75 %>;
 	padding: 4px;
 	padding-right: 6px;
 	font-size: 16px;
@@ -194,8 +194,8 @@ li { list-style-type: none; }
 .buttons {
 	<%= shallow_shadow_decl %>
 	
-	margin: -2px;
-	border: 2px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	margin: -<%= border_width %>;
+	border: <%= border_width %> solid <%= generic_border_color.to_s(:css_rgba) %>;
 	border-radius:			6px;
 	-moz-border-radius:		6px;
 	-webkit-border-radius:	6px;
@@ -350,7 +350,7 @@ ul.scope-list > li.scope-item {
 	line-height: 1em;
 	margin-left: 1.5em;
 	
-	border: 2px solid transparent;
+	border: <%= border_width %> solid transparent;
 	border-radius:			4px;
 	-moz-border-radius:		4px;
 	-webkit-border-radius:	4px;
