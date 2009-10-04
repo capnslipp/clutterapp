@@ -15,6 +15,11 @@ class PriorityProp < Prop
   end
   
   
+  def self::badgable?
+    true
+  end
+  
+  
 protected
   
   def in_range

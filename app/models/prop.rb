@@ -39,4 +39,15 @@ class Prop < ActiveRecord::Base
     end
   end
   
+  
+  # override with true to allow badge-style placement
+  def self::badgable?
+    false
+  end
+  
+  # if badgable, then always badged, for now; will be position-dependent eventually
+  def badged?
+    self.class.badgable? ? true : false
+  end
+  
 end

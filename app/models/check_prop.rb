@@ -10,4 +10,10 @@ class CheckProp < Prop
   def self::filler
     new :checked => false
   end
+  
+  
+  def self::badgable?
+    true
+  end
+  
 end

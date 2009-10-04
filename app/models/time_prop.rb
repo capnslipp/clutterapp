@@ -10,4 +10,10 @@ class TimeProp < Prop
   def self::filler
     new :time => Time.now
   end
+  
+  
+  def self::badgable?
+    true
+  end
+  
 end

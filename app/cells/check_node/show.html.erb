@@ -1,4 +1,4 @@
-<div class="check prop">
+<div class="check prop <%= 'badge' if @node.prop.badged? -%>">
 	<%= check_box_tag "check_prop_#{@node.prop.id}", '1', @node.prop.checked? %>
 	<%= observe_field "check_prop_#{@node.prop.id}",
 		:url => "#{node_path(@node, :id => @node)}/update_check_prop_checked",

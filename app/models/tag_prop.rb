@@ -11,4 +11,10 @@ class TagProp < Prop
   def self::filler
     new :tag => ''
   end
+  
+  
+  def self::badgable?
+    true
+  end
+  
 end
