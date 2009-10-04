@@ -67,6 +67,14 @@ module StylesheetsHelper
     inverted? ? DIVIDER_COLOR.invert : DIVIDER_COLOR
   end
   
+  WIDGET_COLOR = Color.new(0xdddddd)
+  def widget_color
+    inverted? ? WIDGET_COLOR.invert : WIDGET_COLOR
+  end
+  def active_widget_color
+    inverted? ? widget_color + Color.new(0x333333) : widget_color - Color.new(0x333333)
+  end
+  
   
 protected
   

@@ -231,10 +231,10 @@ li { list-style-type: none; }
     #new-bar .widget {}
 .action.stub .widget, .action.stub .widget a,
  #action-bar .widget,  #action-bar .widget a,
-    #new-bar .widget,     #new-bar .widget a { color: #ddd; }
+    #new-bar .widget,     #new-bar .widget a { color: <%= widget_color %>; }
 .action.stub .widget a:hover,
  #action-bar .widget a:hover,
-    #new-bar .widget a:hover { color: #aaa; }
+    #new-bar .widget a:hover { color: <%= active_widget_color %>; }
 
 #action-bar .buttons {
 	background: <%= accent_color %>;
