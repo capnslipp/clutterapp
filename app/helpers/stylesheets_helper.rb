@@ -2,6 +2,12 @@ module StylesheetsHelper
   include Colorist
   
   
+  # outline-radius is not supported by WebKit; otherwise, we'd use it as well
+  def border_radius_decl(size = '4px')
+    "border-radius: #{size}; -moz-border-radius: #{size}; -webkit-border-radius: #{size};"
+  end
+  
+  
   BG_COLOR = Color.new(0xffffff)
   def bg_color
     inverted? ? BG_COLOR.invert : BG_COLOR
@@ -23,12 +29,13 @@ module StylesheetsHelper
     wash_color.text_color
   end
   
-  GENERIC_BORDER_COLOR = Color.new(0x000000, 0.1)
-  def generic_border_color
-    inverted? ? GENERIC_BORDER_COLOR.invert : GENERIC_BORDER_COLOR
+  GENERIC_BORDER_COLOR = Color.new(0x000000, 0.2)
+  def generic_border_color(m = 1.0)
+    color = inverted? ? GENERIC_BORDER_COLOR.invert : GENERIC_BORDER_COLOR
+    color.with(:a => color.a * m)
   end
   
-  BORDER_WIDTH = 2
+  BORDER_WIDTH = 1
   def border_width
     "#{BORDER_WIDTH}px"
   end
@@ -44,22 +51,22 @@ module StylesheetsHelper
     focus_color.to_s
   end
   
-  SHADOW_COLOR = Color.new(0x000000, 0.5)
-  def shadow_color(a = nil)
+  SHADOW_COLOR = Color.new(0x000000, 0.75)
+  def shadow_color(m = 1.0)
     color = inverted? ? SHADOW_COLOR.invert : SHADOW_COLOR
-    Color.from_rgba(color.r, color.g, color.b, a || color.a)
+    Color.from_rgba(color.r, color.g, color.b, color.a * m)
   end
-  def deep_shadow(a = nil)
-  	"0px 3px 5px #{shadow_color(a).to_s(:css_rgba)}"
+  def deep_shadow(m = 1.0)
+  	"0px 1px 6px #{shadow_color(m).to_s(:css_rgba)}"
   end
-  def shallow_shadow(a = nil)
-  	"0px 2px 3px #{shadow_color(a).to_s(:css_rgba)}"
+  def shallow_shadow(m = 1.0)
+  	"0px 1px 4px #{shadow_color(m * 0.5).to_s(:css_rgba)}"
   end
-  def deep_shadow_decl(a = nil)
-    %W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{deep_shadow(a)};" }.join(' ')
+  def deep_shadow_decl(m = 1.0)
+    %W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{deep_shadow(m)};" }.join(' ')
   end
-  def shallow_shadow_decl(a = nil)
-  	%W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{shallow_shadow(a)};" }.join(' ')
+  def shallow_shadow_decl(m = 1.0)
+  	%W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{shallow_shadow(m)};" }.join(' ')
   end
   
   FILL_COLOR = Color.new(0xffffff, 0.75)
