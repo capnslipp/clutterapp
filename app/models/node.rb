@@ -12,6 +12,17 @@ class Node < ActiveRecord::Base
   belongs_to :pile
   
   
+  def type
+    type = read_attribute(:prop_type)
+    if type =~ /Prop$/
+      type = type[0...-4]
+      type.underscore
+    else
+      nil
+    end
+  end
+  
+  
   def create_child!(*attributes)
     transaction do
       child = pile.nodes.build(*attributes)

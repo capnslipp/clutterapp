@@ -13,7 +13,7 @@ class Prop < ActiveRecord::Base
       type
     else
       type = type.to_s.classify
-      type << 'Prop' unless type.match(/Prop$/)
+      type << 'Prop' unless type =~ /Prop$/
       type = type.constantize
     end
   end
