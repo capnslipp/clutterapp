@@ -40,14 +40,28 @@ class Prop < ActiveRecord::Base
   end
   
   
-  # override with true to allow badge-style placement
+  # allows badge-style placement
+  cattr_writer :badgeable
   def self::badgable?
-    false
+    !!@@badgeable
   end
   
   # if badgable, then always badged, for now; will be position-dependent eventually
   def badged?
     self.class.badgable? ? true : false
+  end
+  
+  
+  # allows more than one on a parent node
+  cattr_writer :stackable
+  def self::stackable?
+    !!@@stackable
+  end
+  
+  # allow childs items
+  cattr_writer :nodeable
+  def self::nodeable?
+    !!@@nodeable
   end
   
 end

@@ -6,6 +6,9 @@ class PriorityProp < Prop
   validate :in_range
   
   
+  self::badgeable = true
+  
+  
   def self::rand
     new :priority => Kernel.rand(5 + 1)
   end
@@ -15,9 +18,8 @@ class PriorityProp < Prop
   end
   
   
-  def self::badgable?
-    true
-  end
+  def self::badgable?; true; end
+  def self::stackable?; false; end
   
   
 protected

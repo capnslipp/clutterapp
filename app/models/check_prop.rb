@@ -3,17 +3,17 @@ class CheckProp < Prop
   
   validates_presence_of :node
   
+  
+  self::badgeable = true
+  self::stackable = true
+  
+  
   def self::rand
     new :checked => (Kernel.rand(2) == 1)
   end
   
   def self::filler
     new :checked => false
-  end
-  
-  
-  def self::badgable?
-    true
   end
   
 end

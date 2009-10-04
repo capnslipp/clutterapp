@@ -4,6 +4,11 @@ class TagProp < Prop
   validates_presence_of :node
   validates_length_of :tag, :within => 1..26
   
+  
+  self::badgeable = true
+  self::stackable = true
+  
+  
   def self::rand
     new :tag => String.rand_alphanum(4)
   end
@@ -13,8 +18,6 @@ class TagProp < Prop
   end
   
   
-  def self::badgable?
-    true
-  end
+  def self::badgable?; true; end
   
 end

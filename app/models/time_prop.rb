@@ -3,6 +3,10 @@ class TimeProp < Prop
   
   validates_presence_of :node
   
+  
+  self::badgeable = true
+  
+  
   def self::rand
     new :time => Time.now - Kernel.rand(59).minutes - Kernel.rand(23).hours - Kernel.rand(364).days - Kernel.rand(100).years
   end
@@ -12,8 +16,7 @@ class TimeProp < Prop
   end
   
   
-  def self::badgable?
-    true
-  end
+  def self::badgable?; true; end
+  def self::stackable?; false; end
   
 end
