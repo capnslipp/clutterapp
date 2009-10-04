@@ -235,7 +235,7 @@ li { list-style-type: none; }
     #new-bar .widget a:hover { color: <%= active_widget_color %>; }
 
 #action-bar .buttons {
-	background: <%= accent_color %>;
+	background: <%= accent_color.adjust(:v => -0.05).with(:a => 0.9).to_s(:css_rgba) %>;
 	position: absolute;
 	top: 0; left: 1.5em;
 	padding: 0 0.5em;
@@ -345,15 +345,26 @@ ul.scope-list > li.scope-item {
 
 .prop {
 	display: block;
-	line-height: 1em;
-	margin-left: 1.5em;
+	line-height: 12px;
+	margin-left: 18px;
 	
 	border: <%= border_width %> solid transparent;
 	<%= border_radius_decl %>
 }
 
-.prop.badge { border-color: <%= generic_border_color(0.5).to_s(:css_rgba) %>; border-width: 2px; <%= shallow_shadow_decl %> }
-.note.prop { border-color: <%= generic_border_color(0.5).to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %> }
+.prop.badge {
+	font-size: 10px;
+	line-height: 12px;
+	height: 12px;
+	
+	margin: 0 2px;
+	
+	border-color: <%= generic_border_color(0.5).to_s(:css_rgba) %>;
+	border-width: 1px;
+}
+.prop.badge input[type='text'], .prop.badge textarea {
+    font-size: 10px; line-height: 12px; height: 12px
+}
 
 .check.prop { border: none; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; }
 
@@ -362,78 +373,74 @@ ul.scope-list > li.scope-item {
 	padding: 2px;
 	vertical-align: top;
 	
-	margin-bottom: 0.5em;
+	margin-bottom: 6px;
+	
+	border-color: <%= generic_border_color(0.5).to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %> }
 }
-.show.note.prop, .edit.note.prop textarea { line-height: 1.25em; }
-.edit.note.prop textarea { height: 1em; }
+.note.prop, .note.prop textarea { line-height: 15px; }
+.note.prop textarea { height: 1px; }
 
 .priority.prop {
-	font-size: 0.75em;
-	line-height: 1em;
+	width: 12px; /* same as height and line-height */
 	
-	/*vertical-align: middle;*/
 	position: relative;
-	top: -0.5em;
+	top: -6px;
 	display: inline-block;
 	margin: 0;
 	
 	text-align: center;
-	width: 1em; height: 1em;
 	background: <%= wash_color %>;
 	color: <%= wash_text_color %>;
 	
 	<%= border_radius_decl('6px') %>
 }
-.priority.prop, .priority.prop input { font-family: 'Arial Black', sans-serif; font-weight: bold; padding: 0; }
-.priority.prop input { font-size: 1em; }
+.priority.prop, .priority.prop input { font-family: 'Arial Black', sans-serif; font-weight: bold; }
+.priority.prop input { }
 
 .tag.prop {
-	font-size: 0.75em;
-	line-height: 1em;
-	
 	display: inline-block;
-	margin: 0;
+	
 	background-color: <%= wash_color %>;
 	color: <%= wash_text_color %>;
+	
+	padding: 0 2px;
 }
-.tag.prop, .tag.prop input { font-weight: bold; text-transform: uppercase; padding: 0; }
-.tag.prop input { font-size: 1em; }
+.tag.prop, .tag.prop input { font-weight: bold; text-transform: uppercase; }
+.tag.prop input { }
 
 .text.prop {
 }
 
 .time.prop {
-	background-color: #986;
-	font-weight: bold;
-	color: <%= wash_text_color %>;
+	color: <%= text_color.with(:a => 0.75).to_s(:css_rgba) %>;
 	
 	display: inline-block;
-	margin: 0;
+	
+	padding: 0 2px;
 }
 
 
-    .edit.text.prop input[type='submit'],
-.edit.priority.prop input[type='submit'],
-     .edit.tag.prop input[type='submit'],
-    .edit.time.prop input[type='submit'] { display: none; }
-
-
 .edit.prop {
-	background: <%= focus_back %>;
+	margin: -1px;
+	margin-left: 18px;
 	
+	background: <%= focus_back %>;
 	border-width: 2px;
 	border-color: <%= focus_border %>;
 	
 	<%= deep_shadow_decl(0.5) %>
 }
+.edit.prop.badge { margin: 0 2px; }
+
+.edit.prop input[type='submit'] { display: none; }
+.edit.note.prop input[type='submit'] { display: inherit; }
 
 .edit.prop input[type='text'], .edit.prop textarea {
-	height: 1em;
 	background: transparent;
 	color: <%= text_color %>;
 	border: none;
-	margin: -1px;
-	padding: 2px;
+	margin: 0;
+	padding: 1px;
 	display: block;
 	width: 100%;
 }

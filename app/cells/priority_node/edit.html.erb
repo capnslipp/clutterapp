@@ -1,4 +1,4 @@
-<div class="edit priority prop">
+<div class="edit priority prop <%= 'badge' if @node.prop.badged? -%>">
 	<%- form_for @node, :url => node_path(@node), :html => {:method => 'put'} do |node_form| -%>
 	
 		<%- node_form.fields_for :prop do |prop_form| -%>
