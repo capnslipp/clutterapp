@@ -12,6 +12,15 @@ class Node < ActiveRecord::Base
   belongs_to :pile
   
   
+  named_scope :typed, lambda {|type|
+    { :conditions => {:prop_type => Prop.class_from_type(type).to_s} }
+  }
+  
+  named_scope :badgeable, lambda {|for_ability| badgeable_conditions(for_ability) }
+  named_scope :stackable, lambda {|for_ability| stackable_conditions(for_ability) }
+  named_scope :nodeable,  lambda {|for_ability| nodeable_conditions(for_ability) }
+  
+  
   def type
     type = read_attribute(:prop_type)
     if type =~ /Prop$/
@@ -71,6 +80,30 @@ protected
   
   def increment_parent_version
     parent.increment_version unless parent.nil?
+  end
+  
+  def self::badgeable_conditions(for_ability)
+    if for_ability
+      { :conditions => {:prop_type => Prop.badgeable_types.collect(&:to_s)} }
+    else
+      { :conditions => {:prop_type => (Prop.types - Prop.badgeable_types).collect(&:to_s)} }
+    end
+  end
+  
+  def self::stackable_conditions(for_ability)
+    if for_ability
+      { :conditions => {:prop_type => Prop.stackable_types.collect(&:to_s)} }
+    else
+      { :conditions => {:prop_type => (Prop.types - Prop.stackable_types).collect(&:to_s)} }
+    end
+  end
+  
+  def self::nodeable_conditions(for_ability)
+    if for_ability
+      { :conditions => {:prop_type => Prop.nodeable_types.collect(&:to_s)} }
+    else
+      { :conditions => {:prop_type => (Prop.types - Prop.nodeable_types).collect(&:to_s)} }
+    end
   end
   
 end

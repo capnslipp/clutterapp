@@ -5,9 +5,7 @@ class TextProp < Prop
   validates_length_of :text, :within => 1..255
   
   
-  self::badgeable = true
-  self::stackable = true
-  self::nodeable = true
+  is_badgeable; is_stackable; is_nodeable
   
   
   def self::rand

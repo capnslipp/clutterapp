@@ -23,6 +23,19 @@ class Prop < ActiveRecord::Base
     [TextProp, CheckProp, NoteProp, PriorityProp, TagProp, TimeProp]
   end
   
+  def self::badgeable_types
+    types.select {|t| t.badgeable? }
+  end
+  
+  def self::stackable_types
+    types.select {|t| t.stackable? }
+  end
+  
+  def self::nodeable_types
+    types.select {|t| t.nodeable? }
+  end
+  
+  
   def self::rand
     types.rand.rand # 1st rand: choose from array; 2nd rand: create random instance
   end
@@ -39,29 +52,33 @@ class Prop < ActiveRecord::Base
     end
   end
   
-  
+  def self::badgeable?; false; end
   # allows badge-style placement
-  cattr_writer :badgeable
-  def self::badgable?
-    !!@@badgeable
+  def self::is_badgeable
+    class_eval(<<-EOS, __FILE__, __LINE__)
+      def self::badgeable?; true; end
+    EOS
   end
   
-  # if badgable, then always badged, for now; will be position-dependent eventually
+  def self::stackable?; false; end
+  # allows more than one of each on a parent node
+  def self::is_stackable
+    class_eval(<<-EOS, __FILE__, __LINE__)
+      def self::stackable?; true; end
+    EOS
+  end
+  
+  def self::nodeable?; false; end
+  # allow child nodes
+  def self::is_nodeable
+    class_eval(<<-EOS, __FILE__, __LINE__)
+      def self::nodeable?; true; end
+    EOS
+  end
+  
+  # if badgeable, then always badged, for now; will be position-dependent eventually
   def badged?
-    self.class.badgable? ? true : false
-  end
-  
-  
-  # allows more than one on a parent node
-  cattr_writer :stackable
-  def self::stackable?
-    !!@@stackable
-  end
-  
-  # allow childs items
-  cattr_writer :nodeable
-  def self::nodeable?
-    !!@@nodeable
+    self.class.badgeable? ? true : false
   end
   
 end

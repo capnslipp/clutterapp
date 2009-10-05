@@ -4,7 +4,7 @@ class TimeProp < Prop
   validates_presence_of :node
   
   
-  self::badgeable = true
+  is_badgeable
   
   
   def self::rand
@@ -14,9 +14,5 @@ class TimeProp < Prop
   def self::filler
     new :time => Time.now
   end
-  
-  
-  def self::badgable?; true; end
-  def self::stackable?; false; end
   
 end

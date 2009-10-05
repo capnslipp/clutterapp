@@ -5,8 +5,7 @@ class TagProp < Prop
   validates_length_of :tag, :within => 1..26
   
   
-  self::badgeable = true
-  self::stackable = true
+  is_badgeable; is_stackable
   
   
   def self::rand
@@ -16,8 +15,5 @@ class TagProp < Prop
   def self::filler
     new :tag => ''
   end
-  
-  
-  def self::badgable?; true; end
   
 end
