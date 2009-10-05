@@ -4,13 +4,13 @@ class PilesControllerTest < ActionController::TestCase
   fixtures :users
   
   
-  test "should get index" do
-    bypass_authentication
-    
-    get :index, :user_id => users(:one)
-    assert_response :success
-    assert_not_nil assigns(:piles)
-  end
+  #test "should get index" do
+  #  bypass_authentication
+  #  
+  #  get :index, :user_id => users(:one)
+  #  assert_response :success
+  #  assert_not_nil assigns(:piles)
+  #end
   
   
   test "should get new" do
