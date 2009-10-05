@@ -10,11 +10,11 @@ class NoteProp < Prop
   is_stackable
   
   
-  def self::rand
+  def self::rand_new
     new :note => String.rand_lorem(50)
   end
   
-  def self::filler
+  def self::filler_new
     new :note => ''
   end
 end

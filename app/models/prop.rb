@@ -36,11 +36,11 @@ class Prop < ActiveRecord::Base
   end
   
   
-  def self::rand
-    types.rand.rand # 1st rand: choose from array; 2nd rand: create random instance
+  def self::rand_new
+    types.rand.rand_new
   end
   
-  def self::filler
+  def self::filler_new
     raise NotImplementedError
   end
   

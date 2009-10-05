@@ -44,7 +44,7 @@ class Node < ActiveRecord::Base
   end
   
   
-  def self::rand
+  def self::rand_new
     self::new :prop => Prop.rand
   end
   

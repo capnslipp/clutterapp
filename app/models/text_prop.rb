@@ -8,11 +8,11 @@ class TextProp < Prop
   is_badgeable; is_stackable; is_nodeable
   
   
-  def self::rand
+  def self::rand_new
     new :text => String.rand_lorem(5)
   end
   
-  def self::filler
+  def self::filler_new
     new :text => ''
   end
   

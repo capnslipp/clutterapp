@@ -74,7 +74,7 @@ class NodesController < ApplicationController
   def create
     node_creation_args = params[:node] || {}
     unless params[:type].nil?
-      filler_prop = Prop.class_from_type(params[:type]).filler
+      filler_prop = Prop.class_from_type(params[:type]).filler_new
       node_creation_args.update( :prop => filler_prop )
     end
     

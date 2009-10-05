@@ -7,11 +7,11 @@ class CheckProp < Prop
   is_badgeable; is_stackable
   
   
-  def self::rand
+  def self::rand_new
     new :checked => (Kernel.rand(2) == 1)
   end
   
-  def self::filler
+  def self::filler_new
     new :checked => false
   end
   

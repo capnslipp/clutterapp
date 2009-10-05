@@ -8,11 +8,11 @@ class TagProp < Prop
   is_badgeable; is_stackable
   
   
-  def self::rand
+  def self::rand_new
     new :tag => String.rand_alphanum(4)
   end
   
-  def self::filler
+  def self::filler_new
     new :tag => ''
   end
   

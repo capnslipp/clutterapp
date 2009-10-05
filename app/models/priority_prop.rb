@@ -9,11 +9,11 @@ class PriorityProp < Prop
   is_badgeable
   
   
-  def self::rand
+  def self::rand_new
     new :priority => Kernel.rand(5 + 1)
   end
   
-  def self::filler
+  def self::filler_new
     new :priority => 1
   end
   
