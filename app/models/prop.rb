@@ -18,6 +18,17 @@ class Prop < ActiveRecord::Base
     end
   end
   
+  def self::to_s(format = :default)
+    if format == :short
+      name = self.to_s
+      raise NameError.new('all prop sub-classes must end in the word "Prop"', name) unless name =~ /Prop$/
+      name = name[0...-('Prop'.length)]
+      name.underscore
+    else
+      super()
+    end
+  end
+  
   
   def self::types
     [TextProp, CheckProp, NoteProp, PriorityProp, TagProp, TimeProp]

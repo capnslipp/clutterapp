@@ -21,13 +21,12 @@ class Node < ActiveRecord::Base
   named_scope :nodeable,  lambda {|for_ability| nodeable_conditions(for_ability) }
   
   
-  def type
-    type = read_attribute(:prop_type)
-    if type =~ /Prop$/
-      type = type[0...-4]
-      type.underscore
+  def to_s(format = :default, &block)
+    if format == :short
+      prop_type = read_attribute(:prop_type)
+      prop_type.classify.to_s(:short) unless prop_type.nil?
     else
-      nil
+      super(&block)
     end
   end
   
