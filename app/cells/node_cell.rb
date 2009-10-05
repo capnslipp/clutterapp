@@ -18,12 +18,34 @@ class NodeCell < Cell::Base
   def show
     logger.prefixed self.class.to_s, :light_blue, "show"
     
-    @pile = @opts[:pile]
+    #@pile = @opts[:pile]
+    #raise ArgumentError, ":pile option is required by NodeCell#show" if @pile.nil?
     @node = @opts[:node]
+    raise ArgumentError, ":node option is required by NodeCell#show" if @node.nil?
     
     #@children = @node.children || [] # unused
     
+    if @node.prop.class.nodeable?
+      Prop.badgeable_types.each do |t|
+        short_name = t.to_s(:short)
+        if t.stackable?
+          instance_variable_set(:"@#{short_name.pluralize}", @node.children.typed(short_name)) # i.e. @tags
+        else
+          instance_variable_set(:"@#{short_name}", @node.children.typed(short_name).first) # i.e. @check, @priority, @time
+        end
+      end
+      @check = @node.children.typed(:check).first
+    end
+    
     render :layout => 'item'
+  end
+  
+  
+  def badge
+    @node = @opts[:node]
+    raise ArgumentError, ":node option is required by NodeCell#show" if @node.nil?
+    
+    render :layout => nil
   end
   
   
