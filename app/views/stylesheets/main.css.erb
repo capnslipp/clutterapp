@@ -94,7 +94,7 @@ a.sym, a .sym, .sym a {
 /* item list (old) */
 
 ul.list ul.list {
-	border-left: 1px solid <%= divider_color %>;
+	border-left: 1px dotted <%= divider_color %>;
 	padding-left: 18px;/*
 	/*margin-left: -1em;*/
 }
@@ -102,12 +102,12 @@ ul.list ul.list {
 li { list-style-type: none; }
 
 .item_for_node.pile > .name { display: inline-block; margin-bottom: 0.5em; }
-.item_for_node.pile > .body { display: inline-block; width: auto; }
+.item_for_node.pile > .body { display: inline-block; width: auto; border: none; }
 .item_for_node.pile > .body > .stub,
 .item_for_node.pile > .body > .bar { float: none; }
 
-.item_for_node > .body { width: 100%; min-height: 1.5em; }
-.pile > .item_for_node > .body { min-height: 1.5em; }
+.item_for_node {  }
+.item_for_node > .body { width: 100%; min-height: 1.5em; border-top: 1px dotted <%= divider_color %>; padding-top: 4px; }
 
 
 /* page */
