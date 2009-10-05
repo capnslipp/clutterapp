@@ -34,11 +34,11 @@ a { color: <%= text_color %>; }
 
 h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; }
 h1 { font-size: 18px; line-height: 24px; }
-h2 { font-size: 17px; line-height: 22px; }
-h3 { font-size: 16px; line-height: 20px; }
-h4 { font-size: 15px; line-height: 18px; }
-h5 { font-size: 14px; line-height: 17px; }
-h6 { font-size: 13px; line-height: 16px; }
+h2 { font-size: 17px; line-height: 17px; color: <%= wash_color %>; }
+h3 { font-size: 16px; line-height: 16px; color: <%= accent_color %>; }
+h4 { font-size: 15px; line-height: 15px; color: <%= wash_color %>; }
+h5 { font-size: 14px; line-height: 14px; color: <%= accent_color %>; }
+h6 { font-size: 13px; line-height: 13px; color: <%= wash_color %>; }
 
 
 form {
@@ -94,7 +94,7 @@ a.sym, a .sym, .sym a {
 /* item list (old) */
 
 ul.list ul.list {
-	border-left: 1px dotted <%= divider_color %>;
+	border-left: 1px dotted <%= divider_color * 0.5 + "#fff".to_color * 0.5 %>;
 	padding-left: 18px;/*
 	/*margin-left: -1em;*/
 }
@@ -107,7 +107,7 @@ li { list-style-type: none; }
 .item_for_node.pile > .body > .bar { float: none; }
 
 .item_for_node {  }
-.item_for_node > .body { min-height: 1.5em; border-top: 1px dotted <%= divider_color %>; padding-left: 18px; }
+.item_for_node > .body { min-height: 1.5em; border-top: 1px dotted <%= divider_color %>; margin-left: 23px; }
 .item_for_node > .body > .sub-line { overflow: auto; width: 100%; /* to contain floating elements */ }
 
 /* page */
@@ -225,8 +225,11 @@ li { list-style-type: none; }
 .action.bar { float: left; }
 
 .action.stub .widget,
+ #action-bar .widget { margin-left: -18px; }
+
+.action.stub .widget,
  #action-bar .widget,
-    #new-bar .widget { margin-top: 4px; margin-left: -18px; }
+    #new-bar .widget { margin-top: 4px; }
 .action.stub .widget, .action.stub .widget a,
  #action-bar .widget,  #action-bar .widget a,
     #new-bar .widget,     #new-bar .widget a { color: <%= widget_color %>; }
@@ -371,12 +374,14 @@ ul.scope-list > li.scope-item {
 
 .note.prop {
 	display: block;
-	padding: 2px;
+	padding: 4px;
 	vertical-align: top;
+	
+	line-height: 18px;
 	
 	margin-bottom: 6px;
 	
-	border-color: <%= generic_border_color(0.5).to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %> }
+	border-color: <%= generic_border_color.to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %> }
 }
 .note.prop, .note.prop textarea { line-height: 15px; }
 .note.prop textarea { height: 1px; }

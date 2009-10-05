@@ -74,7 +74,7 @@ module StylesheetsHelper
     inverted? ? FILL_COLOR.invert : FILL_COLOR
   end
   
-  DIVIDER_COLOR = Color.new(0xeeeeee)
+  DIVIDER_COLOR = Color.new(0xcccccc)
   def divider_color
     inverted? ? DIVIDER_COLOR.invert : DIVIDER_COLOR
   end
