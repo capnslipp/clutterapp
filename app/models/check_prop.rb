@@ -4,7 +4,7 @@ class CheckProp < Prop
   validates_presence_of :node
   
   
-  is_badgeable; is_stackable
+  is_badgeable
   
   
   def self::rand_new
