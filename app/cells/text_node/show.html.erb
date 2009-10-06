@@ -1,7 +1,15 @@
 <%= render_cell cell_for_node(@check), :badge, :node => @check unless @check.nil? %>
 <%= render_cell cell_for_node(@priority), :badge, :node => @priority unless @priority.nil? %>
 <div class="show text prop">
-	<%= h @node.prop.text %>
+	<%- if @node.prop.text[0..0] =~ (/[A-Z]/);
+		h_level = 1;
+		h_node = @node
+		h_level += 1 while h_node = h_node.parent
+	-%>
+		<h<%=h_level%>><%= h @node.prop.text %></h<%=h_level%>>
+	<%- else -%>
+		<%= h @node.prop.text %>
+	<%- end -%>
 </div>
 <div class="sub-line">
 	<%= render_cell cell_for_node(@time), :badge, :node => @time unless @time.nil? %>
