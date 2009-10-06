@@ -1,5 +1,6 @@
 <%= render_cell cell_for_node(@check), :badge, :node => @check unless @check.nil? %>
 <%= render_cell cell_for_node(@priority), :badge, :node => @priority unless @priority.nil? %>
+<%= render_cell cell_for_node(@tags[0]), :badge, :node => @tags[0] unless @tags.nil? || @tags.size != 1 %>
 <div class="show text prop">
 	<%= h @node.prop.text %>
 </div>
@@ -7,5 +8,5 @@
 	<%= render_cell cell_for_node(@time), :badge, :node => @time unless @time.nil? %>
 	<%- for tag in @tags -%>
 		<%= render_cell cell_for_node(tag), :badge, :node => tag %>
-	<%- end unless @tags.nil? -%>
+	<%- end unless @tags.nil? || !(@tags.size > 1) -%>
 </div>
