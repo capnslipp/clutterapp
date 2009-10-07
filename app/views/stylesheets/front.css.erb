@@ -1,46 +1,38 @@
-.front #top-bar {
-	height: 180px;
-	margin-bottom: 15px;
-	
-	<%= %W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: 0px 5px 30px #{shadow_color.to_s(:css_rgba)};" }.join(' ') %>
+/*.front #top-bar {	height: 120px;	
+	<%= %W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: 0px 3px 18px #{shadow_color.to_s(:css_rgba)};" }.join(' ') %>
 }
 
-.front #top-bar > .back {
-	background: <%= accent_color %>;
-}
+.front #top-bar > .back > .fill {
+	background: <%= accent_color %>;}*/
 
 .front #top-bar > .logo {
 	border: none;
 	
-	height: 120px;
-	margin: 20px 15px 40px;
+	/*margin: 25px 15px 35px;
 	
-	position: relative;
+	position: relative;*/
 }
 
-.front #top-bar > .logo > .text {
-	position: absolute; z-index: 1;
-	top: 0; left: 8px;
+.front #top-bar > .logo > .graphic {	float: left;	
+	width: 0;	overflow: visible;
+}
+
+.front #top-bar > .logo > .text {	float: left;		position: relative; z-index: 1;
+	margin-left: 4px;
 	
-	font-size: 144px;
+	font-size: 72px;
 	line-height: 1em;
 	
-	visibility: hidden;
-}
-
-.front #top-bar > .logo > .graphic {
-	position: absolute; z-index: 0;
-	top: 0; left: 0;
+	color: transparent;	filter: alpha(opacity=0);
 }
 
 
-.front #page {
-	padding: 24px;
+.front #page {	padding: 24px;
 }
 
 
-.front h2 { font-size: 48px; line-height: 1.25em; color: <%= wash_color %>; }
-.front h3 { font-size: 36px; line-height: 1.25em; color: <%= accent_color %>; }
+.front h2 { font-size: 32px; line-height: 1.25em; color: <%= text_color %>; }
+.front h3 { font-size: 24px; line-height: 1.25em; color: <%= accent_color %>; }
 
 
 .front #feature-box {
