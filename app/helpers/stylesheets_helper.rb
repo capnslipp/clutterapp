@@ -1,5 +1,8 @@
+require 'const_reader'
+
 module StylesheetsHelper
   include Colorist
+  include ConstReader
   
   
   # outline-radius is not supported by WebKit; otherwise, we'd use it as well
@@ -37,7 +40,7 @@ module StylesheetsHelper
   
   BORDER_WIDTH = 1
   def border_width
-    "#{BORDER_WIDTH}px"
+    BORDER_WIDTH
   end
   
   FOCUS_COLOR = ACCENT_COLOR
@@ -86,6 +89,11 @@ module StylesheetsHelper
   def active_widget_color
     inverted? ? widget_color + Color.new(0x333333) : widget_color - Color.new(0x333333)
   end
+  
+  
+  
+  CSS_DIRECTION_QUARTET = [:top, :right, :bottom, :left]
+  const_reader :css_direction_quartet
   
   
 protected

@@ -7,7 +7,7 @@ html, body {
 }
 
 body {
-	margin: 120px; padding: 0; border: 2px dotted #579;
+	margin: 0; padding: 0;
 }
 
 body, input, textarea {
@@ -47,16 +47,16 @@ form {
 
 input[type='text'], input[type='password'], textarea {
 	background: <%= wash_color * 0.666 %>;
-	border: <%= border_width %> solid transparent;
+	border: <%= border_width %>px solid transparent;
 	color: <%= wash_text_color %>;
-	margin: -<%= border_width %>;
+	margin: -<%= border_width %>px;
 	padding: 0;
 	<%= border_radius_decl %>
 }
 input[type='text']:focus, input[type='password']:focus, textarea:focus { background: <%= focus_back %>; border-color: <%= focus_border %>; }
 input[type='button'], input[type='submit'] {
 	background: <%= wash_color * 0.666 %>;
-	border: <%= border_width %> solid <%= wash_color * 0.5 %>;
+	border: <%= border_width %>px solid <%= wash_color * 0.5 %>;
 	color: <%= wash_text_color %>;
 	<%= border_radius_decl %>
 }
@@ -135,8 +135,8 @@ li { list-style-type: none; }
 	position: absolute;
 	z-index: -1;	top: 0; bottom: <%=top_bar_back_shadow_height%>px;	top: -26px; left: -26px; right: -26px;	
 	background: <%= wash_color %>;	
-	margin-bottom: -<%= border_width %>;
-	border-bottom: <%= border_width %> solid <%= generic_border_color.to_s(:css_rgba) %>;	
+	margin-bottom: -<%= border_width %>px;
+	border-bottom: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;	
 	<%= deep_shadow_decl %>}
 
 #top-bar > .logo {
@@ -145,8 +145,8 @@ li { list-style-type: none; }
 	background: <%= accent_color %>;
 	
 	margin-bottom: -1px;
-	border-bottom: <%= border_width %> solid <%= generic_border_color.to_s(:css_rgba) %>;
-	border-right: <%= border_width %> solid <%= generic_border_color.to_s(:css_rgba) %>;
+	border-bottom: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	border-right: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
 	
 	padding: 4px;
 	padding-right: 6px;
@@ -194,8 +194,8 @@ li { list-style-type: none; }
 .buttons {
 	<%= shallow_shadow_decl %>
 	
-	margin: -<%= border_width %>;
-	border: <%= border_width %> solid <%= generic_border_color.to_s(:css_rgba) %>;
+	margin: -<%= border_width %>px;
+	border: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
 	<%= border_radius_decl('6px') %>
 	
 	height: 1em;
@@ -347,7 +347,7 @@ ul.scope-list > li.scope-item {
 	line-height: 12px;
 	margin: 4px 0;
 	
-	border: <%= border_width %> solid transparent;
+	border: <%= border_width %>px solid transparent;
 	<%= border_radius_decl %>
 }
 
