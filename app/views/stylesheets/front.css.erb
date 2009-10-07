@@ -1,17 +1,12 @@
 <%- top_bar_back_shadow_height = 30 -%>
 <%- top_bar_logo_graphic_img_dimens = {:width => 276, :height => 83} -%>
 <%- top_bar_logo_graphic_img_insets = {:top => -2, :right => -6, :bottom => -26, :left => -6} -%>
-<%- top_bar_logo_margins = {:top => 20, :right => 20, :bottom => 30, :left => 20} -%>
-.front #top-bar > .content {	margin: <%= css_direction_quartet.collect {|d| "#{top_bar_logo_margins[d]}px" }.join(' ') %>;	vertical-align: top;}
-.front #top-bar > .content > .tagline {
-	/*position: absolute;
-	left: <%#=top_bar_logo_graphic_img_dimens[:width] + 16 %>px;
-	top: <%#=top_bar_logo_graphic_img_dimens[:height] - top_bar_logo_margin%>px;
-		line-height: <%#=top_bar_logo_graphic_img_dimens[:height]%>px;*/		<%- top_bar_tagline_height = 24 -%>		margin-top: <%= top_bar_logo_graphic_img_dimens[:height] + top_bar_logo_graphic_img_insets[:top] + top_bar_logo_graphic_img_insets[:bottom] - top_bar_tagline_height %>px;		line-height: 1em;	
+<%- top_bar_logo_margins = {:top => 20, :right => 20, :bottom => 30, :left => 20} -%>.front #top-bar > .content {	margin: <%= css_direction_quartet.collect {|d| "#{top_bar_logo_margins[d]}px" }.join(' ') %>;	vertical-align: top;		position: absolute;	top: 0; left: <%= top_bar_logo_graphic_img_dimens[:width] + top_bar_logo_graphic_img_insets[:left] + top_bar_logo_graphic_img_insets[:right] + top_bar_logo_margins[:right] * 2 %>px;}
+.front #top-bar > .content > .tagline {	<%- top_bar_tagline_height = 24 -%>		margin-top: <%= top_bar_logo_graphic_img_dimens[:height] + top_bar_logo_graphic_img_insets[:top] + top_bar_logo_graphic_img_insets[:bottom] - top_bar_tagline_height %>px;	margin-bottom: <%= -top_bar_logo_graphic_img_insets[:bottom] %>px;		line-height: 1em;	
 	font-size: <%=top_bar_tagline_height%>px;
 	color: #ddd;
-	text-shadow: 0 2px 3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
-}.front #top-bar > .content > .tagline > .imp { color: #fff; }
+	text-shadow: 0 2px 3px <%= shadow_color(0.5).to_s(:css_rgba) %>;		white-space: nowrap;
+}.front #top-bar > .content > .tagline > .imp { color: #eee; }
 
 .front #top-bar > .back {
 	/* override */ padding-bottom: <%=top_bar_back_shadow_height%>px;
@@ -53,16 +48,16 @@
 	
 	color: transparent;
 	/* IE8 */ filter: alpha(opacity=0);
-}
+}
 
 
 .front #page {
 	padding: 24px;
 }
 
-
-.front h3 { font-size: 32px; line-height: 1.25em; color: <%= text_color %>; }
-.front h4 { font-size: 24px; line-height: 1.25em; color: <%= accent_color %>; }
+.front #schpiel { margin-bottom: 32px; }
+.front #schpiel h3 { font-size: 32px; line-height: 1.25em; color: <%= wash_color %>; }
+.front #schpiel h4 { font-size: 24px; line-height: 1.25em; color: <%= text_color %>; }.front #schpiel .leader { padding-left: 1em; }.front #schpiel .leader .sym { color: <%= wash_color * 0.5 + bg_color * 0.5 %>; margin-left: -1.25em; margin-right: 0.25em; }.front #schpiel ul { padding-left: 2.5em; }.front #schpiel ul > li { padding-left: 0.5em; list-style-type: disc; }
 
 
 .front #feature-box {
@@ -74,7 +69,7 @@
 .front #feature-box h4 { font-size: 18px; line-height: 1.25em; color: <%= wash_color %>; }
 
 .front #feature-box ul {}
-.front #feature-box li {}
+.front #feature-box li { list-style-type: none; }
 .front #feature-box li.feature {}
 
 .front #feature-box > img.screenshot {
