@@ -7,7 +7,7 @@
 	<meta http-equiv="X-UA-Compatible" content="chrome=1">
 	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
 	<%= stylesheet_link_tag 'reset', :media => 'all', :cache => true %>
-	<%= stylesheet_link_tag 'main' %><%# can't cache this one, since it's dynamic %>
+	<%= stylesheet_link_tag 'main', :media => 'all' %><%# can't cache this one, since it's dynamic %>
 	<% js_files = [
 			{:src => 'jquery', :min => 'jquery.min'},
 			{:src => 'jquery-ui', :min => 'jquery-ui.min'},
