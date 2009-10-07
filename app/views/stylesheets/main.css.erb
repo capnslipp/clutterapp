@@ -128,16 +128,31 @@ li { list-style-type: none; }
 
 /* contain-float-after */
 #top-bar:after { content: ""; display: block; height: 0; clear: both; visibility: hidden; /* (FF, S2, O9) */ }
-<%- top_bar_back_shadow_height = 10 -%>
+
+<%- top_bar_back_shadow_height = 10 -%>
+
 #top-bar > .back {
-	overflow: hidden;		position: absolute;	width: 100%; height: 100%;		padding-bottom: <%=top_bar_back_shadow_height%>px;
-}#top-bar > .back > .fill {
+	overflow: hidden;
+	
 	position: absolute;
-	z-index: -1;	top: 0; bottom: <%=top_bar_back_shadow_height%>px;	top: -26px; left: -26px; right: -26px;	
-	background: <%= wash_color %>;	
+	width: 100%; height: 100%;
+	
+	padding-bottom: <%=top_bar_back_shadow_height%>px;
+}
+
+#top-bar > .back > .fill {
+	position: absolute;
+	z-index: -1;
+	top: 0; bottom: <%=top_bar_back_shadow_height%>px;
+	top: -26px; left: -26px; right: -26px;
+	
+	background: <%= wash_color %>;
+	
 	margin-bottom: -<%= border_width %>px;
-	border-bottom: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;	
-	<%= deep_shadow_decl %>}
+	border-bottom: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	
+	<%= deep_shadow_decl %>
+}
 
 #top-bar > .logo {
 	font-weight: bold;
