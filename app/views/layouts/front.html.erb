@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:oc="http://orgclut.com/oc" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<title><%= "OrgClut » #{controller.controller_name} » #{controller.action_name} #{params[:id]}" %></title>
+	<meta http-equiv="X-UA-Compatible" content="chrome=1">
+	<%= stylesheet_link_tag 'reset', :media => 'all', :cache => true %>
+	<%= stylesheet_link_tag 'main', :media => 'all' %><%# can't cache this one, since it's dynamic %>
+	<%= stylesheet_link_tag 'front', :media => 'all', :cache => true %><%# needs to come after main %>
+	<% js_files = [
+			{:src => 'jquery', :min => 'jquery.min'},
+			{:src => 'jquery-ui', :min => 'jquery-ui.min'},
+			{:src => 'front'},
+		] %>
+	<%= javascript_include_tag js_files.collect{|file_h| file_h[:src] } unless ActionController::Base.perform_caching %>
+	<%= javascript_include_tag js_files.collect{|file_h| file_h[:min] || file_h[:src] }, :cache => true if ActionController::Base.perform_caching %>
+</head>
+<body class="front">
+
+<div id="base">
+	
+	<div id="fill" class="initially-hidden"></div>
+	
+	<div id="top-bar">
+		<div class="back"></div>
+		
+		<div class="logo">
+			<div class="graphic">
+				<img alt="OrgClut" src="images/logo.orgclut.wh-tr.555x165.png" width="555"/><%# no height so that it will scale uniformly %>
+			</div>
+			<h1 class="text">OrgClut</h1>
+		</div>
+	</div>
+	
+	
+	<div id="page">
+		<%= yield  %>
+	</div>
+	
+</div>
+
+
+</body>
+</html>

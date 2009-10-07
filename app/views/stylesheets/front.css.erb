@@ -1,0 +1,64 @@
+.front #top-bar {
+	height: 180px;
+	margin-bottom: 15px;
+	
+	<%= %W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: 0px 5px 30px #{shadow_color.to_s(:css_rgba)};" }.join(' ') %>
+}
+
+.front #top-bar > .back {
+	background: <%= accent_color %>;
+}
+
+.front #top-bar > .logo {
+	border: none;
+	
+	height: 120px;
+	margin: 20px 15px 40px;
+	
+	position: relative;
+}
+
+.front #top-bar > .logo > .text {
+	position: absolute; z-index: 1;
+	top: 0; left: 8px;
+	
+	font-size: 144px;
+	line-height: 1em;
+	
+	visibility: hidden;
+}
+
+.front #top-bar > .logo > .graphic {
+	position: absolute; z-index: 0;
+	top: 0; left: 0;
+}
+
+
+.front #page {
+	padding: 24px;
+}
+
+
+.front h2 { font-size: 48px; line-height: 1.25em; color: <%= wash_color %>; }
+.front h3 { font-size: 36px; line-height: 1.25em; color: <%= accent_color %>; }
+
+
+.front #feature-box {
+	margin: 64px 0;
+}
+
+
+.front #feature-box h4 { font-size: 18px; line-height: 1.25em; color: <%= wash_color %>; }
+
+.front #feature-box ul {}
+.front #feature-box li {}
+.front #feature-box li.feature {}
+
+.front #feature-box > img.screenshot {
+	min-width: 512px;
+	max-width: 100%;
+}
+
+
+.front h5 { font-size: 14px; line-height: 1.25em; color: <%= accent_color %>; }
+.front h6 { font-size: 13px; line-height: 1.25em; color: <%= wash_color %>; }
