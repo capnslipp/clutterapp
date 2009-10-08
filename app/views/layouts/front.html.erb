@@ -6,8 +6,7 @@
 	<title><%= "OrgClut » #{controller.controller_name} » #{controller.action_name} #{params[:id]}" %></title>
 	<meta http-equiv="X-UA-Compatible" content="chrome=1">
 	<%= stylesheet_link_tag 'reset', :media => 'all', :cache => true %>
-	<%= stylesheet_link_tag 'main', :media => 'all' %><%# can't cache this one, since it's dynamic %>
-	<%= stylesheet_link_tag 'front', :media => 'all', :cache => true %><%# needs to come after main %>
+	<%= stylesheet_link_tag 'main', 'front', :media => 'all' %><%# can't cache these ones, since they're dynamic %>
 	<% js_files = [
 			{:src => 'jquery', :min => 'jquery.min'},
 			{:src => 'jquery-ui', :min => 'jquery-ui.min'},
