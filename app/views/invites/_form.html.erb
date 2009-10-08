@@ -7,7 +7,7 @@
 	</p>
 <% end -%>
 
-<%- onsubmit_h = analytics? ? {:onsubmit => "clicky.goal('1'); clicky.pause();"} : {} -%>
+<%- onsubmit_h = analytics? ? {:onsubmit => "clicky.goal('584'); clicky.pause();"} : {} -%>
 <% form_for @invite, :html => onsubmit_h do |f| %>
 	<%= f.text_field :recipient_email %>
 	<%= f.submit "Let's Do This!" %>
