@@ -60,9 +60,9 @@
 		<div class="screenshot">
 			<img alt="[OrgClut screenshot]" src="images/screenshot.pile-view.2009-10-07.960x893.png"/>
 			<div id="fill" class="initially-hidden"></div>
-			<img class="overlay n1 initially-hidden" alt="[OrgClut screenshot]" src="images/screenshot.pile-view.2009-10-07.960x893.png"/>
+			<%#img class="overlay n1 initially-hidden" alt="[OrgClut screenshot]" src="images/screenshot.pile-view.2009-10-07.960x893.png"/>
 			<img class="overlay n2 initially-hidden" alt="[OrgClut screenshot]" src="images/screenshot.pile-view.2009-10-07.960x893.png"/>
-			<img class="overlay n3 initially-hidden" alt="[OrgClut screenshot]" src="images/screenshot.pile-view.2009-10-07.960x893.png"/>
+			<img class="overlay n3 initially-hidden" alt="[OrgClut screenshot]" src="images/screenshot.pile-view.2009-10-07.960x893.png"/%>
 			<div class="footnote">Note: This screenshot is from mid-way thought development; the public beta will probably look a bit different. No worries, though; we've added features since then!</div>
 		</div>
 		
@@ -78,6 +78,12 @@
 		
 		<div id="invite">
 			<%= render :partial => 'invites/form' %>
+		</div>
+		
+		<div id="copyright">
+			<%= %w{Thinkright Knowright Fathomright}.rand %>, 
+			<%= %w{Birthright Createright Instantiaright}.rand %>, 
+			and Copyright © 2006-<%= Time.now.strftime('%Y') %>, <a href="http://slippyd.com">Slippy Douglas</a>. All rights reserved.
 		</div>
 		
 	</div>
