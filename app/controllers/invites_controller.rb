@@ -16,10 +16,10 @@ class InvitesController < ApplicationController
     else
       if logged_in?
         Mailer.deliver_invite(@invite, new_user_url(@invite.token))
-        flash[:notice] = "Thank you, invite sent."
+        flash[:notice] = "Thanks! Invite sent."
         redirect_to new_invite_url
       else
-        flash[:notice] = "Thank you, we will notify when we are ready."
+        flash[:notice] = "Thanks! We'll let you know when our little bun is out of the oven!"
         redirect_to root_url
       end
     end

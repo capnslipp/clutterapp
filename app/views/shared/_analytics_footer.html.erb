@@ -1,0 +1,19 @@
+<script type="text/javascript">
+var gaJsHost = (('https:' == document.location.protocol) ? 'https://ssl.' : 'http://www.');
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker('UA-_fill_in_-1');
+pageTracker._initData();
+pageTracker._trackPageview();
+pageTracker._setVar('<%= DateTime.now.strftime('%Y-%m-%d %H:%M:%S %Z') %>: IP/hostname: <%=request.remote_ip%><%=( ' (' + request.port_string + ')' if request.port != request.standard_port ).to_s%>; <%=( 'user: ' + current_user.name if current_user ).to_s%>');
+</script>
+
+<script type="text/javascript">
+var clicky_custom = {
+	session: { <%- if current_user: -%>user: '<%=current_user.name%>',<%- end -%> },
+};
+var domainy = location.protocol == "https:" ? "https://static.getclicky.com" : "http://static.getclicky.com";
+document.write(unescape("%3Cscript src='" + domainy + "/_fill_in_.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<noscript><p><img alt="Clicky" width="1" height="1" src="http://static.getclicky.com/_fill_in_-db17.gif" /></p></noscript>
