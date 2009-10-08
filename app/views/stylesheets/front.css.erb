@@ -117,8 +117,8 @@
 
 .front #schpiel { margin-top: 12px; margin-bottom: 32px; }
 
-.front #schpiel h3 { font-size: 24px; line-height: 1.5em; color: <%= wash_color %>; }
-.front #schpiel h4 { font-size: 16px; line-height: 1.5em; color: <%= text_color %>; }
+.front #schpiel h3 { font-size: 32px; line-height: 1.5em; color: <%= wash_color %>; }
+.front #schpiel h4 { font-size: 24px; line-height: 1.5em; color: <%= text_color %>; }
 
 .front #schpiel .leader { padding-left: 1em; border-top: 2px dotted <%= divider_color * 0.5 + "#fff".to_color * 0.5 %>; }
 .front #schpiel .leader .sym { color: <%= wash_color * 0.5 + bg_color * 0.5 %>; margin-left: -1.25em; margin-right: 0.25em; }
@@ -127,7 +127,7 @@
 .front #schpiel ul > li { padding-left: 0.5em; list-style-type: disc; border-top: 2px dotted <%= divider_color * 0.5 + "#fff".to_color * 0.5 %>; }
 
 
-<%- feature_box_screenshot_img_dimens = {:width => 1010, :height => nil} -%>
+<%- feature_box_screenshot_img_dimens = {:width => 960, :height => nil} -%>
 <%- feature_box_screenshot_img_min_dimens = {:width => feature_box_screenshot_img_dimens[:width] * 0.5, :height => nil} -%>
 <%- feature_box_screenshot_img_insets = {:top => -12, :right => -23, :bottom => -34, :left => -23} -%>
 
@@ -190,7 +190,7 @@
 .front #invite {
 	position: relative;
 	
-	width: 640px;
+	width: 480px;
 	margin: 0 auto;
 	margin-bottom: 32px;
 	
@@ -215,7 +215,7 @@
 	
 	text-shadow: 0 2px 3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
 	
-	width: <%= 640 - 8 - 128 %>px;
+	width: <%= 480 - 8 - 128 %>px;
 }
 
 .front #invite form input[type='submit'] {
