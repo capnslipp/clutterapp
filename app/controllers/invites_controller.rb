@@ -11,7 +11,7 @@ class InvitesController < ApplicationController
     @invite.sender = current_user
     
     unless @invite.save
-      render :action => 'new'
+      redirect_to root_url
     
     else
       if logged_in?
