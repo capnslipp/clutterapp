@@ -83,6 +83,8 @@
 	padding: 24px;
 }
 
+
+
 .front #schpiel { margin-bottom: 32px; }
 
 .front #schpiel h3 { font-size: 32px; line-height: 1.5em; color: <%= wash_color %>; }
@@ -95,17 +97,50 @@
 .front #schpiel ul > li { padding-left: 0.5em; list-style-type: disc; border-top: 2px dotted <%= divider_color * 0.5 + "#fff".to_color * 0.5 %>; }
 
 
-.front #feature-box { min-width: 512px; max-width: 1010px; }
-.front #feature-box h3 { font-size: 18px; line-height: 1.5em; color: <%= wash_color %>; }
+<%- feature_box_screenshot_img_dimens = {:width => 1010, :height => nil} -%>
+<%- feature_box_screenshot_img_min_dimens = {:width => feature_box_screenshot_img_dimens[:width] * 0.5, :height => nil} -%>
+<%- feature_box_screenshot_img_insets = {:top => -12, :right => -23, :bottom => -34, :left => -23} -%>
 
-.front #features { display: block; }
-.front #features .feature { display: block; width: 33%; float: left; }
+
+.front #feature-box {
+	min-width: <%= feature_box_screenshot_img_min_dimens[:width] %>px; max-width: <%= feature_box_screenshot_img_dimens[:width] %>px;
+	
+	/*padding: <%= css_direction_quartet.collect {|d| "#{-feature_box_screenshot_img_insets[d]}px" }.join(' ') %>;*/ /* to add back in the image's drop shadow spacing */
+}
+
+.front #features { position: relative; z-index: 10; display: block; /* no horizontal padding, or it will throw off the 33%! */ }
+.front #features .feature { display: block; width: 33%; float: left; /* no horizontal margin, or it will throw off the 33%! */ }
+.front #features .feature h3 { font-size: 18px; line-height: 1.5em; color: <%= wash_color %>; margin-bottom: 0.25em; border-bottom: 1px dotted <%=divider_color%>;  }
+.front #features .feature:hover h3, .front #features .feature.hover h3 { color: #111; border-color: <%= divider_color - (bg_color - divider_color) %>;}
 .front #features ul {}
 .front #features ul > li { list-style-type: none; }
-.front #features .feature > .inner { margin: 16px; }
 .front #features .feature p { font-size: 14px; }
+.front #features .feature > .inner {
+	display: block;
+	
+	margin: 4px;
+	padding: 8px;
+	
+	border: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	<%= border_radius_decl('6px') %>
+	
+	<%= deep_shadow_decl(0.25) %>
+}
+.front #features .feature:hover > .inner, .front #features .feature.hover > .inner {
+	margin: 3px; /* one less than than non-hover margin */
+	
+	background: <%= focus_back %>;
+	border-width: 2px;
+	border-color: <%= focus_border %>;
+	
+	<%= deep_shadow_decl(0.5) %>
+}
 
-.front #feature-box img.screenshot { min-width: 512px; width: 1010px; max-width: 100%; }
+.front #feature-box .screenshot img {
+	min-width: <%= feature_box_screenshot_img_min_dimens[:width] %>px; width: <%= feature_box_screenshot_img_dimens[:width] %>px; max-width: 100%;
+	
+	/*margin: <%= css_direction_quartet.collect {|d| "#{feature_box_screenshot_img_insets[d]}px" }.join(' ') %>;*/ /* to remove the built-in drop shadow spacing */
+}
 
 
 .front h5 { font-size: 14px; line-height: 1.25em; color: <%= accent_color %>; }

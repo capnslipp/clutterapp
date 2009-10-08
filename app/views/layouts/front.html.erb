@@ -18,15 +18,17 @@
 </head>
 <body class="front">
 
-<div id="base">		<div class="corner" style="position: absolute; z-index: 2600; opacity: 0.25; right: 0;"><%# for now %>
-		<%= render :partial => 'users/user_bar' %>
-	</div>	
+<div id="base">
 	
-	<div id="fill" class="initially-hidden"></div>
+	<div class="corner" style="position: absolute; z-index: 2600; opacity: 0.25; right: 0;"><%# for now %>
+		<%= render :partial => 'users/user_bar' %>
+	</div>
 	
 	
 	<%= yield  %>
-			</div>
+	
+		
+</div>
 
 
 </body>
