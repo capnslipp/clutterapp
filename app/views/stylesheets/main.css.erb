@@ -48,21 +48,22 @@ form {
 }
 
 input[type='text'], input[type='password'], textarea {
-	background: <%= wash_color * 0.666 %>;
-	border: <%= border_width %>px solid transparent;
+	background: <%= (wash_color * 0.5).with(:a => 0.9).to_s(:css_rgba) %>;
+	border: <%= border_width %>px solid <%= wash_color * 0.5 %>;
 	color: <%= wash_text_color %>;
 	margin: -<%= border_width %>px;
 	padding: 0;
 	<%= border_radius_decl %>
 }
-input[type='text']:focus, input[type='password']:focus, textarea:focus { background: <%= focus_back %>; border-color: <%= focus_border %>; }
+input[type='text']:focus, input[type='password']:focus, textarea:focus { background: <%= (wash_color * 0.5).with(:a => 0.99).to_s(:css_rgba) %>; border-color: <%= focus_color %>; }
+
 input[type='button'], input[type='submit'] {
-	background: <%= wash_color * 0.666 %>;
+	background: <%= (wash_color * 0.5).with(:a => 0.9).to_s(:css_rgba) %>;
 	border: <%= border_width %>px solid <%= wash_color * 0.5 %>;
 	color: <%= wash_text_color %>;
 	<%= border_radius_decl %>
 }
-input[type='button']:active, input[type='submit']:active { background: <%= wash_color * 0.5 %>; border-color: <%= accent_color %>; }
+input[type='button']:active, input[type='submit']:active { background: <%= (wash_color * 0.5).with(:a => 0.99).to_s(:css_rgba) %>; border-color: <%= accent_color %>; }
 
 
 /* general-purpose */
@@ -446,7 +447,7 @@ ul.scope-list > li.scope-item {
 	
 	background: <%= focus_back %>;
 	border-width: 2px;
-	border-color: <%= focus_border %>;
+	border-color: <%= focus_color %>;
 	
 	<%= deep_shadow_decl(0.5) %>
 }

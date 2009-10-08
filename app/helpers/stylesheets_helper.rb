@@ -50,9 +50,6 @@ module StylesheetsHelper
   def focus_back
     focus_color.with(:a => 0.25).to_s(:css_rgba)
   end
-  def focus_border
-    focus_color.to_s
-  end
   
   SHADOW_COLOR = Color.new(0x000000, 0.75)
   def shadow_color(m = 1.0)

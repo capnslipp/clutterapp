@@ -77,6 +77,36 @@
 }
 
 
+.front #flashes {
+	position: relative;
+	z-index: 500;
+	
+	height: 0;
+	overflow: visible;
+	
+	top: -32px;
+}
+
+
+.front #flashes > .flash {
+	display: inline-block;
+	padding: 0.25em 0.5em;
+	
+	font-size: 24px;
+	
+	background-color: <%= (wash_color * 0.5).to_s(:css_rgba) %>;
+	color: <%= wash_text_color %>;
+	
+	text-shadow: 0 2px 3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
+	
+	border: 2px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	<%= border_radius_decl %>
+	
+	<%= deep_shadow_decl(1) %>
+	
+	margin-bottom: 12px;
+}
+
 
 
 .front #page {
@@ -85,10 +115,10 @@
 
 
 
-.front #schpiel { margin-bottom: 32px; }
+.front #schpiel { margin-top: 12px; margin-bottom: 32px; }
 
-.front #schpiel h3 { font-size: 32px; line-height: 1.5em; color: <%= wash_color %>; }
-.front #schpiel h4 { font-size: 24px; line-height: 1.5em; color: <%= text_color %>; }
+.front #schpiel h3 { font-size: 24px; line-height: 1.5em; color: <%= wash_color %>; }
+.front #schpiel h4 { font-size: 16px; line-height: 1.5em; color: <%= text_color %>; }
 
 .front #schpiel .leader { padding-left: 1em; border-top: 2px dotted <%= divider_color * 0.5 + "#fff".to_color * 0.5 %>; }
 .front #schpiel .leader .sym { color: <%= wash_color * 0.5 + bg_color * 0.5 %>; margin-left: -1.25em; margin-right: 0.25em; }
@@ -106,6 +136,8 @@
 	min-width: <%= feature_box_screenshot_img_min_dimens[:width] %>px; max-width: <%= feature_box_screenshot_img_dimens[:width] %>px;
 	
 	/*padding: <%= css_direction_quartet.collect {|d| "#{-feature_box_screenshot_img_insets[d]}px" }.join(' ') %>;*/ /* to add back in the image's drop shadow spacing */
+	
+	/*margin-bottom: 32px;*/
 }
 
 .front #features { position: relative; z-index: 10; display: block; /* no horizontal padding, or it will throw off the 33%! */ }
@@ -131,8 +163,7 @@
 	
 	background: <%= focus_back %>;
 	border-width: 2px;
-	border-color: <%= focus_border %>;
-	
+	border-color: <%= focus_color %>;
 	<%= deep_shadow_decl(0.5) %>
 }
 
@@ -152,8 +183,86 @@
 	font-size: 0.75em;
 	line-height: 1em;
 	text-transform: uppercase;
-	opacity: 0.333; filter: alpha(opacity=33);
+	opacity: 0.33; filter: alpha(opacity=33);
 }
+
+
+.front #invite {
+	position: relative;
+	
+	width: 640px;
+	margin: 0 auto;
+	margin-bottom: 32px;
+	
+	padding: 8px;
+	
+	border: 2px solid <%= focus_color %>;
+	<%= border_radius_decl('6px') %>
+	background: <%= focus_back %>;
+	<%= deep_shadow_decl(1.0) %>
+}
+
+.front #invite p { font-size: 14px; }
+.front #invite .sub { font-size: 10px; opacity: 0.66; filter: alpha(opacity=66); }
+
+.front #invite form input { border-width: 2px; }
+
+.front #invite form input[type='text'] {
+	font-size: 20px;
+	line-height: 24px; height: 24px;
+	padding: 2px;
+	margin: -2px;
+	
+	text-shadow: 0 2px 3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
+	
+	width: <%= 640 - 8 - 128 %>px;
+}
+
+.front #invite form input[type='submit'] {
+	font-size: 16px;
+	font-weight: bold;
+	font-style: italic;
+	line-height: 24px; height: 24px;
+	
+	text-shadow: 0 2px 3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
+	
+	width: 128px;
+	float: right;
+}
+
+
+
+<%- foot_bar_back_shadow_height = 10 -%>
+
+.front #foot-bar {
+	position: relative;
+	
+	background: #eee;
+}
+
+.front #foot-bar > .back {
+	overflow: hidden;
+	
+	position: absolute;
+	top: -26px;
+	width: 100%; height: 26px;
+	
+	padding-bottom: <%=foot_bar_back_shadow_height%>px;
+}
+
+.front #foot-bar > .back > .fill {
+	position: absolute;
+	z-index: 1;
+	top: -26px; left: -26px; right: -26px;
+	bottom: <%=foot_bar_back_shadow_height%>px;
+	
+	<%= shallow_shadow_decl %>
+}
+
+.front #foot-bar > .content {
+	padding: 36px 0 4px;
+}
+
 
 
 .front h5 { font-size: 14px; line-height: 1.25em; color: <%= accent_color %>; }

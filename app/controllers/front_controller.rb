@@ -4,6 +4,7 @@ class FrontController < ApplicationController
   before_filter :be_visiting
   
   def index
+    @invite = Invite.new
   end
   
 end

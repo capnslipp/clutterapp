@@ -1,0 +1,15 @@
+<% if logged_in? -%>
+	<p>Invite a friend using the form below. You have <%= current_users_invites_remaining -%> invitations left to share.</p>
+<% else -%>
+	<p>
+		Interested in trying it out? It's not ready yet, but we can let you know when it is!
+		<div class="sub">Spam sucks (it's a proven fact); so you'll only be hearing from only us and only once we are ready for you to try it out!</div>
+	</p>
+<% end -%>
+
+<% form_for @invite do |f| %>
+	<%= f.text_field :recipient_email %>
+	<%= f.submit "Let's Do This!" %>
+	
+	<%= f.error_messages %>
+<% end %>

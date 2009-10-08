@@ -15,6 +15,13 @@
 
 <div id="page">
 	
+	<div id="flashes">
+		<% if flash[:message]: %><span class="flash message"><%= flash[:message] %></span><% end %>
+		<% if flash[:notice]: %><span class="flash notice"><%= flash[:notice] %></span><% end %>
+		<% if flash[:warning]: %><span class="flash warning"><%= flash[:warning] %></span><% end %>
+		<% if flash[:error]: %><span class="flash error"><%= flash[:error] %></span><% end %>
+	</div>
+	
 	<div id="schpiel">
 		<h3 class="leader"><span class="sym">∴</span>The Easy, Open-Ended Way To Organize All Your Cluttered:</h3>
 		<h4><ul>
@@ -59,8 +66,17 @@
 		
 	</div>
 	
-	<div id="invite">
+</div>
+
+
+<div id="foot-bar">
+	<div class="back"><div class="fill"></div></div>
+	
+	<div class="content">
+		
+		<div id="invite">
+			<%= render :partial => 'invites/form' %>
+		</div>
 		
 	</div>
-	
 </div>
