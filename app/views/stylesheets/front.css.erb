@@ -136,10 +136,23 @@
 	<%= deep_shadow_decl(0.5) %>
 }
 
+.front #feature-box .screenshot { position: relative; }
+
 .front #feature-box .screenshot img {
 	min-width: <%= feature_box_screenshot_img_min_dimens[:width] %>px; width: <%= feature_box_screenshot_img_dimens[:width] %>px; max-width: 100%;
 	
 	/*margin: <%= css_direction_quartet.collect {|d| "#{feature_box_screenshot_img_insets[d]}px" }.join(' ') %>;*/ /* to remove the built-in drop shadow spacing */
+}
+
+.front #feature-box .screenshot > .footnote {
+	position: relative;
+	top: -1em;
+	margin: 0 32px;
+	
+	font-size: 0.75em;
+	line-height: 1em;
+	text-transform: uppercase;
+	opacity: 0.333; filter: alpha(opacity=33);
 }
 
 
