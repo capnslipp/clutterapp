@@ -8,7 +8,7 @@ class SwitchFromRootNodeHasOnePileToPileHasManyNodes < ActiveRecord::Migration
         
         # populate data from the old column
         Node.all.each do |n|
-          n.update_attribute(:pile_id => n.root.pile.id)
+          n.update_attribute(:pile_id, n.root.pile.id)
         end
         
         # remove the old column
@@ -25,7 +25,7 @@ class SwitchFromRootNodeHasOnePileToPileHasManyNodes < ActiveRecord::Migration
         
         # populate data from the new column
         Pile.all.each do |p|
-          p.update_attribute(:root_node_id => p.nodes.first.root.id)
+          p.update_attribute(:root_node_id, p.nodes.first.root.id)
         end
         
         # remove the new column
