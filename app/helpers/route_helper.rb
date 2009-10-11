@@ -5,11 +5,13 @@ module RouteHelper
   # two scoops
   def piles_url(r_h_a, options = {})
     record = devise_record(r_h_a)
-    user_piles_url(options.merge user_id_from_user( record.instance_of?(Pile) ? record.owner : record ))
+    options.merge!( user_id_from_user(record.instance_of?(Pile) ? record.owner : record) )
+    user_piles_url(options)
   end
   def piles_path(r_h_a, options = {})
     record = devise_record(r_h_a)
-    user_piles_path(options.merge user_id_from_user( record.instance_of?(Pile) ? record.owner : record ))
+    options.merge!( user_id_from_user(record.instance_of?(Pile) ? record.owner : record) )
+    user_piles_path(options)
   end
   
   # one scoop
@@ -31,11 +33,13 @@ module RouteHelper
   # chocolate
   def new_pile_url(r_h_a, options = {})
     record = devise_record(r_h_a)
-    new_user_pile_url(options.merge user_id_from_user( record.instance_of?(Pile) ? record.owner : record ))
+    options.merge!( user_id_from_user(record.instance_of?(Pile) ? record.owner : record) )
+    new_user_pile_url(options)
   end
   def new_pile_path(r_h_a, options = {})
     record = devise_record(r_h_a)
-    new_user_pile_path(options.merge user_id_from_user( record.instance_of?(Pile) ? record.owner : record ))
+    options.merge!( user_id_from_user(record.instance_of?(Pile) ? record.owner : record) )
+    new_user_pile_path(options)
   end
   
   
@@ -44,11 +48,13 @@ module RouteHelper
   # two waffle cones
   def nodes_url(r_h_a, options = {})
     record = devise_record(r_h_a)
-    user_pile_nodes_url(options.merge pile_id_and_user_id_from_pile( record.instance_of?(Node) ? record.pile : record ))
+    options.merge!( pile_id_and_user_id_from_pile(record.instance_of?(Node) ? record.pile : record) )
+    user_pile_nodes_url(options)
   end
   def nodes_path(r_h_a, options = {})
     record = devise_record(r_h_a)
-    user_pile_nodes_path(options.merge pile_id_and_user_id_from_pile( record.instance_of?(Node) ? record.pile : record ))
+    options.merge!( pile_id_and_user_id_from_pile(record.instance_of?(Node) ? record.pile : record) )
+    user_pile_nodes_path(options)
   end
   
   # one waffle cone
@@ -78,11 +84,13 @@ module RouteHelper
   # spinkled waffle cone
   def new_node_url(r_h_a, options = {})
     record = devise_record(r_h_a)
-    new_user_pile_node_url(options.merge pile_id_and_user_id_from_pile( record.instance_of?(Node) ? record.pile : record ))
+    options.merge( pile_id_and_user_id_from_pile(record.instance_of?(Node) ? record.pile : record) )
+    new_user_pile_node_url(options)
   end
   def new_node_path(r_h_a, options = {})
     record = devise_record(r_h_a)
-    new_user_pile_node_path(options.merge pile_id_and_user_id_from_pile( record.instance_of?(Node) ? record.pile : record ))
+    options.merge( pile_id_and_user_id_from_pile( record.instance_of?(Node) ? record.pile : record) )
+    new_user_pile_node_path(options)
   end
   
   

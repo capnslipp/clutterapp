@@ -139,7 +139,7 @@ protected
   end
   
   def create_default_pile!
-    raise Exception.new 'A default Pile could not be created because one for this User already exists.' if piles.count > 0
+    raise Exception.new('A default Pile could not be created because one for this User already exists.') if piles.count > 0
     create_default_pile
   end
   

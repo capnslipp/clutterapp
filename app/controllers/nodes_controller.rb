@@ -86,10 +86,10 @@ class NodesController < ApplicationController
     node_sel = dom_id(@node, 'item')
     
     if request.xhr?
-      return render :inline => render_cell(cell_for_node(@node), :new, :node => @node), :status => :ok
+      return render(:inline => render_cell(cell_for_node(@node), :new, :node => @node), :status => :ok)
     end
     
-    render :nothing => true, :status => 418
+    render(:nothing => true, :status => 418)
   end
   
   
@@ -110,10 +110,10 @@ class NodesController < ApplicationController
       @node = @pile.nodes.find params[:id]
       
       if request.xhr?
-        return render :inline => render_cell(cell_for_node(@node), :edit, :node => @node), :status => :ok
+        return render(:inline => render_cell(cell_for_node(@node), :edit, :node => @node), :status => :ok)
       end
       
-      render :nothing => true, :status => 418
+      render(:nothing => true, :status => 418)
     end
   end
   
@@ -137,11 +137,11 @@ class NodesController < ApplicationController
       
       if @node.update_attributes(params[:node])
         if request.xhr?
-          return render :inline => render_cell(cell_for_node(@node), :update, :node => @node), :status => :ok
+          return render(:inline => render_cell(cell_for_node(@node), :update, :node => @node), :status => :ok)
         end
       end
       
-      render :nothing => true, :status => 418
+      render(:nothing => true, :status => 418)
     end
   end
   
@@ -165,7 +165,7 @@ class NodesController < ApplicationController
       when :out:  orig_ref_node.nil? || orig_ref_node.root?
       else        true
     end
-    return render :nothing => true , :status => 418 if cant_move
+    return render(:nothing => true , :status => 418) if cant_move
     
     case dir
       when :up:   @node.move_to_left_of orig_ref_node
@@ -219,10 +219,10 @@ class NodesController < ApplicationController
     node_sel = dom_id(@node, 'item_for')
     
     if request.xhr?
-      return render :nothing => true, :status => :ok
+      return render(:nothing => true, :status => :ok)
     end
     
-    render :nothing => true , :status => 418
+    render(:nothing => true , :status => 418)
   end
   
 end

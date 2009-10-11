@@ -22,7 +22,7 @@ protected
   end
   
   def create_root_node!
-    raise Exception.new 'A root node could not be created because one for this Pile already exists.' if nodes.count > 0
+    raise Exception.new('A root node could not be created because one for this Pile already exists.') if nodes.count > 0
     create_root_node
   end
   
