@@ -1,6 +1,5 @@
 class StylesheetsController < ApplicationController
   layout  nil
-  session :off
   
   def show
     name = params[:id]
