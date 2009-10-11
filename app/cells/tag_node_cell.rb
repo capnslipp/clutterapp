@@ -1,4 +1,6 @@
 class TagNodeCell < NodeCell
+  cache :show, :cache_version
+  
   
 protected
   

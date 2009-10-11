@@ -1,4 +1,6 @@
 class PriorityNodeCell < NodeCell
+  cache :show, :cache_version
+  
   
 protected
   

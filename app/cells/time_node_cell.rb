@@ -1,4 +1,6 @@
 class TimeNodeCell < NodeCell
+  cache :show, :cache_version
+  
   
 protected
   

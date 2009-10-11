@@ -2,8 +2,6 @@ class NodeCell < Cell::Base
   helper :cell
   helper :route
   
-  cache :show, :cache_version
-  
   
   # not getting cached for some reason
   def cache_version

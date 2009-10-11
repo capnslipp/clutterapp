@@ -1,4 +1,6 @@
 class CheckNodeCell < NodeCell
+  cache :show, :cache_version
+  
   
   # check has no "new" or "edit" functionality
   def new
