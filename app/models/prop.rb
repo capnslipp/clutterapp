@@ -12,7 +12,7 @@ class Prop < ActiveRecord::Base
     if type.instance_of?(Class) && type.superclass == Prop
       type
     else
-      type = type.to_s.classify
+      type = type.to_s.underscore.classify
       type << 'Prop' unless type =~ /Prop$/
       type = type.constantize
     end
