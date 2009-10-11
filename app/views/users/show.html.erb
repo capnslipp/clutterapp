@@ -3,5 +3,5 @@
 <h3>Public Piles</h3>
 
 <% for pile in @public_piles %>
-	<%= link_to h("P#{pile.id} - N#{pile.root_node.id}"), user_pile_path(:user_id => pile.owner, :id => pile) %>
+	<%= link_to h("#{pile.name} (P#{pile.id} - N#{pile.root_node.id})"), user_pile_path(:user_id => pile.owner, :id => pile) %>
 <% end %>

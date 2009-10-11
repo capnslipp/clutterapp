@@ -392,6 +392,8 @@ $(function() {
 		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'tag'); return false; })
 	newButtons.find('a.new.time')
 		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'time'); return false; })
+	newButtons.find('a.new.pile-ref')
+		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'pile-ref'); return false; })
 });
 
 

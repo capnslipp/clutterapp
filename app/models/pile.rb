@@ -4,6 +4,8 @@ class Pile < ActiveRecord::Base
   
   has_many :nodes, :dependent => :destroy, :autosave => true
   
+  has_one :pile_ref_prop, :as => :ref_pile
+  
   #validates_presence_of   :root_node, :message => 'is required'
   
   #before_validation_on_create :create_root_node!
