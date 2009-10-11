@@ -69,7 +69,7 @@ protected
   
   def validate
     #errors.add(:node, "either be root and have pile; or it must be neither root ") if root? ^ (pile.root_node != self) # causes stack overflow
-    errors.add(:prop, "must exist or #{self.class.to_s} must be root but not both") unless root? ^ prop
+    errors.add(:node, "must have a prop or be root, but not both") unless root? ^ prop
   end
   
   def increment_version
