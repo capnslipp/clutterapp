@@ -67,6 +67,11 @@ class Prop < ActiveRecord::Base
     end
   end
   
+  
+  def self::abilities
+    [:badgeable, :stackable, :nodeable, :deepable]
+  end
+  
   def self::badgeable?; false; end
   # allows badge-style placement
   def self::is_badgeable

@@ -5,12 +5,10 @@
 	</div>
 	
 	<div class="buttons">
-		<a href="#" class="new text">text</a>
-		<a href="#" class="new check">check</a>
-		<a href="#" class="new note">note</a>
-		<a href="#" class="new priority">priority</a>
-		<a href="#" class="new tag">tag</a>
-		<a href="#" class="new time">time</a>
+		<%- for t in Prop.types -%>
+			<%- ability_classes = Prop.abilities.select{|a| t.send("#{a}?") }.collect{|a| a.to_s }.join(' ') -%>
+			<a href="#" class="new <%= t.to_s(:short) %> <%= ability_classes %>"><%= t.to_s(:short) %></a>
+		<%- end -%>
 	</div>
 	
 </li>
