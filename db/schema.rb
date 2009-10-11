@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090925180351) do
+ActiveRecord::Schema.define(:version => 20091011185324) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -44,10 +44,17 @@ ActiveRecord::Schema.define(:version => 20090925180351) do
     t.datetime "updated_at"
   end
 
+  create_table "pile_ref_props", :force => true do |t|
+    t.integer  "ref_pile_id", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "piles", :force => true do |t|
     t.integer  "owner_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name",       :limit => 100, :null => false
   end
 
   create_table "priority_props", :force => true do |t|
