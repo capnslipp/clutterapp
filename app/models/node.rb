@@ -19,6 +19,7 @@ class Node < ActiveRecord::Base
   named_scope :badgeable, lambda {|for_ability| badgeable_conditions(for_ability) }
   named_scope :stackable, lambda {|for_ability| stackable_conditions(for_ability) }
   named_scope :nodeable,  lambda {|for_ability| nodeable_conditions(for_ability) }
+  named_scope :deepable,  lambda {|for_ability| deepable_conditions(for_ability) }
   
   
   def to_s(format = :default, &block)
@@ -102,6 +103,14 @@ protected
       { :conditions => {:prop_type => Prop.nodeable_types.collect(&:to_s)} }
     else
       { :conditions => {:prop_type => (Prop.types - Prop.nodeable_types).collect(&:to_s)} }
+    end
+  end
+  
+  def self::deepable_conditions(for_ability)
+    if for_ability
+      { :conditions => {:prop_type => Prop.deepable_types.collect(&:to_s)} }
+    else
+      { :conditions => {:prop_type => (Prop.types - Prop.deepable_types).collect(&:to_s)} }
     end
   end
   
