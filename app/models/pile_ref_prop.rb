@@ -5,7 +5,7 @@ class PileRefProp < Prop
   validates_presence_of :ref_pile
   
   
-  is_stackable
+  is_stackable; isnt_deepable
   
   
   #def self::rand_new

@@ -31,7 +31,7 @@ class Prop < ActiveRecord::Base
   
   
   def self::types
-    [TextProp, CheckProp, NoteProp, PriorityProp, TagProp, TimeProp]
+    [TextProp, CheckProp, NoteProp, PriorityProp, TagProp, TimeProp, PileRefProp]
   end
   
   def self::badgeable_types
@@ -44,6 +44,10 @@ class Prop < ActiveRecord::Base
   
   def self::nodeable_types
     types.select {|t| t.nodeable? }
+  end
+  
+  def self::deepable_types
+    types.select {|t| t.deepable? }
   end
   
   
@@ -90,6 +94,14 @@ class Prop < ActiveRecord::Base
   # if badgeable, then always badged, for now; will be position-dependent eventually
   def badged?
     self.class.badgeable? ? true : false
+  end
+  
+  def self::deepable?; true; end
+  # disallow "deep" placement (any deeper than a child of the root node)
+  def self::isnt_deepable
+    class_eval(<<-EOS, __FILE__, __LINE__)
+      def self::deepable?; false; end
+    EOS
   end
   
 end
