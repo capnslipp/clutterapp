@@ -39,6 +39,8 @@ set :scm, :git
 set :branch, "master"
 set :deploy_via, :remote_cache
 
+set :git_enable_submodules, 1
+
 
 #set :scm_username, "rails"
 #set :scm_password, "_fill_in_"
