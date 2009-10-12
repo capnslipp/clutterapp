@@ -32,24 +32,12 @@ class Node < ActiveRecord::Base
   end
   
   
-  def create_child!(*attributes)
-    transaction do
-      child = pile.nodes.build(*attributes)
-      child.save_with_validation false
-      child.move_to_child_of self
-      self.increment_version
-      raise ActiveRecord::RecordInvalid.new(child) unless child.valid?
-      child
-    end
-  end
-  
-  
   def self::rand_new
     self::new :prop => Prop.rand
   end
   
   def create_rand_child
-    create_child!(:prop => Prop.rand)
+    sellf.chilren.create!(:prop => Prop.rand)
   end
   
   def create_rand_descendant

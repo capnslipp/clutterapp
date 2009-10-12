@@ -79,7 +79,7 @@ class NodesController < ApplicationController
     end
     
     @parent = Node.find(params[:parent_id])
-    @node = @parent.create_child!(node_creation_args)
+    @node = @parent.children.create!(node_creation_args)
     @left_sibling = @node.left_sibling
     @left_sibling.reload :select => :version unless @left_sibling.nil?
     
