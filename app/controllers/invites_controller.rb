@@ -12,7 +12,7 @@ class InvitesController < ApplicationController
     
     unless @invite.save
       redirect_to root_url
-    
+      
     else
       if logged_in?
         Mailer.deliver_invite(@invite, new_user_url(@invite.token))

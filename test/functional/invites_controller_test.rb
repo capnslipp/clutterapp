@@ -8,17 +8,17 @@ class InvitesControllerTest < ActionController::TestCase
   
   def test_create_invalid
     post :create
-    assert_template 'new'
+    assert_redirected_to root_url
   end
   
   def test_create_blank_invite_email
     post :create, { :invite => {:recipient_email => ''} }
-    assert_template 'new'
+    assert_redirected_to root_url
   end
   
   def test_create_nil_invite_email
     post :create, { :invite => {:recipient_email => nil} }
-    assert_template 'new'
+    assert_redirected_to root_url
   end
   
   def test_create_valid
