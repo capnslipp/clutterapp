@@ -33,20 +33,27 @@
 }
 
 .front #top-bar > .back > .fill {
+	/* override */ border-bottom: <%=border_width*2%>px solid <%= wash_color.adjust(:v => -0.1) %>; /* for IE */
+	/* override */ border-bottom: <%=border_width*2%>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	
 	/* override */ /*background: <%= accent_color %>;*/
 	/* override */ <%= %W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: 0px 3px 18px #{shadow_color.to_s(:css_rgba)};" }.join(' ') %>
 	
-	margin-bottom: -<%=border_width*2%>px;
-	border-bottom-width: <%=border_width*2%>px;
+	/* override */ margin-bottom: -<%=border_width*2%>px;
 	
 	/* override */ bottom: <%=top_bar_back_shadow_height%>px;
 }
 
 .front #top-bar > .logo {
+	/* override */ border-bottom: <%=border_width*2 %>px solid <%= accent_color.adjust(:v => -0.15) %>; /* for IE */
+	/* override */ border-bottom: <%=border_width*2%>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	
+	/* override */ border-right: <%=border_width%>px solid <%= accent_color.adjust(:v => -0.15) %>; /* for IE */
+	/* override */ border-right: <%=border_width%>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	
 	/* override */ /*border: none;*/
 	/* override */ /*background: none;*/
-	margin-bottom: -<%=border_width*2%>px;
-	border-bottom-width: <%=border_width*2%>px;
+	/* override */ margin-bottom: -<%=border_width*2%>px;
 	
 	padding: <%= css_direction_quartet.collect {|d| "#{top_bar_logo_margins[d]}px" }.join(' ') %>;
 }
@@ -94,12 +101,15 @@
 	
 	font-size: 24px;
 	
+	background-color: <%= (wash_color * 0.5).to_s %>;  /* for IE */
 	background-color: <%= (wash_color * 0.5).to_s(:css_rgba) %>;
 	color: <%= wash_text_color %>;
 	
 	text-shadow: 0 2px 3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
 	
-	border: 2px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	border: 2px solid transparent;
+	border-color: <%= generic_border_color.to_s %>;  /* for IE */
+	border-color: <%= generic_border_color.to_s(:css_rgba) %>;
 	<%= border_radius_decl %>
 	
 	<%= deep_shadow_decl(1) %>
@@ -153,7 +163,10 @@
 	margin: 4px;
 	padding: 8px;
 	
-	border: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	
+	border: <%= border_width %>px solid transparent;
+	border-color: <%= generic_border_color.adjust(:v => 0.75).to_s %>; /* for IE */
+	border-color: <%= generic_border_color.to_s(:css_rgba) %>;
 	<%= border_radius_decl('6px') %>
 	
 	<%= deep_shadow_decl(0.25) %>
@@ -233,7 +246,8 @@
 	
 	border: 2px solid <%= focus_color %>;
 	<%= border_radius_decl('6px') %>
-	background: <%= focus_back %>;
+	background: <%= focus_color.adjust(:v => 1.0, :s => -0.75) %>; /* for IE */
+	background: <%= focus_color.with(:a => 0.25).to_s(:css_rgba) %>;
 	<%= shallow_shadow_decl(1.0) %>
 }
 
@@ -250,6 +264,9 @@
 	
 	text-shadow: 0 2px 3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
 	
+	background: <%= (wash_color * 0.5).adjust(:v => 0.1).to_s %>; /* for IE */
+	background: <%= (wash_color * 0.5).with(:a => 0.9).to_s(:css_rgba) %>;
+	
 	width: <%= 480 - 8 - 128 %>px;
 }
 
@@ -261,6 +278,9 @@
 	
 	text-shadow: 0 2px 3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
 	
+	background: <%= (wash_color * 0.5).adjust(:v => 0.1).to_s %>; /* for IE */
+	background: <%= (wash_color * 0.5).with(:a => 0.9).to_s(:css_rgba) %>;
+	
 	width: 128px;
 	float: right;
 }
@@ -271,7 +291,9 @@
 	width: 480px;
 	padding: 8px;
 	
-	border: 2px solid <%= generic_border_color(0.25).to_s(:css_rgba) %>;
+	border: 2px solid transparent;
+	border-color: <%= generic_border_color.adjust(:v => 0.75).to_s %>; /* for IE */
+	border-color: <%= generic_border_color(0.25).to_s(:css_rgba) %>;
 	<%= border_radius_decl('6px') %>
 	background: <%=bg_color%>;
 	<%= deep_shadow_decl(0.5) %>
@@ -282,7 +304,7 @@
 .front #share p > .sub { display: block; font-weight: normal; font-style: italic; opacity: 0.5; filter: alpha(opacity=50); }
 .front #share > ul { display: block; margin-bottom: 16px; }
 .front #share > ul > li { display: block; float: left; margin: 0 16px 16px 0; }
-.front #share .facebook { border: 1px solid #94A3C4; background: #ECEFF5; }
+.front #share .facebook { /*border: 1px solid #94A3C4; background: #ECEFF5;*/ }
 
 .front #foot-bar #copyright {
 	font-size: 0.85em;
