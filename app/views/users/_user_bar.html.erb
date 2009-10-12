@@ -1,6 +1,6 @@
 <% if logged_in? -%>
 	<span id="user-bar-greeting">Logged in as <strong><%= link_to_current_user :content_method => :login %></strong>.</span>
-	<span id="user-bar-action"><%= link_to "Log out", logout_path %></span>
+	<span id="user-bar-action"><%= link_to "Log out", logout_path, :method => :delete %></span>
 <% else -%>
 	<span id="user-bar-greeting">
 		<% form_tag session_path do %>
