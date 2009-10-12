@@ -33,11 +33,17 @@ body, input, textarea {
 a { color: <%= text_color %>; }
 
 h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; }
+section h1,
 h1 { font-size: 18px; line-height: 24px; }
+section section h1,
 h2 { font-size: 17px; line-height: 17px; color: <%= wash_color %>; }
+section section section h1,
 h3 { font-size: 16px; line-height: 16px; color: <%= accent_color %>; }
+section section section section h1,
 h4 { font-size: 15px; line-height: 15px; color: <%= wash_color %>; }
+section section section section section h1,
 h5 { font-size: 14px; line-height: 14px; color: <%= accent_color %>; }
+section section section section section section h1,
 h6 { font-size: 13px; line-height: 13px; color: <%= wash_color %>; }
 
 em { font-weight: bold; font-style: normal; color: #222; }
@@ -440,14 +446,6 @@ ul.scope-list > li.scope-item {
 	padding: 0 2px;
 }
 .time.prop.badge { float: left; }
-
-.pile-ref.prop {
-	color: <%= accent_color %>;
-	
-	font-size: 1.5em;
-	line-height: 1.5em;
-	font-weight: bold;
-}
 
 
 .edit.prop {

@@ -1,4 +1,4 @@
-<div id="<%= dom_id(@base_node, 'item_for') %>" class="<%= dom_class(@base_node, 'item_for') %> pile" oc:nodesUrl="<%=nodes_path(@base_node)%>">
+<section id="<%= dom_id(@base_node, 'item_for') %>" class="<%= dom_class(@base_node, 'item_for') %> pile" oc:nodesUrl="<%=nodes_path(@base_node)%>">
 	<h1 class="name"><%= @pile.name %></h1>
 	<div class="body">
 		<%= render :partial => 'nodes/action_stub' %>
@@ -8,4 +8,4 @@
 	
 	<%= render :partial => 'nodes/new_bar' %>
 	<%= render :partial => 'nodes/action_bar' %>
-</div>
+</section>
