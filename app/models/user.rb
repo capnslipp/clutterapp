@@ -135,7 +135,7 @@ protected
   end
   
   def create_default_pile
-    @default_pile = Pile.create(:owner => self) unless piles.count > 0
+    @default_pile = Pile.create(:owner => self, :name => "#{self.name}'s Pile") unless piles.count > 0
   end
   
   def create_default_pile!
