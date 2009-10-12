@@ -25,7 +25,7 @@ class PilesControllerTest < ActionController::TestCase
     bypass_authentication
     
     assert_difference 'Pile.count', +1 do
-      post :create, :pile => { }, :user_id => users(:one)
+      post :create, :pile => {:name => 'Test Pile PCT 1'}, :user_id => users(:one)
     end
     
     #assert_redirected_to user_piles_path(assigns(:pile)) # I don't know and don't care where this redirects at this point.
