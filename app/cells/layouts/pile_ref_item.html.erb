@@ -6,7 +6,8 @@
 			<%= render :partial => 'nodes/action_stub' %>
 			<%= @content_for_layout %>
 		</div>
-		
-		<%= render :partial => 'nodes/item_list', :locals => {:item => @node.prop.ref_pile.root_node} %>
+		<ul class="node list">
+			<%= render :partial => 'nodes/list_items', :locals => {:item => @node.prop.ref_pile.root_node} %>
+		</ul>
 	</section>
 <% end -%>

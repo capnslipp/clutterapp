@@ -4,8 +4,10 @@
 		<%= render :partial => 'nodes/action_stub' %>
 	</div>
 	
-	<%= render :partial => 'nodes/item_list', :locals => {:item => @base_node} -%>
+	<ul class="node list">
+		<%= render :partial => 'nodes/list_items', :locals => {:item => @base_node} -%>
+		<%= render :partial => 'nodes/new_bar' %>
+	</ul>
 	
-	<%= render :partial => 'nodes/new_bar' %>
 	<%= render :partial => 'nodes/action_bar' %>
 </section>

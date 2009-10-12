@@ -1,5 +1,0 @@
-<ul class="node list">
-	<%- item.children.badgeable(false).each do |child| -%>
-		<%= render_child(child) %>
-	<%- end unless item.children.badgeable(false).empty? -%>
-</ul>
