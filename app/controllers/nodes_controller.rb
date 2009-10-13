@@ -20,7 +20,6 @@ class NodesController < ApplicationController
   
   
   # POST /nodes
-  # POST /nodes.xml
   def create
     node_creation_args = params[:node] || {}
     unless params[:type].nil?
@@ -30,8 +29,6 @@ class NodesController < ApplicationController
     
     @parent = Node.find(params[:parent_id])
     @node = @parent.children.create!(node_creation_args)
-    @left_sibling = @node.left_sibling
-    @left_sibling.reload :select => :version unless @left_sibling.nil?
     
     node_sel = dom_id(@node, 'item')
     
