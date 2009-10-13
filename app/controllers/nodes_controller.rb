@@ -31,7 +31,7 @@ class NodesController < ApplicationController
     @node = @parent.children.create!(node_creation_args)
     
     if request.xhr?
-      return render :inline => render_cell(cell_for_node(@node), :new, :node => @node), :status => :ok
+      return render :inline => render_cell(cell_for_node(@node), :new, :node => @node)
     end
     
     render :nothing => true, :status => 418
@@ -55,7 +55,7 @@ class NodesController < ApplicationController
       @node = @pile.nodes.find params[:id]
       
       if request.xhr?
-        return render :inline => render_cell(cell_for_node(@node), :edit, :node => @node), :status => :ok
+        return render :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
       end
       
       render :nothing => true, :status => 418
@@ -82,7 +82,7 @@ class NodesController < ApplicationController
       
       if @node.update_attributes(params[:node])
         if request.xhr?
-          return render :inline => render_cell(cell_for_node(@node), :update, :node => @node), :status => :ok
+          return render :inline => render_cell(cell_for_node(@node), :update, :node => @node)
         end
       end
       
