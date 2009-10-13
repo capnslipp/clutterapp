@@ -94,7 +94,7 @@ Rails::Initializer.run do |config|
   config.after_initialize do
     Cell::Base.add_view_path 'app/views'
     
-    require 'logger_extension' # extends ActiveSupport::BufferedLogger
+    require 'logger_prefix_extension' # extends ActiveSupport::BufferedLogger with prefix(), prefixed()
   end
   
 end
