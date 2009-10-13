@@ -30,8 +30,6 @@ class NodesController < ApplicationController
     @parent = Node.find(params[:parent_id])
     @node = @parent.children.create!(node_creation_args)
     
-    node_sel = dom_id(@node, 'item')
-    
     if request.xhr?
       return render :inline => render_cell(cell_for_node(@node), :new, :node => @node), :status => :ok
     end
@@ -162,8 +160,6 @@ class NodesController < ApplicationController
     orig_right_node = @node.right_sibling
     @node.destroy
     orig_parent_node.after_child_destroy
-    
-    node_sel = dom_id(@node, 'item_for')
     
     if request.xhr?
       return render :nothing => true, :status => :ok
