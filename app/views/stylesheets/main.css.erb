@@ -402,7 +402,7 @@ ul.scope-list > li.scope-item {
 	
 	margin-bottom: 6px;
 	
-	border-color: <%= generic_border_color.to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %> }
+	border-color: <%= generic_border_color.to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %>
 }
 .note.prop, .note.prop textarea { line-height: 15px; }
 .note.prop textarea { height: 1px; }
@@ -448,7 +448,7 @@ ul.scope-list > li.scope-item {
 .time.prop.badge { float: left; }
 
 
-.edit.prop {
+.new.prop, .edit.prop {
 	margin: -1px;
 	margin-left: 18px;
 	
@@ -458,11 +458,14 @@ ul.scope-list > li.scope-item {
 	
 	<%= deep_shadow_decl(0.5) %>
 }
-/*.edit.prop.badge { margin: 0 2px; }*/
+/*.new.prop.badge, .edit.prop.badge { margin: 0 2px; }*/
 
+.new.prop input[type='submit'],
 .edit.prop input[type='submit'] { display: none; }
+.new.note.prop input[type='submit'],
 .edit.note.prop input[type='submit'] { display: inherit; }
 
+.new.prop input[type='text'], .new.prop textarea,
 .edit.prop input[type='text'], .edit.prop textarea {
 	background: transparent;
 	color: <%= text_color %>;
@@ -472,6 +475,7 @@ ul.scope-list > li.scope-item {
 	display: block;
 	width: 100%;
 }
+.new.prop input[type='button'], .new.prop input[type='submit'],
 .edit.prop input[type='button'], .edit.prop input[type='submit'] { position: absolute; }
 
 .prop input[type='checkbox'] { border: none; margin: 0; background: none; }

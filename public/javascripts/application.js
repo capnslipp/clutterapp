@@ -140,6 +140,22 @@ function hideItemNewBar() {
 		.appendTo($('.pile:first')); // in case the parent item gets deleted
 }
 
+$(function() {
+	$('.action.stub .widget.collapsed a').live('click', function() {
+		expandActionBar($(this).closest('.item_for_node')); return false;
+	});
+	
+	$('#action-bar .widget.expanded a')
+		.click(function() { collapseActionBar(); return false; });
+	
+	var actionButtons = $('#action-bar .buttons');
+	actionButtons.find('a.toggle.new-bar')
+		.click(function() { toggleItemNewBar($(this).closest('.item_for_node')); return false; });
+	
+	$('#new-bar .widget.expanded a')
+		.click(function() { hideItemNewBar(); return false; });
+});
+
 
 
 function nodeIDOfContainingItem(elem) {
@@ -188,15 +204,106 @@ function hideFill(modalElement) {
 }
 
 
+function nodeItemNew(parentNode, type) {
+	$.ajax({
+		type: 'get',
+		data: {type: type, parent_id: nodeIDOfItem(parentNode)},
+		url: parentNode.closest('.pile').attr('oc\:nodes-url') + '/new',
+		dataType: 'html',
+		success: function(responseData) { handleSuccess(parentNode, type, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(parentNode, type, xhrObj, errStr, expObj); }
+	});
+	
+	
+	function handleSuccess(parentNode, type, responseData) {
+		collapseActionBar();
+		
+		var list = parentNode.children('.list');
+		
+		if (list.children('#new-bar').length != 0)
+			list.children('#new-bar').before(responseData);
+		else
+			list.append(responseData);
+		
+		var editProp = list.children('.item_for_node:last').children('.body').children('.new.prop');
+		
+		editProp.filter('.note.prop').find('textarea').elastic();
+		
+		showFill(editProp);
+		editFormFocus(editProp.children('form'));
+	}
+	
+	function handleError(parentNode, type, xhrObj, errStr, expObj) {
+		parentNode.find('#new-bar:first')
+			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+	}
+}
+	
+$(function() {
+	var newButtons = $('#new-bar .buttons');
+	newButtons.find('a.new.text')
+		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'text'); return false; });
+	newButtons.find('a.new.check')
+		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'check'); return false; });
+	newButtons.find('a.new.note')
+		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'note'); return false; });
+	newButtons.find('a.new.priority')
+		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'priority'); return false; });
+	newButtons.find('a.new.tag')
+		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'tag'); return false; });
+	newButtons.find('a.new.time')
+		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'time'); return false; });
+	newButtons.find('a.new.pile-ref')
+		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'pile-ref'); return false; });
+});
+
+
+
+function nodeItemCreate(form) {
+	$.ajax({
+		type: form.attr('method'), // 'post'
+		url: form.attr('action'),
+		data: form.formSerialize(),
+		dataType: 'html',
+		success: function(responseData) { handleSuccess(form, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
+	});
+	
+	
+	function handleSuccess(form, responseData) {
+		var newProp = form.closest('.new.prop');
+		var newItem = newProp.closest('.item_for_node');
+		
+		hideFill( newProp.parent('.body') );
+		
+		newItem
+			.replaceWith(responseData);
+	}
+	
+	function handleError(form, xhrObj, errStr, expObj) {
+		form.closest('.new.prop')
+			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		
+		editFormFocus(form);
+	}
+}
+
+$(function() {
+	$('form.new_node').live('submit', function() {
+		nodeItemCreate($(this)); return false;
+	});
+});
+
+
 function editFormFocus(form) {
 	form.children('.field:first')
 		.focus();
 }
 
-function editFormShow(prop) {
+function nodeItemEdit(prop) {
 	$.ajax({
 		type: 'get',
-		url: prop.closest('.node').attr('oc\:editUrl'),
+		url: prop.closest('.node').attr('oc\:url') + '/edit',
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(prop, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(prop, xhrObj, errStr, expObj); }
@@ -227,53 +334,16 @@ function editFormShow(prop) {
 
 $(function() {
 	$('.item_for_node > .body > .show.prop').live('click', function() {
-		editFormShow($(this)); return false;
+		nodeItemEdit($(this)); return false;
 	});
 });
 
 
-
-function nodeItemCreate(parentNode, type) {
+function nodeItemUpdate(form) {
 	$.ajax({
-		type: 'post',
-		data: {type: type, parent_id: nodeIDOfItem(parentNode)},
-		url: parentNode.closest('.pile').attr('oc\:nodesUrl'),
-		dataType: 'html',
-		success: function(responseData) { handleSuccess(parentNode, type, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(parentNode, type, xhrObj, errStr, expObj); }
-	});
-	
-	
-	function handleSuccess(parentNode, type, responseData) {
-		var list = parentNode.children('.list');
-		
-		if (list.children('#new-bar').length != 0)
-			list.children('#new-bar').before(responseData);
-		else
-			list.append(responseData);
-		
-		var editProp = list.children('.item_for_node:last').children('.body').children('.edit.prop');
-		
-		editProp.filter('.note.prop').find('textarea').elastic();
-		
-		if (type != 'check') {
-			showFill(editProp);
-			editFormFocus(editProp.children('form'));
-		}
-	}
-	
-	function handleError(parentNode, type, xhrObj, errStr, expObj) {
-		parentNode.find('#new-bar:first')
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
-	}
-}
-
-
-function editFormSubmit(form) {
-	$.ajax({
-		type: form.attr('method'),
+		type: form.attr('method'), // 'post' (PUT)
 		url: form.attr('action'),
-		data: form.formSerialize(false),
+		data: form.formSerialize(),
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(form, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
@@ -299,7 +369,7 @@ function editFormSubmit(form) {
 
 $(function() {
 	$('form.edit_node').live('submit', function() {
-		editFormSubmit($(this)); return false;
+		nodeItemUpdate($(this)); return false;
 	});
 });
 
@@ -309,7 +379,7 @@ function nodeItemMove(node, dir) {
 	$.ajax({
 		type: 'post',
 		data: {_method: 'put', dir: dir},
-		url: node.attr('oc\:moveUrl'),
+		url: node.attr('oc\:url') + '/move',
 		dataType: 'script',
 		success: function(responseData) { handleSuccess(node, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
@@ -325,6 +395,18 @@ function nodeItemMove(node, dir) {
 			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 	}
 }
+	
+$(function() {
+	var actionButtons = $('#action-bar .buttons');
+	actionButtons.find('a.move.out')
+		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'out'); return false; });
+	actionButtons.find('a.move.up')
+		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'up'); return false; });
+	actionButtons.find('a.move.down')
+		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'down'); return false; });
+	actionButtons.find('a.move.in')
+		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'in'); return false; });
+});
 
 
 
@@ -349,51 +431,11 @@ function nodeItemDelete(node) {
 			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 	}
 }
-
-
+	
 $(function() {
-	$('.action.stub .widget.collapsed a').live('click', function() {
-		expandActionBar($(this).closest('.item_for_node')); return false;
-	});
-	
-	$('#action-bar .widget.expanded a')
-		.click(function() { collapseActionBar(); return false; })
-	
 	var actionButtons = $('#action-bar .buttons');
-	actionButtons.find('a.move.out')
-		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'out'); return false; });
-	actionButtons.find('a.move.up')
-		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'up'); return false; });
-	actionButtons.find('a.move.down')
-		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'down'); return false; });
-	actionButtons.find('a.move.in')
-		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'in'); return false; });
-	
 	actionButtons.find('a.delete')
 		.click(function() { nodeItemDelete($(this).closest('.item_for_node')); return false; });
-	
-	actionButtons.find('a.toggle.new-bar')
-		.click(function() { toggleItemNewBar($(this).closest('.item_for_node')); return false; });
-	
-	
-	$('#new-bar .widget.expanded a')
-		.click(function() { hideItemNewBar(); return false; })
-	
-	var newButtons = $('#new-bar .buttons');
-	newButtons.find('a.new.text')
-		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'text'); return false; })
-	newButtons.find('a.new.check')
-		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'check'); return false; })
-	newButtons.find('a.new.note')
-		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'note'); return false; })
-	newButtons.find('a.new.priority')
-		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'priority'); return false; })
-	newButtons.find('a.new.tag')
-		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'tag'); return false; })
-	newButtons.find('a.new.time')
-		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'time'); return false; })
-	newButtons.find('a.new.pile-ref')
-		.click(function() { nodeItemCreate($(this).closest('.item_for_node'), 'pile-ref'); return false; })
 });
 
 

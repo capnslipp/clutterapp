@@ -9,13 +9,14 @@ class Prop < ActiveRecord::Base
   
   
   def self::class_from_type(type)
-    if type.instance_of?(Class) && type.superclass == Prop
-      type
-    else
+    unless type.instance_of?(Class)
       type = type.to_s.underscore.classify
       type << 'Prop' unless type =~ /Prop$/
       type = type.constantize
     end
+    
+    raise %{type "#{type}" must be a subclass of Prop and not "Prop" itself (empty string passed in?)} unless type.superclass == Prop
+    type
   end
   
   def self::to_s(format = :default)
@@ -60,11 +61,7 @@ class Prop < ActiveRecord::Base
   end
   
   def increment_node_version
-    unless node.nil?
-      # independent of the current instance and hopefully leaner and safer, too
-      Node::increment_counter :version, node.id
-      node.after_prop_save
-    end
+    node.before_prop_save unless node.nil?
   end
   
   

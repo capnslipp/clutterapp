@@ -35,7 +35,7 @@ class NodeCell < Cell::Base
       @check = @node.children.typed(:check).first
     end
     
-    render :layout => 'item'
+    render :layout => 'show'
   end
   
   
@@ -47,25 +47,24 @@ class NodeCell < Cell::Base
   end
   
   
-  # this new action works like "show" because the node has already been created at this point
   def new
     logger.prefixed self.class.to_s, :light_blue, "new"
     
     @pile = @opts[:pile]
     @node = @opts[:node]
     
-    #@node = Node.new(:prop => new_prop)
-    
-    render :view => 'edit', :layout => 'item'
+    render :layout => 'new'
   end
   
   
-  #def create
-  #  parent = Node.find @opts[:parent_id]
-  #  @node = parent.create_child :prop => Prop.rand
-  #  
-  #  @children = []
-  #end
+  def create
+    logger.prefixed self.class.to_s, :light_blue, "update"
+    
+    @pile = @opts[:pile]
+    @node = @opts[:node]
+    
+    render :view => 'show', :layout => 'show'
+  end
   
   
   def edit

@@ -1,10 +1,12 @@
 class Node < ActiveRecord::Base
   acts_as_nested_set :scope => :pile, :dependent => :destroy
   
+  attr_delta :version
+  
   # must be specified first (at least before any associations)
-  after_save :increment_version
-  before_move :increment_parent_version
-  after_move :increment_version
+  #before_update :increment_version
+  #before_move :increment_parent_version
+  #after_move :increment_version # necessary?
   
   belongs_to :prop, :polymorphic => true, :autosave => true
   accepts_nested_attributes_for :prop
@@ -33,11 +35,11 @@ class Node < ActiveRecord::Base
   
   
   def self::rand_new
-    self::new :prop => Prop.rand
+    self.new :prop => Prop.rand
   end
   
   def create_rand_child
-    sellf.chilren.create!(:prop => Prop.rand)
+    self.chilren.create!(:prop => Prop.rand)
   end
   
   def create_rand_descendant
@@ -45,12 +47,12 @@ class Node < ActiveRecord::Base
   end
   
   
-  def after_prop_save
+  def before_prop_save
     increment_version
   end
   
   def after_child_destroy
-    increment_version
+    increment_version!
   end
   
   
@@ -62,8 +64,13 @@ protected
   end
   
   def increment_version
-    Node::increment_counter(:version, self.id)
+    version_delta = 1
     increment_parent_version
+  end
+  
+  def increment_version!
+    increment_version
+    save!
   end
   
   def increment_parent_version

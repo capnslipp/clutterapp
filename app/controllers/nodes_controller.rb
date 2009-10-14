@@ -19,19 +19,46 @@ class NodesController < ApplicationController
   end
   
   
-  # POST /nodes
-  def create
-    node_creation_args = params[:node] || {}
-    unless params[:type].nil?
-      filler_prop = Prop.class_from_type(params[:type]).filler_new
-      node_creation_args.update( :prop => filler_prop )
+  # GET /nodes/new
+  def new
+    if params[:node]
+      node_attrs = params[:node]
+    else
+      node_attrs = {}
+      raise 'type param is required' if params[:type].nil?
+      prop_class = Prop.class_from_type(params[:type])
+      node_attrs[:prop] = prop_class.filler_new
     end
     
     @parent = Node.find(params[:parent_id])
-    @node = @parent.children.create!(node_creation_args)
+    node_attrs.merge!(:pile => @parent.pile)
+    @node = @parent.children.build(node_attrs)
+    #@node.prop.node = @node # reference the prop back to it's node
     
     if request.xhr?
       return render :inline => render_cell(cell_for_node(@node), :new, :node => @node)
+    end
+    
+    render :nothing => true, :status => 418
+  end
+  
+  
+  # POST /nodes
+  def create
+    node_attrs = params[:node] || {}
+    prop_class = Prop.class_from_type(params[:type])
+    node_attrs[:prop] = prop_class.new(node_attrs.delete(:prop))
+    
+    node_attrs[:pile] = Pile.find(params[:pile_id])
+    
+    @parent = Node.find(params[:parent_id])
+    @node = @parent.children.build(node_attrs)
+    #@node.prop.node = @node # reference the prop back to it's node
+    
+    @node.save!
+    
+    if request.xhr?
+      return render :inline => render_cell(cell_for_node(@node), :create, :node => @node)
     end
     
     render :nothing => true, :status => 418
@@ -78,9 +105,11 @@ class NodesController < ApplicationController
     else
       @pile = @pile_owner.piles.find(params[:pile_id])
       @node = @pile.nodes.find(params[:id])
-      @prop = @node.prop
       
-      if @node.update_attributes(params[:node])
+      @node.update_attributes(params[:node])
+      @node.prop.update_attributes(params[:node][:prop_attributes]) # Node's "accepts_nested_attributes_for :prop" seems not to be working
+      
+      if @node.save
         if request.xhr?
           return render :inline => render_cell(cell_for_node(@node), :update, :node => @node)
         end
