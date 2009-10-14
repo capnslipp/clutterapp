@@ -9,7 +9,7 @@ class SessionsControllerTest < ActionController::TestCase
   # Then, you can remove it from this and the units test.
   include AuthenticatedTestHelper
   
-  fixtures :users
+  #fixtures :users # using factory_girl now
   
   def test_should_login_and_redirect
     post :create, :login => 'quentin', :password => 'monkey'

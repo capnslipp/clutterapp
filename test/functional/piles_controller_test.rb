@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class PilesControllerTest < ActionController::TestCase
-  fixtures :users
+  #fixtures :users # using factory_girl now
   
   
   #test "should get index" do

@@ -4,7 +4,7 @@ class UserTest < ActiveSupport::TestCase
   # Be sure to include AuthenticatedTestHelper in test/test_helper.rb instead.
   # Then, you can remove it from this and the functional test.
   include AuthenticatedTestHelper
-  fixtures :users
+  #fixtures :users # using factory_girl now
 
   def test_should_create_user
     assert_difference 'User.count' do
@@ -53,7 +53,7 @@ class UserTest < ActiveSupport::TestCase
   #end
 
   def test_should_authenticate_user
-    assert_equal users(:one), User.authenticate('quentin', 'monkey')
+    assert_equal Factory.create(:user, :login => 'alpha1', :password => 'secret'), User.authenticate('alpha1', 'monkey')
   end
 
   def test_should_set_remember_token

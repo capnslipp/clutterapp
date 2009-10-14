@@ -9,7 +9,7 @@ class UsersControllerTest < ActionController::TestCase
   # Then, you can remove it from this and the units test.
   include AuthenticatedTestHelper
   
-  fixtures :users
+  #fixtures :users # using factory_girl now
   
   def test_should_allow_signup
     assert_difference 'User.count' do
