@@ -3,7 +3,7 @@ class PileRefProp < Prop
   
   belongs_to :ref_pile, :class_name => Pile.to_s
   
-  validates_presence_of :node
+  validates_presence_of :node, :on => :update # less stringent when the Prop is new in order to prevent circular dependencies
   validates_presence_of :ref_pile
   
   

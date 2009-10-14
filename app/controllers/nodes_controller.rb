@@ -47,11 +47,13 @@ class NodesController < ApplicationController
   def create
     node_attrs = params[:node] || {}
     prop_class = Prop.class_from_type(params[:type])
-    node_attrs[:prop] = prop_class.new(node_attrs.delete(:prop))
+    node_attrs[:prop] = prop_class.new(node_attrs.delete(:prop_attributes))
     
     node_attrs[:pile] = Pile.find(params[:pile_id])
     
     @parent = Node.find(params[:parent_id])
+    logger.prefixed 'node_attrs[:prop]', :light_yellow, node_attrs[:prop].inspect
+    logger.prefixed 'node_attrs[:pile]', :light_yellow, node_attrs[:pile].inspect
     @node = @parent.children.build(node_attrs)
     #@node.prop.node = @node # reference the prop back to it's node
     
