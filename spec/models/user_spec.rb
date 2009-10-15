@@ -106,13 +106,13 @@ describe User do
   end
   
   
-  it "should end up creating 2 users and 2 additional piles" do
+  it "should create 2 Piles, when creating 2 Users" do
     assert_difference 'Pile.count', +2 do
       u1, u2 = 2.times { Factory.create(:user) }
     end
   end
   
-  it "should end up creating 2 users, each having 1 pile apiece" do
+  it "should create 1 Pile for each new user, when creating 2 Users" do
     u1, u2 = Factory.create(:user), Factory.create(:user)
     
     u1.piles.count.should == 1
@@ -120,13 +120,13 @@ describe User do
     Pile.find_all_by_owner_id(u2.id).count.should == 1
   end
   
-  it "should end up creating 2 users and 2 additional nodes" do
+  it "should create 2 Nodes, when creating 2 Users" do
     assert_difference 'Node.count', +2 do
       u1, u2 = 2.times { Factory.create(:user) }
     end
   end
   
-  it "should end up creating 2 users, each having 1 node apiece" do
+  it "should create 1 Node for each new User, when creating 2 Users" do
     u1, u2 = Factory.create(:user), Factory.create(:user)
     
     Node.all.select {|n| n.root.pile.owner == u1 }.count.should == 1
