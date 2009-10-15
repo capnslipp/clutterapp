@@ -130,7 +130,7 @@
 
 
 
-.front #schpiel { margin: 0 auto; margin-top: 12px; margin-bottom: 16px; width: <%= feature_box_screenshot_img_dimens[:width] + feature_box_screenshot_img_insets[:left] + feature_box_screenshot_img_insets[:right] %>px; }
+.front #schpiel { margin: 0 auto; margin-top: 12px; margin-bottom: 32px; width: <%= feature_box_screenshot_img_dimens[:width] + feature_box_screenshot_img_insets[:left] + feature_box_screenshot_img_insets[:right] %>px; }
 
 .front #schpiel h3 { font-size: 24px; line-height: 1.5em; color: <%= wash_color %>; }
 .front #schpiel h4 { font-size: 16px; line-height: 1.5em; color: <%= text_color %>; font-weight: normal; }
@@ -156,7 +156,6 @@
 	position: relative; z-index: 10;
 	display: block;
 	/* no horizontal padding, or it will throw off the 33%! */
-	margin-top: -24px;
 	<%= [:left, :right].collect {|d| "margin-#{d.to_s}: #{-feature_box_screenshot_img_insets[d]}px;" }.join(' ') %>; /* to remove the built-in drop shadow spacing */
 }
 .front #features .feature { display: block; width: 33%; float: left; /* no horizontal margin, or it will throw off the 33%! */ }
