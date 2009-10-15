@@ -1,10 +1,16 @@
 require 'spec_helper'
 
 describe User do
-  it "should create user" do
+  
+  before(:each) do
+    @user = Factory.create(:user)
+  end
+  
+  
+  it "should be created" do
     assert_difference 'User.count' do
-      user = Factory.create(:user)
-      assert !user.new_record?, "#{user.errors.full_messages.to_sentence}"
+      u = Factory.create(:user)
+      u.new_record?.should == false
     end
   end
   
@@ -62,47 +68,42 @@ describe User do
   
   
   it "should set remember token" do
-    u = Factory.create(:user)
-    u.remember_me
-    assert_not_nil u.remember_token
-    assert_not_nil u.remember_token_expires_at
+    @user.remember_me
+    assert_not_nil @user.remember_token
+    assert_not_nil @user.remember_token_expires_at
   end
   
   it "should unset remember token" do
-    u = Factory.create(:user)
-    u.remember_me
-    assert_not_nil u.remember_token
-    u.forget_me
-    assert_nil u.remember_token
+    @user.remember_me
+    assert_not_nil @user.remember_token
+    @user.forget_me
+    assert_nil @user.remember_token
   end
   
   it "should remember me for one week" do
-    u = Factory.create(:user)
     before = 1.week.from_now.utc
-    u.remember_me_for 1.week
+    @user.remember_me_for 1.week
     after = 1.week.from_now.utc
-    assert_not_nil u.remember_token
-    assert_not_nil u.remember_token_expires_at
-    assert u.remember_token_expires_at.between?(before, after)
+    assert_not_nil @user.remember_token
+    assert_not_nil @user.remember_token_expires_at
+    assert @user.remember_token_expires_at.between?(before, after)
   end
   
   it "should remember me until one week" do
-    u = Factory.create(:user)
     time = 1.week.from_now.utc
-    u.remember_me_until time
-    assert_not_nil u.remember_token
-    assert_not_nil u.remember_token_expires_at
-    assert_equal u.remember_token_expires_at, time
+    @user.remember_me_until time
+    assert_not_nil @user.remember_token
+    assert_not_nil @user.remember_token_expires_at
+    assert_equal @user.remember_token_expires_at, time
   end
   
   it "should remember me default two weeks" do
-    u = Factory.create(:user)
     before = 2.weeks.from_now.utc
-    u.remember_me
+    @user.remember_me
     after = 2.weeks.from_now.utc
-    assert_not_nil u.remember_token
-    assert_not_nil u.remember_token_expires_at
-    assert u.remember_token_expires_at.between?(before, after)
+    assert_not_nil @user.remember_token
+    assert_not_nil @user.remember_token_expires_at
+    assert @user.remember_token_expires_at.between?(before, after)
   end
   
   
@@ -132,4 +133,5 @@ describe User do
     Node.all.select {|n| n.root.pile.owner == u1 }.count.should == 1
     Node.all.select {|n| n.root.pile.owner == u2 }.count.should == 1
   end
+  
 end
