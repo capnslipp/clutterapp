@@ -54,10 +54,17 @@ defaults: &snaotn
   host: localhost
   timeout: 5000
 
+defaults: &stc
+  adapter: postgres
+  encoding: unicode
+  username: orgclut2
+  password: _fill_in_
+  pool: 5
+
 
 # Environments
 
-development:
+dev:
   database: orgclut2_development
   <<: *silver-delicious-built-in
 
@@ -66,6 +73,10 @@ test:
   database: orgclut2_test
   <<: *silver-delicious-built-in
 
-production:
+stag:
   database: orgclut2
   <<: *snaotn
+
+prod:
+  database: orgclut2
+  <<: *stc

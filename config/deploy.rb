@@ -23,7 +23,7 @@ set :deploy_to, "/var/www/#{application}"
 set :user, "rails" # SSH username, optional if the same as the dev computer username
 set :use_sudo, false
 
-set :domain, "orgclut2.slippyd.com"
+set :domain, "prod.orgclut.com"
 server domain, :app, :web
 role :db, domain, :primary => true
 
