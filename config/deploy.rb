@@ -32,7 +32,7 @@ role :db, domain, :primary => true
 #	Subversion
 #############################################################
 
-set :repository,  "git@192.168.0.2:orgclut2.git"
+set :repository,  "git@snaotn.6bitt.com:orgclut2.git"
 set :scm, :git
 #set :scm_username, "rails"
 #ssh_options[:forward_agent] = true # needed?
