@@ -55,7 +55,7 @@ defaults: &snaotn
   timeout: 5000
 
 defaults: &stc
-  adapter: pg
+  adapter: postgresql
   encoding: unicode
   username: orgclut2
   password: _fill_in_
