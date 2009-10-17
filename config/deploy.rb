@@ -9,6 +9,8 @@ set :application, "orgclut2"
 # via the :deploy_to variable:
 set :deploy_to, "/var/www/#{application}"
 
+set :rails_env, "prod"
+
 
 #############################################################
 #	Settings
@@ -23,7 +25,7 @@ set :deploy_to, "/var/www/#{application}"
 set :user, "rails" # SSH username, optional if the same as the dev computer username
 set :use_sudo, false
 
-set :domain, "orgclut2.slippyd.com"
+set :domain, "prod.orgclut.com"
 server domain, :app, :web
 role :db, domain, :primary => true
 
@@ -32,7 +34,7 @@ role :db, domain, :primary => true
 #	Subversion
 #############################################################
 
-set :repository,  "git@192.168.0.2:orgclut2.git"
+set :repository,  "git@snaotn.6bitt.com:orgclut2.git"
 set :scm, :git
 #set :scm_username, "rails"
 #ssh_options[:forward_agent] = true # needed?
