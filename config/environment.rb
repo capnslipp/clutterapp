@@ -28,7 +28,7 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
-  config.gem 'slippyd-colorist', :lib => false, :version => '>=0.0.5'
+  config.gem 'slippyd-colorist', :lib => 'colorist', :version => '>=0.0.5', :source => 'http://gemcutter.org'
   
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
@@ -94,7 +94,9 @@ Rails::Initializer.run do |config|
   config.after_initialize do
     Cell::Base.add_view_path 'app/views'
     
-    require 'logger_extension' # extends ActiveSupport::BufferedLogger
+    require 'logger_prefix_extension' # extends ActiveSupport::BufferedLogger with prefix(), prefixed()
+    require 'active_record_nice_id_extension' # extends ActiveRecord::Base with nice_id()
+    require 'hash_nice_to_s_extension' # extends Hash with to_s(:nice)
   end
   
 end
