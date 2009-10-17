@@ -3,11 +3,6 @@ require 'spec_helper'
 describe UsersController do
   describe "routing" do
     
-    before(:each) do
-      @user = Factory.create(:user)
-    end
-    
-    
     #it "recognizes and generates #index" do
     #  { :get => "/users" }.should route_to(:controller => 'users', :action => 'index')
     #end
@@ -18,12 +13,12 @@ describe UsersController do
     
     it "recognizes and generates #show" do
       u = Factory.create(:user)
-      { :get => "/#{@user.login}" }.should route_to(:controller => 'users', :action => 'show', :id => @user.to_param)
+      { :get => "/test-user" }.should route_to(:controller => 'users', :action => 'show', :id => 'test-user')
     end
     
     it "recognizes and generates #edit" do
       u = Factory.create(:user)
-      { :get => "/#{@user.login}/edit" }.should route_to(:controller => 'users', :action => 'edit', :id => @user.to_param)
+      { :get => "/test-user/edit" }.should route_to(:controller => 'users', :action => 'edit', :id => 'test-user')
     end
     
     it "recognizes and generates #create" do
@@ -32,12 +27,12 @@ describe UsersController do
     
     it "recognizes and generates #update" do
       u = Factory.create(:user)
-      { :put => "/#{@user.login}" }.should route_to(:controller => 'users', :action => 'update', :id => @user.to_param)
+      { :put => "/test-user" }.should route_to(:controller => 'users', :action => 'update', :id => 'test-user')
     end
     
     it "recognizes and generates #destroy" do
       u = Factory.create(:user)
-      { :delete => "/#{@user.login}" }.should route_to(:controller => 'users', :action => 'destroy', :id => @user.to_param)
+      { :delete => "/test-user" }.should route_to(:controller => 'users', :action => 'destroy', :id => 'test-user')
     end
     
   end
