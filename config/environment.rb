@@ -3,7 +3,14 @@
 # Uncomment below to force Rails into production mode when
 # you don't control web/app server and can't set it the proper way
 # ENV['RAILS_ENV'] ||= 'production'
-env_replace = {'development' => 'dev', 'production' => 'prod'};
+
+# Trying out using essentially aliases for long environment names.
+# @todo: If this works without a hitch, blog about it.
+env_replace = {
+  'dev' => 'development',
+  'stag' => 'staging',
+  'prod' => 'prodution'
+};
 ENV['RAILS_ENV'] = env_replace[ENV['RAILS_ENV']] if env_replace.has_key?(ENV['RAILS_ENV'])
 
 # Specifies gem version of Rails to use when vendor/rails is not present
