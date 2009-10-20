@@ -4,7 +4,9 @@ describe UsersController do
   describe "routing" do
     
     #it "recognizes and generates #index" do
+    #  expected_path = '/users'
     #  { :get => "/users" }.should route_to(:controller => 'users', :action => 'index')
+    #  users_path().should == expected_path
     #end
     
     it "recognizes and generates #new" do
