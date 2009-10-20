@@ -3,12 +3,6 @@ require 'spec_helper'
 describe PilesController do
   describe "routing" do
     
-    before(:each) do
-      @user = Factory.create(:user)
-      @pile = @user.default_pile
-    end
-    
-    
     it "recognizes and generates #index" do
       expected_path = '/test-user/piles'
       { :get => expected_path }.should route_to(:controller => 'piles', :action => 'index', :user_id => 'test-user')
