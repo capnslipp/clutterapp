@@ -10,31 +10,45 @@ describe PilesController do
     
     
     it "recognizes and generates #index" do
-      { :get => "/test-user/piles" }.should route_to(:controller => 'piles', :action => 'index', :user_id => 'test-user')
+      expected_path = '/test-user/piles'
+      { :get => expected_path }.should route_to(:controller => 'piles', :action => 'index', :user_id => 'test-user')
+      user_piles_path(:user_id => 'test-user').should == expected_path
     end
     
     it "recognizes and generates #new" do
-      { :get => "/test-user/piles/new" }.should route_to(:controller => 'piles', :action => 'new', :user_id => 'test-user')
+      expected_path = '/test-user/piles/new'
+      { :get => expected_path }.should route_to(:controller => 'piles', :action => 'new', :user_id => 'test-user')
+      new_user_pile_path(:user_id => 'test-user').should == expected_path
     end
     
     it "recognizes and generates #show" do
-      { :get => "/test-user/piles/1" }.should route_to(:controller => 'piles', :action => 'show', :user_id => 'test-user', :id => '1')
+      expected_path = '/test-user/piles/1'
+      { :get => expected_path }.should route_to(:controller => 'piles', :action => 'show', :user_id => 'test-user', :id => '1')
+      user_pile_path(:id => 1, :user_id => 'test-user').should == expected_path
     end
     
     it "recognizes and generates #edit" do
-      { :get => "/test-user/piles/1/edit" }.should route_to(:controller => 'piles', :action => 'edit', :user_id => 'test-user', :id => '1')
+      expected_path = '/test-user/piles/1/edit'
+      { :get => expected_path }.should route_to(:controller => 'piles', :action => 'edit', :user_id => 'test-user', :id => '1')
+      edit_user_pile_path(:id => 1, :user_id => 'test-user').should == expected_path
     end
     
     it "recognizes and generates #create" do
-      { :post => "/test-user/piles" }.should route_to(:controller => 'piles', :action => 'create', :user_id => 'test-user')
+      expected_path = '/test-user/piles'
+      { :post => expected_path }.should route_to(:controller => 'piles', :action => 'create', :user_id => 'test-user')
+      user_piles_path(:user_id => 'test-user').should == expected_path
     end
     
     it "recognizes and generates #update" do
-      { :put => "/test-user/piles/1" }.should route_to(:controller => 'piles', :action => 'update', :user_id => 'test-user', :id => '1')
+      expected_path = '/test-user/piles/1'
+      { :put => expected_path }.should route_to(:controller => 'piles', :action => 'update', :user_id => 'test-user', :id => '1')
+      user_pile_path(:id => 1, :user_id => 'test-user').should == expected_path
     end
     
     it "recognizes and generates #destroy" do
-      { :delete => "/test-user/piles/1" }.should route_to(:controller => 'piles', :action => 'destroy', :user_id => 'test-user', :id => '1')
+      expected_path = '/test-user/piles/1'
+      { :delete => expected_path }.should route_to(:controller => 'piles', :action => 'destroy', :user_id => 'test-user', :id => '1')
+      user_pile_path(:id => 1, :user_id => 'test-user').should == expected_path
     end
     
   end
