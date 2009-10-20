@@ -1,8 +1,6 @@
 class PilesController < ApplicationController
   before_filter :authorize
   
-  include RouteHelper
-  
   
   # GET /piles
   # GET /piles.xml

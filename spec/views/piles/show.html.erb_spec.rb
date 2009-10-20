@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe "/piles/show.html.erb" do
   include PilesHelper
-  include RouteHelper
   
   
   before(:each) do

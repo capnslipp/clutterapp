@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe "/piles/edit.html.erb" do
   include PilesHelper
-  include RouteHelper
   
   
   before(:each) do
@@ -14,7 +13,7 @@ describe "/piles/edit.html.erb" do
   it "renders the edit pile form" do
     render
     
-    response.should have_tag("form[action=#{pile_path(@pile)}][method=post]") do
+    response.should have_tag("form[action=#{user_pile_path(:id => @pile, :user_id => @pile.owner)}][method=post]") do
     end
   end
   

@@ -1,11 +1,11 @@
 <h1>New pile</h1>
 
-<% form_for @pile, :url => piles_path(@pile) do |f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.submit 'Create' %>
-  </p>
+<% form_for @pile, :url => user_piles_path(@pile.owner) do |f| %>
+	<%= f.error_messages %>
+	
+	<p>
+		<%= f.submit 'Create' %>
+	</p>
 <% end %>
 
-<%#= link_to 'Back', piles_path %>
+<%= link_to 'Back', user_piles_path(:user_id => @pile.owner) %>

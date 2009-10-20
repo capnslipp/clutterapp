@@ -1,12 +1,12 @@
 <h1>Editing pile</h1>
 
-<% form_for(@pile) do |f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.submit 'Update' %>
-  </p>
+<% form_for @pile, :url => user_pile_path(:id => @pile, :user_id => @pile.owner) do |f| %>
+	<%= f.error_messages %>
+	
+	<p>
+		<%= f.submit 'Update' %>
+	</p>
 <% end %>
 
-<%= link_to 'Show', @pile %> |
-<%= link_to 'Back', piles_path(@pile) %>
+<%= link_to 'Show', user_pile_path(:id => @pile, :user_id => @pile.owner) %> |
+<%= link_to 'Back', user_piles_path(:user_id => @pile.owner) %>
