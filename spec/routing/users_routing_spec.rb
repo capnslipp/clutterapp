@@ -8,31 +8,45 @@ describe UsersController do
     #end
     
     it "recognizes and generates #new" do
-      { :get => "/sup" }.should route_to(:controller => 'users', :action => 'new')
+      expected_path = '/sup'
+      { :get => expected_path }.should route_to(:controller => 'users', :action => 'new')
+      new_user_path().should == expected_path
+    end
+    
+    it "recognizes and generates #new with an invite_token" do
+      expected_path = '/sup?invite_token=a'
+      { :get => expected_path }.should route_to(:controller => 'users', :action => 'new', :invite_token => 'a')
+      new_user_path(:invite_token => 'a').should == expected_path
     end
     
     it "recognizes and generates #show" do
-      u = Factory.create(:user)
-      { :get => "/test-user" }.should route_to(:controller => 'users', :action => 'show', :id => 'test-user')
+      expected_path = '/test-user'
+      { :get => expected_path }.should route_to(:controller => 'users', :action => 'show', :id => 'test-user')
+      user_path('test-user').should == expected_path
     end
     
     it "recognizes and generates #edit" do
-      u = Factory.create(:user)
-      { :get => "/test-user/edit" }.should route_to(:controller => 'users', :action => 'edit', :id => 'test-user')
+      expected_path = '/test-user/edit'
+      { :get => expected_path }.should route_to(:controller => 'users', :action => 'edit', :id => 'test-user')
+      edit_user_path('test-user').should == expected_path
     end
     
     it "recognizes and generates #create" do
-      { :post => "/reg" }.should route_to(:controller => 'users', :action => 'create')
+      expected_path = '/reg'
+      { :post => expected_path }.should route_to(:controller => 'users', :action => 'create')
+      users_path().should == expected_path
     end
     
     it "recognizes and generates #update" do
-      u = Factory.create(:user)
-      { :put => "/test-user" }.should route_to(:controller => 'users', :action => 'update', :id => 'test-user')
+      expected_path = '/test-user'
+      { :put => expected_path }.should route_to(:controller => 'users', :action => 'update', :id => 'test-user')
+      user_path('test-user').should == expected_path
     end
     
     it "recognizes and generates #destroy" do
-      u = Factory.create(:user)
-      { :delete => "/test-user" }.should route_to(:controller => 'users', :action => 'destroy', :id => 'test-user')
+      expected_path = '/test-user'
+      { :delete => expected_path }.should route_to(:controller => 'users', :action => 'destroy', :id => 'test-user')
+      user_path('test-user').should == expected_path
     end
     
   end
