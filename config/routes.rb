@@ -8,8 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session, :as => 'sess'
   
   map.users '/reg',                       :controller => 'users',       :action => 'create',  :conditions => {:method => :post}
-  map.new_user  '/sup',                   :controller => 'users',       :action => 'new',     :conditions => {:method => :get}
-  map.new_user '/sup/:invite_token',      :controller => 'users',       :action => 'new',     :conditions => {:method => :get}
+  map.new_user '/sup',                    :controller => 'users',       :action => 'new',     :conditions => {:method => :get}
   
   map.resources :invites, :as => 'inv'
   
