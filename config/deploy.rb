@@ -9,7 +9,7 @@ set :application, "orgclut2"
 # via the :deploy_to variable:
 set :deploy_to, "/var/www/#{application}"
 
-set :rails_env, "prod"
+set :rails_env, "production"
 
 
 #############################################################

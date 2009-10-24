@@ -64,7 +64,7 @@ defaults: &stc
 
 # Environments
 
-dev:
+development:
   database: orgclut2_development
   <<: *silver-delicious-built-in
 
@@ -73,10 +73,10 @@ test:
   database: orgclut2_test
   <<: *silver-delicious-built-in
 
-stag:
+staging:
   database: orgclut2
   <<: *snaotn
 
-prod:
+production:
   database: orgclut2
   <<: *stc
