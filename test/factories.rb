@@ -11,7 +11,7 @@ end
 
 Factory.define :user do |f|
   f.sequence(:login) { |u_n| "user_#{u_n}" }
-  f.password "p4ssword"
+  f.password 'p4ssword'
   f.password_confirmation { |u| u.password }
   f.sequence(:email) { |u_n| "user_#{u_n}@example.com" }
   f.association :invite
@@ -31,4 +31,5 @@ end
 
 
 Factory.define :text_prop do |f|
+  f.text 'test text'
 end
