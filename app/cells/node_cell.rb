@@ -1,6 +1,5 @@
 class NodeCell < Cell::Base
   helper :cell
-  helper :route
   
   
   # not getting cached for some reason
