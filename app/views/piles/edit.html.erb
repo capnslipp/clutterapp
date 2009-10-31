@@ -1,6 +1,6 @@
 <h1>Editing pile</h1>
 
-<% form_for(@pile) do |f| %>
+<% form_for @pile, :url => polymorphic_path([@pile_owner, @pile]) do |f| %>
   <%= f.error_messages %>
 
   <p>
@@ -8,5 +8,5 @@
   </p>
 <% end %>
 
-<%= link_to 'Show', @pile %> |
-<%= link_to 'Back', piles_path(@pile) %>
+<%= link_to 'Show', polymorphic_path([@pile_owner, @pile]) %> |
+<%= link_to 'Back', polymorphic_path([@pile_owner, :piles]) %>

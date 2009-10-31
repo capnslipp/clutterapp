@@ -52,17 +52,45 @@ class PilesController < ApplicationController
   # GET /piles/new
   # GET /piles/new.xml
   def new
-    @pile = current_user.piles.build
+    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
     
-    respond_to do |format|
-      format.html # new.html.erb
+    if @pile_owner.nil?
+      flash[:warning] = "No such user exists."
+      redirect_to user_url(current_user)
+      
+    elsif @pile_owner != current_user
+      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
+      redirect_to user_url(current_user)
+      
+    else
+      @pile = current_user.piles.build
+      
+      respond_to do |format|
+        format.html # new.html.erb
+      end
     end
   end
   
   
   # GET /piles/1/edit
   def edit
-    @pile = Pile.find(params[:id])
+    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
+    
+    if @pile_owner.nil?
+      flash[:warning] = "No such user exists."
+      redirect_to user_url(current_user)
+      
+    elsif @pile_owner != current_user
+      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
+      redirect_to user_url(current_user)
+      
+    else
+      @pile = @pile_owner.piles.find(params[:id])
+      
+      respond_to do |format|
+        format.html # edit.html.erb
+      end
+    end
   end
   
   
