@@ -1,5 +1,5 @@
 <div class="edit priority prop <%= 'badge' if @node.prop.badged? -%>">
-	<%- form_for @node, :url => node_path(@node), :html => {:method => 'put'} do |node_form| -%>
+	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node]), :html => {:method => 'put'} do |node_form| -%>
 	
 		<%- node_form.fields_for :prop do |prop_form| -%>
 			<%= prop_form.text_field :priority, :maxlength => 1, :class => 'field' %>

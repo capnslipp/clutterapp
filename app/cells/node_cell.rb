@@ -5,6 +5,7 @@ class NodeCell < Cell::Base
   # not getting cached for some reason
   def cache_version
     {
+      :owner_id => @opts[:node].pile.owner.id,
       :pile_id => @opts[:node].pile.id,
       :node_id => @opts[:node].id,
       :version => @opts[:node].version
@@ -15,10 +16,7 @@ class NodeCell < Cell::Base
   def show
     logger.prefixed self.class.to_s, :light_blue, "show"
     
-    #@pile = @opts[:pile]
-    #raise ArgumentError, ":pile option is required by NodeCell#show" if @pile.nil?
     @node = @opts[:node]
-    raise ArgumentError, ":node option is required by NodeCell#show" if @node.nil?
     
     #@children = @node.children || [] # unused
     
@@ -40,7 +38,6 @@ class NodeCell < Cell::Base
   
   def badge
     @node = @opts[:node]
-    raise ArgumentError, ":node option is required by NodeCell#show" if @node.nil?
     
     render :layout => nil
   end
@@ -49,7 +46,6 @@ class NodeCell < Cell::Base
   def new
     logger.prefixed self.class.to_s, :light_blue, "new"
     
-    @pile = @opts[:pile]
     @node = @opts[:node]
     
     render :layout => 'new'
@@ -59,7 +55,6 @@ class NodeCell < Cell::Base
   def create
     logger.prefixed self.class.to_s, :light_blue, "update"
     
-    @pile = @opts[:pile]
     @node = @opts[:node]
     
     render :view => 'show', :layout => 'show'
@@ -69,7 +64,6 @@ class NodeCell < Cell::Base
   def edit
     logger.prefixed self.class.to_s, :light_blue, "edit"
     
-    @pile = @opts[:pile]
     @node = @opts[:node]
     
     render :layout => nil
@@ -79,7 +73,6 @@ class NodeCell < Cell::Base
   def update
     logger.prefixed self.class.to_s, :light_blue, "update"
     
-    @pile = @opts[:pile]
     @node = @opts[:node]
     
     render :view => 'show', :layout => nil

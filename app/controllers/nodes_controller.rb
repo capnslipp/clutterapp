@@ -4,17 +4,19 @@ class NodesController < ApplicationController
   layout nil
   
   before_filter :authorize
+  before_filter :have_owner
+  before_filter :have_pile
   
   
   # PUT /items/1/update_check_prop_checked
   def update_check_prop_checked
     logger.prefixed 'update_check_prop_checked', :light_green, 'params: ' + params.inspect
-    node = Node.find(params[:id])
-    prop = node.prop
-    prop.checked = params[:checked]
-    prop.save!
+    @node = active_pile.nodes.find(params[:id])
+    @prop = @node.prop
+    @prop.checked = params[:checked]
+    @prop.save!
     render :update do |page|
-      page.call 'updateCheckPropField', "check_prop_#{prop.id}", prop.checked?
+      page.call 'updateCheckPropField', "check_prop_#{@prop.id}", @prop.checked?
     end
   end
   
@@ -30,16 +32,16 @@ class NodesController < ApplicationController
       node_attrs[:prop] = prop_class.filler_new
     end
     
-    @parent = Node.find(params[:parent_id])
+    @parent = active_pile.nodes.find(params[:parent_id])
     node_attrs.merge!(:pile => @parent.pile)
     @node = @parent.children.build(node_attrs)
     #@node.prop.node = @node # reference the prop back to it's node
     
     if request.xhr?
-      return render :inline => render_cell(cell_for_node(@node), :new, :node => @node)
+      render :inline => render_cell(cell_for_node(@node), :new, :node => @node)
+    else
+      render :nothing => true, :status => :forbidden
     end
-    
-    render :nothing => true, :status => 418
   end
   
   
@@ -51,73 +53,47 @@ class NodesController < ApplicationController
     
     node_attrs[:pile] = Pile.find(params[:pile_id])
     
-    @parent = Node.find(params[:parent_id])
-    logger.prefixed 'node_attrs[:prop]', :light_yellow, node_attrs[:prop].inspect
-    logger.prefixed 'node_attrs[:pile]', :light_yellow, node_attrs[:pile].inspect
+    @parent = active_pile.nodes.find(params[:parent_id])
     @node = @parent.children.build(node_attrs)
     #@node.prop.node = @node # reference the prop back to it's node
     
     @node.save!
     
     if request.xhr?
-      return render :inline => render_cell(cell_for_node(@node), :create, :node => @node)
+      render :inline => render_cell(cell_for_node(@node), :create, :node => @node)
+    else
+      render :nothing => true, :status => :forbidden
     end
-    
-    render :nothing => true, :status => 418
   end
   
   
   # GET /nodes/1/edit
   def edit
-    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
+    @node = active_pile.nodes.find params[:id]
     
-    if @pile_owner.nil?
-      flash[:warning] = "No such user exists."
-      redirect_to user_url(current_user)
-      
-    elsif @pile_owner != current_user
-      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
-      redirect_to user_url(current_user)
-      
+    if request.xhr?
+      render :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
     else
-      @pile = @pile_owner.piles.find params[:pile_id]
-      @node = @pile.nodes.find params[:id]
-      
-      if request.xhr?
-        return render :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
-      end
-      
-      render :nothing => true, :status => 418
+      render :nothing => true, :status => :forbidden
     end
   end
   
   
   # PUT /nodes/1
   def update
-    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
+    @node = active_pile.nodes.find(params[:id])
     
-    if @pile_owner.nil?
-      flash[:warning] = "No such user exists."
-      redirect_to user_url(current_user)
-      
-    elsif @pile_owner != current_user
-      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
-      redirect_to user_url(current_user)
-      
-    else
-      @pile = @pile_owner.piles.find(params[:pile_id])
-      @node = @pile.nodes.find(params[:id])
-      
-      @node.update_attributes(params[:node])
-      @node.prop.update_attributes(params[:node][:prop_attributes]) # Node's "accepts_nested_attributes_for :prop" seems not to be working
-      
-      if @node.save
-        if request.xhr?
-          return render :inline => render_cell(cell_for_node(@node), :update, :node => @node)
-        end
+    @node.update_attributes(params[:node])
+    @node.prop.update_attributes(params[:node][:prop_attributes]) # Node's "accepts_nested_attributes_for :prop" seems not to be working
+    
+    if @node.save
+      if request.xhr?
+        render :inline => render_cell(cell_for_node(@node), :update, :node => @node)
+      else
+        render :nothing => true, :status => :forbidden
       end
-      
-      render :nothing => true, :status => 418
+    else
+      render :nothing => true, :status => :bad_request
     end
   end
   
@@ -126,7 +102,7 @@ class NodesController < ApplicationController
   def move
     dir = params[:dir].to_sym
     
-    @node = Node.find(params[:id])
+    @node = active_pile.nodes.find(params[:id])
     orig_ref_node = case dir
       when :up:   @node.left_sibling
       when :down: @node.right_sibling
@@ -141,7 +117,7 @@ class NodesController < ApplicationController
       when :out:  orig_ref_node.nil? || orig_ref_node.root?
       else        true
     end
-    return render :nothing => true , :status => 418 if cant_move
+    return render :nothing => true , :status => :bad_request if cant_move
     
     case dir
       when :up:   @node.move_to_left_of orig_ref_node
@@ -185,18 +161,16 @@ class NodesController < ApplicationController
   # DELETE /nodes/1
   # DELETE /nodes/1.xml
   def destroy
-    @node = Node.find(params[:id])
+    @node = active_pile.nodes.find(params[:id])
     orig_parent_node = @node.parent
-    orig_left_node = @node.left_sibling
-    orig_right_node = @node.right_sibling
     @node.destroy
     orig_parent_node.after_child_destroy
     
     if request.xhr?
-      return render :nothing => true, :status => :ok
+      render :nothing => true, :status => :accepted
+    else
+      render :nothing => true, :status => :bad_request
     end
-    
-    render :nothing => true , :status => 418
   end
   
 end

@@ -1,26 +1,16 @@
 class PilesController < ApplicationController
   before_filter :authorize
+  before_filter :have_owner
+  before_filter :have_pile, :only => [:show, :edit, :update, :destroy]
   
   
   # GET /piles
   # GET /piles.xml
   def index
-    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
+    @piles = active_owner.piles
     
-    if @pile_owner.nil?
-      flash[:warning] = "No such user exists."
-      redirect_to user_url(current_user)
-      
-    elsif @pile_owner != current_user
-      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
-      redirect_to user_url(current_user)
-      
-    else
-      @piles = @pile_owner.piles
-    
-      respond_to do |format|
-        format.html # index.html.erb
-      end
+    respond_to do |format|
+      format.html # index.html.erb
     end
   end
   
@@ -28,23 +18,10 @@ class PilesController < ApplicationController
   # GET /piles/1
   # GET /piles/1.xml
   def show
-    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
+    @pile = active_pile
     
-    if @pile_owner.nil?
-      flash[:warning] = "No such user exists."
-      redirect_to user_url(current_user)
-      
-    elsif @pile_owner != current_user
-      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
-      redirect_to user_url(current_user)
-      
-    else
-      @pile = @pile_owner.piles.find(params[:id])
-      @base_node = @pile.root_node
-      
-      respond_to do |format|
-        format.html # show.html.erb
-      end
+    respond_to do |format|
+      format.html # show.html.erb
     end
   end
   
@@ -52,44 +29,20 @@ class PilesController < ApplicationController
   # GET /piles/new
   # GET /piles/new.xml
   def new
-    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
+    @pile = active_owner.piles.build
     
-    if @pile_owner.nil?
-      flash[:warning] = "No such user exists."
-      redirect_to user_url(current_user)
-      
-    elsif @pile_owner != current_user
-      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
-      redirect_to user_url(current_user)
-      
-    else
-      @pile = current_user.piles.build
-      
-      respond_to do |format|
-        format.html # new.html.erb
-      end
+    respond_to do |format|
+      format.html # new.html.erb
     end
   end
   
   
   # GET /piles/1/edit
   def edit
-    @pile_owner = User.find_by_login(params[:user_id]) unless params[:user_id].nil?
+    @pile = active_owner.piles.find(params[:id])
     
-    if @pile_owner.nil?
-      flash[:warning] = "No such user exists."
-      redirect_to user_url(current_user)
-      
-    elsif @pile_owner != current_user
-      flash[:warning] = "You can't really see this pile since, well, it's not yours. Maybe someday though."
-      redirect_to user_url(current_user)
-      
-    else
-      @pile = @pile_owner.piles.find(params[:id])
-      
-      respond_to do |format|
-        format.html # edit.html.erb
-      end
+    respond_to do |format|
+      format.html # edit.html.erb
     end
   end
   
@@ -98,16 +51,18 @@ class PilesController < ApplicationController
   # POST /piles.xml
   def create
     pile_params = params[:pile] || {}
-    pile_params.update(:owner => current_user)
-    @pile = Pile.new(pile_params)
+    #pile_params.update(:owner => active_owner) # necessary?
+    @pile = active_owner.piles.build(pile_params)
     
     respond_to do |format|
+      
       if @pile.save
         flash[:notice] = 'Pile was successfully created.'
         format.html { redirect_to @pile }
       else
-        format.html { render :action => "new" }
+        format.html { render :action => 'new' }
       end
+      
     end
   end
   
@@ -115,17 +70,17 @@ class PilesController < ApplicationController
   # PUT /piles/1
   # PUT /piles/1.xml
   def update
-    @pile = Pile.find(params[:id])
+    @pile = active_owner.piles.find(params[:id])
     
     respond_to do |format|
+      
       if @pile.update_attributes(params[:pile])
         flash[:notice] = 'Pile was successfully updated.'
         format.html { redirect_to @pile }
-        format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @pile.errors, :status => 418 }
+        format.html { render :action => 'edit' }
       end
+      
     end
   end
   
@@ -133,12 +88,16 @@ class PilesController < ApplicationController
   # DELETE /piles/1
   # DELETE /piles/1.xml
   def destroy
-    @pile = Pile.find(params[:id])
-    @pile.destroy
+    @pile = active_owner.piles.find(params[:id])
     
     respond_to do |format|
-      format.html { redirect_to piles_url(@pile) }
-      format.xml  { head :ok }
+      
+      if @pile.destroy
+        format.html { redirect_to piles_url(@pile) }
+      else
+        format.html { render :action => 'index' }
+      end 
+      
     end
   end
   
