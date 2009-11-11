@@ -15,7 +15,7 @@ class InvitesController < ApplicationController
       
     else
       if logged_in?
-        Mailer.deliver_invite(@invite, new_user_url(@invite.token))
+        Mailer.deliver_invite(@invite, new_user_url(:invite_token => @invite.token))
         flash[:notice] = "Thanks! Invite sent."
         redirect_to new_invite_url
       else
