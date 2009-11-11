@@ -38,7 +38,7 @@ set :repository,  "git@snaotn.6bitt.com:orgclut2.git"
 set :scm, :git
 #set :scm_username, "rails"
 #ssh_options[:forward_agent] = true # needed?
-set :branch, "public-front"
+set :branch, "master"
 set :deploy_via, :remote_cache
 
 set :git_enable_submodules, 1
