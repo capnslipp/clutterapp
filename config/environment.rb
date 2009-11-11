@@ -38,7 +38,7 @@ Rails::Initializer.run do |config|
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem 'slippyd-colorist', :lib => 'colorist', :version => '>=0.0.5', :source => 'http://gemcutter.org'
-  config.gem "thoughtbot-factory_girl", :lib => "factory_girl"
+  config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
   
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
