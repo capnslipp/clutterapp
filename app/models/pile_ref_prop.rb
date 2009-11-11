@@ -10,7 +10,8 @@ class PileRefProp < Prop
   after_create :ensure_ref_pile
   
   
-  is_stackable; isnt_deepable
+  is_stackable
+  isnt_deepable
   
   
   #def self::rand_new

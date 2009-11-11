@@ -4,7 +4,7 @@ class TimeProp < Prop
   validates_presence_of :node, :on => :update # less stringent when the Prop is new in order to prevent circular dependencies
   
   
-  is_badgeable
+  #is_badgeable
   
   
   def self::rand_new
