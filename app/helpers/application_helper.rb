@@ -2,7 +2,7 @@
 module ApplicationHelper
   
   def analytics?
-     ENV['RAILS_ENV'] == 'production'
+     ['production', 'staging'].include?(ENV['RAILS_ENV'])
   end
   
 end
