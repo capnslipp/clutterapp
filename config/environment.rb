@@ -67,7 +67,7 @@ Rails::Initializer.run do |config|
   # Make sure the secret is at least 30 characters and all random, 
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
-    :session_key => '_orgclut2_session',
+    :session_key => '_clutter_session',
     :secret      => '2154905dcd0f9af6d0289bf1a81085354b9fe06d552585b47e956139cee10aa82208b4486a25eef8412dd178405e69ffae71c6bdba73dfe5827980233a5efd38'
   }
 
