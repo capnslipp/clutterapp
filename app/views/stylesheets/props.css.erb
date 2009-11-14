@@ -1,0 +1,114 @@
+/* props */
+
+.prop {
+	display: block;
+	line-height: 12px;
+	margin: 4px 0;
+	
+	border: <%= border_width %>px solid transparent;
+	<%= border_radius_decl %>
+}
+
+.prop.badge {
+	font-size: 10px;
+	line-height: 12px;
+	height: 12px;
+	
+	margin-left: 2px; margin-right: 2px;
+	
+	border-color: <%= generic_border_color(0.5).to_s(:css_rgba) %>;
+	border-width: 1px;
+}
+.prop.badge input[type='text'], .prop.badge textarea {
+    font-size: 10px; line-height: 12px; height: 12px
+}
+
+.check.prop { border: none; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; }
+.check.prop.badge { float: left; margin-right: 6px; }
+
+.note.prop {
+	display: block;
+	padding: 4px;
+	vertical-align: top;
+	
+	line-height: 18px;
+	
+	margin-bottom: 6px;
+	
+	border-color: <%= generic_border_color.to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %>
+}
+.note.prop, .note.prop textarea { line-height: 15px; }
+.note.prop textarea { height: 1px; }
+
+.priority.prop {
+	width: 12px; /* same as height and line-height */
+	
+	display: inline-block;
+	margin-left: 0; margin-right: 0;
+	
+	text-align: center;
+	background: <%= wash_color %>;
+	color: <%= wash_text_color %>;
+	
+	<%= border_radius_decl('6px') %>
+}
+.priority.prop, .priority.prop input { font-family: 'Arial Black', sans-serif; font-weight: bold; }
+.priority.prop input { }
+.priority.prop.badge { float: left; margin-right: 6px; }
+
+.tag.prop {
+	display: inline-block;
+	
+	background-color: <%= wash_color %>;
+	color: <%= wash_text_color %>;
+	
+	padding: 0 2px;
+}
+.tag.prop, .tag.prop input { font-weight: bold; text-transform: uppercase; }
+.tag.prop input { }
+.tag.prop.badge { float: left; }
+
+.text.prop {
+}
+
+.time.prop {
+	color: <%= text_color.with(:a => 0.75).to_s(:css_rgba) %>;
+	
+	display: inline-block;
+	
+	padding: 0 2px;
+}
+.time.prop.badge { float: left; }
+
+
+.new.prop, .edit.prop {
+	margin: -1px;
+	margin-left: 18px;
+	
+	background: <%= focus_back %>;
+	border-width: 2px;
+	border-color: <%= focus_color %>;
+	
+	<%= deep_shadow_decl(0.5) %>
+}
+/*.new.prop.badge, .edit.prop.badge { margin: 0 2px; }*/
+
+.new.prop input[type='submit'],
+.edit.prop input[type='submit'] { display: none; }
+.new.note.prop input[type='submit'],
+.edit.note.prop input[type='submit'] { display: inherit; }
+
+.new.prop input[type='text'], .new.prop textarea,
+.edit.prop input[type='text'], .edit.prop textarea {
+	background: transparent;
+	color: <%= text_color %>;
+	border: none;
+	margin: 0;
+	padding: 1px;
+	display: block;
+	width: 100%;
+}
+.new.prop input[type='button'], .new.prop input[type='submit'],
+.edit.prop input[type='button'], .edit.prop input[type='submit'] { position: absolute; }
+
+.prop input[type='checkbox'] { border: none; margin: 0; background: none; }

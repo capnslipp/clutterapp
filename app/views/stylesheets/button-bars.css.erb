@@ -1,0 +1,94 @@
+/* buttons/bars */
+
+.widget {
+	margin-right: 0.5em;
+	
+	height: 1.25em;
+	line-height: 1.25em;
+}
+
+.buttons {
+	<%= shallow_shadow_decl %>
+	
+	margin: -<%= border_width %>px;
+	border: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	<%= border_radius_decl('6px') %>
+	
+	height: 1em;
+	line-height: 1em;
+}
+
+.widget, .buttons {
+	white-space: nowrap;
+}
+
+.widget a, .buttons a { text-decoration: none; }
+
+.stub, .bar {
+	font-size: 12px;
+	line-height: 16px;
+	height: 16px;
+	/*width: 16px;*/
+}
+
+.bar {
+	position: relative;
+	z-index: 1;
+}
+
+.stub { float: left; }
+
+.action.bar { float: left; }
+
+.action.stub .widget,
+ #action-bar .widget { margin-left: -18px; }
+
+.action.stub .widget,
+ #action-bar .widget,
+    #new-bar .widget { margin-top: 4px; }
+.action.stub .widget, .action.stub .widget a,
+ #action-bar .widget,  #action-bar .widget a,
+    #new-bar .widget,     #new-bar .widget a { color: <%= widget_color %>; }
+.action.stub .widget a:hover,
+ #action-bar .widget a:hover,
+    #new-bar .widget a:hover { color: <%= active_widget_color %>; }
+
+#action-bar .buttons {
+	background: <%= accent_color %>;
+	position: absolute;
+	top: 4px; left: 0;
+	padding: 0 0.5em;
+	vertical-align: middle;
+}
+#action-bar .buttons, #action-bar .buttons a { color: <%= wash_text_color %>; }
+#action-bar .buttons a {}
+#action-bar .buttons a:hover {
+	text-shadow:	0 2px	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
+					0 -2px	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
+					2px 0	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
+					-2px 0	3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
+}
+
+#new-bar .buttons {
+	background: <%= accent_color %>;
+	position: absolute;
+	top: 4px; left: 0;
+	padding: 0 0.5em;
+	vertical-align: middle;
+}
+#new-bar .buttons, #new-bar .buttons a { color: <%= wash_text_color %>; }
+#new-bar .buttons a { margin-right: 0.25em; }
+#new-bar .buttons a:hover {
+	text-shadow:	0 2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
+					0 -2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
+					2px 0	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
+					-2px 0	3px <%= shadow_color(1.0).to_s(:css_rgba) %>;
+}
+
+/*.widget, .widget a { color: #ddd; }
+.widget a:hover {  }
+
+.buttons, .buttons a { color: <%= wash_color %>; }
+.buttons a:hover { background: #b10; }*/
+
+/*.new.buttons { margin-left: 2em; }*/
