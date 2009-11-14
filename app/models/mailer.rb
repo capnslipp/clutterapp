@@ -2,9 +2,9 @@
 class Mailer < ActionMailer::Base
   
   def invite(invite, signup_url)
-    subject    'OrgClut Invite'
+    subject    'Clutter Invite'
     recipients invite.recipient_email
-    from       'no-reply@orgclut.com'
+    from       'no-reply@clutterapp.com'
     body       :invite => invite, :signup_url => signup_url
     
     invite.update_attribute(:sent_at, Time.now)
