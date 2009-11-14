@@ -7,6 +7,11 @@
 	
 	border: <%= border_width %>px solid transparent;
 	<%= border_radius_decl %>
+	<% if debug? %>
+		background: rgba(0, 127, 255, 0.125);
+		border-width: 2px;
+		border-color: rgba(0, 127, 255, 0.5);
+	<% end %>
 }
 
 .prop.badge {
