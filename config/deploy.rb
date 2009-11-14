@@ -2,43 +2,49 @@
 #	Application
 #############################################################
 
-set :application, "orgclut2"
+
+set :application, nil
+
+
 
 # If you aren't deploying to /u/apps/#{application} on the target
 # servers (which is the default), you can specify the actual location
 # via the :deploy_to variable:
 set :deploy_to, "/var/www/#{application}"
 
-set :rails_env, "production"
 
 
-#############################################################
-#	Settings
-#############################################################
+task :orgclut do
+  set :application, 'orgclut2'
+  set :deploy_to, '/var/www/orgclut2'
+  
+  set :rails_env, 'production'
+  
+  set :branch, 'public-front'
+end
 
 
+task :clutter do
+  set :application, 'clutter'
+  set :deploy_to, '/var/www/clutter'
+  
+  set :rails_env, 'production'
+  
+  set :branch, 'master'
+end
 
-#############################################################
-#	Servers
-#############################################################
 
-set :user, "rails" # SSH username, optional if the same as the dev computer username
-set :use_sudo, false
-
-set :domain, "prod.orgclut.com"
+set :domain, 'prod.orgclut.com'
 server domain, :app, :web
 role :db, domain, :primary => true
 
+set :user, 'rails' # SSH username, optional if the same as the dev computer username
+set :use_sudo, false
 
-#############################################################
-#	Subversion
-#############################################################
-
-set :repository,  "git@snaotn.6bitt.com:orgclut2.git"
+set :repository,  'git@snaotn.6bitt.com:orgclut2.git'
 set :scm, :git
 #set :scm_username, "rails"
 #ssh_options[:forward_agent] = true # needed?
-set :branch, "master"
 set :deploy_via, :remote_cache
 
 set :git_enable_submodules, 1

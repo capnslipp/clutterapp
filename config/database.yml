@@ -25,39 +25,15 @@ defaults: &dev
   host: localhost
   timeout: 5000
 
-defaults: &silver-bullet-mamp
-  socket: /Applications/MAMP/tmp/mysql/mysql.sock
-  password: _fill_in_
-  <<: *dev
-
-defaults: &silver-bullet-xampp
-  socket: /Applications/xampp/xamppfiles/var/mysql/mysql.sock
-  password: _fill_in_
-  <<: *dev
-
-defaults: &silver-delicious-xampp
-  socket: /Applications/XAMPP/xamppfiles/var/mysql/mysql.sock
-  password: _fill_in_
-  <<: *dev
-
 defaults: &silver-delicious-built-in
   socket: /tmp/mysql.sock
   password: 
   <<: *dev
 
-defaults: &snaotn
-  adapter: mysql
-  encoding: utf8
-  socket: /var/run/mysqld/mysqld.sock
-  username: orgclut2
-  password: _fill_in_
-  host: localhost
-  timeout: 5000
-
 defaults: &stc
   adapter: postgresql
   encoding: unicode
-  username: orgclut2
+  username: clutter
   password: _fill_in_
   pool: 5
 
