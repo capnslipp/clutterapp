@@ -3,7 +3,7 @@
 #############################################################
 
 
-set :application, nil
+set :application, 'clutter'
 
 
 
@@ -14,24 +14,9 @@ set :deploy_to, "/var/www/#{application}"
 
 
 
-task :orgclut do
-  set :application, 'orgclut2'
-  set :deploy_to, '/var/www/orgclut2'
-  
-  set :rails_env, 'production'
-  
-  set :branch, 'public-front'
-end
+set :rails_env, 'staging'
 
-
-task :clutter do
-  set :application, 'clutter'
-  set :deploy_to, '/var/www/clutter'
-  
-  set :rails_env, 'production'
-  
-  set :branch, 'master'
-end
+set :branch, 'master'
 
 
 set :domain, 'prod.orgclut.com'
