@@ -50,9 +50,9 @@ test:
   <<: *silver-delicious-built-in
 
 staging:
-  database: clutter_staging
-  <<: *snaotn
+  database: clutter
+  <<: *stc
 
 production:
-  database: clutter_production
+  database: clutter
   <<: *stc
