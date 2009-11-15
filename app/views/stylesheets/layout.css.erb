@@ -25,6 +25,25 @@ li { list-style-type: none; }
 	min-height: 1.5em;
 	border-top: 1px dotted <%= divider_color %>;
 	margin-left: 23px;
+	
+	<% if debug? %>
+		<%= border_radius_decl %>
+		margin: 1px;
+	<% end %>
+}
+.item_for_node > .show.body {
+	<% if debug? %>
+		background: rgba(127, 191, 0, 0.125);
+		border: 2px solid rgba(127, 191, 0, 0.5);
+	<% end %>
+}
+.item_for_node > .edit.body {
+	/*position: absolute; z-index: 1;*/
+	
+	<% if debug? %>
+		background: rgba(191, 0, 127, 0.125);
+		border: 2px solid rgba(191, 0, 127, 0.5);
+	<% end %>
 }
 .item_for_node > .body > .sub-line {
 	overflow: auto; width: 100%; /* to contain floating elements */
