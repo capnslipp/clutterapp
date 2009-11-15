@@ -52,7 +52,7 @@ protected
   
   
   def have_owner
-    return true if @active_owner
+    return if @active_owner
     
     owner_id = params[:user_id]
     owner_id ||= params[:id] if controller_name == 'users'
@@ -67,20 +67,17 @@ protected
       if @active_owner.nil?
         flash[:warning] = "No such user exists."
         redirect_to user_path(current_user)
-        
       elsif @active_owner != current_user
         flash[:warning] = "You can't really see this pile since it's not yours."
         redirect_to user_path(current_user)
-        @active_owner = nil
       end
+      
     end
-    
-    return !!@active_owner
   end
   
   
   def have_pile
-    return true if @active_pile
+    return if @active_pile
     
     pile_id = params[:pile_id]
     pile_id ||= params[:id] if controller_name == 'piles'
@@ -94,13 +91,11 @@ protected
       if @active_pile.nil?
         flash[:warning] = "No such pile exists."
         redirect_to polymorphic_path([active_owner, :piles])
-        
       elsif @active_pile.owner != current_user
         # @todo: check if the user is authorized to view and/or edit this pile
       end
+      
     end
-    
-    return !!@active_pile
   end
   
 end
