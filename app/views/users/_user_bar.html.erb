@@ -1,5 +1,5 @@
 <% if current_user -%>
-	<span id="user-bar-greeting">Logged in as <strong><%= link_to_current_user :content_method => :login %></strong>.</span>
+	<span id="user-bar-greeting">Logged in as <strong><%= link_to current_user.login,home_path %></strong>.</span>
 	<span id="user-bar-action"><%= link_to "Log out", logout_path, :method => :delete %></span>
 <% else -%>
 	<span id="user-bar-greeting">
