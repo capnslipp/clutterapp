@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091011185324) do
+ActiveRecord::Schema.define(:version => 20091115090029) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -82,20 +82,31 @@ ActiveRecord::Schema.define(:version => 20091011185324) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "login",                     :limit => 40
-    t.string   "name",                      :limit => 100, :default => ""
-    t.string   "email",                     :limit => 100
-    t.string   "crypted_password",          :limit => 40
-    t.string   "salt",                      :limit => 40
+    t.string   "login",                         :limit => 40
+    t.string   "name",                          :limit => 100, :default => ""
+    t.string   "email",                         :limit => 100
+    t.string   "crypted_password",              :limit => 128, :default => "", :null => false
+    t.string   "password_salt",                 :limit => 128, :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remember_token",            :limit => 40
-    t.datetime "remember_token_expires_at"
-    t.integer  "invite_id",                                                :null => false
+    t.string   "old_remember_token",            :limit => 40
+    t.datetime "old_remember_token_expires_at"
+    t.integer  "invite_id",                                                    :null => false
     t.integer  "invite_limit"
-    t.integer  "invite_sent_count",                        :default => 0,  :null => false
+    t.integer  "invite_sent_count",                            :default => 0,  :null => false
+    t.integer  "login_count",                                  :default => 0,  :null => false
+    t.integer  "failed_login_count",                           :default => 0,  :null => false
+    t.datetime "last_request_at"
+    t.datetime "current_login_at"
+    t.datetime "last_login_at"
+    t.string   "current_login_ip"
+    t.string   "last_login_ip"
+    t.string   "persistence_token",                                            :null => false
+    t.string   "single_access_token",                                          :null => false
+    t.string   "perishable_token",                                             :null => false
   end
 
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
+  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end
