@@ -23,7 +23,7 @@
 
 <div id="base">
 	
-	<%= render :partial => 'shared/google_chrome_frame' if logged_in? %>
+	<%= render :partial => 'shared/google_chrome_frame' if current_user %>
 	
 	<div id="fill" class="initially-hidden"></div>
 	
@@ -31,7 +31,7 @@
 		<div class="back"><div class="fill"></div></div>
 		
 		<div class="logo">
-			<a href="<%= logged_in? ? home_path : root_path %>" style="text-decoration: none; background: none; color: #fff;">ClutterApp</a>
+			<a href="<%= current_user ? home_path : root_path %>" style="text-decoration: none; background: none; color: #fff;">ClutterApp</a>
 		</div>
 		
 		<div class="content">
