@@ -14,7 +14,7 @@ class NodeCell < Cell::Base
   
   
   def show
-    logger.prefixed self.class.to_s, :light_blue, "show"
+    logger.prefixed self.class.to_s, :light_blue, 'show'
     
     @node = @opts[:node]
     
@@ -44,7 +44,7 @@ class NodeCell < Cell::Base
   
   
   def new
-    logger.prefixed self.class.to_s, :light_blue, "new"
+    logger.prefixed self.class.to_s, :light_blue, 'new'
     
     @node = @opts[:node]
     
@@ -53,7 +53,7 @@ class NodeCell < Cell::Base
   
   
   def create
-    logger.prefixed self.class.to_s, :light_blue, "update"
+    logger.prefixed self.class.to_s, :light_blue, 'update'
     
     @node = @opts[:node]
     
@@ -62,16 +62,16 @@ class NodeCell < Cell::Base
   
   
   def edit
-    logger.prefixed self.class.to_s, :light_blue, "edit"
+    logger.prefixed self.class.to_s, :light_blue, 'edit'
     
     @node = @opts[:node]
     
-    render :layout => nil
+    render :layout => 'edit'
   end
   
   
   def update
-    logger.prefixed self.class.to_s, :light_blue, "update"
+    logger.prefixed self.class.to_s, :light_blue, 'update'
     
     @node = @opts[:node]
     

@@ -313,22 +313,20 @@ function nodeItemEdit(prop) {
 	function handleSuccess(showProp, responseData) {
 		collapseActionBar();
 		
-		var body = showProp.parent('.body');
+		var showBody = showProp.parent('.show.body');
 		
-		showProp
-			.replaceWith(responseData);
+		showBody.before(responseData);
 		
-		var editProp = body.children('.edit.prop');
+		var editBody = showBody.siblings('.edit.body');
 		
-		editProp.filter('.note.prop').find('textarea').elastic();
+		editBody.find('.note.prop').find('textarea').elastic();
 		
-		showFill(editProp);
-		editFormFocus(editProp.children('form'));
+		showFill(editBody);
+		editFormFocus(editBody.find('form'));
 	}
 	
 	function handleError(prop, xhrObj, errStr, expObj) {
-		prop
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		prop.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 	}
 }
 
