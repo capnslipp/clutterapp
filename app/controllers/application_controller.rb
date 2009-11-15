@@ -37,6 +37,11 @@ class ApplicationController < ActionController::Base
   
 protected
   
+  def be_xhr_request
+    render :nothing => true, :status => :bad_request unless request.xhr?
+  end
+  
+  
   def authorize
     redirect_to :controller => 'front' unless logged_in?
   end
