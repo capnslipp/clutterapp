@@ -3,9 +3,7 @@ class CheckNodeCell < NodeCell
   
   
   # check has no "new" or "edit" functionality
-  def new
-    show.merge(:view => 'show')
-  end
+  undef_method :new, :edit
   
   
 protected
