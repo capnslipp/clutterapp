@@ -49,6 +49,7 @@ describe User do
   
   it "should reset password" do
     u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalP4ssword')
+
     u.update_attributes(:password => 'n3wP4ssword', :password_confirmation => 'n3wP4ssword')
     User.authenticate('original_username', 'n3wP4ssword').should == u
   end
@@ -56,32 +57,34 @@ describe User do
   it "should not rehash password" do
     u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalp4ssword')
     u.update_attributes(:login => 'new_username')
-    User.authenticate('new_username', 'or1ginalp4ssword').should == u
+    u.password.should == 'or1ginalp4ssword'
+    # User.('new_username', 'or1ginalp4ssword').should == u
   end
   
   
   it "should authenticate user" do
     u = Factory.create(:user, :login => 'alpha1', :password => 's3cret')
-    User.authenticate('alpha1', 's3cret').should == u
+    UserSession.create(u).save.should == true
+    # User.authenticate('alpha1', 's3cret').should == u
   end
   
   it "shouldn't authenticate user with incorrect password" do
     u = Factory.create(:user, :login => 'alpha1', :password => 's3cret')
-    User.authenticate('alpha1', 'inc0rrect').should_not == u
+    UserSession.new(u, :password => 'inc0rrect').should == false
+    # User.authenticate('alpha1', 'inc0rrect').should_not == u
   end
   
   
   it "should set remember token" do
-    @user.remember_me
-    assert_not_nil @user.remember_token
-    assert_not_nil @user.remember_token_expires_at
+    session = UserSession.create(@user, :remember_me => true)
+    session.remember_me?.should == true
   end
   
   it "should unset remember token" do
-    @user.remember_me
-    assert_not_nil @user.remember_token
-    @user.forget_me
-    assert_nil @user.remember_token
+    session = UserSession.create(@user, :remember_me => true)
+    session.remember_me?.should == true
+    session.remember_me = false
+    session.remember_me?.should == false
   end
   
   it "should remember me for one week" do
