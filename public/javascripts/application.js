@@ -304,20 +304,18 @@ function editFormFocus(form) {
 		.focus();
 }
 
-function nodeItemEdit(prop) {
+function nodeItemEdit(showBody) {
 	$.ajax({
 		type: 'get',
-		url: prop.closest('.node').attr('oc\:url') + '/edit',
+		url: showBody.closest('.node').attr('oc\:url') + '/edit',
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(prop, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(prop, xhrObj, errStr, expObj); }
+		success: function(responseData) { handleSuccess(showBody, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(showBody, xhrObj, errStr, expObj); }
 	});
 	
 	
-	function handleSuccess(showProp, responseData) {
+	function handleSuccess(showBody, responseData) {
 		collapseActionBar();
-		
-		var showBody = showProp.parent('.show.body');
 		
 		showBody.before(responseData);
 		
@@ -329,14 +327,14 @@ function nodeItemEdit(prop) {
 		editFormFocus(editBody.find('form'));
 	}
 	
-	function handleError(prop, xhrObj, errStr, expObj) {
-		prop
+	function handleError(showBody, xhrObj, errStr, expObj) {
+		showBody
 			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 	}
 }
 
 $(function() {
-	$('.item_for_node > .body > .show.prop').live('click', function() {
+	$('.item_for_node > .show.body').live('click', function() {
 		nodeItemEdit($(this)); return false;
 	});
 });
