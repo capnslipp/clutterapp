@@ -2,18 +2,30 @@ require 'factory_girl/syntax/blueprint' # definition syntax similar to Machinist
 require 'factory_girl/syntax/generate' # usage syntax similar to Object Daddy
 require 'factory_girl/syntax/make' # usage syntax similar to Machinist
 require 'factory_girl/syntax/sham' # sequence syntax similar to Machinist
-
+require 'authlogic'
 
 Factory.define :invite do |f|
   f.sequence(:recipient_email) { |i_n| "invite_#{i_n}@example.com" }
 end
 
 
+# Factory.define :user do |f|
+#   f.sequence(:login) { |u_n| "user_#{u_n}" }
+#   f.password 'p4ssword'
+#   f.password_confirmation { |u| u.password }
+#   f.sequence(:email) { |u_n| "user_#{u_n}@example.com" }
+#   f.association :invite
+# end
+
 Factory.define :user do |f|
   f.sequence(:login) { |u_n| "user_#{u_n}" }
+  f.sequence(:email) {|u_n| "user_#{u_n}@example.com" }
   f.password 'p4ssword'
-  f.password_confirmation { |u| u.password }
-  f.sequence(:email) { |u_n| "user_#{u_n}@example.com" }
+  f.password_confirmation {|u| u.password}
+  f.password_salt rand(36**8).to_s(36)
+  f.crypted_password { |u| Authlogic::CryptoProviders::Sha512.encrypt("6cde0674657a8a313ce952d" + u.password_salt) }
+  f.persistence_token rand(36**8).to_s(36)
+  f.single_access_token rand(36**8).to_s(36)
   f.association :invite
 end
 

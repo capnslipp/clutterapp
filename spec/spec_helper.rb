@@ -2,9 +2,13 @@
 # from the project root directory.
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
+
 require 'spec/autorun'
 require 'spec/rails'
+
 require File.dirname(__FILE__) + "/factories"
+require 'authlogic/test_case'
+
 
 # Uncomment the next line to use webrat's matchers
 #require 'webrat/integrations/rspec-rails'

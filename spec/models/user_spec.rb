@@ -3,9 +3,13 @@ require 'spec_helper'
 describe User do
   
   before(:each) do
+    activate_authlogic
     @user = Factory.create(:user)
   end
   
+  it "should be valid" do
+    @user.should be_valid
+  end
   
   it "should be created" do
     assert_difference 'User.count' do
