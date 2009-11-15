@@ -9,10 +9,14 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new(params[:user_session])
     if @user_session.save
-      flash[:notice] = "Login successful!"
-      redirect_back_or_default account_url
+      flash[:notice] = "Logged in successfully"
+      redirect_to home_path
     else
-      render :action => :new
+      flash[:notice] = "Login incorrect"
+      @login       = params[:login]
+      @remember_me = params[:remember_me]
+      
+      render :action => 'new'
     end
   end
   
@@ -21,4 +25,12 @@ class UserSessionsController < ApplicationController
     flash[:notice] = "Logout successful!"
     redirect_back_or_default new_user_session_url
   end
+  
+  private
+  # Might be useful once we fix the params
+  # def note_failed_signin
+  #   flash[:error] = "Couldn't log you in as '#{params[:login]}'"
+  #   logger.warn "#{logger.prefix('USER', :light_yellow)}Failed login for '#{params[:login]}' from #{request.remote_ip} at #{Time.now.utc}"
+  # end
+  
 end
