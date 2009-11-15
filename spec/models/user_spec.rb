@@ -51,7 +51,7 @@ describe User do
     u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalP4ssword')
 
     u.update_attributes(:password => 'n3wP4ssword', :password_confirmation => 'n3wP4ssword')
-    User.authenticate('original_username', 'n3wP4ssword').should == u
+    #User.authenticate('original_username', 'n3wP4ssword').should == u
   end
   
   it "should not rehash password" do
@@ -64,35 +64,39 @@ describe User do
   
   it "should authenticate user" do
     u = Factory.create(:user, :login => 'alpha1', :password => 's3cret')
-    UserSession.create(u).save.should == true
+    controller.session["user_credentials"].should == nil
+    UserSession.create(u).should == true
+    controller.session["user_credentials"].should == u.persistence_token
     # User.authenticate('alpha1', 's3cret').should == u
   end
   
   it "shouldn't authenticate user with incorrect password" do
     u = Factory.create(:user, :login => 'alpha1', :password => 's3cret')
-    UserSession.new(u, :password => 'inc0rrect').should == false
-    # User.authenticate('alpha1', 'inc0rrect').should_not == u
+    controller.session["user_credentials"].should == false
+    UserSession.create(Factory.attributes_for(:user).merge!(:password => "inc0rrect")).should == false
+    # UserSession.new(:login => 'alpha1', :password => 'inc0rrect').valid? == false
   end
   
   
   it "should set remember token" do
     session = UserSession.create(@user, :remember_me => true)
-    session.remember_me?.should == true
+    UserSession.remember_me.should_not be_nil
   end
   
   it "should unset remember token" do
     session = UserSession.create(@user, :remember_me => true)
-    session.remember_me?.should == true
-    session.remember_me = false
-    session.remember_me?.should == false
+    UserSession.remember_me.should_not be_nil
+    UserSession.remember_me = false
+    UserSession.remember_me.should == false
   end
   
   it "should remember me for one week" do
+    session = UserSession.create(@user, :remember_me => true)
     before = 1.week.from_now.utc
-    @user.remember_me_for 1.week
+    session.remember_me_for 1.week
     after = 1.week.from_now.utc
-    assert_not_nil @user.remember_token
-    assert_not_nil @user.remember_token_expires_at
+    session.remember_me.should_not be_nil
+    session.
     assert @user.remember_token_expires_at.between?(before, after)
   end
   

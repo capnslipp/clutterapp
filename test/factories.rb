@@ -8,8 +8,8 @@ Factory.define :invite do |f|
   f.sequence(:recipient_email) { |i_n| "invite_#{i_n}@example.com" }
 end
 
-Factory.sequence :friendly_token do |n|
-  rand((36)**8).to_s(36)
+Factory.sequence :password do |n|
+  "p#{n}ssword"
 end
 
 
@@ -24,12 +24,12 @@ end
 Factory.define :user do |f|
   f.sequence(:login) { |u_n| "user_#{u_n}" }
   f.sequence(:email) {|u_n| "user_#{u_n}@example.com" }
-  f.password 'p4ssword'
+  f.password {Factory.next(:password)}
   f.password_confirmation {|u| u.password}
-  f.password_salt {Factory.next(:friendly_token)}
-  f.crypted_password { |u| Authlogic::CryptoProviders::Sha512.encrypt("6cde0674657a8a313ce952d" + u.password_salt) }
-  f.persistence_token { Factory.next(:friendly_token)}
-  f.single_access_token {Factory.next(:friendly_token)}
+  f.password_salt {Authlogic::Random.hex_token}
+  f.crypted_password { |u| Authlogic::CryptoProviders::Sha512.encrypt(u.password + u.password_salt) }
+  f.persistence_token { Authlogic::Random.hex_token}
+  f.single_access_token {Authlogic::Random.friendly_token}
   f.association :invite
 end
 

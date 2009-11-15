@@ -1,4 +1,4 @@
-<% if logged_in? -%>
+<% if current_user -%>
 	<p>Invite a friend using the form below. You have <%= current_users_invites_remaining -%> invitations left to share.</p>
 <% else -%>
 	<p>
