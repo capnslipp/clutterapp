@@ -111,8 +111,8 @@ class NodesController < ApplicationController
       when :out:  @node.move_to_right_of orig_ref_node
     end
     
-    orig_ref_node.reload :select => :version
-    @node.reload :select => :version
+    orig_ref_node.reload #:select => :version # doesn't work some times, possibly due to being a named_scope?
+    @node.reload #:select => :version # doesn't work some times, possibly due to being a named_scope?
     
     node_sel = dom_id(@node, 'item_for')
     
