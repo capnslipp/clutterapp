@@ -9,3 +9,17 @@
 		
 	<%- end -%>
 </div>
+<div class="sub-line">
+	<%= render_cell cell_for_node(@check), :edit, :node => @check unless @check.nil? %>
+</div>
+<div class="sub-line">
+	<%= render_cell cell_for_node(@priority), :edit, :node => @priority unless @priority.nil? %>
+</div>
+<div class="sub-line">
+	<%= render_cell cell_for_node(@time), :edit, :node => @time unless @time.nil? %>
+</div>
+<div class="sub-line">
+	<%- for tag in @tags -%>
+		<%= render_cell cell_for_node(tag), :edit, :node => tag %>
+	<%- end unless @tags.nil? -%>
+</div>

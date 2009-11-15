@@ -14,9 +14,10 @@ class NodeCell < Cell::Base
   
   
   def show
-    @node = @opts[:node]
+    logger.prefixed self.class.to_s, :light_blue, 'show'
     
-    #@children = @node.children || [] # unused
+    
+    @node = @opts[:node]
     
     if @node.prop.class.nodeable?
       Prop.badgeable_types.each do |t|
@@ -35,6 +36,9 @@ class NodeCell < Cell::Base
   
   
   def badge
+    logger.prefixed self.class.to_s, :light_blue, 'badge'
+    
+    
     @node = @opts[:node]
     
     render :layout => nil
@@ -44,6 +48,7 @@ class NodeCell < Cell::Base
   def new
     logger.prefixed self.class.to_s, :light_blue, 'new'
     
+    
     @node = @opts[:node]
     
     render :layout => 'new_item'
@@ -51,7 +56,8 @@ class NodeCell < Cell::Base
   
   
   def create
-    logger.prefixed self.class.to_s, :light_blue, 'update'
+    logger.prefixed self.class.to_s, :light_blue, 'create'
+    
     
     @node = @opts[:node]
     
@@ -62,7 +68,20 @@ class NodeCell < Cell::Base
   def edit
     logger.prefixed self.class.to_s, :light_blue, 'edit'
     
+    
     @node = @opts[:node]
+    
+    if @node.prop.class.nodeable?
+      Prop.badgeable_types.each do |t|
+        short_name = t.to_s(:short)
+        if t.stackable?
+          instance_variable_set(:"@#{short_name.pluralize}", @node.children.typed(short_name)) # i.e. @tags
+        else
+          instance_variable_set(:"@#{short_name}", @node.children.typed(short_name).first) # i.e. @check, @priority, @time
+        end
+      end
+      @check = @node.children.typed(:check).first
+    end
     
     render :layout => 'edit_body'
   end
@@ -70,6 +89,7 @@ class NodeCell < Cell::Base
   
   def update
     logger.prefixed self.class.to_s, :light_blue, 'update'
+    
     
     @node = @opts[:node]
     
