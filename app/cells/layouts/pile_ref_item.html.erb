@@ -1,6 +1,6 @@
-<% content_tag_for :li, @node, 'item_for', :class => dom_class(@node, 'item_for'), :'oc:url' => polymorphic_path([@node.pile.owner, @node.pile, @node]), :onclick => 'void(0)' do -%><%# For MobileSafari with Love -%>
+<% content_tag_for :li, @node, 'item_for', :class => dom_class(@node, 'item_for'), :'oc:url' => polymorphic_path([@node.pile.owner, @node.pile, @node]) do -%>
 	<section id="<%= dom_id(@node.prop.ref_pile.root_node, 'item_for') %>" class="<%= dom_class(@node.prop.ref_pile.root_node, 'item_for') %> pile" oc:nodes-url="<%=nodes_path(@node.prop.ref_pile.root_node)%>">
-		<div class="body">
+		<div class="body"><%# onclick, for MobileSafari, with Love -%>
 			<%= render :partial => 'nodes/action_stub' %>
 			<%= @content_for_layout %>
 		</div>

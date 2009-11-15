@@ -2,7 +2,7 @@ class NodeCell < Cell::Base
   helper :cell
   
   
-  # not getting cached for some reason
+  # call cache in each derived class, not this one
   def cache_version
     {
       :owner_id => @opts[:node].pile.owner.id,
@@ -14,8 +14,6 @@ class NodeCell < Cell::Base
   
   
   def show
-    logger.prefixed self.class.to_s, :light_blue, 'show'
-    
     @node = @opts[:node]
     
     #@children = @node.children || [] # unused
@@ -32,7 +30,7 @@ class NodeCell < Cell::Base
       @check = @node.children.typed(:check).first
     end
     
-    render :layout => 'show'
+    render :layout => 'show_body'
   end
   
   
@@ -66,7 +64,7 @@ class NodeCell < Cell::Base
     
     @node = @opts[:node]
     
-    render :layout => 'edit'
+    render :layout => 'edit_body'
   end
   
   
@@ -75,7 +73,7 @@ class NodeCell < Cell::Base
     
     @node = @opts[:node]
     
-    render :view => 'show', :layout => 'show'
+    render :view => 'show', :layout => 'show_body'
   end
   
   
