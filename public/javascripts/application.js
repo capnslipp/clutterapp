@@ -178,11 +178,14 @@ function showGoogleChromeFrame() {
 
 function showFill(modalElement) {
 	if (!$('#fill').is(':visible')) {
-		if (modalElement != undefined) {
-			modalElement.attr('oc\:origPosition', modalElement.css('position'));
-			modalElement
-				.css('position', 'relative')
-				.css('z-index', 1000);
+		if (modalElement != undefined)
+		{
+			if (modalElement.cssPosition == 'static') {
+				modalElement.attr('oc\:origPosition', modalElement.css('position'));
+				modalElement.css('position', 'relative');
+			}
+			
+			modalElement.css('z-index', 1000);
 		}
 	
 		$('#fill').fadeIn(kDefaultTransitionDuration);
@@ -193,12 +196,12 @@ function hideFill(modalElement) {
 	if ($('#fill').is(':visible')) {
 		$('#fill').fadeOut(kDefaultTransitionDuration);
 	
-		if (modalElement != undefined) {
-			modalElement
-				.css({
-					position: modalElement.attr('oc\:origPosition'),
-					zIndex: 0
-				});
+		if (modalElement != undefined)
+		{
+			modalElement.css('z-index', 0);
+			
+			if (modalElement.attr('oc\:origPosition'))
+				modalElement.css('position', modalElement.attr('oc\:origPosition'));
 		}
 	}
 }
@@ -326,7 +329,8 @@ function nodeItemEdit(prop) {
 	}
 	
 	function handleError(prop, xhrObj, errStr, expObj) {
-		prop.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		prop
+			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 	}
 }
 
@@ -349,12 +353,15 @@ function nodeItemUpdate(form) {
 	
 	
 	function handleSuccess(form, responseData) {
-		var editProp = form.closest('.edit.prop');
+		var editBody = form.closest('.edit.body');
 		
-		hideFill( editProp.parent('.body') );
+		hideFill(editBody);
 		
-		editProp
-			.replaceWith(responseData);
+		var showBody = editBody.siblings('.show.body');
+		
+		editBody.remove();
+		
+		showBody.replaceWith(responseData);
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {

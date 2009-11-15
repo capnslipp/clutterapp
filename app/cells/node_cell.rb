@@ -75,7 +75,7 @@ class NodeCell < Cell::Base
     
     @node = @opts[:node]
     
-    render :view => 'show', :layout => nil
+    render :view => 'show', :layout => 'show'
   end
   
   
