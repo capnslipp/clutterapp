@@ -1,10 +1,11 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-  include Authentication
-  include Authentication::ByPassword
-  include Authentication::ByCookieToken
-  
+  acts_as_authentic
+  # include Authentication
+  # include Authentication::ByPassword
+  # include Authentication::ByCookieToken
+  # 
   validates_presence_of     :login
   validates_length_of       :login,    :within => 6..40
   validates_uniqueness_of   :login
