@@ -180,10 +180,11 @@ function showFill(modalElement) {
 	if (!$('#fill').is(':visible')) {
 		if (modalElement != undefined)
 		{
-			if (modalElement.cssPosition != 'absolute') {
-				modalElement.attr('oc\:origPosition', modalElement.css('position'));
-				modalElement.css('position', 'relative');
-			}
+			//alert(modalElement.cssPosition);
+			//if (modalElement.cssPosition != 'absolute') {
+			//	modalElement.attr('oc\:origPosition', modalElement.css('position'));
+			//	modalElement.css('position', 'relative');
+			//}
 			
 			modalElement.css('z-index', 1000);
 		}
