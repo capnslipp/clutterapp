@@ -180,7 +180,7 @@ function showFill(modalElement) {
 	if (!$('#fill').is(':visible')) {
 		if (modalElement != undefined)
 		{
-			if (modalElement.cssPosition == 'static') {
+			if (modalElement.cssPosition != 'absolute') {
 				modalElement.attr('oc\:origPosition', modalElement.css('position'));
 				modalElement.css('position', 'relative');
 			}
@@ -228,12 +228,12 @@ function nodeItemNew(parentNode, type) {
 		else
 			list.append(responseData);
 		
-		var editProp = list.children('.item_for_node:last').children('.body').children('.new.prop');
+		var newBody = list.children('.item_for_node:last').find('.new.body');
 		
-		editProp.filter('.note.prop').find('textarea').elastic();
+		newBody.find('.note.prop').find('textarea').elastic();
 		
-		showFill(editProp);
-		editFormFocus(editProp.children('form'));
+		showFill(newBody);
+		editFormFocus(newBody.find('form'));
 	}
 	
 	function handleError(parentNode, type, xhrObj, errStr, expObj) {

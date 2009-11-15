@@ -48,7 +48,7 @@ class NodeCell < Cell::Base
     
     @node = @opts[:node]
     
-    render :layout => 'new'
+    render :layout => 'new_item'
   end
   
   
@@ -57,7 +57,7 @@ class NodeCell < Cell::Base
     
     @node = @opts[:node]
     
-    render :view => 'show', :layout => 'show'
+    render :view => 'show', :layout => 'show_item'
   end
   
   

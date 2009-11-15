@@ -1,0 +1,9 @@
+<% content_tag_for :li, @node, 'item_for', :class => dom_class(@node, 'item_for'), :onclick => 'void(0)' do -%><%# onclick, for MobileSafari, with Love -%>
+	<div class="new body">
+		<%= render :partial => 'nodes/action_stub' %>
+		<%= @content_for_layout %>
+	</div>
+	<ul class="node list">
+		<%= render :partial => 'nodes/list_items', :locals => {:item => @node} %>
+	</ul>
+<% end -%>
