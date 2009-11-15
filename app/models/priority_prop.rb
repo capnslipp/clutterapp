@@ -6,7 +6,7 @@ class PriorityProp < Prop
   validate :in_range
   
   
-  #is_badgeable
+  is_badgeable
   
   
   def self::rand_new

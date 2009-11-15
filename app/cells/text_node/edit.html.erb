@@ -10,16 +10,16 @@
 	<%- end -%>
 </div>
 <div class="sub-line">
-	<%= render_cell cell_for_node(@check), :edit, :node => @check unless @check.nil? %>
+	<%= render_cell cell_for_node(@check), :edit_badge, :node => @check unless @check.nil? %>
 </div>
 <div class="sub-line">
-	<%= render_cell cell_for_node(@priority), :edit, :node => @priority unless @priority.nil? %>
+	<%= render_cell cell_for_node(@priority), :edit_badge, :node => @priority unless @priority.nil? %>
 </div>
 <div class="sub-line">
-	<%= render_cell cell_for_node(@time), :edit, :node => @time unless @time.nil? %>
+	<%= render_cell cell_for_node(@time), :edit_badge, :node => @time unless @time.nil? %>
 </div>
 <div class="sub-line">
 	<%- for tag in @tags -%>
-		<%= render_cell cell_for_node(tag), :edit, :node => tag %>
+		<%= render_cell cell_for_node(tag), :edit_badge, :node => tag %>
 	<%- end unless @tags.nil? -%>
 </div>

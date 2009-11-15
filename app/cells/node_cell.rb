@@ -15,51 +15,33 @@ class NodeCell < Cell::Base
   
   def show
     logger.prefixed self.class.to_s, :light_blue, 'show'
+    fetch_opts
     
+    fetch_badges
     
-    @node = @opts[:node]
-    
-    if @node.prop.class.nodeable?
-      Prop.badgeable_types.each do |t|
-        short_name = t.to_s(:short)
-        if t.stackable?
-          instance_variable_set(:"@#{short_name.pluralize}", @node.children.typed(short_name)) # i.e. @tags
-        else
-          instance_variable_set(:"@#{short_name}", @node.children.typed(short_name).first) # i.e. @check, @priority, @time
-        end
-      end
-      @check = @node.children.typed(:check).first
-    end
-    
-    render :layout => 'show_body'
+    render :view => 'show', :layout => 'show_body'
   end
   
   
-  def badge
-    logger.prefixed self.class.to_s, :light_blue, 'badge'
+  def show_badge
+    logger.prefixed self.class.to_s, :light_blue, 'show_badge'
+    fetch_opts
     
-    
-    @node = @opts[:node]
-    
-    render :layout => nil
+    render :view => 'show', :layout => nil
   end
   
   
   def new
     logger.prefixed self.class.to_s, :light_blue, 'new'
+    fetch_opts
     
-    
-    @node = @opts[:node]
-    
-    render :layout => 'new_item'
+    render :view => 'new', :layout => 'new_item'
   end
   
   
   def create
     logger.prefixed self.class.to_s, :light_blue, 'create'
-    
-    
-    @node = @opts[:node]
+    fetch_opts
     
     render :view => 'show', :layout => 'show_item'
   end
@@ -67,31 +49,27 @@ class NodeCell < Cell::Base
   
   def edit
     logger.prefixed self.class.to_s, :light_blue, 'edit'
+    fetch_opts
     
+    fetch_badges
     
-    @node = @opts[:node]
+    render :view => 'edit', :layout => 'edit_body'
+  end
+  
+  
+  def edit_badge
+    logger.prefixed self.class.to_s, :light_blue, 'edit_badge'
+    fetch_opts
     
-    if @node.prop.class.nodeable?
-      Prop.badgeable_types.each do |t|
-        short_name = t.to_s(:short)
-        if t.stackable?
-          instance_variable_set(:"@#{short_name.pluralize}", @node.children.typed(short_name)) # i.e. @tags
-        else
-          instance_variable_set(:"@#{short_name}", @node.children.typed(short_name).first) # i.e. @check, @priority, @time
-        end
-      end
-      @check = @node.children.typed(:check).first
-    end
-    
-    render :layout => 'edit_body'
+    render :view => 'edit', :layout => nil
   end
   
   
   def update
     logger.prefixed self.class.to_s, :light_blue, 'update'
+    fetch_opts
     
-    
-    @node = @opts[:node]
+    fetch_badges
     
     render :view => 'show', :layout => 'show_body'
   end
@@ -102,6 +80,28 @@ protected
   # must override in each derived Cell type
   def new_prop
     nil # @pile.build_..._prop OR ...Prop.new(:pile => @pile)
+  end
+  
+  
+  def fetch_opts
+    [:node].each do |opt_name|
+      instance_variable_set(:"@#{opt_name}", @opts[opt_name])
+    end
+  end
+  
+  
+  def fetch_badges
+    if @node.prop.class.nodeable?
+      Prop.badgeable_types.each do |t|
+        short_name = t.to_s(:short)
+        if t.stackable?
+          instance_variable_set(:"@#{short_name.pluralize}", @node.children.typed(short_name)) # i.e. @tags
+        else
+          instance_variable_set(:"@#{short_name}", @node.children.typed(short_name).first) # i.e. @check, @priority, @time
+        end
+      end
+      @check = @node.children.typed(:check).first
+    end
   end
   
 end
