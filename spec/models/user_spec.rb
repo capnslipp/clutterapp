@@ -118,5 +118,12 @@ describe User do
   end
   
   
+  it "should have infinite invites_remaining, given invite_limit of nil" do
+    u = Factory.create(:user)
+    u.invite_limit = nil
+    
+    u.invites_remaining.should be_infinite
+  end
+  
   
 end
