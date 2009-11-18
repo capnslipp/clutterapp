@@ -107,6 +107,7 @@ Rails::Initializer.run do |config|
     require 'logger_prefix_extension' # extends ActiveSupport::BufferedLogger with prefix(), prefixed()
     require 'active_record_nice_id_extension' # extends ActiveRecord::Base with nice_id()
     require 'hash_nice_to_s_extension' # extends Hash with to_s(:nice)
+    require 'polymorphic_route_hacks' # overrides ActionController::PolymorphicRoutes#extract_namespace() with a fixed version
   end
   
 end
