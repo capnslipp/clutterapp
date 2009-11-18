@@ -102,11 +102,19 @@ describe User do
     u.invite_token.should == i.token
   end
   
-  
   it "should give back nil if it doesn't have an invite" do
     u = Factory.create(:user, :invite => nil)
     
     u.invite_token.should be_nil
+  end
+  
+  it "should find and set the correct invite, given it's token" do
+    i = Factory.create(:invite)
+    u = Factory.create(:user, :invite => nil)
+    
+    u.invite_token = i.token
+    
+    u.invite.should == i
   end
   
   
