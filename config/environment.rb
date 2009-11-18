@@ -112,6 +112,7 @@ Rails::Initializer.run do |config|
     require 'active_record_nice_id_extension' # extends ActiveRecord::Base with nice_id()
     require 'hash_nice_to_s_extension' # extends Hash with to_s(:nice)
     require 'polymorphic_route_hacks' # overrides ActionController::PolymorphicRoutes#extract_namespace() with a fixed version
+    require 'dont_do' # a simple little extension that uses blocks to "comment-out" code, while retaining syntax highlighting
   end
   
 end
