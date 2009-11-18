@@ -30,29 +30,14 @@ defaults: &silver-delicious-built-in
   password: 
   <<: *dev
 
-defaults: &stc
-  adapter: postgresql
-  encoding: unicode
-  username: clutter
-  password: _fill_in_
-  pool: 5
-
 
 # Environments
 
 development:
-  database: clutter_development
+  database: clutter_eipr20091114_development
   <<: *silver-delicious-built-in
 
 # Warning: The database defined as "test" will be erased and re-generated from your development database when you run "rake". Do not set this db to the same as development or production.
 test:
-  database: clutter_test
+  database: clutter_eipr20091114_test
   <<: *silver-delicious-built-in
-
-staging:
-  database: clutter
-  <<: *stc
-
-production:
-  database: clutter
-  <<: *stc
