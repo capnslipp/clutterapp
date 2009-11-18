@@ -46,6 +46,11 @@ describe User do
     end
   end
   
+  it "should not require invite" do
+    u = Factory.create(:user, :invite => nil)
+    u.errors.on(:invite).should be_nil
+  end
+  
   
   it "should reset password" do
     u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalP4ssword')
@@ -88,5 +93,22 @@ describe User do
     Node.all.select {|n| n.root.pile.owner == u1 }.count.should == 1
     Node.all.select {|n| n.root.pile.owner == u2 }.count.should == 1
   end
+  
+  
+  it "should give back the invite's token if it has an invite" do
+    i = Factory.create(:invite)
+    u = Factory.create(:user, :invite => i)
+    
+    u.invite_token.should == i.token
+  end
+  
+  
+  it "should give back nil if it doesn't have an invite" do
+    u = Factory.create(:user, :invite => nil)
+    
+    u.invite_token.should be_nil
+  end
+  
+  
   
 end
