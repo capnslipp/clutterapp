@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
   
-  validates_presence_of   :invite_id, :message => 'is required'
+  #validates_presence_of   :invite_id, :message => 'is required'
   validates_uniqueness_of :invite_id
   
   has_many :sent_invites, :class_name => 'Invite', :foreign_key => 'sender_id'
