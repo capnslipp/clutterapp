@@ -46,12 +46,6 @@ class User < ActiveRecord::Base
   end
   
   
-  def self::find_by_login_if_exists(login)
-    user_list = find_all_by_login(login.to_s)
-    user_list.first
-  end
-  
-  
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
   
   def invite_token
