@@ -1,16 +1,12 @@
 module InvitesHelper
   
-  def current_users_invites_remaining
-    unless logged_in?
-      nil
+  def current_user_invites_remaining
+    invites_remaining = current_user.invites_remaining
+    
+    if invites_remaining.to_f.infinite?
+      'unlimited'
     else
-      invites_remaining = current_user.invites_remaining
-      
-      if invites_remaining.infinite?
-        'unlimited'
-      else
-        invites_remaining
-      end
+      invites_remaining
     end
   end
   
