@@ -62,62 +62,6 @@ describe User do
   end
   
   
-  it "should authenticate user" #do
-  #  u = Factory.create(:user, :login => 'alpha1', :password => 's3cret')
-  #  controller.session["user_credentials"].should == nil
-  #  UserSession.create(u).should == true
-  #  controller.session["user_credentials"].should == u.persistence_token
-  #  # User.authenticate('alpha1', 's3cret').should == u
-  #end
-  
-  it "shouldn't authenticate user with incorrect password" #do
-  #  u = Factory.create(:user, :login => 'alpha1', :password => 's3cret')
-  #  controller.session["user_credentials"].should == false
-  #  UserSession.create(Factory.attributes_for(:user).merge!(:password => "inc0rrect")).should == false
-  #  # UserSession.new(:login => 'alpha1', :password => 'inc0rrect').valid? == false
-  #end
-  
-  
-  it "should set remember token" do
-    session = UserSession.create(@user, :remember_me => true)
-    UserSession.remember_me.should_not be_nil
-  end
-  
-  it "should unset remember token" do
-    session = UserSession.create(@user, :remember_me => true)
-    UserSession.remember_me.should_not be_nil
-    UserSession.remember_me = false
-    UserSession.remember_me.should == false
-  end
-  
-  it "should remember me for one week" #do
-  #  session = UserSession.create(@user, :remember_me => true)
-  #  before = 1.week.from_now.utc
-  #  session.remember_me_for 1.week
-  #  after = 1.week.from_now.utc
-  #  session.remember_me.should_not be_nil
-  #  session.
-  #  assert @user.remember_token_expires_at.between?(before, after)
-  #end
-  
-  it "should remember me until one week" #do
-  #  time = 1.week.from_now.utc
-  #  @user.remember_me_until time
-  #  assert_not_nil @user.remember_token
-  #  assert_not_nil @user.remember_token_expires_at
-  #  assert_equal @user.remember_token_expires_at, time
-  #end
-  
-  it "should remember me default two weeks" #do
-  #  before = 2.weeks.from_now.utc
-  #  @user.remember_me
-  #  after = 2.weeks.from_now.utc
-  #  assert_not_nil @user.remember_token
-  #  assert_not_nil @user.remember_token_expires_at
-  #  assert @user.remember_token_expires_at.between?(before, after)
-  #end
-  
-  
   it "should create 2 Piles, when creating 2 Users" do
     assert_difference 'Pile.count', +2 do
       u1, u2 = 2.times { Factory.create(:user) }
