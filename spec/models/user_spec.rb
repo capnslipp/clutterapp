@@ -138,4 +138,16 @@ describe User do
   end
   
   
+  it "should not raise exception on create_default_pile!, given it having no Piles" do
+    u = Factory.create(:user)
+    u.stub!(:piles).and_return([])
+    
+    u.piles.count.should == 0
+    
+    Proc.new {
+      u.send(:create_default_pile!)
+    }.should_not raise_error
+  end
+  
+  
 end
