@@ -74,10 +74,22 @@ describe User do
   
   describe "invite" do
     
+    it "should accept invite" do
+      u = Factory.create(:user, :invite => Factory.create(:invite))
+      
+      u.errors.on(:invite).should be_nil
+    end
+    
     it "should NOT require invite" do
       u = Factory.create(:user, :invite => nil)
       
       u.errors.on(:invite).should be_nil
+    end
+    
+    it "be able to create multiple users without invites" do
+      u1, u2 = 2.times { Factory.create(:user, :invite => nil) }
+      
+      [u1, u2].each { |u| u.errors.on(:invite).should be_nil }
     end
     
   end
