@@ -48,13 +48,14 @@ class User < ActiveRecord::Base
     login
   end
   
+  def add_followee(followee)
+    self.followees << followee unless followees.include?(followee)
+  end
   
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
-  
   def invite_token
     invite.token if invite
   end
-  
   
   def invite_token=(token)
     self.invite = Invite.find_by_token(token)
