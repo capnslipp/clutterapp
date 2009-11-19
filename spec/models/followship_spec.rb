@@ -25,11 +25,6 @@ describe Followship do
     followee.users.count.should == 0
   end
   
-  it "should let followees access shared piles" do
-    charles = Factory.create(:user)
-    charles.share_pile_with_user(@pile, @user)
-    @user.add_followee(Factory.create(:user))
-  
-  end
+  it "should let followees access shared piles"
 end
 
