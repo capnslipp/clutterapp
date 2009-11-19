@@ -12,14 +12,10 @@ Factory.sequence :password do |n|
   "p#{n}ssword"
 end
 
-
-# Factory.define :user do |f|
-#   f.sequence(:login) { |u_n| "user_#{u_n}" }
-#   f.password 'p4ssword'
-#   f.password_confirmation { |u| u.password }
-#   f.sequence(:email) { |u_n| "user_#{u_n}@example.com" }
-#   f.association :invite
-# end
+Factory.define :followships do |f|
+  f.followee {|a| a.association(:followee)}
+  f.user {|a| a.association(:user)}
+end
 
 Factory.define :user do |f|
   f.sequence(:login) { |u_n| "user_#{u_n}" }
@@ -31,6 +27,7 @@ Factory.define :user do |f|
   f.persistence_token { Authlogic::Random.hex_token}
   f.single_access_token {Authlogic::Random.friendly_token}
   f.association :invite
+
 end
 
 
