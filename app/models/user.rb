@@ -5,18 +5,18 @@ class User < ActiveRecord::Base
   
   validates_presence_of     :login
   validates_length_of       :login,    :within => 6..40
-  validates_uniqueness_of   :login
+  validates_uniqueness_of   :login,    :message => %<"{{value}}" has already been taken>
 
   validates_length_of       :name,     :maximum => 100
   
   validates_presence_of     :email
   validates_length_of       :email,    :within => 6..100 #r@a.wk
-  validates_uniqueness_of   :email
+  validates_uniqueness_of   :email,    :message => %<"{{value}}" has already been taken>
 
   
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
   
-  validates_presence_of   :invite_id, :message => 'is required'
+  #validates_presence_of   :invite_id, :message => 'is required'
   validates_uniqueness_of :invite_id
   
   has_many :sent_invites, :class_name => 'Invite', :foreign_key => 'sender_id'
@@ -46,12 +46,6 @@ class User < ActiveRecord::Base
   
   def to_param
     login
-  end
-  
-  
-  def self::find_by_login_if_exists(login)
-    user_list = find_all_by_login(login.to_s)
-    user_list.first
   end
   
   

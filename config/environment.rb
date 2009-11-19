@@ -38,8 +38,12 @@ Rails::Initializer.run do |config|
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem 'slippyd-colorist', :lib => 'colorist', :version => '>=0.0.5', :source => 'http://gemcutter.org'
+  config.gem 'andand'
+  config.gem 'rspec', :lib => false, :version => '>= 1.2.9'
+  config.gem 'rspec-rails', :lib => false, :version => '>= 1.2.9'
   config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gems.github.com'
-  config.gem "authlogic", :lib => "authlogic", :source => "http://gemcutter.org"
+  config.gem "authlogic", :lib => "authlogic", :source => 'http://gemcutter.org'
+  
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
   # :all can be used as a placeholder for all plugins not explicitly named
@@ -107,6 +111,8 @@ Rails::Initializer.run do |config|
     require 'logger_prefix_extension' # extends ActiveSupport::BufferedLogger with prefix(), prefixed()
     require 'active_record_nice_id_extension' # extends ActiveRecord::Base with nice_id()
     require 'hash_nice_to_s_extension' # extends Hash with to_s(:nice)
+    require 'polymorphic_route_hacks' # overrides ActionController::PolymorphicRoutes#extract_namespace() with a fixed version
+    require 'dont_do' # a simple little extension that uses blocks to "comment-out" code, while retaining syntax highlighting
   end
   
 end

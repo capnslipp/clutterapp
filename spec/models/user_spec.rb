@@ -4,12 +4,8 @@ describe User do
   
   before(:each) do
     activate_authlogic
-    @user = Factory.create(:user)
   end
   
-  it "should be valid" do
-    @user.should be_valid
-  end
   
   it "should be able to add 1 user" do
     @user.followees << Factory.create(:user)
@@ -60,6 +56,11 @@ describe User do
     end
   end
   
+  it "should not require invite" do
+    u = Factory.create(:user, :invite => nil)
+    u.errors.on(:invite).should be_nil
+  end
+  
   
   it "should reset password" do
     u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalP4ssword')
@@ -74,62 +75,6 @@ describe User do
     u.password.should == 'or1ginalp4ssword'
     # User.('new_username', 'or1ginalp4ssword').should == u
   end
-  
-  
-  it "should authenticate user" #do
-  #  u = Factory.create(:user, :login => 'alpha1', :password => 's3cret')
-  #  controller.session["user_credentials"].should == nil
-  #  UserSession.create(u).should == true
-  #  controller.session["user_credentials"].should == u.persistence_token
-  #  # User.authenticate('alpha1', 's3cret').should == u
-  #end
-  
-  it "shouldn't authenticate user with incorrect password" #do
-  #  u = Factory.create(:user, :login => 'alpha1', :password => 's3cret')
-  #  controller.session["user_credentials"].should == false
-  #  UserSession.create(Factory.attributes_for(:user).merge!(:password => "inc0rrect")).should == false
-  #  # UserSession.new(:login => 'alpha1', :password => 'inc0rrect').valid? == false
-  #end
-  
-  
-  it "should set remember token" do
-    session = UserSession.create(@user, :remember_me => true)
-    UserSession.remember_me.should_not be_nil
-  end
-  
-  it "should unset remember token" do
-    session = UserSession.create(@user, :remember_me => true)
-    UserSession.remember_me.should_not be_nil
-    UserSession.remember_me = false
-    UserSession.remember_me.should == false
-  end
-  
-  it "should remember me for one week" #do
-  #  session = UserSession.create(@user, :remember_me => true)
-  #  before = 1.week.from_now.utc
-  #  session.remember_me_for 1.week
-  #  after = 1.week.from_now.utc
-  #  session.remember_me.should_not be_nil
-  #  session.
-  #  assert @user.remember_token_expires_at.between?(before, after)
-  #end
-  
-  it "should remember me until one week" #do
-  #  time = 1.week.from_now.utc
-  #  @user.remember_me_until time
-  #  assert_not_nil @user.remember_token
-  #  assert_not_nil @user.remember_token_expires_at
-  #  assert_equal @user.remember_token_expires_at, time
-  #end
-  
-  it "should remember me default two weeks" #do
-  #  before = 2.weeks.from_now.utc
-  #  @user.remember_me
-  #  after = 2.weeks.from_now.utc
-  #  assert_not_nil @user.remember_token
-  #  assert_not_nil @user.remember_token_expires_at
-  #  assert @user.remember_token_expires_at.between?(before, after)
-  #end
   
   
   it "should create 2 Piles, when creating 2 Users" do
@@ -158,5 +103,61 @@ describe User do
     Node.all.select {|n| n.root.pile.owner == u1 }.count.should == 1
     Node.all.select {|n| n.root.pile.owner == u2 }.count.should == 1
   end
+  
+  
+  it "should give back the invite's token if it has an invite" do
+    i = Factory.create(:invite)
+    u = Factory.create(:user, :invite => i)
+    
+    u.invite_token.should == i.token
+  end
+  
+  it "should give back nil if it doesn't have an invite" do
+    u = Factory.create(:user, :invite => nil)
+    
+    u.invite_token.should be_nil
+  end
+  
+  it "should find and set the correct invite, given it's token" do
+    i = Factory.create(:invite)
+    u = Factory.create(:user, :invite => nil)
+    
+    u.invite_token = i.token
+    
+    u.invite.should == i
+  end
+  
+  
+  it "should have infinite invites_remaining, given invite_limit of nil" do
+    u = Factory.create(:user)
+    u.invite_limit = nil
+    
+    u.invites_remaining.should be_infinite
+  end
+  
+  
+  it "should raise exception on create_default_pile!, given it already having Pile(s)" do
+    u = Factory.create(:user)
+    u.piles.create(Factory.attributes_for(:pile))
+    
+    u.piles.count.should == 2
+    
+    Proc.new {
+      u.send(:create_default_pile!)
+    }.should raise_error
+  end
+  
+  
+  it "should not raise exception on create_default_pile!, given it having no Piles" do
+    u = Factory.create(:user)
+    u.stub!(:piles).and_return([])
+    
+    u.piles.count.should == 0
+    
+    Proc.new {
+      u.send(:create_default_pile!)
+    }.should_not raise_error
+  end
+  
   
 end
