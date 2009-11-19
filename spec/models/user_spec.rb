@@ -4,6 +4,8 @@ describe User do
   
   before(:each) do
     activate_authlogic
+    
+    @user = Factory.create(:user)
   end
   
   
