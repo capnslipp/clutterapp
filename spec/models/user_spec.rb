@@ -5,22 +5,7 @@ describe User do
   before(:each) do
     activate_authlogic
   end
-  
-  
-  it "should be able to add 1 user" do
-    @user.followees << Factory.create(:user)
-    @user.followees.count.should == 1
-  end
-  
-  it "should be able to add 10 users" do
-    1.upto(10) do
-      @user.followees << Factory.create(:user)
-    end
-    @user.followees.count.should == 10
-  end
-  
-  it "should not let followees have access by default"
-  
+    
   it "should be created" do
     assert_difference 'User.count' do
       u = Factory.create(:user)
