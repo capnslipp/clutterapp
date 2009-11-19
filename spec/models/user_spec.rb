@@ -14,52 +14,72 @@ describe User do
     end
   end
   
-  it "should require login" do
-    assert_no_difference 'User.count' do
-      u = User.create( Factory.attributes_for(:user).merge!(:login => nil) )
-      u.errors.on(:login).should_not be_nil
+  
+  describe "login" do
+    
+    it "should require login" do
+      assert_no_difference 'User.count' do
+        u = User.create( Factory.attributes_for(:user).merge!(:login => nil) )
+        u.errors.on(:login).should_not be_nil
+      end
     end
+    
   end
   
-  it "should require password" do
-    assert_no_difference 'User.count' do
-      u = User.create( Factory.attributes_for(:user).merge!(:password => nil) )
-      u.errors.on(:password).should_not be_nil
+  
+  describe "password" do
+    
+    it "should require password" do
+      assert_no_difference 'User.count' do
+        u = User.create( Factory.attributes_for(:user).merge!(:password => nil) )
+        u.errors.on(:password).should_not be_nil
+      end
     end
-  end
-  
-  it "should require password confirmation" do
-    assert_no_difference 'User.count' do
-      u = User.create( Factory.attributes_for(:user).merge!(:password_confirmation => nil) )
-      u.errors.on(:password_confirmation).should_not be_nil
+    
+    it "should require password confirmation" do
+      assert_no_difference 'User.count' do
+        u = User.create( Factory.attributes_for(:user).merge!(:password_confirmation => nil) )
+        u.errors.on(:password_confirmation).should_not be_nil
+      end
     end
-  end
-  
-  it "should require email" do
-    assert_no_difference 'User.count' do
-      u = User.create( Factory.attributes_for(:user).merge!(:email => nil) )
-      u.errors.on(:email).should_not be_nil
+    
+    it "should reset password" do
+      u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalP4ssword')
+      
+      u.update_attributes(:password => 'n3wP4ssword', :password_confirmation => 'n3wP4ssword')
+      #User.authenticate('original_username', 'n3wP4ssword').should == u
     end
+    
+    it "should not rehash password" do
+      u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalp4ssword')
+      u.update_attributes(:login => 'new_username')
+      u.password.should == 'or1ginalp4ssword'
+      # User.('new_username', 'or1ginalp4ssword').should == u
+    end
+    
   end
   
-  it "should not require invite" do
-    u = Factory.create(:user, :invite => nil)
-    u.errors.on(:invite).should be_nil
+  
+  describe "email" do
+    
+    it "should require email" do
+      assert_no_difference 'User.count' do
+        u = User.create( Factory.attributes_for(:user).merge!(:email => nil) )
+        u.errors.on(:email).should_not be_nil
+      end
+    end
+    
   end
   
   
-  it "should reset password" do
-    u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalP4ssword')
-
-    u.update_attributes(:password => 'n3wP4ssword', :password_confirmation => 'n3wP4ssword')
-    #User.authenticate('original_username', 'n3wP4ssword').should == u
-  end
-  
-  it "should not rehash password" do
-    u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalp4ssword')
-    u.update_attributes(:login => 'new_username')
-    u.password.should == 'or1ginalp4ssword'
-    # User.('new_username', 'or1ginalp4ssword').should == u
+  describe "invite" do
+    
+    it "should NOT require invite" do
+      u = Factory.create(:user, :invite => nil)
+      
+      u.errors.on(:invite).should be_nil
+    end
+    
   end
   
   
