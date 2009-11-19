@@ -103,7 +103,7 @@ describe User do
     end
     
     it "be able to create multiple users without invites" do
-      u1, u2 = 2.times { Factory.create(:user, :invite => nil) }
+      u1, u2 = (1..2).to_a.collect { Factory.create(:user, :invite => nil) }
       
       [u1, u2].each { |u| u.errors.on(:invite).should be_nil }
     end
