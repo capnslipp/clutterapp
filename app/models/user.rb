@@ -28,7 +28,10 @@ class User < ActiveRecord::Base
   #before_validation_on_create :create_default_pile!
   after_create :default_pile # ensures that it's created
   
-  
+  #Followship associations
+  has_many :followships
+  has_many :followees, :through => :followships
+  has_many :users, :through => :followships
   
   has_many :piles, :foreign_key => 'owner_id', :dependent => :destroy, :autosave => true
   
