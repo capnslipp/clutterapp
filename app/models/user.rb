@@ -49,11 +49,24 @@ class User < ActiveRecord::Base
   end
   
   #Followship methods
+  
   def add_followee(followee)
-    followship = followships.build(:user_id => self.id, :followee_id => followee.id)
+    followship = followships.build(:followee_id => followee.id)
     unless followship.save
       logger.debug "User #{followee.login} is already the users friend."
     end
+  end
+  
+  def follow(user)
+    followship = followships.build(:user_id => user.id, :followee_id => self.id)
+    unless followship.save
+      logger.debug "User is already following #{user.login}"
+    end
+  end
+  
+  def unfollow(user)
+    followship = Followship.find_by_user_and_followee(user, self)
+    followship.destroy if followship
   end
   
   def remove_followee(followee)
@@ -63,6 +76,10 @@ class User < ActiveRecord::Base
   
   def is_followee?(followee)
     self.followees.include? followee
+  end
+  
+  def following?(user)
+    self.users.include? user
   end
   
   def follows
