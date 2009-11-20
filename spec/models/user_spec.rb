@@ -74,9 +74,21 @@ describe User do
   
   
   describe "followees" do
-    it "should be able to add 1 followees" do
+    it "should be able to add 1 followee" do
       @user.add_followee(Factory.create(:user))
       @user.followees.count.should == 1
+    end
+    
+    it "should be able to follow 1 user" do
+      @user.follow(Factory.create(:user))
+      @user.users.count.should == 1
+    end
+    
+    it "should be able to follow 10 users" do
+      1.upto(10) do
+        @user.follow(Factory.create(:user))
+      end
+      @user.users.count.should == 10
     end
     
     it "should be able to add 10 followees" do
@@ -89,7 +101,7 @@ describe User do
     it "should let followees follow the user" do
       followee = Factory.create(:user)
       @user.add_followee(followee)
-      followee.add_followee(@user)
+      followee.follow(@user)
       followee.users.count.should == 1
     end
 
