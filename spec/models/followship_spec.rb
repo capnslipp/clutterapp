@@ -13,14 +13,5 @@ describe Followship do
       followship = Followship.create(:user_id => Factory.create(:user).id, :followee_id => @user.id)
       followship.should be_valid
     end
-    
-    it "should find unique followships by who the user follows" do
-      10.times do |f|
-        Followship.create(:user_id => Factory.create(:user).id, :followee_id => @user.id)
-        Followship.create(:user_id => Factory.create(:user).id, :followee_id => Factory.create(:user).id)
-      end
-      followships = Followship.find_follows(@user)
-      followships.count.should == 10
-    end
   end
 end
