@@ -3,28 +3,24 @@ require 'spec_helper'
 describe Followship do
   
   before(:each) do
+    activate_authlogic
     @user = Factory.create(:user)
     @pile = @user.default_pile
   end
   
-  it "should be able to add 1 followees" do
-    @user.add_followee(Factory.create(:user))
-    @user.followees.count.should == 1
-  end
-
-  it "should be able to add 10 followees" do
-    1.upto(10) do
-      @user.add_followee(Factory.create(:user))
+  describe "Finding followships" do
+    it "should create a followship between a user and a followee" do
+      followship = Followship.create(:user_id => Factory.create(:user).id, :followee_id => @user.id)
+      followship.should be_valid
     end
-    @user.followees.count.should == 10
+    
+    it "should find unique followships by who the user follows" do
+      10.times do |f|
+        Followship.create(:user_id => Factory.create(:user).id, :followee_id => @user.id)
+        Followship.create(:user_id => Factory.create(:user).id, :followee_id => Factory.create(:user).id)
+      end
+      followships = Followship.find_follows(@user)
+      followships.count.should == 10
+    end
   end
-
-  it "should not let followees have access by default" do
-    followee = Factory.create(:user)
-    @user.add_followee(Factory.create(:user))
-    followee.users.count.should == 0
-  end
-  
-  it "should let followees access shared piles"
 end
-
