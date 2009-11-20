@@ -61,13 +61,17 @@ class User < ActiveRecord::Base
     followship.destroy if followship
   end
   
+
+  
   def is_followee?(followee)
     self.followees.include? followee
   end
   
   def follows
-    Followship.find_follows self
+    User.find_follows self
   end
+  
+
   
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
   def invite_token
@@ -109,6 +113,10 @@ protected
   def create_default_pile!
     raise Exception.new('A default Pile could not be created because one for this User already exists.') if piles.count > 0
     create_default_pile
+  end
+  
+  def self.find_follows(user)
+    Followship.find(:all, :conditions => ["followee_id = ?", user.id]).map{|f|f.user}
   end
   
 end
