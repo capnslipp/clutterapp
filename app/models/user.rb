@@ -61,8 +61,6 @@ class User < ActiveRecord::Base
     followship.destroy if followship
   end
   
-
-  
   def is_followee?(followee)
     self.followees.include? followee
   end
@@ -70,8 +68,6 @@ class User < ActiveRecord::Base
   def follows
     User.find_follows self
   end
-  
-
   
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
   def invite_token
@@ -81,7 +77,6 @@ class User < ActiveRecord::Base
   def invite_token=(token)
     self.invite = Invite.find_by_token(token)
   end
-  
   
   def invites_remaining
     if invite_limit.nil?
