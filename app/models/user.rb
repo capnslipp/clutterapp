@@ -6,13 +6,13 @@ class User < ActiveRecord::Base
   validates_presence_of     :login
   validates_length_of       :login,    :within => 6..40
   validates_uniqueness_of   :login,    :message => %<"{{value}}" has already been taken>
-
+  
   validates_length_of       :name,     :maximum => 100
   
   validates_presence_of     :email
   validates_length_of       :email,    :within => 6..100 #r@a.wk
   validates_uniqueness_of   :email,    :message => %<"{{value}}" has already been taken>
-
+  
   
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
   
@@ -48,8 +48,25 @@ class User < ActiveRecord::Base
     login
   end
   
+  #Followship methods
   def add_followee(followee)
-    self.followees << followee unless followees.include?(followee)
+    followship = followships.build(:user_id => self.id, :followee_id => followee.id)
+    unless followship.save
+      logger.debug "User #{followee.login} is already the users friend."
+    end
+  end
+  
+  def remove_followee(followee)
+    followship = Followship.find_by_user_and_followee(self, followee)
+    followship.destroy if followship
+  end
+  
+  def is_followee?(followee)
+    self.followees.include? followee
+  end
+  
+  def follows
+    Followship.find_follows self
   end
   
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
