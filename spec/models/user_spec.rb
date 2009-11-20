@@ -73,6 +73,45 @@ describe User do
   end
   
   
+  describe "followees" do
+    it "should be able to add 1 followees" do
+      @user.add_followee(Factory.create(:user))
+      @user.followees.count.should == 1
+    end
+    
+    it "should be able to add 10 followees" do
+      1.upto(10) do
+        @user.add_followee(Factory.create(:user))
+      end
+      @user.followees.count.should == 10
+    end
+    
+    it "should let followees follow the user" do
+      followee = Factory.create(:user)
+      @user.add_followee(followee)
+      followee.add_followee(@user)
+      followee.users.count.should == 1
+    end
+
+    it "should let user access who it follows" do
+      u1 = Factory.create(:user)
+      u2 = Factory.create(:user)
+      u1.add_followee(@user)
+      u2.add_followee(@user)
+      @user.follows.count.should == 2
+    end
+    
+    it "should find unique users by who the user follows" do
+      10.times do |f|
+        Followship.create(:user_id => Factory.create(:user).id, :followee_id => @user.id)
+        Followship.create(:user_id => Factory.create(:user).id, :followee_id => Factory.create(:user).id)
+      end
+      followships = User.find_follows(@user)
+      followships.count.should == 10
+    end
+  end
+  
+  
   describe "invite" do
     
     it "should accept invite" do
