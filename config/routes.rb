@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  
+  map.resource :followship
   map.stylesheets '/stylesheets/:id.css', :controller => 'stylesheets', :action => 'show'
   
   map.login '/in',                        :controller => 'user_sessions',    :action => 'new',     :conditions => {:method => :get}
