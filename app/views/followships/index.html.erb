@@ -1,0 +1,13 @@
+<ul>
+	<% @followees.each do |followee| %>
+		<li id="<%= followee.login %>">
+			<div class="followee_container" style="width: 305px;">
+			<h3><%= link_to followee.login, user_piles_path(followee.login) %></h3>	
+			<p>A Description could go here.</p>
+			</div>
+			<div class="button_container">
+				<%= button_to "Unfollow", :action => :toggle_follow %>
+			</div>
+		</li>
+	<% end -%>
+</ul>

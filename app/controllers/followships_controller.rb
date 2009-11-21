@@ -1,6 +1,14 @@
 class FollowshipsController < ApplicationController
   before_filter :authorize
 
+  def index
+    @followees = current_user.followees
+    @users = current_user.users
+  end
+  
+  def create
+  end
+  
   def toggle_follow
     @user = User.find_by_login(params[:login])
     if @user.is_followee? current_user
@@ -12,5 +20,9 @@ class FollowshipsController < ApplicationController
     end
     redirect_to followship_path
   end
+  
+  def destroy
+  end
+  
   
 end
