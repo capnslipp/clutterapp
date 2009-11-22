@@ -12,8 +12,8 @@ Factory.sequence :password do |n|
   "p#{n}ssword"
 end
 
-Factory.define :followships do |f|
-  f.followee {|a| a.association(:followee)}
+Factory.define :followship do |f|
+  f.followee {|a| a.association(:user)}
   f.user {|a| a.association(:user)}
 end
 
