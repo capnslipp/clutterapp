@@ -26,13 +26,22 @@ describe NodeCell do
     mock_node :prop => mock_model(Prop)
   end
   
-  describe "show" do
+  describe "show action" do
     it "doesn't render" do
       proc {
         @result = render_cell(:show, :node => @mock_node)
       }.should raise_error(ActionView::MissingTemplate)
     end
   end
+  
+  describe "edit action" do
+    it "doesn't render" do
+      proc {
+        @result = render_cell(:edit, :node => @mock_node)
+      }.should raise_error(ActionView::MissingTemplate)
+    end
+  end
+  
 end
 
 
@@ -41,13 +50,22 @@ share_examples_for "All NodeCell Types" do
   integrate_views
   include NodeSpecHelper
   
-  describe "show" do
+  describe "show action" do
     it "renders" do
       @result = render_cell(:show, :node => @mock_node)
       opts[:node].should be(@mock_node)
       @result.should_not be_blank
     end
   end
+  
+  describe "edit action" do
+    it "renders" do
+      @result = render_cell(:edit, :node => @mock_node)
+      opts[:node].should be(@mock_node)
+      @result.should_not be_blank
+    end
+  end
+  
 end
 
 
@@ -56,7 +74,7 @@ describe CheckNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(CheckProp)
-    @mock_node.prop.should_receive(:checked?).and_return(false)
+    @mock_node.prop.stub(:checked?).and_return(false)
     @mock_node.prop.should_receive(:badged?).and_return(false)
   end
 end
@@ -67,7 +85,7 @@ describe NoteNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(NoteProp)
-    @mock_node.prop.should_receive(:note).and_return('A test note.')
+    @mock_node.prop.stub(:note).and_return('A test note.')
   end
 end
 
@@ -77,11 +95,11 @@ describe PileRefNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(PileRefProp)
-    @mock_node.prop.should_receive(:ref_pile).at_least(:once).and_return(mock_model(Pile))
+    @mock_node.prop.stub(:ref_pile).at_least(:once).and_return(mock_model(Pile))
     @mock_node.prop.ref_pile.should_receive(:name).and_return("A Test Ref'd Pile")
-    @mock_node.prop.ref_pile.should_receive(:owner).and_return(mock_model(User))
+    @mock_node.prop.ref_pile.stub(:owner).and_return(mock_model(User))
     @mock_node.prop.ref_pile.should_receive(:root_node).at_least(:once).and_return(mock_model(Node))
-    @mock_node.prop.ref_pile.root_node.should_receive(:children).and_return([])
+    @mock_node.prop.ref_pile.root_node.stub(:children).and_return([])
   end
 end
 
@@ -91,7 +109,7 @@ describe PriorityNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(PriorityProp)
-    @mock_node.prop.should_receive(:priority).at_least(:once).and_return(3)
+    @mock_node.prop.stub(:priority).at_least(:once).and_return(3)
     @mock_node.prop.should_receive(:badged?).and_return(false)
   end
 end
@@ -102,7 +120,7 @@ describe TagNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(TagProp)
-    @mock_node.prop.should_receive(:tag).and_return('test-tag')
+    @mock_node.prop.stub(:tag).and_return('test-tag')
     @mock_node.prop.should_receive(:badged?).and_return(false)
   end
 end
@@ -113,7 +131,7 @@ describe TextNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(TextProp)
-    @mock_node.prop.should_receive(:text).and_return('test text')
+    @mock_node.prop.stub(:text).and_return('test text')
   end
 end
 
@@ -123,7 +141,7 @@ describe TimeNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(TimeProp)
-    @mock_node.prop.should_receive(:time).and_return(Time.now)
+    @mock_node.prop.stub(:time).and_return(Time.now)
     @mock_node.prop.should_receive(:badged?).and_return(false)
   end
 end
