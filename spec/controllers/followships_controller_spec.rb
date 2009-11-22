@@ -17,11 +17,13 @@ describe FollowshipsController do
       response.should be_success
     end
   end
-
-  describe "GET 'destroy'" do
-    it "should be successful" do
-      get 'destroy'
-      response.should be_success
-    end
+  
+  
+  describe "DELETE 'destroy'" do
+    it "should be successful" #do
+    #  delete 'destroy'
+    #  response.should be_success
+    #end
   end
+  
 end
