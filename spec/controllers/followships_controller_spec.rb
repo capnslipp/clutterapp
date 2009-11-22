@@ -11,9 +11,9 @@ describe FollowshipsController do
   end
 
 
-  describe "GET 'create'" do
+  describe "POST 'create'" do
     it "should be successful" do
-      get 'create'
+      post 'create'
       response.should be_success
     end
   end

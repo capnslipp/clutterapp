@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   
-  map.resources :followships, :only => [:index, :create, :destroy], :member => { :toggle_follow => :get }
+  #map.resources :followships, :only => [:index, :create, :destroy], :member => { :toggle_follow => :post }
   
   map.stylesheets '/stylesheets/:id.css', :controller => 'stylesheets', :action => 'show'
   
@@ -40,6 +40,12 @@ ActionController::Routing::Routes.draw do |map|
       
     end
     
+    users.resources :followships do |followships|
+     followships.resources :only => [:create, :destroy], :member => {:toggle_follow => :post}
+    end
+    #/:user_id/followin
+    users.following '/following', :controller => 'followships', :action => 'following', :conditions => {:method => :get}
+    users.followers '/followers', :controller => 'followships', :action => 'followers', :conditions => {:method => :get}
   end
   
   map.about '/about', :controller => 'front'
