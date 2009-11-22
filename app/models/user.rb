@@ -31,7 +31,9 @@ class User < ActiveRecord::Base
   #Followship associations
   has_many :followships
   has_many :followees, :through => :followships
-  has_many :users, :through => :followships
+  # Hey Josh, is this followers???
+  # Any Followship relation that has a user pointing to this User… Hmm.
+  # has_many :users,     :through => :followships # necessary?
   
   has_many :piles, :foreign_key => 'owner_id', :dependent => :destroy, :autosave => true
   
@@ -50,40 +52,35 @@ class User < ActiveRecord::Base
   
   #Followship methods
   
-  def add_followee(followee)
-    followship = followships.build(:followee_id => followee.id)
-    unless followship.save
-      logger.debug "User #{followee.login} is already the users friend."
-    end
+  def follow(user_to_follow)
+    followship = followships.build(:followee => user_to_follow)
+    
+    logger.debug "User is already following #{followee.login}" unless followship.save
   end
   
-  def follow(user)
-    followship = followships.build(:user_id => user.id, :followee_id => self.id)
-    unless followship.save
-      logger.debug "User is already following #{user.login}"
-    end
-  end
+  # Combining the two into the follow one above
+  #def follow(user)
+  #  followship = followships.build(:user_id => user.id, :followee_id => self.id)
+  #  unless followship.save
+  #    logger.debug "User is already following #{user.login}"
+  #  end
+  #end
   
-  def unfollow(user)
-    followship = Followship.find_by_user_and_followee(user, self)
+  def unfollow(user_to_unfollow)
+    followship = Followship.find_by_user_and_followee(self, user_to_unfollow)
     followship.destroy if followship
   end
   
-  def remove_followee(followee)
-    followship = Followship.find_by_user_and_followee(self, followee)
-    followship.destroy if followship
+  def following?(followee_user)
+    self.followees.include? followee_user
   end
   
-  def is_followee?(followee)
-    self.followees.include? followee
+  def followed_by?(follower_user)
+    self.followers.include? follower_user
   end
   
-  def following?(user)
-    self.users.include? user
-  end
-  
-  def follows
-    User.find_follows self
+  def followers
+    User.find_follows(self)
   end
   
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>

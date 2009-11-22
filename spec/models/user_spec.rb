@@ -75,43 +75,73 @@ describe User do
   
   describe "followees" do
     it "should be able to add 1 followee" do
-      @user.add_followee(Factory.create(:user))
+      @user.follow(Factory.create(:user))
       @user.followees.count.should == 1
     end
     
+    #For this test, the @user follows @user2
+    #So how should @user2 have access to @user?
+    #I'm thinking the user_id in Followship should be akin to 
+    #follower_id. and @user.followers should be 1?
     it "should be able to follow 1 user" do
       @user2 = Factory.create(:user)
       @user.follow(@user2)
-      @user.users.count.should == 1
-      @user2.followees.count.should == 1
+      @user.followees.count.should == 1
     end
     
-    it "should be able to follow 10 users" do
+    it "should be able to follow 10 Users and have a followees count of 10" do
       1.upto(10) do
         @user.follow(Factory.create(:user))
-      end
-      @user.users.count.should == 10
-    end
-    
-    it "should be able to add 10 followees" do
-      1.upto(10) do
-        @user.add_followee(Factory.create(:user))
       end
       @user.followees.count.should == 10
     end
     
+    it "should be able to follow 10 Users and each of them should be followed by it" do
+      @followees = []
+      
+      1.upto(10) do
+        @followees << followee_user = Factory.create(:user)
+        @user.follow(followee_user)
+      end
+      
+      @followees.each do |fu|
+        fu.should be_followed_by(@user)
+      end
+    end
+    
+    it "should be able to have 10 Users follow it and have a followers count of 10" do
+      1.upto(10) do
+        Factory.create(:user).follow(@user)
+      end
+      
+      @user.followers.count.should == 10
+    end
+    
+    it "should be able to have 10 Users follow it and each of them should be following it" do
+      @followers = []
+      
+      1.upto(10) do
+        @followers << follower_user = Factory.create(:user)
+        follower_user.follow(@user)
+      end
+      
+      @followers.each do |fu|
+        fu.should be_following(@user)
+      end
+    end
+    
     it "should let followees follow the user" do
-      followee = Factory.create(:user)
-      @user.add_followee(followee)
-      followee.users.count.should == 1
+      followee_user = Factory.create(:user)
+      @user.follow(followee_user)
+      followee_user.followers.count.should == 1
     end
 
     it "should let user access who it follows" do
       u1 = Factory.create(:user)
       u2 = Factory.create(:user)
-      u1.add_followee(@user)
-      u2.add_followee(@user)
-      @user.follows.count.should == 2
+      u1.follow(@user)
+      u2.follow(@user)
+      @user.followers.count.should == 2
     end
     
     it "should find unique users by who the user follows" do
