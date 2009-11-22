@@ -149,9 +149,28 @@ describe User do
         Followship.create(:user_id => Factory.create(:user).id, :followee_id => @user.id)
         Followship.create(:user_id => Factory.create(:user).id, :followee_id => Factory.create(:user).id)
       end
-      followships = User.find_follows(@user)
+      followships = User.followers_of(@user)
       followships.count.should == 10
     end
+    
+    it "should be mutual friends when both users are following each other" do
+      another_user = Factory.create(:user)
+      @user.follow(another_user)
+      another_user.follow(@user)
+      
+      @user.should be_friends_with(another_user)
+      another_user.should be_friends_with(@user)
+    end
+    
+    it "should be included in each other's friends list when both users are following each other" do
+      another_user = Factory.create(:user)
+      @user.follow(another_user)
+      another_user.follow(@user)
+      
+      @user.friends.should be_include(another_user)
+      another_user.friends.should be_include(@user)
+    end
+    
   end
   
   

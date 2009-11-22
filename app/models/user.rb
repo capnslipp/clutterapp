@@ -35,6 +35,15 @@ class User < ActiveRecord::Base
   # Any Followship relation that has a user pointing to this User… Hmm.
   # has_many :users,     :through => :followships # necessary?
   
+  # @fix: get it to properly alias tables so that "a_user.followees.followers_of(self)" works
+  named_scope :followers_of, proc { |a_user|
+    {
+      :conditions => { :followships => {:followee_id => a_user.id} },
+      :joins => [:followships => :followee]
+    }
+  }
+  
+  
   has_many :piles, :foreign_key => 'owner_id', :dependent => :destroy, :autosave => true
   
   
@@ -80,7 +89,17 @@ class User < ActiveRecord::Base
   end
   
   def followers
-    User.find_follows(self)
+    User.followers_of(self)
+  end
+  
+  def friends
+    #followees.followers_of self
+    # @todo: get the below to work as the above
+    followees.select {|f| f.following?(self) }
+  end
+  
+  def friends_with?(another_user)
+    self.friends.include? another_user
   end
   
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
@@ -122,10 +141,6 @@ protected
   def create_default_pile!
     raise Exception.new('A default Pile could not be created because one for this User already exists.') if piles.count > 0
     create_default_pile
-  end
-  
-  def self.find_follows(user)
-    Followship.find(:all, :conditions => ["followee_id = ?", user.id]).map{|f|f.user}
   end
   
 end
