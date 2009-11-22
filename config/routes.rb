@@ -1,5 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :followships
+  
+  map.resources :followships, :only => [:index, :create, :destroy], :member => { :toggle_follow => :get }
+  
   map.stylesheets '/stylesheets/:id.css', :controller => 'stylesheets', :action => 'show'
   
   map.login '/in',                        :controller => 'user_sessions',    :action => 'new',     :conditions => {:method => :get}
