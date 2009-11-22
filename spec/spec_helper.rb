@@ -13,6 +13,10 @@ require File.dirname(__FILE__) + "/factories"
 # in ./support/ and its subdirectories.
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
 
+# Requires cells specs in ./cells/ and its subdirectories.
+Dir[RAILS_ROOT + "/app/cells/*.rb"].each {|f| require f }
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'cells','**','*.rb'))].each {|f| require f}
+
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
   # lines, delete config/database.yml and disable :active_record
