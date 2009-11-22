@@ -5,6 +5,7 @@ require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environ
 require 'spec/autorun'
 require 'spec/rails'
 require File.dirname(__FILE__) + "/factories"
+require 'spec/cells'
 
 # Uncomment the next line to use webrat's matchers
 #require 'webrat/integrations/rspec-rails'
@@ -14,7 +15,6 @@ require File.dirname(__FILE__) + "/factories"
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
 
 # Requires cells specs in ./cells/ and its subdirectories.
-Dir[RAILS_ROOT + "/app/cells/*.rb"].each {|f| require f }
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'cells','**','*.rb'))].each {|f| require f}
 
 Spec::Runner.configure do |config|
