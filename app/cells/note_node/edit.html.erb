@@ -4,6 +4,7 @@
 		<%- node_form.fields_for :prop do |prop_form| -%>
 			<%= prop_form.text_area :note, :class => 'field' %>
 		<%- end -%>
+		<%#textarea class="field" id="node_prop_note" name="node[prop][note]"><%=h node_form.object.prop.note % ></textarea%>
 		
 		<%# ✓ %><%= node_form.submit '&#10003;' %>
 		
