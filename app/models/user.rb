@@ -36,12 +36,10 @@ class User < ActiveRecord::Base
   # has_many :users,     :through => :followships # necessary?
   
   # @fix: get it to properly alias tables so that "a_user.followees.followers_of(self)" works
-  named_scope :followers_of, proc { |a_user|
-    {
-      :conditions => { :followships => {:followee_id => a_user.id} },
-      :joins => [:followships => :followee]
-    }
-  }
+  named_scope :followers_of, proc {|a_user| {
+      :conditions => { :followships_4_followers_of => {:followee_id => a_user.id} },
+      :joins => %q{INNER JOIN `followships` as followships_4_followers_of ON followships_4_followers_of.user_id = users.id} #:joins => :followships # with "followships as followships_4_followers_of" alias
+  } }
   
   
   has_many :piles, :foreign_key => 'owner_id', :dependent => :destroy, :autosave => true
@@ -93,9 +91,7 @@ class User < ActiveRecord::Base
   end
   
   def friends
-    #followees.followers_of self
-    # @todo: get the below to work as the above
-    followees.select {|f| f.following?(self) }
+    followees.followers_of(self)
   end
   
   def friends_with?(another_user)
