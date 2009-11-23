@@ -14,17 +14,17 @@ class NodeCell < Cell::Base
   
   
   def show
-    logger.prefixed self.class.to_s, :light_blue, 'show'
+    logger.prefixed self.class.to_s, :light_blue, state_name
     fetch_opts
     
     fetch_badges
     
-    render :view => 'show', :layout => 'show_body'
+    render :view => 'show', :layout => 'body'
   end
   
   
   def show_badge
-    logger.prefixed self.class.to_s, :light_blue, 'show_badge'
+    logger.prefixed self.class.to_s, :light_blue, state_name
     fetch_opts
     
     render :view => 'show', :layout => nil
@@ -32,33 +32,33 @@ class NodeCell < Cell::Base
   
   
   def new
-    logger.prefixed self.class.to_s, :light_blue, 'new'
+    logger.prefixed self.class.to_s, :light_blue, state_name
     fetch_opts
     
-    render :view => 'new', :layout => 'new_item'
+    render :view => 'new', :layout => 'item'
   end
   
   
   def create
-    logger.prefixed self.class.to_s, :light_blue, 'create'
+    logger.prefixed self.class.to_s, :light_blue, state_name
     fetch_opts
     
-    render :view => 'show', :layout => 'show_item'
+    render :view => 'show', :layout => 'item'
   end
   
   
   def edit
-    logger.prefixed self.class.to_s, :light_blue, 'edit'
+    logger.prefixed self.class.to_s, :light_blue, state_name
     fetch_opts
     
     fetch_badges
     
-    render :view => 'edit', :layout => 'edit_body'
+    render :view => 'edit', :layout => 'body'
   end
   
   
   def edit_badge
-    logger.prefixed self.class.to_s, :light_blue, 'edit_badge'
+    logger.prefixed self.class.to_s, :light_blue, state_name
     fetch_opts
     
     render :view => 'edit', :layout => nil
@@ -66,12 +66,12 @@ class NodeCell < Cell::Base
   
   
   def update
-    logger.prefixed self.class.to_s, :light_blue, 'update'
+    logger.prefixed self.class.to_s, :light_blue, state_name
     fetch_opts
     
     fetch_badges
     
-    render :view => 'show', :layout => 'show_body'
+    render :view => 'show', :layout => 'body'
   end
   
   

@@ -5,7 +5,7 @@ class PileRefNodeCell < NodeCell
   def show
     super
     
-    render :layout => 'pile_ref_item'
+    render :layout => 'pile_ref'
   end
   
   
