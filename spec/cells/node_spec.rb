@@ -107,7 +107,7 @@ describe CheckNodeCell do
   before(:each) do
     mock_node :prop => mock_model(CheckProp, :checked? => false)
     @mock_node.prop.should_receive(:badged?).and_return(false)
-    @mock_node.prop.stubs(:type => CheckProp)
+    @mock_node.prop.stubs(:class => CheckProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -128,7 +128,7 @@ describe NoteNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(NoteProp, :note => 'A test note for >> you.')
-    @mock_node.prop.stubs(:type => NoteProp)
+    @mock_node.prop.stubs(:class => NoteProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -156,7 +156,7 @@ describe PileRefNodeCell do
     @mock_node.prop.ref_pile.stub(:owner).and_return(mock_model(User))
     @mock_node.prop.ref_pile.should_receive(:root_node).at_least(:once).and_return(mock_model(Node))
     @mock_node.prop.ref_pile.root_node.stub(:children).and_return([])
-    @mock_node.prop.stubs(:type => PileRefProp)
+    @mock_node.prop.stubs(:class => PileRefProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -181,7 +181,7 @@ describe PriorityNodeCell do
   before(:each) do
     mock_node :prop => mock_model(PriorityProp, :priority => 110000000000)
     @mock_node.prop.should_receive(:badged?).and_return(false)
-    @mock_node.prop.stubs(:type => PriorityProp)
+    @mock_node.prop.stubs(:class => PriorityProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -206,7 +206,7 @@ describe TagNodeCell do
   before(:each) do
     mock_node :prop => mock_model(TagProp, :tag => 'test-tag')
     @mock_node.prop.should_receive(:badged?).and_return(false)
-    @mock_node.prop.stubs(:type => TagProp)
+    @mock_node.prop.stubs(:class => TagProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -230,7 +230,7 @@ describe TextNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(TextProp, :text => 'test text')
-    @mock_node.prop.stubs(:type => TextProp)
+    @mock_node.prop.stubs(:class => TextProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -256,7 +256,7 @@ describe TimeNodeCell do
     @time_now = Time.now
     mock_node :prop => mock_model(TimeProp, :time => @time_now)
     @mock_node.prop.should_receive(:badged?).and_return(false)
-    @mock_node.prop.stubs(:type => TimeProp)
+    @mock_node.prop.stubs(:class => TimeProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
