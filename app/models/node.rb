@@ -27,7 +27,7 @@ class Node < ActiveRecord::Base
   def to_s(format = :default, &block)
     if format == :short
       prop_type = read_attribute(:prop_type)
-      prop_type.classify.to_s(:short) unless prop_type.nil?
+      prop_type.classify.short_name unless prop_type.nil?
     else
       super(&block)
     end

@@ -7,7 +7,7 @@
 	<div class="buttons">
 		<%- for t in Prop.types -%>
 			<%- ability_classes = Prop.abilities.select{|a| t.send("#{a}?") }.collect{|a| a.to_s }.join(' ') -%>
-			<a href="#" class="new <%= t.to_s(:short) %> <%= ability_classes %>"><%= t.to_s(:short) %></a>
+			<a href="#" class="new <%= t.short_name %> <%= ability_classes %>"><%= t.short_name %></a>
 		<%- end -%>
 	</div>
 	

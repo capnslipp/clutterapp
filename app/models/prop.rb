@@ -19,15 +19,11 @@ class Prop < ActiveRecord::Base
     type
   end
   
-  def self::to_s(format = :default)
-    if format == :short
-      name = self.to_s
-      raise NameError.new('all prop sub-classes must end in the word "Prop"', name) unless name =~ /Prop$/
-      name = name[0...-('Prop'.length)]
-      name.underscore.dasherize
-    else
-      super()
-    end
+  def self::short_name
+    name = self.to_s
+    raise NameError.new('all prop sub-classes must end in the word "Prop"', name) unless name =~ /Prop$/
+    name = name[0...-('Prop'.length)]
+    name.underscore.dasherize
   end
   
   
