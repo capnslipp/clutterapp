@@ -107,14 +107,14 @@ describe CheckNodeCell do
   before(:each) do
     mock_node :prop => mock_model(CheckProp, :checked? => false)
     @mock_node.prop.should_receive(:badged?).and_return(false)
-    CheckProp.stub!(:to_s).with(anything).and_return('check') # @fix: not working; probably due to overriding to_s
+    @mock_node.prop.stubs(:type => CheckProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
   
   describe "form-based" do
     describe("edit action") { it_should_behave_like "Editing a NodeCell" }
-    describe("new action") { it_should_behave_like "(NYI) Newing a NodeCell" }
+    describe("new action") { it_should_behave_like "Newing a NodeCell" }
   end
   
   after(:each) do
@@ -128,13 +128,14 @@ describe NoteNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(NoteProp, :note => 'A test note for >> you.')
+    @mock_node.prop.stubs(:type => NoteProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
   
   describe "form-based" do
     describe("edit action") { it_should_behave_like "Editing a NodeCell" }
-    describe("new action") { it_should_behave_like "(NYI) Newing a NodeCell" }
+    describe("new action") { it_should_behave_like "Newing a NodeCell" }
     
     after(:each) { @result.should have_tag('textarea') }
   end
@@ -155,6 +156,7 @@ describe PileRefNodeCell do
     @mock_node.prop.ref_pile.stub(:owner).and_return(mock_model(User))
     @mock_node.prop.ref_pile.should_receive(:root_node).at_least(:once).and_return(mock_model(Node))
     @mock_node.prop.ref_pile.root_node.stub(:children).and_return([])
+    @mock_node.prop.stubs(:type => PileRefProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -179,13 +181,14 @@ describe PriorityNodeCell do
   before(:each) do
     mock_node :prop => mock_model(PriorityProp, :priority => 110000000000)
     @mock_node.prop.should_receive(:badged?).and_return(false)
+    @mock_node.prop.stubs(:type => PriorityProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
   
   describe "form-based" do
     describe("edit action") { it_should_behave_like "Editing a NodeCell" }
-    describe("new action") { it_should_behave_like "(NYI) Newing a NodeCell" }
+    describe("new action") { it_should_behave_like "Newing a NodeCell" }
     
     after(:each) { @result.should have_tag('input[type=text]') }
   end
@@ -203,13 +206,14 @@ describe TagNodeCell do
   before(:each) do
     mock_node :prop => mock_model(TagProp, :tag => 'test-tag')
     @mock_node.prop.should_receive(:badged?).and_return(false)
+    @mock_node.prop.stubs(:type => TagProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
   
   describe "form-based" do
     describe("edit action") { it_should_behave_like "Editing a NodeCell" }
-    describe("new action") { it_should_behave_like "(NYI) Newing a NodeCell" }
+    describe("new action") { it_should_behave_like "Newing a NodeCell" }
     
     after(:each) { @result.should have_tag('input[type=text]') }
   end
@@ -226,13 +230,14 @@ describe TextNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(TextProp, :text => 'test text')
+    @mock_node.prop.stubs(:type => TextProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
   
   describe "form-based" do
     describe("edit action") { it_should_behave_like "Editing a NodeCell" }
-    describe("new action") { it_should_behave_like "(NYI) Newing a NodeCell" }
+    describe("new action") { it_should_behave_like "Newing a NodeCell" }
     
     after(:each) { @result.should have_tag('input[type=text]') }
   end
@@ -249,16 +254,16 @@ describe TimeNodeCell do
   
   before(:each) do
     @time_now = Time.now
-    
     mock_node :prop => mock_model(TimeProp, :time => @time_now)
     @mock_node.prop.should_receive(:badged?).and_return(false)
+    @mock_node.prop.stubs(:type => TimeProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
   
   describe "form-based" do
     describe("edit action") { it_should_behave_like "Editing a NodeCell" }
-    describe("new action") { it_should_behave_like "(NYI) Newing a NodeCell" }
+    describe("new action") { it_should_behave_like "Newing a NodeCell" }
     
     after(:each) { @result.should have_tag('input[type=text]') }
   end
