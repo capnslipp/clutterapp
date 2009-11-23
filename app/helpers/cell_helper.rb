@@ -1,7 +1,7 @@
 module CellHelper
   
-  def render_child(child_node)
-    render_cell cell_for_node(child_node), :show, :node => child_node
+  def render_child(child_node, mode)
+    render_cell cell_for_node(child_node), :show, :node => child_node, :mode => mode
   end
   
   

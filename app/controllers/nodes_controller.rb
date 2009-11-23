@@ -38,7 +38,7 @@ class NodesController < ApplicationController
     @node = @parent.children.build(node_attrs)
     #@node.prop.node = @node # reference the prop back to it's node
     
-    render :inline => render_cell(cell_for_node(@node), :new, :node => @node)
+    render :inline => render_cell(cell_for_node(@node), :new, :node => @node, :mode => :item)
   end
   
   
@@ -56,7 +56,7 @@ class NodesController < ApplicationController
     
     @node.save!
     
-    render :inline => render_cell(cell_for_node(@node), :create, :node => @node)
+    render :inline => render_cell(cell_for_node(@node), :show, :node => @node, :mode => :item)
   end
   
   
@@ -64,7 +64,7 @@ class NodesController < ApplicationController
   def edit
     @node = active_pile.nodes.find params[:id]
     
-    render :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
+    render :inline => render_cell(cell_for_node(@node), :edit, :node => @node, :mode => :body)
   end
   
   
@@ -76,7 +76,7 @@ class NodesController < ApplicationController
     @node.prop.update_attributes(params[:node][:prop_attributes]) # Node's "accepts_nested_attributes_for :prop" seems not to be working
     
     if @node.save
-      render :inline => render_cell(cell_for_node(@node), :update, :node => @node)
+      render :inline => render_cell(cell_for_node(@node), :show, :node => @node, :mode => :body)
     else
       render :nothing => true, :status => :bad_request
     end
@@ -135,7 +135,7 @@ class NodesController < ApplicationController
         render :update do |page|
           page.call 'collapseActionBar'
           page.remove node_sel
-          page.insert_html insert_pos, orig_ref_sel, render_cell(cell_for_node(@node), :show, :node => @node)
+          page.insert_html insert_pos, orig_ref_sel, render_cell(cell_for_node(@node), :show, :node => @node, :mode => :body)
           page.visual_effect :highlight, node_sel
         end
       end # format.js
