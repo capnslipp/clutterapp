@@ -19,12 +19,9 @@ class NodeCell < Cell::Base
   # show        » @mode => :body
   def show
     fetch_opts
-    
     fetch_badges unless @mode == :badge
     
-    layout = determine_layout
-    
-    render :view => 'show', :layout => layout unless layout.nil?
+    render :layout => determine_layout
   end
   
   
@@ -32,9 +29,7 @@ class NodeCell < Cell::Base
   def new
     fetch_opts
     
-    layout = determine_layout
-    
-    render :view => 'new', :layout => layout unless layout.nil?
+    render :layout => determine_layout
   end
   
   
@@ -42,12 +37,9 @@ class NodeCell < Cell::Base
   # edit        » @mode => :body
   def edit
     fetch_opts
-    
     fetch_badges unless @mode == :badge
     
-    layout = determine_layout
-    
-    render :view => 'edit', :layout => layout unless layout.nil?
+    render :layout => determine_layout
   end
   
   
@@ -64,14 +56,14 @@ protected
       instance_variable_set(:"@#{opt_name}", @opts[opt_name])
     end
     
-    @mode = @mode.to_sym
+    @mode = @mode.to_sym unless @mode.nil?
   end
   
   
   def determine_layout
     case @mode
-      when :item: 'item'
-      when :body: 'body'
+      when :item:   'item'
+      when :body:   'body'
       when :badge:  'badge'
     end
   end
