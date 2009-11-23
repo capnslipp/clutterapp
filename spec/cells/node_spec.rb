@@ -38,7 +38,7 @@ describe NodeCell do
   describe "show action" do
     it "doesn't work" do
       proc {
-        @result = render_cell(:show, :node => @mock_node)
+        @result = render_cell(:show, :node => @mock_node, :mode => :item)
       }.should raise_error(ActionView::MissingTemplate)
     end
   end
@@ -46,7 +46,7 @@ describe NodeCell do
   describe "edit action" do
     it "doesn't work" do
       proc {
-        @result = render_cell(:edit, :node => @mock_node)
+        @result = render_cell(:edit, :node => @mock_node, :mode => :item)
       }.should raise_error(ActionView::MissingTemplate)
     end
   end
@@ -72,7 +72,7 @@ end
 
 
 share_examples_for "Showing a NodeCell" do
-  it("works") { @result = render_cell(:show, :node => @mock_node) }
+  it("works") { @result = render_cell(:show, :node => @mock_node, :mode => :item) }
   
   after(:each) do
     @result.should have_tag('*[class*=show][class*=body]')
@@ -85,7 +85,7 @@ share_examples_for "(NYI) Showing a NodeCell" do
 end
 
 share_examples_for "Editing a NodeCell" do
-  it("works") { @result = render_cell(:edit, :node => @mock_node) }
+  it("works") { @result = render_cell(:edit, :node => @mock_node, :mode => :item) }
   
   after(:each) do
     @result.should have_tag('*[class*=edit][class*=body]')
@@ -98,7 +98,7 @@ share_examples_for "(NYI) Editing a NodeCell" do
 end
 
 share_examples_for "Newing a NodeCell" do
-  it("works") { @result = render_cell(:new, :node => @mock_node) }
+  it("works") { @result = render_cell(:new, :node => @mock_node, :mode => :item) }
   
   after(:each) do
     @result.should have_tag('*[class*=new][class*=body]')
@@ -120,8 +120,7 @@ describe CheckNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node :prop => mock_model(CheckProp, :checked? => false)
-    @mock_node.prop.should_receive(:badged?).and_return(false)
+    mock_node :prop => mock_model(CheckProp, :checked? => false, :badged? => false)
     @mock_node.prop.stubs(:class => CheckProp)
   end
   
@@ -195,7 +194,6 @@ describe PriorityNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(PriorityProp, :priority => 110000000000)
-    @mock_node.prop.should_receive(:badged?).and_return(false)
     @mock_node.prop.stubs(:class => PriorityProp)
   end
   
@@ -220,7 +218,6 @@ describe TagNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(TagProp, :tag => 'test-tag')
-    @mock_node.prop.should_receive(:badged?).and_return(false)
     @mock_node.prop.stubs(:class => TagProp)
   end
   
@@ -270,7 +267,6 @@ describe TimeNodeCell do
   before(:each) do
     @time_now = Time.now
     mock_node :prop => mock_model(TimeProp, :time => @time_now)
-    @mock_node.prop.should_receive(:badged?).and_return(false)
     @mock_node.prop.stubs(:class => TimeProp)
   end
   

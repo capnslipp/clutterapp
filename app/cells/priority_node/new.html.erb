@@ -1,4 +1,4 @@
-<div class="new priority prop <%= 'badge' if @node.prop.badged? -%>">
+<div class="new priority prop <%= 'badge' if @mode == :badge -%>">
 	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node], :parent_id => @node.parent_id, :type => @node.prop.class.short_name), :html => {:method => 'post'} do |node_form| -%>
 	
 		<%- node_form.fields_for :prop do |prop_form| -%>
