@@ -2,10 +2,10 @@ ActionController::Routing::Routes.draw do |map|
   
   map.stylesheets '/stylesheets/:id.css', :controller => 'stylesheets', :action => 'show'
   
-  map.login '/in',                        :controller => 'sessions',    :action => 'new',     :conditions => {:method => :get}
-  map.connect '/in',                      :controller => 'sessions',    :action => 'create',  :conditions => {:method => :post}
-  map.logout  '/out',                     :controller => 'sessions',    :action => 'destroy', :conditions => {:method => :delete}
-  map.resource :session, :as => 'sess'
+  map.login '/in',                        :controller => 'user_sessions',    :action => 'new',     :conditions => {:method => :get}
+  map.connect '/in',                      :controller => 'user_sessions',    :action => 'create',  :conditions => {:method => :post}
+  map.logout  '/out',                     :controller => 'user_sessions',    :action => 'destroy', :conditions => {:method => :delete}
+  map.resource :user_session, :as => 'sess'
   
   map.users '/reg',                       :controller => 'users',       :action => 'create',  :conditions => {:method => :post}
   map.new_user '/sup',                    :controller => 'users',       :action => 'new',     :conditions => {:method => :get}
@@ -43,6 +43,6 @@ ActionController::Routing::Routes.draw do |map|
   map.about '/about', :controller => 'front'
   
   #map.root :controller => 'front' # for now, we're just going to give a log-in form
-  map.root :controller => 'sessions',    :action => 'new',     :conditions => {:method => :get}
+  map.root :controller => 'user_sessions',    :action => 'new',     :conditions => {:method => :get}
   
 end

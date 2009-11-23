@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-  
   before_filter :authorize, :except => [:new, :create]
   
   # render new.rhtml
@@ -11,7 +10,7 @@ class UsersController < ApplicationController
   
   
   def create
-    logout_keeping_session!
+    
     @user = User.new(params[:user])
     success = @user && @user.save
     if success && @user.errors.empty?
@@ -29,7 +28,7 @@ class UsersController < ApplicationController
   
   
   def show
-    @user = User.find_by_login_if_exists(params[:id])
+    @user = User.find_by_login(params[:id])
     
     if !@user.nil?
       @public_piles = @user.piles # @todo: make it actually show only public piles, once they're implemented

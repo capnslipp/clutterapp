@@ -11,10 +11,11 @@ class InvitesController < ApplicationController
     @invite.sender = current_user
     
     unless @invite.save
+      flash[:notice] = "That didn't work… perhaps you already signed up?"
       redirect_to root_url
       
     else
-      if logged_in?
+      if current_user?
         Mailer.deliver_invite(@invite, new_user_url(:invite_token => @invite.token))
         flash[:notice] = "Thanks! Invite sent."
         redirect_to new_invite_url

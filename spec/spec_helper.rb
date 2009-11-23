@@ -1,10 +1,12 @@
 # This file is copied to ~/spec when you run 'ruby script/generate rspec'
 # from the project root directory.
-ENV["RAILS_ENV"] = 'test' # force using the test environment to avoid mishaps
+ENV['RAILS_ENV'] = 'test' # force using the test environment to avoid mishaps
 require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environment'))
+
 require 'spec/autorun'
 require 'spec/rails'
 require File.dirname(__FILE__) + "/factories"
+require 'authlogic/test_case'
 require 'spec/cells'
 
 # Uncomment the next line to use webrat's matchers
@@ -24,7 +26,7 @@ Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
   config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
-
+  
   # == Fixtures
   #
   # You can declare fixtures for each example_group like this:
@@ -56,4 +58,29 @@ Spec::Runner.configure do |config|
   # == Notes
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
+  
+  
+  # AuthLogic Mocks/Stubs
+  
+  def current_user(overrides = {})
+    @current_user ||= Factory.create(:user, overrides)
+  end
+  
+  def current_user_session(stubs = {}, user_overrides = {})
+    @current_user_session ||= mock_model(
+      UserSession,
+      { :user => current_user(user_overrides) }.merge(stubs)
+    )
+  end
+  
+  def login(session_stubs = {}, user_stubs = {})
+    UserSession.stub!(:find).and_return(
+      current_user_session(session_stubs, user_stubs)
+    )
+  end
+  
+  def logout
+    @current_user_session = nil
+  end
+  
 end

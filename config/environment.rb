@@ -42,6 +42,7 @@ Rails::Initializer.run do |config|
   config.gem 'rspec', :lib => false, :version => '>= 1.2.9'
   config.gem 'rspec-rails', :lib => false, :version => '>= 1.2.9'
   config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :version => '>= 1.2.2', :source => 'http://gems.github.com'
+  config.gem "authlogic", :lib => "authlogic", :source => 'http://gemcutter.org'
   
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
@@ -110,6 +111,8 @@ Rails::Initializer.run do |config|
     require 'logger_prefix_extension' # extends ActiveSupport::BufferedLogger with prefix(), prefixed()
     require 'active_record_nice_id_extension' # extends ActiveRecord::Base with nice_id()
     require 'hash_nice_to_s_extension' # extends Hash with to_s(:nice)
+    require 'polymorphic_route_hacks' # overrides ActionController::PolymorphicRoutes#extract_namespace() with a fixed version
+    require 'dont_do' # a simple little extension that uses blocks to "comment-out" code, while retaining syntax highlighting
   end
   
 end

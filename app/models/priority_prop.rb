@@ -10,7 +10,7 @@ class PriorityProp < Prop
   
   
   def self::rand_new
-    new :priority => Kernel.rand(5 + 1)
+    new :priority => Kernel.rand(5) + 1
   end
   
   def self::filler_new
@@ -21,7 +21,7 @@ class PriorityProp < Prop
 protected
   
   def in_range
-    errors.add(:priority, "must be in the range of 1 to 5") unless (1..5).include? priority
+    errors.add(:priority, "was {{value}}; must be in the range of 1 to 5") unless (1..5).include? priority
   end
   
 end

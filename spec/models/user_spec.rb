@@ -3,10 +3,11 @@ require 'spec_helper'
 describe User do
   
   before(:each) do
+    activate_authlogic
+    
     @user = Factory.create(:user)
   end
-  
-  
+    
   it "should be created" do
     assert_difference 'User.count' do
       u = Factory.create(:user)
@@ -14,96 +15,84 @@ describe User do
     end
   end
   
-  it "should require login" do
-    assert_no_difference 'User.count' do
-      u = User.create( Factory.attributes_for(:user).merge!(:login => nil) )
-      u.errors.on(:login).should_not be_nil
+  
+  describe "login" do
+    
+    it "should require login" do
+      assert_no_difference 'User.count' do
+        u = User.create( Factory.attributes_for(:user).merge!(:login => nil) )
+        u.errors.on(:login).should_not be_nil
+      end
     end
+    
   end
   
-  it "should require password" do
-    assert_no_difference 'User.count' do
-      u = User.create( Factory.attributes_for(:user).merge!(:password => nil) )
-      u.errors.on(:password).should_not be_nil
+  
+  describe "password" do
+    
+    it "should require password" do
+      assert_no_difference 'User.count' do
+        u = User.create( Factory.attributes_for(:user).merge!(:password => nil) )
+        u.errors.on(:password).should_not be_nil
+      end
     end
-  end
-  
-  it "should require password confirmation" do
-    assert_no_difference 'User.count' do
-      u = User.create( Factory.attributes_for(:user).merge!(:password_confirmation => nil) )
-      u.errors.on(:password_confirmation).should_not be_nil
+    
+    it "should require password confirmation" do
+      assert_no_difference 'User.count' do
+        u = User.create( Factory.attributes_for(:user).merge!(:password_confirmation => nil) )
+        u.errors.on(:password_confirmation).should_not be_nil
+      end
     end
-  end
-  
-  it "should require email" do
-    assert_no_difference 'User.count' do
-      u = User.create( Factory.attributes_for(:user).merge!(:email => nil) )
-      u.errors.on(:email).should_not be_nil
+    
+    it "should reset password" do
+      u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalP4ssword')
+      
+      u.update_attributes(:password => 'n3wP4ssword', :password_confirmation => 'n3wP4ssword')
+      #User.authenticate('original_username', 'n3wP4ssword').should == u
     end
+    
+    it "should not rehash password" do
+      u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalp4ssword')
+      u.update_attributes(:login => 'new_username')
+      u.password.should == 'or1ginalp4ssword'
+      # User.('new_username', 'or1ginalp4ssword').should == u
+    end
+    
   end
   
   
-  it "should reset password" do
-    u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalP4ssword')
-    u.update_attributes(:password => 'n3wP4ssword', :password_confirmation => 'n3wP4ssword')
-    User.authenticate('original_username', 'n3wP4ssword').should == u
-  end
-  
-  it "should not rehash password" do
-    u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalp4ssword')
-    u.update_attributes(:login => 'new_username')
-    User.authenticate('new_username', 'or1ginalp4ssword').should == u
-  end
-  
-  
-  it "should authenticate user" do
-    u = Factory.create(:user, :login => 'alpha1', :password => 's3cret')
-    User.authenticate('alpha1', 's3cret').should == u
-  end
-  
-  it "shouldn't authenticate user with incorrect password" do
-    u = Factory.create(:user, :login => 'alpha1', :password => 's3cret')
-    User.authenticate('alpha1', 'inc0rrect').should_not == u
+  describe "email" do
+    
+    it "should require email" do
+      assert_no_difference 'User.count' do
+        u = User.create( Factory.attributes_for(:user).merge!(:email => nil) )
+        u.errors.on(:email).should_not be_nil
+      end
+    end
+    
   end
   
   
-  it "should set remember token" do
-    @user.remember_me
-    assert_not_nil @user.remember_token
-    assert_not_nil @user.remember_token_expires_at
-  end
-  
-  it "should unset remember token" do
-    @user.remember_me
-    assert_not_nil @user.remember_token
-    @user.forget_me
-    assert_nil @user.remember_token
-  end
-  
-  it "should remember me for one week" do
-    before = 1.week.from_now.utc
-    @user.remember_me_for 1.week
-    after = 1.week.from_now.utc
-    assert_not_nil @user.remember_token
-    assert_not_nil @user.remember_token_expires_at
-    assert @user.remember_token_expires_at.between?(before, after)
-  end
-  
-  it "should remember me until one week" do
-    time = 1.week.from_now.utc
-    @user.remember_me_until time
-    assert_not_nil @user.remember_token
-    assert_not_nil @user.remember_token_expires_at
-    assert_equal @user.remember_token_expires_at, time
-  end
-  
-  it "should remember me default two weeks" do
-    before = 2.weeks.from_now.utc
-    @user.remember_me
-    after = 2.weeks.from_now.utc
-    assert_not_nil @user.remember_token
-    assert_not_nil @user.remember_token_expires_at
-    assert @user.remember_token_expires_at.between?(before, after)
+  describe "invite" do
+    
+    it "should accept invite" do
+      u = Factory.create(:user, :invite => Factory.create(:invite))
+      
+      u.errors.on(:invite).should be_nil
+    end
+    
+    it "should NOT require invite" do
+      u = Factory.create(:user, :invite => nil)
+      
+      u.errors.on(:invite).should be_nil
+    end
+    
+    it "be able to create multiple users without invites" do
+      u1, u2 = (1..2).to_a.collect { Factory.create(:user, :invite => nil) }
+      
+      [u1, u2].each { |u| u.errors.on(:invite).should be_nil }
+    end
+    
   end
   
   
@@ -133,5 +122,61 @@ describe User do
     Node.all.select {|n| n.root.pile.owner == u1 }.count.should == 1
     Node.all.select {|n| n.root.pile.owner == u2 }.count.should == 1
   end
+  
+  
+  it "should give back the invite's token if it has an invite" do
+    i = Factory.create(:invite)
+    u = Factory.create(:user, :invite => i)
+    
+    u.invite_token.should == i.token
+  end
+  
+  it "should give back nil if it doesn't have an invite" do
+    u = Factory.create(:user, :invite => nil)
+    
+    u.invite_token.should be_nil
+  end
+  
+  it "should find and set the correct invite, given it's token" do
+    i = Factory.create(:invite)
+    u = Factory.create(:user, :invite => nil)
+    
+    u.invite_token = i.token
+    
+    u.invite.should == i
+  end
+  
+  
+  it "should have infinite invites_remaining, given invite_limit of nil" do
+    u = Factory.create(:user)
+    u.invite_limit = nil
+    
+    u.invites_remaining.should be_infinite
+  end
+  
+  
+  it "should raise exception on create_default_pile!, given it already having Pile(s)" do
+    u = Factory.create(:user)
+    u.piles.create(Factory.attributes_for(:pile))
+    
+    u.piles.count.should == 2
+    
+    Proc.new {
+      u.send(:create_default_pile!)
+    }.should raise_error
+  end
+  
+  
+  it "should not raise exception on create_default_pile!, given it having no Piles" do
+    u = Factory.create(:user)
+    u.stub!(:piles).and_return([])
+    
+    u.piles.count.should == 0
+    
+    Proc.new {
+      u.send(:create_default_pile!)
+    }.should_not raise_error
+  end
+  
   
 end
