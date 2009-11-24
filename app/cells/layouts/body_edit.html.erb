@@ -2,17 +2,17 @@
 	<%= render :partial => 'nodes/action_stub' %>
 	<%= @content_for_layout %>
 	<div class="sub-line">
-		<%= render_cell cell_for_node(@check), :edit, :node => @check, :mode => :badge unless @check.nil? %>
+		<%= render_cell cell_for_node(@check), :edit, :node => @check, :body => false unless @check.nil? %>
 	</div>
 	<div class="sub-line">
-		<%= render_cell cell_for_node(@priority), :edit, :node => @priority, :mode => :badge unless @priority.nil? %>
+		<%= render_cell cell_for_node(@priority), :edit, :node => @priority, :body => false unless @priority.nil? %>
 	</div>
 	<div class="sub-line">
-		<%= render_cell cell_for_node(@time), :edit, :node => @time, :mode => :badge unless @time.nil? %>
+		<%= render_cell cell_for_node(@time), :edit, :node => @time, :body => false unless @time.nil? %>
 	</div>
 	<div class="sub-line">
 		<%- for tag in @tags -%>
-			<%= render_cell cell_for_node(tag), :edit, :node => tag, :mode => :badge %>
+			<%= render_cell cell_for_node(tag), :edit, :node => tag, :body => false %>
 		<%- end unless @tags.nil? -%>
 	</div>
 </div>

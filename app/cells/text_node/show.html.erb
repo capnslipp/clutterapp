@@ -1,11 +1,11 @@
-<%#= render_cell cell_for_node(@check), :show, :node => @check, :mode => :badge unless @check.nil? %>
-<%#= render_cell cell_for_node(@priority), :show, :node => @priority, :mode => :badge unless @priority.nil? %>
-<div class="show text prop <%= 'badge' if @mode == :badge -%>">
+<%#= render_cell cell_for_node(@check), :show, :node => @check, :body => false unless @check.nil? %>
+<%#= render_cell cell_for_node(@priority), :show, :node => @priority, :body => false unless @priority.nil? %>
+<div class="show text prop <%= 'badge' unless @body -%>">
 	<%= h @node.prop.text %>
 </div>
 <%#div class="sub-line">
-	<%= render_cell cell_for_node(@time), :show, :node => @time, :mode => :badge unless @time.nil? % >
+	<%= render_cell cell_for_node(@time), :show, :node => @time, :body => false unless @time.nil? % >
 	<%- for tag in @tags -% >
-		<%= render_cell cell_for_node(tag), :show, :node => tag, :mode => :badge % >
+		<%= render_cell cell_for_node(tag), :show, :node => tag, :body => false % >
 	<%- end unless @tags.nil? || !(@tags.size > 1) -% >
 </div%>

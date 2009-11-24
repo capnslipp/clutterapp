@@ -1,3 +1,3 @@
-<div class="show pile-ref prop <%= 'badge' if @mode == :badge -%>">
+<div class="show pile-ref prop <%= 'badge' unless @body -%>">
 	<h1 class="name"><%= h @node.prop.ref_pile.name %></h1>
 </div>
