@@ -4,8 +4,7 @@ class PileRefNodeCell < NodeCell
   
 protected
   
-  def new_prop
-    PileRefProp.new(:pile => @pile)
-  end
-  
+  #def new_prop
+  #  PileRefProp.new(:pile => @pile)
+  #end
 end

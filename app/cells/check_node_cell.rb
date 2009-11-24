@@ -4,7 +4,7 @@ class CheckNodeCell < NodeCell
   
 protected
   
-  def new_prop
-    CheckProp.new(:pile => @pile)
-  end
+  #def new_prop
+  #  CheckProp.new(:pile => @pile)
+  #end
 end

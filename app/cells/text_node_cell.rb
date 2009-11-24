@@ -4,7 +4,7 @@ class TextNodeCell < NodeCell
   
 protected
   
-  def new_prop
-    TextProp.new(:pile => @pile)
-  end
+  #def new_prop
+  #  TextProp.new(:pile => @pile)
+  #end
 end
