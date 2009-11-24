@@ -1,5 +1,5 @@
 class NoteNodeCell < NodeCell
-  cache :show, :cache_version
+  #cache :show, :cache_version
   
   
 protected
