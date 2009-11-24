@@ -4,12 +4,12 @@
 
 # Use like this:
 # 
-#   5.scoped do
+#   5.in_scope do
 #     puts self.to_f
 #   end
 # 
 class Object
-  def scoped(&block)
+  def in_scope(&block)
     self.instance_eval(&block)
   end
 end
@@ -17,12 +17,12 @@ end
 
 # Use like this:
 # 
-#   [5, 10].each(&with_scoped do
+#   [5, 10].each(&with_scope do
 #     puts self.to_f
 #   end)
 # 
 module Kernel
-  def with_scoped(&block)
+  def with_scope(&block)
     return lambda { |obj|
       obj.instance_eval(&block)
     }
