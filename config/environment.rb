@@ -113,6 +113,7 @@ Rails::Initializer.run do |config|
     require 'hash_nice_to_s_extension' # extends Hash with to_s(:nice)
     require 'polymorphic_route_hacks' # overrides ActionController::PolymorphicRoutes#extract_namespace() with a fixed version
     require 'dont_do' # a simple little extension that uses blocks to "comment-out" code, while retaining syntax highlighting
+    require 'scoped_block' # a crafty little extension to execute blocks with an object's scope
   end
   
 end
