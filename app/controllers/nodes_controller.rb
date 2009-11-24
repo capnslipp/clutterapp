@@ -36,9 +36,9 @@ class NodesController < ApplicationController
     @parent = active_pile.nodes.find(params[:parent_id])
     node_attrs.merge!(:pile => @parent.pile)
     @node = @parent.children.build(node_attrs)
-    #@node.prop.node = @node # reference the prop back to it's node
     
-    render :inline => render_cell(cell_for_node(@node), :new, :node => @node, :mode => :item)
+    @cell_state = :new
+    render :partial => 'item', :locals => {:item => @node}
   end
   
   
@@ -52,11 +52,11 @@ class NodesController < ApplicationController
     
     @parent = active_pile.nodes.find(params[:parent_id])
     @node = @parent.children.build(node_attrs)
-    #@node.prop.node = @node # reference the prop back to it's node
     
     @node.save!
     
-    render :inline => render_cell(cell_for_node(@node), :show, :node => @node, :mode => :item)
+    @cell_state = :show
+    render :partial => 'item', :locals => {:item => @node}
   end
   
   

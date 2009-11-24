@@ -4,11 +4,6 @@ class PileRefNodeCell < NodeCell
   
 protected
   
-  def determine_layout(state_name)
-    "pile_ref_#{state_name}"
-  end
-  
-  
   def new_prop
     PileRefProp.new(:pile => @pile)
   end
