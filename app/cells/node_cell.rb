@@ -14,14 +14,14 @@ class NodeCell < Cell::Base
   
   
   # create      » @mode => :item
-  # show_badge  » @mode => :badge
   # update      » @mode => :body
   # show        » @mode => :body
+  # show_badge  » @mode => :badge
   def show
     fetch_opts
     fetch_badges unless @mode == :badge
     
-    render :layout => determine_layout
+    render :layout => determine_layout(:show)
   end
   
   
@@ -29,17 +29,17 @@ class NodeCell < Cell::Base
   def new
     fetch_opts
     
-    render :layout => determine_layout
+    render :layout => determine_layout(:new)
   end
   
   
-  # edit_badge  » @mode => :badge
   # edit        » @mode => :body
+  # edit_badge  » @mode => :badge
   def edit
     fetch_opts
     fetch_badges unless @mode == :badge
     
-    render :layout => determine_layout
+    render :layout => determine_layout(:edit)
   end
   
   
@@ -60,11 +60,11 @@ protected
   end
   
   
-  def determine_layout
+  def determine_layout(state_name)
     case @mode
-      when :item:   'item'
-      when :body:   'body'
-      when :badge:  'badge'
+      when :item:   "item_#{state_name}"
+      when :body:   "body_#{state_name}"
+      when :badge:  "badge_#{state_name}"
     end
   end
   

@@ -1,0 +1,18 @@
+<div class="<%=cell.state_name%> body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
+	<%= render :partial => 'nodes/action_stub' %>
+	<%= @content_for_layout %>
+	<div class="sub-line">
+		<%= render_cell cell_for_node(@check), :edit, :node => @check, :mode => :badge unless @check.nil? %>
+	</div>
+	<div class="sub-line">
+		<%= render_cell cell_for_node(@priority), :edit, :node => @priority, :mode => :badge unless @priority.nil? %>
+	</div>
+	<div class="sub-line">
+		<%= render_cell cell_for_node(@time), :edit, :node => @time, :mode => :badge unless @time.nil? %>
+	</div>
+	<div class="sub-line">
+		<%- for tag in @tags -%>
+			<%= render_cell cell_for_node(tag), :edit, :node => tag, :mode => :badge %>
+		<%- end unless @tags.nil? -%>
+	</div>
+</div>

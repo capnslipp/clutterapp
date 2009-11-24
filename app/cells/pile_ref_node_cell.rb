@@ -2,16 +2,15 @@ class PileRefNodeCell < NodeCell
   #cache :show, :cache_version
   
   
-  def show
-    super
-    
-    render :layout => 'pile_ref'
+protected
+  
+  def determine_layout(state_name)
+    "pile_ref_#{state_name}"
   end
   
-  
-protected
   
   def new_prop
     PileRefProp.new(:pile => @pile)
   end
+  
 end
