@@ -1,5 +1,5 @@
 <div class="edit text prop">
-	<%- form_for @node, :node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node]), :html => {:method => 'put'} do |node_form| -%>
+	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node]), :html => {:method => 'put'} do |node_form| -%>
 		
 		<%- node_form.fields_for :prop do |prop_form| -%>
 			<%= prop_form.text_field :text, :class => 'field' %>
@@ -8,4 +8,18 @@
 		<%# ✓ %><%= node_form.submit '&#10003;' %>
 		
 	<%- end -%>
+</div>
+<div class="sub-line">
+	<%= render_cell cell_for_node(@check), :edit_badge, :node => @check unless @check.nil? %>
+</div>
+<div class="sub-line">
+	<%= render_cell cell_for_node(@priority), :edit_badge, :node => @priority unless @priority.nil? %>
+</div>
+<div class="sub-line">
+	<%= render_cell cell_for_node(@time), :edit_badge, :node => @time unless @time.nil? %>
+</div>
+<div class="sub-line">
+	<%- for tag in @tags -%>
+		<%= render_cell cell_for_node(tag), :edit_badge, :node => tag %>
+	<%- end unless @tags.nil? -%>
 </div>

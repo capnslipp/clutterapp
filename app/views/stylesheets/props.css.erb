@@ -7,6 +7,12 @@
 	
 	border: <%= border_width %>px solid transparent;
 	<%= border_radius_decl %>
+	<% if debug? %>
+		background: rgba(0, 127, 255, 0.125);
+		border-width: 2px;
+		border-color: rgba(0, 127, 255, 0.5);
+		margin: 1px;
+	<% end %>
 }
 
 .prop.badge {
@@ -24,7 +30,7 @@
 }
 
 .check.prop { border: none; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none; }
-.check.prop.badge { float: left; margin-right: 6px; }
+.check.prop.badge { /*float: left; margin-right: 6px;*/ }
 
 .note.prop {
 	display: block;
@@ -54,7 +60,7 @@
 }
 .priority.prop, .priority.prop input { font-family: 'Arial Black', sans-serif; font-weight: bold; }
 .priority.prop input { }
-.priority.prop.badge { float: left; margin-right: 6px; }
+.priority.prop.badge { /*float: left; margin-right: 6px;*/ }
 
 .tag.prop {
 	display: inline-block;
@@ -66,7 +72,7 @@
 }
 .tag.prop, .tag.prop input { font-weight: bold; text-transform: uppercase; }
 .tag.prop input { }
-.tag.prop.badge { float: left; }
+.tag.prop.badge { /*float: left;*/ }
 
 .text.prop {
 }
@@ -78,7 +84,7 @@
 	
 	padding: 0 2px;
 }
-.time.prop.badge { float: left; }
+.time.prop.badge { /*float: left;*/ }
 
 
 .new.prop, .edit.prop {

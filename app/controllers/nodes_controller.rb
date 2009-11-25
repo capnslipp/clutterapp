@@ -3,6 +3,7 @@ class NodesController < ApplicationController
   include ERB::Util
   layout nil
   
+  before_filter :be_xhr_request
   before_filter :authorize
   before_filter :have_owner
   before_filter :have_pile
@@ -37,11 +38,7 @@ class NodesController < ApplicationController
     @node = @parent.children.build(node_attrs)
     #@node.prop.node = @node # reference the prop back to it's node
     
-    if request.xhr?
-      render :inline => render_cell(cell_for_node(@node), :new, :node => @node)
-    else
-      render :nothing => true, :status => :forbidden
-    end
+    render :inline => render_cell(cell_for_node(@node), :new, :node => @node)
   end
   
   
@@ -59,11 +56,7 @@ class NodesController < ApplicationController
     
     @node.save!
     
-    if request.xhr?
-      render :inline => render_cell(cell_for_node(@node), :create, :node => @node)
-    else
-      render :nothing => true, :status => :forbidden
-    end
+    render :inline => render_cell(cell_for_node(@node), :create, :node => @node)
   end
   
   
@@ -71,11 +64,7 @@ class NodesController < ApplicationController
   def edit
     @node = active_pile.nodes.find params[:id]
     
-    if request.xhr?
-      render :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
-    else
-      render :nothing => true, :status => :forbidden
-    end
+    render :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
   end
   
   
@@ -87,11 +76,7 @@ class NodesController < ApplicationController
     @node.prop.update_attributes(params[:node][:prop_attributes]) # Node's "accepts_nested_attributes_for :prop" seems not to be working
     
     if @node.save
-      if request.xhr?
-        render :inline => render_cell(cell_for_node(@node), :update, :node => @node)
-      else
-        render :nothing => true, :status => :forbidden
-      end
+      render :inline => render_cell(cell_for_node(@node), :update, :node => @node)
     else
       render :nothing => true, :status => :bad_request
     end
@@ -126,8 +111,8 @@ class NodesController < ApplicationController
       when :out:  @node.move_to_right_of orig_ref_node
     end
     
-    orig_ref_node.reload :select => :version
-    @node.reload :select => :version
+    orig_ref_node.reload #:select => :version # doesn't work some times, possibly due to being a named_scope?
+    @node.reload #:select => :version # doesn't work some times, possibly due to being a named_scope?
     
     node_sel = dom_id(@node, 'item_for')
     
@@ -166,11 +151,7 @@ class NodesController < ApplicationController
     @node.destroy
     orig_parent_node.after_child_destroy
     
-    if request.xhr?
-      render :nothing => true, :status => :accepted
-    else
-      render :nothing => true, :status => :bad_request
-    end
+    render :nothing => true, :status => :accepted
   end
   
 end

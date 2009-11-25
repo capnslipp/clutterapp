@@ -5,6 +5,12 @@ module StylesheetsHelper
   include ConstReader
   
   
+  def debug?
+    ENV['RAILS_ENV'] == 'development'
+  end
+  
+  
+  
   # outline-radius is not supported by WebKit; otherwise, we'd use it as well
   def border_radius_decl(size = '4px')
     "border-radius: #{size}; -moz-border-radius: #{size}; -webkit-border-radius: #{size};"

@@ -5,7 +5,7 @@ class TagProp < Prop
   validates_length_of :tag, :within => 1..26
   
   
-  #is_badgeable
+  is_badgeable
   is_stackable
   
   

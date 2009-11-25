@@ -13,9 +13,52 @@ li { list-style-type: none; }
 .item_for_node.pile > .body > .stub,
 .item_for_node.pile > .body > .bar { float: none; }
 
-.item_for_node {  }
-.item_for_node > .body { min-height: 1.5em; border-top: 1px dotted <%= divider_color %>; margin-left: 23px; }
-.item_for_node > .body > .sub-line { overflow: auto; width: 100%; /* to contain floating elements */ }
+.item_for_node {
+	position: relative;
+	
+	<% if debug? %>
+		background: rgba(255, 127, 0, 0.125);
+		border: 2px solid rgba(255, 127, 0, 0.5);
+		<%= border_radius_decl %>
+		margin: 1px;
+	<% end %>
+}
+.item_for_node > .body {
+	min-height: 1.5em;
+	border-top: 1px dotted <%= divider_color %>;
+	margin-left: 23px;
+	
+	<% if debug? %>
+		<%= border_radius_decl %>
+		margin: 1px;
+	<% end %>
+}
+.item_for_node > .show.body {
+	<% if debug? %>
+		background: rgba(127, 191, 0, 0.125);
+		border: 2px solid rgba(127, 191, 0, 0.5);
+	<% end %>
+}
+.item_for_node > .edit.body {
+	position: absolute;
+	width: 100%;
+	
+	<% if debug? %>
+		background: rgba(191, 0, 127, 0.125);
+		border: 2px solid rgba(191, 0, 127, 0.5);
+	<% end %>
+}
+.item_for_node > .new.body {
+	position: relative;
+	
+	<% if debug? %>
+		background: rgba(0, 255, 191, 0.125);
+		border: 2px solid rgba(0, 255, 191, 0.5);
+	<% end %>
+}
+.item_for_node > .body > .sub-line {
+	/*overflow: auto; width: 100%; /* to contain floating elements */
+}
 
 /* page */
 #page {

@@ -178,11 +178,15 @@ function showGoogleChromeFrame() {
 
 function showFill(modalElement) {
 	if (!$('#fill').is(':visible')) {
-		if (modalElement != undefined) {
-			modalElement.attr('oc\:origPosition', modalElement.css('position'));
-			modalElement
-				.css('position', 'relative')
-				.css('z-index', 1000);
+		if (modalElement != undefined)
+		{
+			//alert(modalElement.cssPosition);
+			//if (modalElement.cssPosition != 'absolute') {
+			//	modalElement.attr('oc\:origPosition', modalElement.css('position'));
+			//	modalElement.css('position', 'relative');
+			//}
+			
+			modalElement.css('z-index', 1000);
 		}
 	
 		$('#fill').fadeIn(kDefaultTransitionDuration);
@@ -193,12 +197,12 @@ function hideFill(modalElement) {
 	if ($('#fill').is(':visible')) {
 		$('#fill').fadeOut(kDefaultTransitionDuration);
 	
-		if (modalElement != undefined) {
-			modalElement
-				.css({
-					position: modalElement.attr('oc\:origPosition'),
-					zIndex: 0
-				});
+		if (modalElement != undefined)
+		{
+			modalElement.css('z-index', 0);
+			
+			if (modalElement.attr('oc\:origPosition'))
+				modalElement.css('position', modalElement.attr('oc\:origPosition'));
 		}
 	}
 }
@@ -225,12 +229,12 @@ function nodeItemNew(parentNode, type) {
 		else
 			list.append(responseData);
 		
-		var editProp = list.children('.item_for_node:last').children('.body').children('.new.prop');
+		var newBody = list.children('.item_for_node:last').find('.new.body');
 		
-		editProp.filter('.note.prop').find('textarea').elastic();
+		newBody.find('.note.prop').find('textarea').elastic();
 		
-		showFill(editProp);
-		editFormFocus(editProp.children('form'));
+		showFill(newBody);
+		editFormFocus(newBody.find('form'));
 	}
 	
 	function handleError(parentNode, type, xhrObj, errStr, expObj) {
@@ -300,40 +304,37 @@ function editFormFocus(form) {
 		.focus();
 }
 
-function nodeItemEdit(prop) {
+function nodeItemEdit(showBody) {
 	$.ajax({
 		type: 'get',
-		url: prop.closest('.node').attr('oc\:url') + '/edit',
+		url: showBody.closest('.node').attr('oc\:url') + '/edit',
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(prop, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(prop, xhrObj, errStr, expObj); }
+		success: function(responseData) { handleSuccess(showBody, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(showBody, xhrObj, errStr, expObj); }
 	});
 	
 	
-	function handleSuccess(showProp, responseData) {
+	function handleSuccess(showBody, responseData) {
 		collapseActionBar();
 		
-		var body = showProp.parent('.body');
+		showBody.before(responseData);
 		
-		showProp
-			.replaceWith(responseData);
+		var editBody = showBody.siblings('.edit.body');
 		
-		var editProp = body.children('.edit.prop');
+		editBody.find('.note.prop').find('textarea').elastic();
 		
-		editProp.filter('.note.prop').find('textarea').elastic();
-		
-		showFill(editProp);
-		editFormFocus(editProp.children('form'));
+		showFill(editBody);
+		editFormFocus(editBody.find('form'));
 	}
 	
-	function handleError(prop, xhrObj, errStr, expObj) {
-		prop
+	function handleError(showBody, xhrObj, errStr, expObj) {
+		showBody
 			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 	}
 }
 
 $(function() {
-	$('.item_for_node > .body > .show.prop').live('click', function() {
+	$('.item_for_node > .show.body').live('click', function() {
 		nodeItemEdit($(this)); return false;
 	});
 });
@@ -351,12 +352,15 @@ function nodeItemUpdate(form) {
 	
 	
 	function handleSuccess(form, responseData) {
-		var editProp = form.closest('.edit.prop');
+		var editBody = form.closest('.edit.body');
 		
-		hideFill( editProp.parent('.body') );
+		hideFill(editBody);
 		
-		editProp
-			.replaceWith(responseData);
+		var showBody = editBody.siblings('.show.body');
+		
+		editBody.remove();
+		
+		showBody.replaceWith(responseData);
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
