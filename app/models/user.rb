@@ -111,7 +111,7 @@ class User < ActiveRecord::Base
   
   
   def invite_limit=(value)
-    write_attribute :invite_limit, (value.infinite? ? nil : value)
+    write_attribute :invite_limit, (value && value.infinite? ? nil : value)
   end
   
   
