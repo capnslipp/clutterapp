@@ -136,12 +136,20 @@ describe User do
       followee_user.followers.count.should == 1
     end
 
-    it "should let user access who it follows" do
+    it "should let user access who follows it" do
       u1 = Factory.create(:user)
       u2 = Factory.create(:user)
       u1.follow(@user)
       u2.follow(@user)
       @user.followers.count.should == 2
+    end
+    
+    it "should let user access who it follows" do
+      u1 = Factory.create(:user)
+      u2 = Factory.create(:user)
+      @user.follow(u1)
+      @user.follow(u2)
+      @user.followees.count.should == 2
     end
     
     it "should find unique users by who the user follows" do
