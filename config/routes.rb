@@ -40,15 +40,16 @@ ActionController::Routing::Routes.draw do |map|
       
     end
     
-    users.resources :followships do |followships|
-     followships.resources :only => [:create, :destroy], :member => {:toggle_follow => :post}
-    end
-    #/:user_id/followin
-    users.following '/following', :controller => 'followships', :action => 'following', :conditions => {:method => :get}
-    users.followers '/followers', :controller => 'followships', :action => 'followers', :conditions => {:method => :get}
+    users.resources :followships, :only => [:create, :destroy], :member => {
+      :toggle_follow => :post
+    }, :collection => {
+      :following => :get,
+      :followers => :get
+    }
+    
   end
   
-  map.about '/about', :controller => 'front'
+  map.about 'about', :controller => 'front'
   
   #map.root :controller => 'front' # for now, we're just going to give a log-in form
   map.root :controller => 'user_sessions',    :action => 'new',     :conditions => {:method => :get}
