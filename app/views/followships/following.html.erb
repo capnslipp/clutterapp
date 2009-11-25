@@ -1,1 +1,2 @@
-<%= render :partial => 'follow_list', :collection => @following, :as => :follow_list %>
+	<%= render :partial => 'follow_list', :locals => {:follow_list => @following} %>
+
