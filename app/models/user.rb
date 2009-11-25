@@ -1,5 +1,3 @@
-require 'digest/sha1'
-
 class User < ActiveRecord::Base
   acts_as_authentic
   
@@ -35,6 +33,13 @@ class User < ActiveRecord::Base
   # Any Followship relation that has a user pointing to this User… Hmm.
   # has_many :users,     :through => :followships # necessary?
   
+  # @fix: get it to properly alias tables so that "a_user.followees.followers_of(self)" works
+  named_scope :followers_of, proc {|a_user| {
+      :conditions => { :followships_4_followers_of => {:followee_id => a_user.id} },
+      :joins => %q{INNER JOIN `followships` as followships_4_followers_of ON followships_4_followers_of.user_id = users.id} #:joins => :followships # with "followships as followships_4_followers_of" alias
+  } }
+  
+  
   has_many :piles, :foreign_key => 'owner_id', :dependent => :destroy, :autosave => true
   
   
@@ -55,7 +60,7 @@ class User < ActiveRecord::Base
   def follow(user_to_follow)
     followship = followships.build(:followee => user_to_follow)
     
-    logger.debug "User is already following #{followee.login}" unless followship.save
+    logger.debug "User is already following #{user_to_follow.login}" unless followship.save
   end
   
   # Combining the two into the follow one above
@@ -80,7 +85,15 @@ class User < ActiveRecord::Base
   end
   
   def followers
-    User.find_follows(self)
+    User.followers_of(self)
+  end
+  
+  def friends
+    followees.followers_of(self)
+  end
+  
+  def friends_with?(another_user)
+    self.friends.include? another_user
   end
   
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
@@ -122,10 +135,6 @@ protected
   def create_default_pile!
     raise Exception.new('A default Pile could not be created because one for this User already exists.') if piles.count > 0
     create_default_pile
-  end
-  
-  def self.find_follows(user)
-    Followship.find(:all, :conditions => ["followee_id = ?", user.id]).map{|f|f.user}
   end
   
 end

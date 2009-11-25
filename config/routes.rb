@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   
-  map.resources :followships, :only => [:index, :create, :destroy], :member => { :toggle_follow => :get }
+  #map.resources :followships, :only => [:index, :create, :destroy], :member => { :toggle_follow => :post }
   
   map.stylesheets '/stylesheets/:id.css', :controller => 'stylesheets', :action => 'show'
   
@@ -40,9 +40,16 @@ ActionController::Routing::Routes.draw do |map|
       
     end
     
+    users.resources :followships, :only => [:create, :destroy], :member => {
+      :toggle_follow => :post
+    }, :collection => {
+      :following => :get,
+      :followers => :get
+    }
+    
   end
   
-  map.about '/about', :controller => 'front'
+  map.about 'about', :controller => 'front'
   
   #map.root :controller => 'front' # for now, we're just going to give a log-in form
   map.root :controller => 'user_sessions',    :action => 'new',     :conditions => {:method => :get}

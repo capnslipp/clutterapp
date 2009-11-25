@@ -136,7 +136,7 @@ describe User do
       followee_user.followers.count.should == 1
     end
 
-    it "should let user access who it follows" do
+    it "should let user access who follows it" do
       u1 = Factory.create(:user)
       u2 = Factory.create(:user)
       u1.follow(@user)
@@ -144,14 +144,41 @@ describe User do
       @user.followers.count.should == 2
     end
     
+    it "should let user access who it follows" do
+      u1 = Factory.create(:user)
+      u2 = Factory.create(:user)
+      @user.follow(u1)
+      @user.follow(u2)
+      @user.followees.count.should == 2
+    end
+    
     it "should find unique users by who the user follows" do
       10.times do |f|
         Followship.create(:user_id => Factory.create(:user).id, :followee_id => @user.id)
         Followship.create(:user_id => Factory.create(:user).id, :followee_id => Factory.create(:user).id)
       end
-      followships = User.find_follows(@user)
+      followships = User.followers_of(@user)
       followships.count.should == 10
     end
+    
+    it "should be mutual friends when both users are following each other" do
+      another_user = Factory.create(:user)
+      @user.follow(another_user)
+      another_user.follow(@user)
+      
+      @user.should be_friends_with(another_user)
+      another_user.should be_friends_with(@user)
+    end
+    
+    it "should be included in each other's friends list when both users are following each other" do
+      another_user = Factory.create(:user)
+      @user.follow(another_user)
+      another_user.follow(@user)
+      
+      @user.friends.should be_include(another_user)
+      another_user.friends.should be_include(@user)
+    end
+    
   end
   
   

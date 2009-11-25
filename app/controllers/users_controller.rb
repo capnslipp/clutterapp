@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     if success && @user.errors.empty?
       # Protects against session fixation attacks, causes request forgery protection if visitor resubmits an earlier form using back button. Uncomment if you understand the tradeoffs.
       # reset session
-      self.current_user = @user # !! now logged in
+      current_user = @user # !! now logged in
       redirect_back_or_default('/')
       flash[:notice] = "Thanks for signing up! Enjoy organizing your clutter!"
       logger.prefixed 'USER', :light_yellow, "New user '#{@user.login}' created from #{request.remote_ip} at #{Time.now.utc}"
