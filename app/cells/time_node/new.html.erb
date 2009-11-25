@@ -1,11 +1,5 @@
 <div class="new time prop <%= 'badge' unless @body -%>">
-	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node], :parent_id => @node.parent_id, :type => @node.prop.class.short_name), :html => {:method => 'post'} do |node_form| -%>
-		
-		<%- node_form.fields_for :prop do |prop_form| -%>
-			<%= prop_form.text_field :time, :class => 'field' %>
-		<%- end -%>
-		
-		<%# ✓ %><%= node_form.submit '&#10003;' %>
-		
+	<%- fields_for :prop do |prop_form| -%>
+		<%= prop_form.text_field :time, :class => 'field' %>
 	<%- end -%>
 </div>

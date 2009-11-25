@@ -1,4 +1,4 @@
-<div class="show check prop <%= 'badge' if @node.prop.badged? -%>">
+<div class="show check prop <%= 'badge' unless @body -%>">
 	<%= check_box_tag "check_prop_#{@node.prop.id}", '1', @node.prop.checked? %>
 	<%= observe_field "check_prop_#{@node.prop.id}",
 		:url => "#{polymorphic_path([@node.pile.owner, @node.pile, @node])}/update_check_prop_checked",

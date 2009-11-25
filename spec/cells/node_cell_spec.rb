@@ -127,8 +127,8 @@ describe CheckNodeCell do
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
   
   describe "form-based" do
-    describe("edit action") { it_should_behave_like "Editing a NodeCell" }
-    describe("new action") { it_should_behave_like "Newing a NodeCell" }
+    describe("edit action") { it_should_behave_like "(NYI) Editing a NodeCell" }
+    describe("new action") { it_should_behave_like "(NYI) Newing a NodeCell" }
   end
   
   after(:each) do

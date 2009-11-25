@@ -1,11 +1,6 @@
 <div class="edit text prop <%= 'badge' unless @body -%>">
-	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node]), :html => {:method => 'put'} do |node_form| -%>
-		
-		<%- node_form.fields_for :prop do |prop_form| -%>
-			<%= prop_form.text_field :text, :class => 'field' %>
-		<%- end -%>
-		
-		<%# ✓ %><%= node_form.submit '&#10003;' %>
-		
+	<%- fields_for :node_prop_attributes, @node.prop  do |prop_form| -%>
+		<%= prop_form.hidden_field :id, :name => 'node[prop_attributes][id]' %>
+		<%= prop_form.text_field :text, :class => 'field', :name => 'node[prop_attributes][text]' %>
 	<%- end -%>
 </div>
