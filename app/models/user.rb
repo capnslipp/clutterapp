@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
   def follow(user_to_follow)
     followship = followships.build(:followee => user_to_follow)
     
-    logger.debug "User is already following #{followee.login}" unless followship.save
+    logger.debug "User is already following #{user_to_follow.login}" unless followship.save
   end
   
   # Combining the two into the follow one above
