@@ -96,6 +96,37 @@ class User < ActiveRecord::Base
     self.friends.include? another_user
   end
   
+  
+  
+  # validating setters and utils
+  
+  def login=(value)
+    write_attribute :login, (value ? value.downcase : nil)
+  end
+  
+  
+  def email=(value)
+    write_attribute :email, (value ? value.downcase : nil)
+  end
+  
+  
+  def invite_limit=(value)
+    write_attribute :invite_limit, (value.infinite? ? nil : value)
+  end
+  
+  
+  def has_name?
+    !attributes['name'].blank?
+  end
+  
+  
+  def name
+    return attributes['name'] unless attributes['name'].blank?
+    return attributes['login']
+  end
+  
+  
+  
   # derived from Railscasts #124: Beta Invites <http://railscasts.com/episodes/124-beta-invites>
   def invite_token
     invite.token if invite
