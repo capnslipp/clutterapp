@@ -18,10 +18,17 @@ class Node < ActiveRecord::Base
     { :conditions => {:prop_type => Prop.class_from_type(type).to_s} }
   }
   
-  named_scope :badgeable, lambda {|for_ability| badgeable_conditions(for_ability) }
-  named_scope :stackable, lambda {|for_ability| stackable_conditions(for_ability) }
-  named_scope :nodeable,  lambda {|for_ability| nodeable_conditions(for_ability) }
-  named_scope :deepable,  lambda {|for_ability| deepable_conditions(for_ability) }
+  named_scope :badgeable,     :conditions => {:prop_type => Prop.badgeable_types.collect(&:to_s)}
+  named_scope :non_badgeable, :conditions => {:prop_type => Prop.non_badgeable_types.collect(&:to_s)}
+  
+  named_scope :stackable,     :conditions => {:prop_type => Prop.stackable_types.collect(&:to_s)}
+  named_scope :non_stackable, :conditions => {:prop_type => Prop.non_stackable_types.collect(&:to_s)}
+  
+  named_scope :nodeable,      :conditions => {:prop_type => Prop.nodeable_types.collect(&:to_s)}
+  named_scope :non_nodeable,  :conditions => {:prop_type => Prop.non_nodeable_types.collect(&:to_s)}
+  
+  named_scope :deepable,      :conditions => {:prop_type => Prop.deepable_types.collect(&:to_s)}
+  named_scope :non_deepable,  :conditions => {:prop_type => Prop.non_deepable_types.collect(&:to_s)}
   
   
   def to_s(format = :default, &block)
@@ -75,38 +82,6 @@ protected
   
   def increment_parent_version
     parent.increment_version unless parent.nil?
-  end
-  
-  def self::badgeable_conditions(for_ability)
-    if for_ability
-      { :conditions => {:prop_type => Prop.badgeable_types.collect(&:to_s)} }
-    else
-      { :conditions => {:prop_type => (Prop.types - Prop.badgeable_types).collect(&:to_s)} }
-    end
-  end
-  
-  def self::stackable_conditions(for_ability)
-    if for_ability
-      { :conditions => {:prop_type => Prop.stackable_types.collect(&:to_s)} }
-    else
-      { :conditions => {:prop_type => (Prop.types - Prop.stackable_types).collect(&:to_s)} }
-    end
-  end
-  
-  def self::nodeable_conditions(for_ability)
-    if for_ability
-      { :conditions => {:prop_type => Prop.nodeable_types.collect(&:to_s)} }
-    else
-      { :conditions => {:prop_type => (Prop.types - Prop.nodeable_types).collect(&:to_s)} }
-    end
-  end
-  
-  def self::deepable_conditions(for_ability)
-    if for_ability
-      { :conditions => {:prop_type => Prop.deepable_types.collect(&:to_s)} }
-    else
-      { :conditions => {:prop_type => (Prop.types - Prop.deepable_types).collect(&:to_s)} }
-    end
   end
   
 end
