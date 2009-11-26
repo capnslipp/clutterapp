@@ -36,7 +36,7 @@ describe NodeCell do
   end
   
   describe "show action" do
-    it "doesn't work" do
+    it "raises an error (since it's the base class)" do
       proc {
         @result = render_cell(:show, :node => @mock_node)
       }.should raise_error(ActionView::MissingTemplate)
@@ -44,7 +44,7 @@ describe NodeCell do
   end
   
   describe "edit action" do
-    it "doesn't work" do
+    it "raises an error (since it's the base class)" do
       proc {
         @result = render_cell(:edit, :node => @mock_node)
       }.should raise_error(ActionView::MissingTemplate)
@@ -72,7 +72,7 @@ end
 
 
 share_examples_for "Showing a NodeCell" do
-  it("works") { @result = render_cell(:show, :node => @mock_node) }
+  it("runs the state and renders valid output") { @result = render_cell(:show, :node => @mock_node) }
   
   after(:each) do
     @result.should have_tag('*[class*=show][class*=body]')
@@ -81,11 +81,11 @@ share_examples_for "Showing a NodeCell" do
 end
 
 share_examples_for "(NYI) Showing a NodeCell" do
-  it "works"
+  it("runs the state and renders valid output")
 end
 
 share_examples_for "Editing a NodeCell" do
-  it("works") { @result = render_cell(:edit, :node => @mock_node) }
+  it("runs the state and renders valid output") { @result = render_cell(:edit, :node => @mock_node) }
   
   after(:each) do
     @result.should have_tag('*[class*=edit][class*=body]')
@@ -94,11 +94,11 @@ share_examples_for "Editing a NodeCell" do
 end
 
 share_examples_for "(NYI) Editing a NodeCell" do
-  it "works"
+  it("runs the state and renders valid output")
 end
 
 share_examples_for "Newing a NodeCell" do
-  it("works") { @result = render_cell(:new, :node => @mock_node) }
+  it("runs the state and renders valid output") { @result = render_cell(:new, :node => @mock_node) }
   
   after(:each) do
     @result.should have_tag('*[class*=new][class*=body]')
@@ -107,7 +107,7 @@ share_examples_for "Newing a NodeCell" do
 end
 
 share_examples_for "(NYI) Newing a NodeCell" do
-  it "works"
+  it("runs the state and renders valid output")
 end
 
 
