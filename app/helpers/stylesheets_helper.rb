@@ -6,7 +6,7 @@ module StylesheetsHelper
   
   
   def debug?
-    ENV['RAILS_ENV'] == 'development'
+    App::Config.debug_style
   end
   
   
