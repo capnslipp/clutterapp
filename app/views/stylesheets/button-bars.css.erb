@@ -7,22 +7,21 @@
 	line-height: 1.25em;
 }
 
-.buttons {
+.buttons, .button {
 	<%= shallow_shadow_decl %>
 	
 	margin: -<%= border_width %>px;
 	border: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
 	<%= border_radius_decl('6px') %>
+	background: <%= accent_color %>;
 	
 	height: 1em;
 	line-height: 1em;
 }
 
-.widget, .buttons {
-	white-space: nowrap;
-}
+.widget, .button, .buttons { white-space: nowrap; }
 
-.widget a, .buttons a { text-decoration: none; }
+.widget a, .buttons a, a.button { text-decoration: none; }
 
 .stub, .bar {
 	font-size: 12px;
@@ -69,16 +68,40 @@
 					-2px 0	3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
 }
 
+#add-bar {
+	padding-left: 0.25em;
+}
+
 #new-bar .buttons {
-	background: <%= accent_color %>;
 	position: absolute;
 	top: 4px; left: 0;
 	padding: 0 0.5em;
 	vertical-align: middle;
 }
-#new-bar .buttons, #new-bar .buttons a { color: <%= wash_text_color %>; }
-#new-bar .buttons a { margin-right: 0.25em; }
-#new-bar .buttons a:hover {
+.button {
+	/*position: absolute;*/
+	float: left;
+	top: 4px; left: 0;
+	width: 1em;
+	margin-right: 0.25em;
+	vertical-align: middle;
+	text-align: center;
+}
+
+#add-bar .button {
+	width: auto;
+	padding: 0 0.5em;
+}
+
+#new-bar .buttons, #new-bar .buttons a,
+#add-bar a.button,
+a.button, a.button .sym { color: <%= wash_text_color %>; }
+
+#new-bar .buttons a,
+#add-bar a { margin-right: 0.25em; }
+
+#new-bar .buttons a:hover,
+#add-bar a:hover {
 	text-shadow:	0 2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
 					0 -2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
 					2px 0	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
