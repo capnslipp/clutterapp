@@ -5,20 +5,15 @@
 		
 		<%= @content_for_layout %>
 		
-		<div class="sub-line">
-			<%= render_cell cell_for_node(@check), :edit, :node => @check, :body => false unless @check.nil? %>
-		</div>
-		<div class="sub-line">
-			<%= render_cell cell_for_node(@priority), :edit, :node => @priority, :body => false unless @priority.nil? %>
-		</div>
-		<div class="sub-line">
-			<%= render_cell cell_for_node(@time), :edit, :node => @time, :body => false unless @time.nil? %>
-		</div>
-		<div class="sub-line">
-			<%- for tag in @tags -%>
-				<%= render_cell cell_for_node(tag), :edit, :node => tag, :body => false %>
-			<%- end unless @tags.nil? -%>
-		</div>
+		<%- @node.children.badgeable.each do |child_node| -%>
+			<div class="sub-line">
+				<a href="#" class="button" onclick="return false;"><span class="sym"><%# ✖ %>&#10006;</span></a>
+				<em><%= child_node.prop.class.short_name %></em>
+				<%= render_cell cell_for_node(child_node), :edit, :node => child_node, :body => false %>
+			</div>
+		<%- end -%>
+		
+		<%= render :partial => 'nodes/add_bar' %>
 		
 		<%# ✓ %><%= node_form.submit '&#10003;' %>
 		

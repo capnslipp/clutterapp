@@ -1,6 +1,8 @@
 <div class="<%=cell.state_name%> body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 	<%= render :partial => 'nodes/action_stub' %>
+	
 	<%= @content_for_layout %>
+	
 	<div class="sub-line">
 		<%= render_cell cell_for_node(@check), :show, :node => @check, :body => false unless @check.nil? %>
 	</div>
