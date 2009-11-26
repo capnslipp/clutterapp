@@ -5,5 +5,5 @@ module App
 end
 
 
-ClutterApp::Config.debug_style = false
-#ClutterApp::Config.debug_style = (ENV['RAILS_ENV'] == 'development')
+App::Config.debug_style = false
+#App::Config.debug_style = (ENV['RAILS_ENV'] == 'development')
