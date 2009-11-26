@@ -32,7 +32,7 @@ jQuery.fn.required = function() {
 JOIN = '_';
 NEW = 'new';
 
-kDefaultTransitionDuration = 125
+kDefaultTransitionDuration = 250;
 
 
 function classForNodeModels(prefix) {
