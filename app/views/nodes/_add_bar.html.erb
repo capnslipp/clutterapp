@@ -1,0 +1,12 @@
+<li id="add-bar" class="add bar">
+	
+	<%- Prop.badgeable_types.each do |t| -%>
+		<%#div class="buttons"%>
+			<%- ability_classes = Prop.abilities.select{|a| t.send("#{a}?") }.collect{|a| a.to_s }.join(' ') -%>
+			<a href="#" class="new <%= t.short_name %> <%= ability_classes %> button">
+				<span class="sym"><%# ✚ %>&#10010;</span> <%= t.short_name %>
+			</a>
+		<%#/div%>
+	<%- end -%>
+	
+</li>
