@@ -5,5 +5,5 @@ module App
 end
 
 
-App::Config.debug_style = false
+App::Config.debug_style = true
 #App::Config.debug_style = (ENV['RAILS_ENV'] == 'development')
