@@ -13,7 +13,7 @@ module NodeSpecHelper
       Node,
       {
         :pile => mock_model(Pile, :owner => mock_model(User)),
-        :children => mock(Array, :typed => [], :empty? => true),
+        :children => mock(Array, :typed => [], :empty? => true, :non_badgeable => []),
         :parent_id => 2600
       }.merge(stubs)
     )
