@@ -39,6 +39,21 @@ li { list-style-type: none; }
 		border: 2px solid rgba(127, 191, 0, 0.5);
 	<% end %>
 }
+.item_for_node > .new.body,
+.item_for_node > .edit.body {
+	margin: -12px; margin-left: 8px;
+	
+	<%= border_radius_decl('16px') %>
+	border: 8px solid <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
+}
+.item_for_node > .new.body > form,
+.item_for_node > .edit.body > form {
+	<%= border_radius_decl('8px') %>
+	<%= shallow_shadow_decl %>
+	
+	background: rgba(255, 255, 255, 1.0);
+	padding: 8px;
+}
 .item_for_node > .edit.body {
 	position: absolute;
 	/*width: 100%;*/ left: 0; right: 0;
