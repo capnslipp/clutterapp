@@ -114,6 +114,7 @@ Rails::Initializer.run do |config|
     require 'polymorphic_route_hacks' # overrides ActionController::PolymorphicRoutes#extract_namespace() with a fixed version
     require 'dont_do' # a simple little extension that uses blocks to "comment-out" code, while retaining syntax highlighting
     require 'scoped_block' # a crafty little extension to execute blocks with an object's scope
+    require 'cell_dispatch_logging_extension' # adds nice colored logging to Cell::Base when a state is rendered
   end
   
 end
