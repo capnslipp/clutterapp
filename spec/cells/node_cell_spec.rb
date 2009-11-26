@@ -8,12 +8,31 @@ require 'spec_helper'
 
 module NodeSpecHelper
   
+  def mocked_node_children_empty
+    @mocked_node_children_empty ||= mock(
+      Array,
+      :typed => [],
+      :empty? => true,
+      :badgeable => [],
+      :non_badgeable => []
+    )
+  end
+  
+  def mocked_node_children_with_filler_nodes
+    @mocked_node_children_with_filler_nodes ||= mock(
+      Array,
+      :typed => Prop.types.collect {|t| Node.new(:prop => t.rand_new) },
+      :empty? => true,
+      :badgeable => Prop.badgeable_types.collect {|t| Node.new(:prop => t.rand_new) },
+      :non_badgeable => Prop.non_badgeable_types.collect {|t| Node.new(:prop => t.rand_new) }
+    )
+  end
+  
   def mock_node(stubs={})
     @mock_node ||= mock_model(
       Node,
       {
         :pile => mock_model(Pile, :owner => mock_model(User)),
-        :children => mock(Array, :typed => [], :empty? => true, :non_badgeable => []),
         :parent_id => 2600
       }.merge(stubs)
     )
@@ -31,8 +50,10 @@ describe NodeCell do
   integrate_views
   include NodeSpecHelper
   
+  before(:all) { @mocked_node_children = mocked_node_children_empty }
+  
   before(:each) do
-    mock_node :prop => mock_model(Prop)
+    mock_node(:prop => mock_model(Prop), :children => @mocked_node_children)
   end
   
   describe "show action" do
@@ -62,6 +83,8 @@ end
 share_examples_for "All NodeCells" do
   integrate_views
   include NodeSpecHelper
+  
+  before(:all) { @mocked_node_children = mocked_node_children_empty }
   
   after(:each) do
     opts[:node].should be(@mock_node)
@@ -120,7 +143,7 @@ describe CheckNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node :prop => mock_model(CheckProp, :checked? => false, :badged? => false)
+    mock_node(:prop => mock_model(CheckProp, :checked? => false, :badged? => false), :children => @mocked_node_children)
     @mock_node.prop.stubs(:class => CheckProp)
   end
   
@@ -141,7 +164,7 @@ describe NoteNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node :prop => mock_model(NoteProp, :note => 'A test note for >> you.')
+    mock_node(:prop => mock_model(NoteProp, :note => 'A test note for >> you.'), :children => @mocked_node_children)
     @mock_node.prop.stubs(:class => NoteProp)
   end
   
@@ -165,7 +188,7 @@ describe PileRefNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node :prop => mock_model(PileRefProp, :ref_pile => mock_model(Pile))
+    mock_node(:prop => mock_model(PileRefProp, :ref_pile => mock_model(Pile)), :children => @mocked_node_children)
     @mock_node.prop.ref_pile.should_receive(:name).and_return("A Test Ref'd Pile & Stuff")
     @mock_node.prop.ref_pile.stub(:owner).and_return(mock_model(User))
     @mock_node.prop.ref_pile.should_receive(:root_node).at_least(:once).and_return(mock_model(Node))
@@ -193,7 +216,7 @@ describe PriorityNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node :prop => mock_model(PriorityProp, :priority => 110000000000)
+    mock_node(:prop => mock_model(PriorityProp, :priority => 110000000000), :children => @mocked_node_children)
     @mock_node.prop.stubs(:class => PriorityProp)
   end
   
@@ -217,7 +240,7 @@ describe TagNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node :prop => mock_model(TagProp, :tag => 'test-tag')
+    mock_node(:prop => mock_model(TagProp, :tag => 'test-tag'), :children => @mocked_node_children)
     @mock_node.prop.stubs(:class => TagProp)
   end
   
@@ -241,7 +264,7 @@ describe TextNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node :prop => mock_model(TextProp, :text => 'test text')
+    mock_node(:prop => mock_model(TextProp, :text => 'test text'), :children => @mocked_node_children)
     @mock_node.prop.stubs(:class => TextProp)
   end
   
@@ -266,7 +289,7 @@ describe TimeNodeCell do
   
   before(:each) do
     @time_now = Time.now
-    mock_node :prop => mock_model(TimeProp, :time => @time_now)
+    mock_node(:prop => mock_model(TimeProp, :time => @time_now), :children => @mocked_node_children)
     @mock_node.prop.stubs(:class => TimeProp)
   end
   
