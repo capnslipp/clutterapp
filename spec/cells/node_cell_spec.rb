@@ -73,6 +73,11 @@ end
 
 share_examples_for "Showing a NodeCell" do
   it("works") { @result = render_cell(:show, :node => @mock_node) }
+  
+  after(:each) do
+    @result.should have_tag('*[class*=show][class*=body]')
+    @result.should have_tag('*[class*=show][class*=prop]')
+  end
 end
 
 share_examples_for "(NYI) Showing a NodeCell" do
@@ -81,6 +86,11 @@ end
 
 share_examples_for "Editing a NodeCell" do
   it("works") { @result = render_cell(:edit, :node => @mock_node) }
+  
+  after(:each) do
+    @result.should have_tag('*[class*=edit][class*=body]')
+    @result.should have_tag('*[class*=edit][class*=prop]')
+  end
 end
 
 share_examples_for "(NYI) Editing a NodeCell" do
@@ -89,6 +99,11 @@ end
 
 share_examples_for "Newing a NodeCell" do
   it("works") { @result = render_cell(:new, :node => @mock_node) }
+  
+  after(:each) do
+    @result.should have_tag('*[class*=new][class*=body]')
+    @result.should have_tag('*[class*=new][class*=prop]')
+  end
 end
 
 share_examples_for "(NYI) Newing a NodeCell" do
@@ -105,16 +120,15 @@ describe CheckNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node :prop => mock_model(CheckProp, :checked? => false)
-    @mock_node.prop.should_receive(:badged?).and_return(false)
+    mock_node :prop => mock_model(CheckProp, :checked? => false, :badged? => false)
     @mock_node.prop.stubs(:class => CheckProp)
   end
   
   describe("show action") { it_should_behave_like "Showing a NodeCell" }
   
   describe "form-based" do
-    describe("edit action") { it_should_behave_like "Editing a NodeCell" }
-    describe("new action") { it_should_behave_like "Newing a NodeCell" }
+    describe("edit action") { it_should_behave_like "(NYI) Editing a NodeCell" }
+    describe("new action") { it_should_behave_like "(NYI) Newing a NodeCell" }
   end
   
   after(:each) do
@@ -169,7 +183,7 @@ describe PileRefNodeCell do
   end
   
   after(:each) do
-    @result.should have_tag('section')
+    #@result.should have_tag('section')
     @result.should include("A Test Ref'd Pile &amp; Stuff") # make sure HTML escaping is being done
   end
 end
@@ -180,7 +194,6 @@ describe PriorityNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(PriorityProp, :priority => 110000000000)
-    @mock_node.prop.should_receive(:badged?).and_return(false)
     @mock_node.prop.stubs(:class => PriorityProp)
   end
   
@@ -205,7 +218,6 @@ describe TagNodeCell do
   
   before(:each) do
     mock_node :prop => mock_model(TagProp, :tag => 'test-tag')
-    @mock_node.prop.should_receive(:badged?).and_return(false)
     @mock_node.prop.stubs(:class => TagProp)
   end
   
@@ -255,7 +267,6 @@ describe TimeNodeCell do
   before(:each) do
     @time_now = Time.now
     mock_node :prop => mock_model(TimeProp, :time => @time_now)
-    @mock_node.prop.should_receive(:badged?).and_return(false)
     @mock_node.prop.stubs(:class => TimeProp)
   end
   

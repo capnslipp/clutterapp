@@ -36,9 +36,9 @@ class NodesController < ApplicationController
     @parent = active_pile.nodes.find(params[:parent_id])
     node_attrs.merge!(:pile => @parent.pile)
     @node = @parent.children.build(node_attrs)
-    #@node.prop.node = @node # reference the prop back to it's node
     
-    render :inline => render_cell(cell_for_node(@node), :new, :node => @node)
+    @cell_state = :new
+    render :partial => 'item', :locals => {:item => @node}
   end
   
   
@@ -52,11 +52,11 @@ class NodesController < ApplicationController
     
     @parent = active_pile.nodes.find(params[:parent_id])
     @node = @parent.children.build(node_attrs)
-    #@node.prop.node = @node # reference the prop back to it's node
     
     @node.save!
     
-    render :inline => render_cell(cell_for_node(@node), :create, :node => @node)
+    @cell_state = :show
+    render :partial => 'item', :locals => {:item => @node}
   end
   
   
@@ -76,7 +76,7 @@ class NodesController < ApplicationController
     @node.prop.update_attributes(params[:node][:prop_attributes]) # Node's "accepts_nested_attributes_for :prop" seems not to be working
     
     if @node.save
-      render :inline => render_cell(cell_for_node(@node), :update, :node => @node)
+      render :inline => render_cell(cell_for_node(@node), :show, :node => @node)
     else
       render :nothing => true, :status => :bad_request
     end

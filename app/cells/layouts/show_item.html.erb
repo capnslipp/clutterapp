@@ -1,9 +1,0 @@
-<% content_tag_for :li, @node, 'item_for', :class => dom_class(@node, 'item_for'), :'oc:url' => polymorphic_path([@node.pile.owner, @node.pile, @node]) do -%>
-	<div class="show body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
-		<%= render :partial => 'nodes/action_stub' %>
-		<%= @content_for_layout %>
-	</div>
-	<ul class="node list">
-		<%= render :partial => 'nodes/list_items', :locals => {:item => @node} %>
-	</ul>
-<% end -%>

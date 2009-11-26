@@ -1,0 +1,26 @@
+<div class="<%=cell.state_name%> body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
+	<%= render :partial => 'nodes/action_stub' %>
+	
+	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node], :parent_id => @node.parent_id, :type => @node.prop.class.short_name), :html => {:method => 'post'} do |node_form| -%>
+		
+		<%= @content_for_layout %>
+		
+		<div class="sub-line">
+			<%= render_cell cell_for_node(@check), :new, :node => @check, :body => false unless @check.nil? %>
+		</div>
+		<div class="sub-line">
+			<%= render_cell cell_for_node(@priority), :new, :node => @priority, :body => false unless @priority.nil? %>
+		</div>
+		<div class="sub-line">
+			<%= render_cell cell_for_node(@time), :new, :node => @time, :body => false unless @time.nil? %>
+		</div>
+		<div class="sub-line">
+			<%- for tag in @tags -%>
+				<%= render_cell cell_for_node(tag), :new, :node => tag, :body => false %>
+			<%- end unless @tags.nil? -%>
+		</div>
+		
+		<%# ✓ %><%= node_form.submit '&#10003;' %>
+		
+	<%- end -%>
+</div>

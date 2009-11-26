@@ -13,65 +13,33 @@ class NodeCell < Cell::Base
   end
   
   
+  # create      » :mode => :body,  :xhr => true, :parital => :item
+  # update      » :mode => :body,  :xhr => true
+  # show        » :mode => :body
+  # show_badge  » :body => false
   def show
-    logger.prefixed self.class.to_s, :light_blue, 'show'
     fetch_opts
+    fetch_badges if @body
     
-    fetch_badges
-    
-    render :view => 'show', :layout => 'show_body'
+    render :layout => determine_layout(:show)
   end
   
   
-  def show_badge
-    logger.prefixed self.class.to_s, :light_blue, 'show_badge'
-    fetch_opts
-    
-    render :view => 'show', :layout => nil
-  end
-  
-  
+  # new         » :mode => :body,  :xhr => true, :parital => :item
   def new
-    logger.prefixed self.class.to_s, :light_blue, 'new'
     fetch_opts
     
-    render :view => 'new', :layout => 'new_item'
+    render :layout => determine_layout(:new)
   end
   
   
-  def create
-    logger.prefixed self.class.to_s, :light_blue, 'create'
-    fetch_opts
-    
-    render :view => 'show', :layout => 'show_item'
-  end
-  
-  
+  # edit        » :mode => :body,  :xhr => true
+  # edit_badge  » :body => false, :xhr => true
   def edit
-    logger.prefixed self.class.to_s, :light_blue, 'edit'
     fetch_opts
+    fetch_badges if @body
     
-    fetch_badges
-    
-    render :view => 'edit', :layout => 'edit_body'
-  end
-  
-  
-  def edit_badge
-    logger.prefixed self.class.to_s, :light_blue, 'edit_badge'
-    fetch_opts
-    
-    render :view => 'edit', :layout => nil
-  end
-  
-  
-  def update
-    logger.prefixed self.class.to_s, :light_blue, 'update'
-    fetch_opts
-    
-    fetch_badges
-    
-    render :view => 'show', :layout => 'show_body'
+    render :layout => determine_layout(:edit)
   end
   
   
@@ -84,8 +52,19 @@ protected
   
   
   def fetch_opts
-    [:node].each do |opt_name|
+    [:node, :body].each do |opt_name|
       instance_variable_set(:"@#{opt_name}", @opts[opt_name])
+    end
+    
+    @body = true if @body.nil?
+  end
+  
+  
+  def determine_layout(state_name)
+    if @body
+      "body_#{state_name}"
+    else
+      nil
     end
   end
   
