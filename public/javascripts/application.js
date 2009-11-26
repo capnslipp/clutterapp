@@ -9,11 +9,11 @@ jQuery.ajaxSetup({beforeSend: function(xhr) {
 
 jQuery.fn.walk = function() {
 	var firstChild = this.children(':first');
-	if (firstChild.length > 0) {
+	if (firstChild[0]) {
 		return firstChild;
 	} else {
 		var nextSibling = this.next()
-		if (nextSibling.length > 0)
+		if (nextSibling[0])
 			return nextSibling;
 		else
 			return this.closest(':not(:last-child)').next();
@@ -98,6 +98,8 @@ function expandActionBar(node) {
 		.hide();
 	
 	var nodeBody = node.children('.body');
+	console.assert(nodeBody[0], 'nodeBody[0]');
+	
 	if (nodeBody.find('#action-bar').length == 0)
 		$('#action-bar').prependTo(nodeBody);
 	
@@ -112,6 +114,8 @@ function collapseActionBar() {
 		.hide()
 	
 	var node = $('#action-bar').closest('.item_for_node');
+	console.assert(node[0], 'node[0]');
+	
 	node.children('.body').children('.action.stub')
 		.show();
 		
@@ -149,6 +153,8 @@ $(function() {
 		.click(function() { collapseActionBar(); return false; });
 	
 	var actionButtons = $('#action-bar .buttons');
+	console.assert(actionButtons[0], 'actionButtons[0]');
+	
 	actionButtons.find('a.toggle.new-bar')
 		.click(function() { toggleItemNewBar($(this).closest('.item_for_node')); return false; });
 	
@@ -223,6 +229,7 @@ function nodeItemNew(parentNode, type) {
 		collapseActionBar();
 		
 		var list = parentNode.children('.list');
+		console.assert(list[0], 'list[0]');
 		
 		if (list.children('#new-bar').length != 0)
 			list.children('#new-bar').before(responseData);
@@ -230,11 +237,15 @@ function nodeItemNew(parentNode, type) {
 			list.append(responseData);
 		
 		var newBody = list.children('.item_for_node:last').find('.new.body');
+		console.assert(newBody[0], 'newBody[0]');
 		
 		newBody.find('.note.prop').find('textarea').elastic();
 		
 		showFill(newBody);
-		editFormFocus(newBody.find('form'));
+		
+		var newBodyForm = newBody.find('form');
+		console.assert(newBodyForm[0], 'newBodyForm[0]');
+		editFormFocus(newBodyForm);
 	}
 	
 	function handleError(parentNode, type, xhrObj, errStr, expObj) {
@@ -245,6 +256,8 @@ function nodeItemNew(parentNode, type) {
 	
 $(function() {
 	var newButtons = $('#new-bar .buttons');
+	console.assert(newButtons[0], 'newButtons[0]');
+	
 	newButtons.find('a.new.text')
 		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'text'); return false; });
 	newButtons.find('a.new.check')
@@ -275,19 +288,23 @@ function nodeItemCreate(form) {
 	
 	
 	function handleSuccess(form, responseData) {
-		var newProp = form.closest('.new.prop');
-		var newItem = newProp.closest('.item_for_node');
+		var newBody = form.closest('.new.body');
+		console.assert(newBody[0], 'newBody[0]');
 		
-		hideFill( newProp.parent('.body') );
+		hideFill(newBody);
 		
-		newItem
-			.replaceWith(responseData);
+		var newItem = newBody.closest('.item_for_node');
+		console.assert(newItem[0], 'newItem[0]');
+		
+		newItem.replaceWith(responseData);
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
-		form.closest('.new.prop')
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		var newProp = form.closest('.new.prop');
+		console.assert(newProp[0], 'newProp[0]');
+		newProp.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 		
+		console.assert(form[0], 'form[0]');
 		editFormFocus(form);
 	}
 }
@@ -320,6 +337,7 @@ function nodeItemEdit(showBody) {
 		showBody.before(responseData);
 		
 		var editBody = showBody.siblings('.edit.body');
+		console.assert(editBody[0], 'editBody[0]');
 		
 		editBody.find('.note.prop').find('textarea').elastic();
 		
@@ -353,10 +371,12 @@ function nodeItemUpdate(form) {
 	
 	function handleSuccess(form, responseData) {
 		var editBody = form.closest('.edit.body');
+		console.assert(editBody[0], 'editBody[0]');
 		
 		hideFill(editBody);
 		
 		var showBody = editBody.siblings('.show.body');
+		console.assert(showBody[0], 'showBody[0]');
 		
 		editBody.remove();
 		
@@ -402,6 +422,8 @@ function nodeItemMove(node, dir) {
 	
 $(function() {
 	var actionButtons = $('#action-bar .buttons');
+	console.assert(actionButtons[0], 'actionButtons[0]');
+	
 	actionButtons.find('a.move.out')
 		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'out'); return false; });
 	actionButtons.find('a.move.up')
@@ -438,6 +460,8 @@ function nodeItemDelete(node) {
 	
 $(function() {
 	var actionButtons = $('#action-bar .buttons');
+	console.assert(actionButtons[0], 'actionButtons[0]');
+	
 	actionButtons.find('a.delete')
 		.click(function() { nodeItemDelete($(this).closest('.item_for_node')); return false; });
 });
