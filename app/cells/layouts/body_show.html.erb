@@ -8,12 +8,12 @@
 	<% end %>
 	<% unless @priority.nil? %>
 		<div class="sub-line">
-			<%= render_cell cell_for_node(@priority), :show, :node => @priority, :body => false unless @priority.nil? %>
+			<%= render_cell cell_for_node(@priority), :show, :node => @priority, :body => false %>
 		</div>
 	<% end %>
 	<% unless @time.nil? %>
 		<div class="sub-line">
-			<%= render_cell cell_for_node(@time), :show, :node => @time, :body => false unless @time.nil? %>
+			<%= render_cell cell_for_node(@time), :show, :node => @time, :body => false %>
 		</div>
 	<% end %>
 	<% unless @tags.nil? %>
