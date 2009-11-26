@@ -243,6 +243,7 @@ function itemNew(parentNode, type) {
 			list.append(responseData);
 		
 		var newBody = list.children('.item_for_node:last').find('.new.body').required();
+		newBody.hide().fadeIn(kDefaultTransitionDuration);
 		
 		newBody.find('.note.prop').find('textarea').elastic();
 		
@@ -292,12 +293,13 @@ function itemCreate(form) {
 	
 	function handleSuccess(form, responseData) {
 		var newBody = form.closest('.new.body').required();
-		
-		hideFill(newBody);
-		
 		var newItem = newBody.closest('.item_for_node').required();
 		
-		newItem.replaceWith(responseData);
+		newItem.after(responseData);
+		
+		hideFill();
+		
+		newBody.fadeOut(kDefaultTransitionDuration, function() { $(this).closest('.item_for_node').required().remove(); });
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
@@ -336,6 +338,7 @@ function itemEdit(showBody) {
 		showBody.before(responseData);
 		
 		var editBody = showBody.siblings('.edit.body').required();
+		editBody.hide().fadeIn(kDefaultTransitionDuration);
 		
 		editBody.find('.note.prop').find('textarea').elastic();
 		
@@ -369,12 +372,11 @@ function itemUpdate(form) {
 	
 	function handleSuccess(form, responseData) {
 		var editBody = form.closest('.edit.body').required();
-		
-		hideFill(editBody);
-		
 		var showBody = editBody.siblings('.show.body').required();
 		
-		editBody.remove();
+		hideFill();
+		
+		editBody.fadeOut(kDefaultTransitionDuration, function() { $(this).remove(); });
 		
 		showBody.replaceWith(responseData);
 	}
