@@ -1,6 +1,4 @@
 <div class="<%=cell.state_name%> body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
-	<%= render :partial => 'nodes/action_stub' %>
-	
 	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node]), :html => {:method => 'put'} do |node_form| -%>
 		
 		<%= @content_for_layout %>

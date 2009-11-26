@@ -39,9 +39,24 @@ li { list-style-type: none; }
 		border: 2px solid rgba(127, 191, 0, 0.5);
 	<% end %>
 }
+.item_for_node > .new.body,
+.item_for_node > .edit.body {
+	margin: -12px; margin-left: 8px;
+	
+	<%= border_radius_decl('16px') %>
+	border: 8px solid <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
+}
+.item_for_node > .new.body > form,
+.item_for_node > .edit.body > form {
+	<%= border_radius_decl('8px') %>
+	<%= shallow_shadow_decl %>
+	
+	background: rgba(255, 255, 255, 1.0);
+	padding: 8px;
+}
 .item_for_node > .edit.body {
 	position: absolute;
-	width: 100%;
+	/*width: 100%;*/ left: 0; right: 0;
 	
 	<% if debug? %>
 		background: rgba(191, 0, 127, 0.125);
@@ -56,13 +71,18 @@ li { list-style-type: none; }
 		border: 2px solid rgba(0, 255, 191, 0.5);
 	<% end %>
 }
-.item_for_node > .body > .sub-line {
+.new.item_for_node {
+	position: absolute;
+	/*width: 100%;*/ left: 0; right: 0;
+}
+.item_for_node > .body .sub-line {
 	/*overflow: auto; width: 100%; /* to contain floating elements */
+	margin-bottom: 6px;
 }
 
 /* page */
 #page {
-	padding: 12px;
+	padding: 24px; padding-top: 12px;
 }
 
 
@@ -101,7 +121,7 @@ li { list-style-type: none; }
 	margin-bottom: -<%= border_width %>px;
 	border-bottom: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
 	
-	<%= deep_shadow_decl %>
+	<%= shallow_shadow_decl %>
 }
 
 #top-bar > .logo {

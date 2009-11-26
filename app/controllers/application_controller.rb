@@ -43,11 +43,11 @@ protected
   
   
   def authorize
-    redirect_to :controller => 'front' unless current_user
+    redirect_to login_url unless current_user
   end
   
   def be_visiting
-    redirect_to :controller => 'home' if current_user
+    redirect_to home_url if current_user
   end
   
   

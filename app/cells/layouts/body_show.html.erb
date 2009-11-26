@@ -3,18 +3,26 @@
 	
 	<%= @content_for_layout %>
 	
-	<div class="sub-line">
-		<%= render_cell cell_for_node(@check), :show, :node => @check, :body => false unless @check.nil? %>
-	</div>
-	<div class="sub-line">
-		<%= render_cell cell_for_node(@priority), :show, :node => @priority, :body => false unless @priority.nil? %>
-	</div>
-	<div class="sub-line">
-		<%= render_cell cell_for_node(@time), :show, :node => @time, :body => false unless @time.nil? %>
-	</div>
-	<div class="sub-line">
-		<%- for tag in @tags -%>
-			<%= render_cell cell_for_node(tag), :show, :node => tag, :body => false %>
-		<%- end unless @tags.nil? -%>
-	</div>
+	<% unless @check.nil? %>
+		<div class="sub-line">
+			<%= render_cell cell_for_node(@check), :show, :node => @check, :body => false %>
+		</div>
+	<% end %>
+	<% unless @priority.nil? %>
+		<div class="sub-line">
+			<%= render_cell cell_for_node(@priority), :show, :node => @priority, :body => false %>
+		</div>
+	<% end %>
+	<% unless @time.nil? %>
+		<div class="sub-line">
+			<%= render_cell cell_for_node(@time), :show, :node => @time, :body => false %>
+		</div>
+	<% end %>
+	<% unless @tags.nil? %>
+		<div class="sub-line">
+			<%- for tag in @tags -%>
+				<%= render_cell cell_for_node(tag), :show, :node => tag, :body => false %>
+			<%- end unless @tags.nil? -%>
+		</div>
+	<% end %>
 </div>
