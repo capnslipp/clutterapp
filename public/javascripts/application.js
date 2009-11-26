@@ -249,7 +249,7 @@ function itemNew(parentNode, type) {
 		showFill(newBody);
 		
 		var newBodyForm = newBody.find('form').required();
-		editFormFocus(newBodyForm);
+		formFocus(newBodyForm.required());
 	}
 	
 	function handleError(parentNode, type, xhrObj, errStr, expObj) {
@@ -304,7 +304,7 @@ function itemCreate(form) {
 		var newProp = form.closest('.new.prop').required();
 		newProp.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 		
-		editFormFocus(form);
+		formFocus(form.required());
 	}
 }
 
@@ -315,8 +315,8 @@ $(function() {
 });
 
 
-function editFormFocus(form) {
-	form.children('.field:first')
+function formFocus(form) {
+	form.find('.field:first').required()
 		.focus();
 }
 
@@ -340,7 +340,7 @@ function itemEdit(showBody) {
 		editBody.find('.note.prop').find('textarea').elastic();
 		
 		showFill(editBody);
-		editFormFocus(editBody.find('form'));
+		formFocus(editBody.find('form').required());
 	}
 	
 	function handleError(showBody, xhrObj, errStr, expObj) {
@@ -383,7 +383,7 @@ function itemUpdate(form) {
 		form.closest('.edit.prop')
 			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 		
-		editFormFocus(form);
+		formFocus(form.required());
 	}
 }
 
