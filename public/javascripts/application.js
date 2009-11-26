@@ -21,7 +21,6 @@ jQuery.fn.walk = function() {
 }
 
 jQuery.fn.required = function() {
-	this[0].length;
 	if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
 		console.assert(this[0]);
 	
