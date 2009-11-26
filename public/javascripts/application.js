@@ -20,6 +20,14 @@ jQuery.fn.walk = function() {
 	}
 }
 
+jQuery.fn.required = function() {
+	this[0].length;
+	if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
+		console.assert(this[0]);
+	
+	return this;
+}
+
 
 
 JOIN = '_';
@@ -98,7 +106,7 @@ function expandActionBar(node) {
 		.hide();
 	
 	var nodeBody = node.children('.body');
-	console.assert(nodeBody[0], 'nodeBody[0]');
+	nodeBody.required();
 	
 	if (nodeBody.find('#action-bar').length == 0)
 		$('#action-bar').prependTo(nodeBody);
@@ -114,7 +122,7 @@ function collapseActionBar() {
 		.hide()
 	
 	var node = $('#action-bar').closest('.item_for_node');
-	console.assert(node[0], 'node[0]');
+	node.required();
 	
 	node.children('.body').children('.action.stub')
 		.show();
@@ -152,8 +160,7 @@ $(function() {
 	$('#action-bar .widget.expanded a')
 		.click(function() { collapseActionBar(); return false; });
 	
-	var actionButtons = $('#action-bar .buttons');
-	console.assert(actionButtons[0], 'actionButtons[0]');
+	var actionButtons = $('#action-bar .buttons').required();
 	
 	actionButtons.find('a.toggle.new-bar')
 		.click(function() { toggleItemNewBar($(this).closest('.item_for_node')); return false; });
@@ -229,22 +236,20 @@ function nodeItemNew(parentNode, type) {
 		collapseActionBar();
 		
 		var list = parentNode.children('.list');
-		console.assert(list[0], 'list[0]');
+		list.required();
 		
 		if (list.children('#new-bar').length != 0)
 			list.children('#new-bar').before(responseData);
 		else
 			list.append(responseData);
 		
-		var newBody = list.children('.item_for_node:last').find('.new.body');
-		console.assert(newBody[0], 'newBody[0]');
+		var newBody = list.children('.item_for_node:last').find('.new.body').required();
 		
 		newBody.find('.note.prop').find('textarea').elastic();
 		
 		showFill(newBody);
 		
-		var newBodyForm = newBody.find('form');
-		console.assert(newBodyForm[0], 'newBodyForm[0]');
+		var newBodyForm = newBody.find('form').required();
 		editFormFocus(newBodyForm);
 	}
 	
@@ -255,8 +260,7 @@ function nodeItemNew(parentNode, type) {
 }
 	
 $(function() {
-	var newButtons = $('#new-bar .buttons');
-	console.assert(newButtons[0], 'newButtons[0]');
+	var newButtons = $('#new-bar .buttons').required();
 	
 	newButtons.find('a.new.text')
 		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'text'); return false; });
@@ -288,23 +292,19 @@ function nodeItemCreate(form) {
 	
 	
 	function handleSuccess(form, responseData) {
-		var newBody = form.closest('.new.body');
-		console.assert(newBody[0], 'newBody[0]');
+		var newBody = form.closest('.new.body').required();
 		
 		hideFill(newBody);
 		
-		var newItem = newBody.closest('.item_for_node');
-		console.assert(newItem[0], 'newItem[0]');
+		var newItem = newBody.closest('.item_for_node').required();
 		
 		newItem.replaceWith(responseData);
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
-		var newProp = form.closest('.new.prop');
-		console.assert(newProp[0], 'newProp[0]');
+		var newProp = form.closest('.new.prop').required();
 		newProp.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
 		
-		console.assert(form[0], 'form[0]');
 		editFormFocus(form);
 	}
 }
@@ -336,8 +336,7 @@ function nodeItemEdit(showBody) {
 		
 		showBody.before(responseData);
 		
-		var editBody = showBody.siblings('.edit.body');
-		console.assert(editBody[0], 'editBody[0]');
+		var editBody = showBody.siblings('.edit.body').required();
 		
 		editBody.find('.note.prop').find('textarea').elastic();
 		
@@ -370,13 +369,11 @@ function nodeItemUpdate(form) {
 	
 	
 	function handleSuccess(form, responseData) {
-		var editBody = form.closest('.edit.body');
-		console.assert(editBody[0], 'editBody[0]');
+		var editBody = form.closest('.edit.body').required();
 		
 		hideFill(editBody);
 		
-		var showBody = editBody.siblings('.show.body');
-		console.assert(showBody[0], 'showBody[0]');
+		var showBody = editBody.siblings('.show.body').required();
 		
 		editBody.remove();
 		
@@ -421,8 +418,7 @@ function nodeItemMove(node, dir) {
 }
 	
 $(function() {
-	var actionButtons = $('#action-bar .buttons');
-	console.assert(actionButtons[0], 'actionButtons[0]');
+	var actionButtons = $('#action-bar .buttons').required();
 	
 	actionButtons.find('a.move.out')
 		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'out'); return false; });
@@ -459,8 +455,7 @@ function nodeItemDelete(node) {
 }
 	
 $(function() {
-	var actionButtons = $('#action-bar .buttons');
-	console.assert(actionButtons[0], 'actionButtons[0]');
+	var actionButtons = $('#action-bar .buttons').required();
 	
 	actionButtons.find('a.delete')
 		.click(function() { nodeItemDelete($(this).closest('.item_for_node')); return false; });
