@@ -221,7 +221,7 @@ function hideFill(modalElement) {
 }
 
 
-function nodeItemNew(parentNode, type) {
+function itemNew(parentNode, type) {
 	$.ajax({
 		type: 'get',
 		data: {type: type, parent_id: nodeIDOfItem(parentNode)},
@@ -263,24 +263,24 @@ $(function() {
 	var newButtons = $('#new-bar .buttons').required();
 	
 	newButtons.find('a.new.text')
-		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'text'); return false; });
+		.click(function() { itemNew($(this).closest('.item_for_node'), 'text'); return false; });
 	newButtons.find('a.new.check')
-		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'check'); return false; });
+		.click(function() { itemNew($(this).closest('.item_for_node'), 'check'); return false; });
 	newButtons.find('a.new.note')
-		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'note'); return false; });
+		.click(function() { itemNew($(this).closest('.item_for_node'), 'note'); return false; });
 	newButtons.find('a.new.priority')
-		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'priority'); return false; });
+		.click(function() { itemNew($(this).closest('.item_for_node'), 'priority'); return false; });
 	newButtons.find('a.new.tag')
-		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'tag'); return false; });
+		.click(function() { itemNew($(this).closest('.item_for_node'), 'tag'); return false; });
 	newButtons.find('a.new.time')
-		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'time'); return false; });
+		.click(function() { itemNew($(this).closest('.item_for_node'), 'time'); return false; });
 	newButtons.find('a.new.pile-ref')
-		.click(function() { nodeItemNew($(this).closest('.item_for_node'), 'pile-ref'); return false; });
+		.click(function() { itemNew($(this).closest('.item_for_node'), 'pile-ref'); return false; });
 });
 
 
 
-function nodeItemCreate(form) {
+function itemCreate(form) {
 	$.ajax({
 		type: form.attr('method'), // 'post'
 		url: form.attr('action'),
@@ -311,7 +311,7 @@ function nodeItemCreate(form) {
 
 $(function() {
 	$('form.new_node').live('submit', function() {
-		nodeItemCreate($(this)); return false;
+		itemCreate($(this)); return false;
 	});
 });
 
@@ -321,7 +321,7 @@ function editFormFocus(form) {
 		.focus();
 }
 
-function nodeItemEdit(showBody) {
+function itemEdit(showBody) {
 	$.ajax({
 		type: 'get',
 		url: showBody.closest('.node').attr('oc\:url') + '/edit',
@@ -352,12 +352,12 @@ function nodeItemEdit(showBody) {
 
 $(function() {
 	$('.item_for_node > .show.body').live('click', function() {
-		nodeItemEdit($(this)); return false;
+		itemEdit($(this)); return false;
 	});
 });
 
 
-function nodeItemUpdate(form) {
+function itemUpdate(form) {
 	$.ajax({
 		type: form.attr('method'), // 'post' (PUT)
 		url: form.attr('action'),
@@ -390,13 +390,13 @@ function nodeItemUpdate(form) {
 
 $(function() {
 	$('form.edit_node').live('submit', function() {
-		nodeItemUpdate($(this)); return false;
+		itemUpdate($(this)); return false;
 	});
 });
 
 
 
-function nodeItemMove(node, dir) {
+function itemMove(node, dir) {
 	$.ajax({
 		type: 'post',
 		data: {_method: 'put', dir: dir},
@@ -421,18 +421,18 @@ $(function() {
 	var actionButtons = $('#action-bar .buttons').required();
 	
 	actionButtons.find('a.move.out')
-		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'out'); return false; });
+		.click(function() { itemMove($(this).closest('.item_for_node'), 'out'); return false; });
 	actionButtons.find('a.move.up')
-		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'up'); return false; });
+		.click(function() { itemMove($(this).closest('.item_for_node'), 'up'); return false; });
 	actionButtons.find('a.move.down')
-		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'down'); return false; });
+		.click(function() { itemMove($(this).closest('.item_for_node'), 'down'); return false; });
 	actionButtons.find('a.move.in')
-		.click(function() { nodeItemMove($(this).closest('.item_for_node'), 'in'); return false; });
+		.click(function() { itemMove($(this).closest('.item_for_node'), 'in'); return false; });
 });
 
 
 
-function nodeItemDelete(node) {
+function itemDelete(node) {
 	$.ajax({
 		type: 'post',
 		data: {_method: 'delete'},
@@ -458,7 +458,7 @@ $(function() {
 	var actionButtons = $('#action-bar .buttons').required();
 	
 	actionButtons.find('a.delete')
-		.click(function() { nodeItemDelete($(this).closest('.item_for_node')); return false; });
+		.click(function() { itemDelete($(this).closest('.item_for_node')); return false; });
 });
 
 
