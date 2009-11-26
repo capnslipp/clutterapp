@@ -255,7 +255,7 @@ function itemNew(parentNode, type) {
 	
 	function handleError(parentNode, type, xhrObj, errStr, expObj) {
 		parentNode.find('#new-bar:first')
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
 	
@@ -303,10 +303,10 @@ function itemCreate(form) {
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
-		var newProp = form.closest('.new.prop').required();
-		newProp.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		form.required();
 		
-		formFocus(form.required());
+		form.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		formFocus(form);
 	}
 }
 
@@ -348,7 +348,7 @@ function itemEdit(showBody) {
 	
 	function handleError(showBody, xhrObj, errStr, expObj) {
 		showBody
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
 
@@ -382,10 +382,10 @@ function itemUpdate(form) {
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
-		form.closest('.edit.prop')
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		form.required();
 		
-		formFocus(form.required());
+		form.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		formFocus(form);
 	}
 }
 
@@ -413,8 +413,8 @@ function itemMove(node, dir) {
 	}
 	
 	function handleError(node, xhrObj, errStr, expObj) {
-		node.find('.body:first')
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		node.find('.body:first').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
 	
@@ -450,8 +450,8 @@ function itemDelete(node) {
 	}
 	
 	function handleError(node, xhrObj, errStr, expObj) {
-		node.find('.body:first')
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		node.find('.body:first').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
 	
