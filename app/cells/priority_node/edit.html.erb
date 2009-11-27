@@ -1,4 +1,4 @@
-<div class="edit priority prop <%= 'badge' unless @body -%>">
+<div class="edit priority prop <%= 'badge' if @node.prop.badged? -%>">
 	<%- @form.fields_for :prop, @node.prop  do |prop_form| -%>
 		<%= prop_form.text_field :priority, :maxlength => 1, :class => 'field' %>
 	<%- end -%>

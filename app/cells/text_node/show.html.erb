@@ -1,6 +1,6 @@
 <%#= render_cell cell_for_node(@check), :show, :node => @check unless @check.nil? %>
 <%#= render_cell cell_for_node(@priority), :show, :node => @priority unless @priority.nil? %>
-<div class="show text prop <%= 'badge' unless @body -%>">
+<div class="show text prop <%= 'badge' if @node.prop.badged? -%>">
 	<%= h @node.prop.text %>
 </div>
 <%#div class="sub-line">
