@@ -3,7 +3,7 @@
 #############################################################
 
 
-set :application, 'clutter'
+set :application, 'clutterapp'
 
 
 
