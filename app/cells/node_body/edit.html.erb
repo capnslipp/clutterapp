@@ -6,7 +6,6 @@
 		<%- @node.children.badgeable.each do |badge_node| -%>
 	  		<% node_form.fields_for 'children', badge_node do |badge_fields| %>
 				<div class="sub-line">
-					<%=h badge_node.inspect %>
 					<a href="#" class="button" onclick="return false;"><span class="sym"><%# ✖ %>&#10006;</span></a>
 					<em><%= badge_node.prop.class.short_name %></em>
 					<%= render_cell cell_for_node(badge_node), :edit, :node => badge_node, :form => badge_fields %>
