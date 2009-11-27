@@ -3,12 +3,15 @@
 		
 		<%= render_cell(cell_for_node(@node), :edit, :node => @node, :form => node_form) %>
 		
-  		<% node_form.fields_for :children, @node.children.badgeable do |child_form|; child = child_form.object %>
-			<div class="sub-line">
-				<a href="#" class="button" onclick="return false;"><span class="sym"><%# ✖ %>&#10006;</span></a>
-				<em><%= child.prop.class.short_name %></em>
-				<%= render_cell cell_for_node(child), :edit, :node => child, :form => child_form %>
-			</div>
+		<%- @node.children.badgeable.each do |badge_node| -%>
+	  		<% node_form.fields_for 'children', badge_node do |badge_fields| %>
+				<div class="sub-line">
+					<%=h badge_node.inspect %>
+					<a href="#" class="button" onclick="return false;"><span class="sym"><%# ✖ %>&#10006;</span></a>
+					<em><%= badge_node.prop.class.short_name %></em>
+					<%= render_cell cell_for_node(badge_node), :edit, :node => badge_node, :form => badge_fields %>
+				</div>
+			<%- end -%>
 		<%- end -%>
 		
 		<%= render :partial => 'nodes/add_bar' %>
