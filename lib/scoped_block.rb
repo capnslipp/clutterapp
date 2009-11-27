@@ -24,10 +24,11 @@ end
 # 
 # @fix: strange bugs with active_support/option_merger when nested 3 levels deep in routes.rb
 # @fix: doesn't play well in ERB files
-module Kernel
-  def with_scope(&block)
-    return lambda { |obj|
-      obj.instance_eval(&block)
-    }
-  end
-end
+# @fix: with_scope is already used by Rails
+#module Kernel
+#  def with_scope(&block)
+#    return lambda { |obj|
+#      obj.instance_eval(&block)
+#    }
+#  end
+#end
