@@ -1,14 +1,16 @@
-<div class="<%=cell.state_name%> body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
+<div class="edit body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node]), :html => {:method => 'put'} do |node_form| -%>
 		
-		<%= render_cell(cell_for_node(@node), cell.state_name, :node => @node, :form => node_form) %>
+		<%= render_cell(cell_for_node(@node), :edit, :node => @node, :form => node_form) %>
 		
-		<%- @node.children.badgeable.each do |child_node| -%>
-			<div class="sub-line">
-				<a href="#" class="button" onclick="return false;"><span class="sym"><%# ✖ %>&#10006;</span></a>
-				<em><%= child_node.prop.class.short_name %></em>
-				<%= render_cell cell_for_node(child_node), :edit, :node => child_node, :body => false %>
-			</div>
+  		<% node_form.fields_for :children do |child_form| %>
+			<%- @node.children.badgeable.each do |child_node| -%>
+				<div class="sub-line">
+					<a href="#" class="button" onclick="return false;"><span class="sym"><%# ✖ %>&#10006;</span></a>
+					<em><%= child_node.prop.class.short_name %></em>
+					<%= render_cell cell_for_node(child_node), :edit, :node => child_node, :form => child_form %>
+				</div>
+			<%- end -%>
 		<%- end -%>
 		
 		<%= render :partial => 'nodes/add_bar' %>

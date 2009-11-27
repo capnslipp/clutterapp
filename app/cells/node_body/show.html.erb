@@ -1,24 +1,24 @@
-<div class="<%=cell.state_name%> body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
+<div class="show body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 	<%= render :partial => 'nodes/action_stub' %>
 	
 	<% unless @check.nil? %>
-		<%= render_cell cell_for_node(@check), :show, :node => @check, :body => false %>
+		<%= render_cell cell_for_node(@check), :show, :node => @check %>
 	<% end %>
 	<% unless @priority.nil? %>
-		<%= render_cell cell_for_node(@priority), :show, :node => @priority, :body => false %>
+		<%= render_cell cell_for_node(@priority), :show, :node => @priority %>
 	<% end %>
 	
-	<%= render_cell(cell_for_node(@node), cell.state_name, :node => @node) %>
+	<%= render_cell(cell_for_node(@node), :show, :node => @node) %>
 	
 	<% unless @time.nil? %>
 		<div class="sub-line">
-			<%= render_cell cell_for_node(@time), :show, :node => @time, :body => false %>
+			<%= render_cell cell_for_node(@time), :show, :node => @time %>
 		</div>
 	<% end %>
 	<% unless @tags.nil? %>
 		<div class="sub-line">
 			<%- for tag in @tags -%>
-				<%= render_cell cell_for_node(tag), :show, :node => tag, :body => false %>
+				<%= render_cell cell_for_node(tag), :show, :node => tag %>
 			<%- end unless @tags.nil? -%>
 		</div>
 	<% end %>
