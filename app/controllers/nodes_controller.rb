@@ -75,7 +75,15 @@ class NodesController < ApplicationController
     @node.update_attributes!(params[:node])
     # Node's "accepts_nested_attributes_for :prop, :children" seems not to be fully working
     @node.prop.update_attributes!(params[:node][:prop_attributes])
+    
     #@node.children.update_attributes(params[:node][:children_attributes])
+    params[:node][:children_attributes].each do |i, attributes|
+      child = @node.children.find(attributes.delete(:id))
+      
+      child.update_attributes!(attributes)
+      # Node's "accepts_nested_attributes_for :prop, :children" seems not to be fully working
+      child.prop.update_attributes!(attributes[:prop_attributes])
+    end
     
     if @node.save
       render :inline => render_cell('node_body', :show, :node => @node)
