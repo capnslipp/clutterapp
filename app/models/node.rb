@@ -9,9 +9,12 @@ class Node < ActiveRecord::Base
   #after_move :increment_version # necessary?
   
   belongs_to :prop, :polymorphic => true, :autosave => true
-  accepts_nested_attributes_for :prop, :children
   
   belongs_to :pile
+  
+  
+  #attr_accessible :node, :node_attributes, :prop, :prop_attributes, :children, :children_attributes
+  accepts_nested_attributes_for :prop, :children
   
   
   named_scope :typed, lambda {|type|

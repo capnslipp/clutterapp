@@ -72,8 +72,10 @@ class NodesController < ApplicationController
   def update
     @node = active_pile.nodes.find(params[:id])
     
-    @node.update_attributes(params[:node])
-    @node.prop.update_attributes(params[:node][:prop_attributes]) # Node's "accepts_nested_attributes_for :prop" seems not to be working
+    @node.update_attributes!(params[:node])
+    # Node's "accepts_nested_attributes_for :prop, :children" seems not to be fully working
+    @node.prop.update_attributes!(params[:node][:prop_attributes])
+    #@node.children.update_attributes(params[:node][:children_attributes])
     
     if @node.save
       render :inline => render_cell('node_body', :show, :node => @node)
