@@ -7,8 +7,8 @@ class Pile < ActiveRecord::Base
   has_many :nodes, :dependent => :destroy, :autosave => true
   
   #Shares associations
-  has_many :private_shares
-  has_many :authorized_users, :through => :private_shares
+  has_many :shares
+  has_many :users, :through => :shares
   
   has_one :pile_ref_prop, :as => :ref_pile
   

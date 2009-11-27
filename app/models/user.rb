@@ -29,9 +29,9 @@ class User < ActiveRecord::Base
   #Followship associations
   has_many :followships
   has_many :followees, :through => :followships
-  # Hey Josh, is this followers???
-  # Any Followship relation that has a user pointing to this User… Hmm.
-  # has_many :users,     :through => :followships # necessary?
+  
+  has_many :shares
+  has_many :shared_piles, :through => :shares
   
   # @fix: get it to properly alias tables so that "a_user.followees.followers_of(self)" works
   named_scope :followers_of, proc {|a_user| {

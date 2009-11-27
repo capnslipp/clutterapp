@@ -17,6 +17,11 @@ Factory.define :followship do |f|
   f.user {|a| a.association(:user)}
 end
 
+Factory.define :share do |f|
+  f.user {|a| a.association(:user)}
+  f.shared_pile {|a| a.association(:pile)}
+end
+
 Factory.define :user do |f|
   f.sequence(:login) { |u_n| "user_#{u_n}" }
   f.sequence(:email) {|u_n| "user_#{u_n}@example.com" }

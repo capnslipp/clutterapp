@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-
-
 =begin
   Helper Module
 =end
