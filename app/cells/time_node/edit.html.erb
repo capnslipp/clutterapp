@@ -1,6 +1,5 @@
 <div class="edit time prop <%= 'badge' unless @body -%>">
-	<%- @form.fields_for :node_prop_attributes, @node.prop  do |prop_form| -%>
-		<%= prop_form.hidden_field :id, :name => 'node[prop_attributes][id]' %>
-		<%= prop_form.text_field :time, :class => 'field', :name => 'node[prop_attributes][time]' %>
+	<%- @form.fields_for :prop, @node.prop  do |prop_form| -%>
+		<%= prop_form.text_field :time, :class => 'field' %>
 	<%- end -%>
 </div>
