@@ -21,7 +21,7 @@ class NodeCell < Cell::Base
     fetch_opts
     fetch_badges if @body
     
-    render :layout => determine_layout(:show)
+    render #:layout => determine_layout(:show)
   end
   
   
@@ -29,7 +29,7 @@ class NodeCell < Cell::Base
   def new
     fetch_opts
     
-    render :layout => determine_layout(:new)
+    render #:layout => determine_layout(:new)
   end
   
   
@@ -39,7 +39,7 @@ class NodeCell < Cell::Base
     fetch_opts
     fetch_badges if @body
     
-    render :layout => determine_layout(:edit)
+    render #:layout => determine_layout(:edit)
   end
   
   
@@ -52,7 +52,7 @@ protected
   
   
   def fetch_opts
-    [:node, :body].each do |opt_name|
+    [:node, :body, :form].each do |opt_name|
       instance_variable_set(:"@#{opt_name}", @opts[opt_name])
     end
     
@@ -60,13 +60,13 @@ protected
   end
   
   
-  def determine_layout(state_name)
-    if @body
-      "body_#{state_name}"
-    else
-      nil
-    end
-  end
+  #def determine_layout(state_name)
+  #  if @body
+  #    "body_#{state_name}"
+  #  else
+  #    nil
+  #  end
+  #end
   
   
   def fetch_badges

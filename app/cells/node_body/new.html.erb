@@ -1,7 +1,7 @@
 <div class="<%=cell.state_name%> body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node], :parent_id => @node.parent_id, :type => @node.prop.class.short_name), :html => {:method => 'post'} do |node_form| -%>
 		
-		<%= @content_for_layout %>
+		<%= render_cell(cell_for_node(@node), cell.state_name, :node => @node, :form => node_form) %>
 		
 		<%- @node.children.badgeable.each do |child_node| -%>
 			<div class="sub-line">

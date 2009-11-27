@@ -1,10 +1,5 @@
 module CellHelper
   
-  def render_child(child_node, mode)
-    render_cell cell_for_node(child_node), :show, :node => child_node, :mode => mode
-  end
-  
-  
   def cell_for_node(node)
     cell = /(.+)Prop/.match( node.prop.class.to_s )
     ((cell ? cell[1] : '') + 'Node').underscore.to_sym

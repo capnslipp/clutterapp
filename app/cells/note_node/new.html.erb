@@ -1,5 +1,5 @@
 <div class="new note prop <%= 'badge' unless @body -%>">
-	<%- fields_for :node_prop_attributes, @node.prop  do |prop_form| -%>
+	<%- @form.fields_for :node_prop_attributes, @node.prop  do |prop_form| -%>
 		<%= prop_form.text_area :note, :class => 'field', :name => 'node[prop_attributes][note]' %>
 	<%- end -%>
 </div>
