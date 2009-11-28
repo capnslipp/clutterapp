@@ -62,7 +62,7 @@ class NodesController < ApplicationController
   
   # GET /nodes/1/edit
   def edit
-    @node = active_pile.nodes.find params[:id]
+    @node = active_pile.nodes.find(params[:id])
     
     render :inline => render_cell('node_body', :edit, :node => @node)
   end
