@@ -25,10 +25,10 @@ class NodesController < ApplicationController
   # GET /nodes/new
   def new
     node_attrs = params.delete(:node) || {}
+    logger.prefixed 'NodesController#new', :red, "node_attrs: #{node_attrs.inspect}"
     
     @parent = active_pile.nodes.find(node_attrs.delete(:parent_id))
-    node_attrs.update(:pile => @parent.pile)
-    logger.prefixed 'NodesController#new', :red, "node_attrs: #{node_attrs.inspect}"
+    node_attrs[:pile] = @parent.pile
     
     #prop_attrs = node_attrs.delete(:prop_attributes) || {}
     raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
@@ -37,8 +37,6 @@ class NodesController < ApplicationController
     
     @node = @parent.children.build(node_attrs)
     
-    # because of lack of Rails capability to build through polymorphic associations
-    #@node.prop = @node.build_prop(prop_attrs)
     
     if params[:add]
       add_attrs = params.delete(:add)
@@ -48,15 +46,13 @@ class NodesController < ApplicationController
       add_attrs[:prop_attributes][:type] = add_attrs.delete(:prop_type)
       
       @add_node = @node.children.build(add_attrs)
-      
-      # because of lack of Rails capability to build through polymorphic associations
-      #@add_node.prop = @add_node.build_prop(params[:add][:prop_attributes])
     end
     
     logger.prefixed 'NodesController#new', :red, "@node: #{@node.inspect}"
     logger.prefixed 'NodesController#new', :red, "@node.prop: #{@node.prop.inspect}"
     logger.prefixed 'NodesController#new', :red, "@node.children: #{@node.children.inspect}"
     logger.prefixed 'NodesController#new', :red, "@node.children.badgeable: #{@node.children.badgeable.inspect}"
+    
     
     @cell_state = :new
     render :partial => 'item', :locals => {:item => @node}
@@ -65,16 +61,29 @@ class NodesController < ApplicationController
   
   # POST /nodes
   def create
-    node_attrs = params[:node] || {}
-    prop_class = Prop.class_from_type(node_attrs[:prop_type])
-    node_attrs[:prop] = prop_class.new(node_attrs.delete(:prop_attributes))
+    node_attrs = params.delete(:node) || {}
+    #prop_class = Prop.class_from_type(node_attrs[:prop_type])
+    #node_attrs[:prop] = prop_class.new(node_attrs.delete(:prop_attributes))
     
-    node_attrs[:pile] = Pile.find(params[:pile_id])
+    @parent = active_pile.nodes.find(node_attrs.delete(:parent_id))
+    node_attrs[:pile] = @parent.pile
     
-    @parent = active_pile.nodes.find(node_attrs[:parent_id])
+    raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
+    node_attrs[:prop_attributes] ||= {}
+    node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
+    
+    node_attrs[:children_attributes].each_value do |child_attrs|
+      child_attrs.update(:parent => @parent, :pile => @parent.pile)
+    end
+    
     @node = @parent.children.build(node_attrs)
     
+    logger.prefixed 'NodesController#create', :red, "node_attrs: #{node_attrs.inspect}"
+    logger.prefixed 'NodesController#create', :red, "@node: #{@node.inspect}"
+    logger.prefixed 'NodesController#create', :red, "@node.prop: #{@node.prop.inspect}"
+    
     @node.save!
+    
     
     @cell_state = :show
     render :partial => 'item', :locals => {:item => @node}
