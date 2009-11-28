@@ -1,5 +1,6 @@
 <div class="new time prop <%= 'badge' if @node.prop.badged? -%>">
 	<%- @form.fields_for :prop do |prop_form| -%>
+		<%= prop_form.hidden_field :type, :class => TimeProp.short_name %>
 		<%= prop_form.text_field :time, :class => 'field' %>
 	<%- end -%>
 </div>

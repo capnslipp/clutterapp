@@ -5,7 +5,7 @@
 		
 		<%- @node.children.badgeable.each do |badge_node| -%>
 			<% node_form.fields_for 'children', badge_node do |badge_fields| %>
-				<%= render :partial => 'nodes/line_for_form', :locals => {:node => badge_node, :form => badge_fields} %>
+				<%= render :partial => 'nodes/line_for_form', :locals => {:state => (badge_node.new_record? ? :new : :edit), :node => badge_node, :form => badge_fields} %>
 			<%- end -%>
 		<%- end -%>
 		

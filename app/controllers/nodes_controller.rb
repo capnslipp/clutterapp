@@ -24,26 +24,33 @@ class NodesController < ApplicationController
   
   # GET /nodes/new
   def new
-    raise 'node[prop_type] param is required' if params[:node][:prop_type].nil?
-    #params[:node][:prop] = Prop.class_from_type(params[:node].delete(:prop_type)).filler_new
-    #logger.prefixed 'NodesController#new', :red, "params[:node][:prop]: #{params[:node][:prop].inspect}"
+    node_attrs = params.delete(:node) || {}
     
-    @parent = active_pile.nodes.find(params[:node].delete(:parent_id))
-    params[:node].update(:pile => @parent.pile)
-    logger.prefixed 'NodesController#new', :red, "params[:node]: #{params[:node].inspect}"
-    params[:node][:prop_attributes] ||= {}
-    params[:node][:prop_attributes][:type] = params[:node].delete(:prop_type)
-    @node = @parent.children.build(params[:node])
+    @parent = active_pile.nodes.find(node_attrs.delete(:parent_id))
+    node_attrs.update(:pile => @parent.pile)
+    logger.prefixed 'NodesController#new', :red, "node_attrs: #{node_attrs.inspect}"
+    
+    #prop_attrs = node_attrs.delete(:prop_attributes) || {}
+    raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
+    node_attrs[:prop_attributes] ||= {}
+    node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
+    
+    @node = @parent.children.build(node_attrs)
+    
     # because of lack of Rails capability to build through polymorphic associations
-    @node.prop = @node.build_prop(params[:node][:prop_attributes])
+    #@node.prop = @node.build_prop(prop_attrs)
     
     if params[:add]
-      raise 'add[prop_type] param is required' if params[:add][:prop_type].nil?
-      params[:add][:prop_attributes] ||= {}
-      params[:add][:prop_attributes][:type] = params[:add].delete(:prop_type)
-      @add_node = @node.children.build(params[:add])
+      add_attrs = params.delete(:add)
+      
+      raise 'add[prop_type] param is required' if add_attrs[:prop_type].nil?
+      add_attrs[:prop_attributes] ||= {}
+      add_attrs[:prop_attributes][:type] = add_attrs.delete(:prop_type)
+      
+      @add_node = @node.children.build(add_attrs)
+      
       # because of lack of Rails capability to build through polymorphic associations
-      @add_node.prop = @add_node.build_prop(params[:add][:prop_attributes])
+      #@add_node.prop = @add_node.build_prop(params[:add][:prop_attributes])
     end
     
     logger.prefixed 'NodesController#new', :red, "@node: #{@node.inspect}"

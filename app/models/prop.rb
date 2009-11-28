@@ -9,6 +9,8 @@ class Prop < ActiveRecord::Base
   
   
   def self::class_from_type(type)
+    logger.prefixed 'Prop::class_from_type', :light_red, "type: #{type.inspect}"
+    
     unless type.instance_of?(Class)
       type = type.to_s.underscore.classify
       type << 'Prop' unless type =~ /Prop$/

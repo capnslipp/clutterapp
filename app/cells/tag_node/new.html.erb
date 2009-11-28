@@ -1,5 +1,6 @@
 <div class="new tag prop <%= 'badge' if @node.prop.badged? -%>">
 	<%- @form.fields_for :prop do |prop_form| -%>
+		<%= prop_form.hidden_field :type, :class => TagProp.short_name %>
 		<%= prop_form.text_field :tag, :class => 'field' %>
 	<%- end -%>
 </div>
