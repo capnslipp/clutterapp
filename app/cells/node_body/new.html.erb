@@ -5,11 +5,7 @@
 		
   		<% node_form.fields_for :children do |child_form| %>
 			<%- @node.children.badgeable.each do |child_node| -%>
-				<div class="sub-line">
-					<a href="#" class="button" onclick="return false;"><span class="sym"><%# ✖ %>&#10006;</span></a>
-					<em><%= child_node.prop.class.short_name %></em>
-					<%= render_cell cell_for_node(child_node), :edit, :node => child_node, :form => child_form %>
-				</div>
+				<%= render :partial => 'nodes/line_for_form', :locals => {:node => badge_node, :form => badge_fields} %>
 			<%- end -%>
 		<%- end -%>
 		
