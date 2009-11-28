@@ -24,7 +24,7 @@ ActionController::Routing::Routes.draw do |map|
     users.resources :piles do |piles|
       # /:user_id/piles/:pile_id/nodes
       # /:user_id/piles/:pile_id/nodes/...
-      piles.resources :nodes, :member => {
+      piles.resources :nodes, :except => [:index], :member => {
         :move => :put,
         :update_check_prop_checked => :put,
         :set_note_prop_note => :put,
