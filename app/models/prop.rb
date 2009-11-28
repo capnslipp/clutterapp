@@ -9,16 +9,12 @@ class Prop < ActiveRecord::Base
   
   
   def self::class_from_type(type)
-    logger.prefixed 'Prop::class_from_type', :light_red, "type: #{type.inspect}"
-    
     unless type.instance_of?(Class)
       type = type.to_s.underscore.classify
       type << 'Prop' unless type =~ /Prop$/
       type = type.constantize
     end
-    
     raise %{type "#{type}" must be a subclass of Prop (not "Prop" itself; empty string passed in?)} unless type.superclass == Prop
-    logger.prefixed 'Prop::class_from_type', :light_red, "type: #{type.inspect}"
     type
   end
   

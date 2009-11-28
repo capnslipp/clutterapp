@@ -25,12 +25,10 @@ class NodesController < ApplicationController
   # GET /nodes/new
   def new
     node_attrs = params.delete(:node) || {}
-    logger.prefixed 'NodesController#new', :red, "node_attrs: #{node_attrs.inspect}"
     
     @parent = active_pile.nodes.find(node_attrs.delete(:parent_id))
     node_attrs[:pile] = @parent.pile
     
-    #prop_attrs = node_attrs.delete(:prop_attributes) || {}
     raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
     node_attrs[:prop_attributes] ||= {}
     node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
@@ -48,11 +46,6 @@ class NodesController < ApplicationController
       @add_node = @node.children.build(add_attrs)
     end
     
-    logger.prefixed 'NodesController#new', :red, "@node: #{@node.inspect}"
-    logger.prefixed 'NodesController#new', :red, "@node.prop: #{@node.prop.inspect}"
-    logger.prefixed 'NodesController#new', :red, "@node.children: #{@node.children.inspect}"
-    logger.prefixed 'NodesController#new', :red, "@node.children.badgeable: #{@node.children.badgeable.inspect}"
-    
     
     @cell_state = :new
     render :partial => 'item', :locals => {:item => @node}
@@ -62,8 +55,6 @@ class NodesController < ApplicationController
   # POST /nodes
   def create
     node_attrs = params.delete(:node) || {}
-    #prop_class = Prop.class_from_type(node_attrs[:prop_type])
-    #node_attrs[:prop] = prop_class.new(node_attrs.delete(:prop_attributes))
     
     @parent = active_pile.nodes.find(node_attrs.delete(:parent_id))
     node_attrs[:pile] = @parent.pile
@@ -77,10 +68,6 @@ class NodesController < ApplicationController
     end
     
     @node = @parent.children.build(node_attrs)
-    
-    logger.prefixed 'NodesController#create', :red, "node_attrs: #{node_attrs.inspect}"
-    logger.prefixed 'NodesController#create', :red, "@node: #{@node.inspect}"
-    logger.prefixed 'NodesController#create', :red, "@node.prop: #{@node.prop.inspect}"
     
     @node.save!
     

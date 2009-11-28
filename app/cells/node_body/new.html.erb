@@ -3,10 +3,7 @@
 		
 		<%= render_cell(cell_for_node(@node), :new, :node => @node, :form => node_form) %>
 		
-		<% logger.prefixed 'cells/node_body/new', :light_red, "@node.children: #{@node.children.inspect}" %>
 		<%- @node.children.each do |badge_node| -%>
-			<% logger.prefixed 'cells/node_body/new', :light_red, "badge_node: #{badge_node.inspect}" %>
-			<% logger.prefixed 'cells/node_body/new', :light_red, "badge_node.prop: #{badge_node.prop.inspect}" %>
 			<%- next unless badge_node.prop.badged? -%>
 			<% node_form.fields_for 'children', badge_node do |badge_fields| %>
 				<%= render :partial => 'nodes/line_for_form', :locals => {:state => :new, :node => badge_node, :form => badge_fields} %>
