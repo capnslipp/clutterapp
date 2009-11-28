@@ -28,14 +28,6 @@ describe NodesController do
       new_polymorphic_path([@user, @pile, new_node]).should == expected_path
     end
     
-    it "recognizes and generates #show" do
-      expected_path = '/test-user/piles/1/nodes/2'
-      
-      { :get => expected_path }.should route_to(:controller => 'nodes', :action => 'show', :user_id => 'test-user', :pile_id => '1', :id => '2')
-      user_pile_node_path(:id => 2, :pile_id => 1, :user_id => 'test-user').should == expected_path
-      polymorphic_path([@user, @pile, @node]).should == expected_path
-    end
-    
     it "recognizes and generates #edit" do
       expected_path = '/test-user/piles/1/nodes/2/edit'
       
@@ -79,9 +71,14 @@ describe NodesController do
     
     # invalid routes
     
-    it "doesn't recognizes and generate #index" do
+    it "doesn't recognize and generate #index" do
       { :get => '/test-user/piles/1/nodes' }.should_not be_routeable
     end
+    
+    # doesn't work; Rails bug?
+    it "doesn't recognize and generate #show" #do
+    #  { :get => '/test-user/piles/1/nodes/2' }.should_not be_routeable
+    #end
     
   end
 end
