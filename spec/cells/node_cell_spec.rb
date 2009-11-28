@@ -143,7 +143,10 @@ describe CheckNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node(:prop => mock_model(CheckProp, :checked? => false, :badged? => false), :children => @mocked_node_children)
+    mock_node(
+      :prop => mock_model(CheckProp, :checked? => false, :badged? => CheckProp::badgeable?),
+      :children => @mocked_node_childre
+    )
     @mock_node.prop.stubs(:class => CheckProp)
   end
   
@@ -164,7 +167,10 @@ describe NoteNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node(:prop => mock_model(NoteProp, :note => 'A test note for >> you.'), :children => @mocked_node_children)
+    mock_node(
+      :prop => mock_model(NoteProp, :note => 'A test note for >> you.', :badged? => NoteProp::badgeable?),
+      :children => @mocked_node_children
+    )
     @mock_node.prop.stubs(:class => NoteProp)
   end
   
@@ -188,7 +194,10 @@ describe PileRefNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node(:prop => mock_model(PileRefProp, :ref_pile => mock_model(Pile)), :children => @mocked_node_children)
+    mock_node(
+      :prop => mock_model(PileRefProp, :ref_pile => mock_model(Pile), :badged? => PileRefProp::badgeable?),
+      :children => @mocked_node_children
+    )
     @mock_node.prop.ref_pile.should_receive(:name).and_return("A Test Ref'd Pile & Stuff")
     @mock_node.prop.ref_pile.stub(:owner).and_return(mock_model(User))
     @mock_node.prop.ref_pile.should_receive(:root_node).at_least(:once).and_return(mock_model(Node))
@@ -216,7 +225,10 @@ describe PriorityNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node(:prop => mock_model(PriorityProp, :priority => 110000000000), :children => @mocked_node_children)
+    mock_node(
+      :prop => mock_model(PriorityProp, :priority => 110000000000, :badged? => PriorityProp::badgeable?),
+      :children => @mocked_node_children
+    )
     @mock_node.prop.stubs(:class => PriorityProp)
   end
   
@@ -240,7 +252,10 @@ describe TagNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node(:prop => mock_model(TagProp, :tag => 'test-tag'), :children => @mocked_node_children)
+    mock_node(
+      :prop => mock_model(TagProp, :tag => 'test-tag', :badged? => TagProp::badgeable?),
+      :children => @mocked_node_children
+    )
     @mock_node.prop.stubs(:class => TagProp)
   end
   
@@ -264,7 +279,10 @@ describe TextNodeCell do
   it_should_behave_like "All NodeCells"
   
   before(:each) do
-    mock_node(:prop => mock_model(TextProp, :text => 'test text'), :children => @mocked_node_children)
+    mock_node(
+      :prop => mock_model(TextProp, :text => 'test text', :badged? => TextProp::badgeable?),
+      :children => @mocked_node_children
+    )
     @mock_node.prop.stubs(:class => TextProp)
   end
   
@@ -289,7 +307,10 @@ describe TimeNodeCell do
   
   before(:each) do
     @time_now = Time.now
-    mock_node(:prop => mock_model(TimeProp, :time => @time_now), :children => @mocked_node_children)
+    mock_node(
+      :prop => mock_model(TimeProp, :time => @time_now, :badged? => TimeProp::badgeable?),
+      :children => @mocked_node_children
+    )
     @mock_node.prop.stubs(:class => TimeProp)
   end
   
