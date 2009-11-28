@@ -52,8 +52,15 @@ class Node < ActiveRecord::Base
     self.chilren.create!(:prop => Prop.rand)
   end
   
+  
   def create_rand_descendant
     self_and_descendants.rand.create_rand_child
+  end
+  
+  
+  def build_prop(params)
+    logger.prefixed 'Node#build_prop', :light_red, "params: #{params.inspect}"
+    Prop.class_from_type(params.delete('type')).new(params)
   end
   
   

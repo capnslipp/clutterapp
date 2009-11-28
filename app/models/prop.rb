@@ -15,7 +15,8 @@ class Prop < ActiveRecord::Base
       type = type.constantize
     end
     
-    raise %{type "#{type}" must be a subclass of Prop and not "Prop" itself (empty string passed in?)} unless type.superclass == Prop
+    raise %{type "#{type}" must be a subclass of Prop (not "Prop" itself; empty string passed in?)} unless type.superclass == Prop
+    logger.prefixed 'Prop::class_from_type', :light_red, "type: #{type.inspect}"
     type
   end
   

@@ -189,20 +189,17 @@ function showGoogleChromeFrame() {
 }
 
 function showFill(modalElement) {
-	if (!$('#fill').is(':visible')) {
-		if (modalElement != undefined)
-		{
-			//alert(modalElement.cssPosition);
-			//if (modalElement.cssPosition != 'absolute') {
-			//	modalElement.attr('oc\:origPosition', modalElement.css('position'));
-			//	modalElement.css('position', 'relative');
-			//}
-			
-			modalElement.css('z-index', 1000);
-		}
-	
-		$('#fill').fadeIn(kDefaultTransitionDuration);
+	if (modalElement != undefined) {
+		//alert(modalElement.cssPosition);
+		//if (modalElement.cssPosition != 'absolute') {
+		//	modalElement.attr('oc\:origPosition', modalElement.css('position'));
+		//	modalElement.css('position', 'relative');
+		//}
+		modalElement.css('z-index', 1000);
 	}
+	
+	if (!$('#fill').is(':visible'))
+		$('#fill').fadeIn(kDefaultTransitionDuration);
 }
 
 function hideFill(modalElement) {
@@ -223,19 +220,18 @@ function hideFill(modalElement) {
 function itemNew(parentNode, type) {
 	$.ajax({
 		type: 'get',
-		data: {type: type, parent_id: nodeIDOfItem(parentNode)},
 		url: parentNode.closest('.pile').attr('oc\:nodes-url') + '/new',
+		data: {'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode)},
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(parentNode, type, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(parentNode, type, xhrObj, errStr, expObj); }
+		success: function(responseData) { handleSuccess(parentNode, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(parentNode, xhrObj, errStr, expObj); }
 	});
 	
 	
-	function handleSuccess(parentNode, type, responseData) {
+	function handleSuccess(parentNode, responseData) {
 		collapseActionBar();
 		
-		var list = parentNode.children('.list');
-		list.required();
+		var list = parentNode.children('.list').required();
 		
 		if (list.children('#new-bar').length != 0)
 			list.children('#new-bar').before(responseData);
@@ -253,7 +249,7 @@ function itemNew(parentNode, type) {
 		formFocus(newBodyForm.required());
 	}
 	
-	function handleError(parentNode, type, xhrObj, errStr, expObj) {
+	function handleError(parentNode, xhrObj, errStr, expObj) {
 		parentNode.find('#new-bar:first')
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
@@ -284,7 +280,7 @@ function itemCreate(form) {
 	$.ajax({
 		type: form.attr('method'), // 'post'
 		url: form.attr('action'),
-		data: form.formSerialize(),
+		data: form.serialize(),
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(form, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
@@ -363,7 +359,7 @@ function itemUpdate(form) {
 	$.ajax({
 		type: form.attr('method'), // 'post' (PUT)
 		url: form.attr('action'),
-		data: form.formSerialize(),
+		data: form.serialize(),
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(form, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
@@ -400,8 +396,8 @@ $(function() {
 function itemMove(node, dir) {
 	$.ajax({
 		type: 'post',
-		data: {_method: 'put', dir: dir},
 		url: node.attr('oc\:url') + '/move',
+		data: {_method: 'put', dir: dir},
 		dataType: 'script',
 		success: function(responseData) { handleSuccess(node, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
@@ -436,8 +432,8 @@ $(function() {
 function itemDelete(node) {
 	$.ajax({
 		type: 'post',
-		data: {_method: 'delete'},
 		url: node.attr('oc\:url'),
+		data: {_method: 'delete'},
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(node, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
@@ -460,6 +456,54 @@ $(function() {
 	
 	actionButtons.find('a.delete')
 		.click(function() { itemDelete($(this).closest('.item_for_node')); return false; });
+});
+
+
+function badgeAdd(link, addType) {
+	var node = $(link).closest('.new.item_for_node').required();
+	var form = node.find('form').required();
+	var parentNode = node.parent().closest('.item_for_node').required();
+	
+	$.ajax({
+		type: 'get',
+		url: form.attr('action').replace(/\?/, '/new?'),
+		data: form.serialize() + '&' + $.param({'add[prop_type]': addType}),
+		dataType: 'html',
+		success: function(responseData) { handleSuccess(node, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
+	});
+	
+	
+	function handleSuccess(node, responseData) {
+		var list = node.parent('.list').required();
+		
+		//var newBody = node.replaceWith(responseData); // possible?
+		node.replaceWith(responseData);
+		
+		var newBody = list.children('.item_for_node:last').find('.new.body').required();
+		
+		newBody.find('.note.prop').find('textarea').elastic();
+		
+		showFill(newBody);
+		
+		var newBodyForm = newBody.find('form').required();
+		formFocus(newBodyForm.required());
+	}
+	
+	function handleError(node, xhrObj, errStr, expObj) {
+		node.find('.body:first').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+	}
+}
+	
+$(function() {
+	$('#add-bar a.add.text'		).live('click', function() { badgeAdd(this, 'text'		); return false; });
+	$('#add-bar a.add.check'	).live('click', function() { badgeAdd(this, 'check'		); return false; });
+	$('#add-bar a.add.note'		).live('click', function() { badgeAdd(this, 'note'		); return false; });
+	$('#add-bar a.add.priority'	).live('click', function() { badgeAdd(this, 'priority'	); return false; });
+	$('#add-bar a.add.tag'		).live('click', function() { badgeAdd(this, 'tag'		); return false; });
+	$('#add-bar a.add.time'		).live('click', function() { badgeAdd(this, 'time'		); return false; });
+	$('#add-bar a.add.pile-ref'	).live('click', function() { badgeAdd(this, 'pile-ref'	); return false; });
 });
 
 
