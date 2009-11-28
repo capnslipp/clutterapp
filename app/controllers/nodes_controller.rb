@@ -63,11 +63,12 @@ class NodesController < ApplicationController
     node_attrs[:prop_attributes] ||= {}
     node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
     
-    node_attrs[:children_attributes].each_value do |child_attrs|
-      child_attrs.update(:parent => @parent, :pile => @parent.pile)
-    end
-    
     @node = @parent.children.build(node_attrs)
+    
+    @node.children.each do |child|
+      child.parent = @node
+      child.pile = @node.pile
+    end
     
     @node.save!
     
