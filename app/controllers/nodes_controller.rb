@@ -43,7 +43,7 @@ class NodesController < ApplicationController
       add_attrs[:prop_attributes] ||= {}
       add_attrs[:prop_attributes][:type] = add_attrs.delete(:prop_type)
       
-      @add_node = @node.children.build(add_attrs)
+      @node.children.build(add_attrs)
     end
     
     
@@ -81,6 +81,20 @@ class NodesController < ApplicationController
   # GET /nodes/1/edit
   def edit
     @node = active_pile.nodes.find(params[:id])
+    
+    @node.attributes = params.delete(:node)
+    
+    
+    if params[:add]
+      add_attrs = params.delete(:add)
+      
+      raise 'add[prop_type] param is required' if add_attrs[:prop_type].nil?
+      add_attrs[:prop_attributes] ||= {}
+      add_attrs[:prop_attributes][:type] = add_attrs.delete(:prop_type)
+      
+      @node.children.build(add_attrs)
+    end
+    
     
     render :inline => render_cell('node_body', :edit, :node => @node)
   end
