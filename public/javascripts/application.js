@@ -462,37 +462,63 @@ $(function() {
 
 
 function badgeAdd(link, addType) {
-	var node = $(link).closest('.new.item_for_node').required();
+	var node = $(link).closest('.item_for_node').required();
+	
+	var state;
+	if (node.children('.new')[0])
+		state = 'new';
+	else if (node.children('.edit')[0])
+		state = 'edit';
+	else if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
+		console.assert('invalid state');
+	
 	var form = node.find('form').required();
 	var parentNode = node.parent().closest('.item_for_node').required();
 	
 	$.ajax({
 		type: 'get',
-		url: form.attr('action').replace(/\?/, '/new?'),
+		url: (state == 'new') ? form.attr('action').replace(/\?/, '/new?') : (node.attr('oc\:url') + '/edit'),
 		data: form.serialize() + '&' + $.param({'add[prop_type]': addType}),
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(node, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(node, responseData) {
-		var list = node.parent('.list').required();
-		
-		//var newBody = node.replaceWith(responseData); // possible?
-		node.replaceWith(responseData);
-		
-		var newBody = list.children('.item_for_node:last').find('.new.body').required();
-		
-		newBody.find('.note.prop').find('textarea').elastic();
-		
-		showFill(newBody);
-		
-		var newBodyForm = newBody.find('form').required();
-		formFocus(newBodyForm.required());
+	function handleSuccess(responseData) {
+		if (state == 'new')
+		{
+			var list = node.parent('.list').required();
+			
+			//var newBody = node.replaceWith(responseData); // possible?
+			node.replaceWith(responseData);
+			
+			var newBody = list.children('.item_for_node:last').find('.new.body').required();
+			
+			newBody.find('.note.prop').find('textarea').elastic();
+			
+			showFill(newBody);
+			
+			formFocus(newBody.find('form').required());
+		}
+		else if (state == 'edit')
+		{
+			var showBody = node.children('.show.body').required();
+			var editBody = showBody.siblings('.edit.body').required();
+			
+			//var editBody = node.replaceWith(responseData); // possible?
+			editBody.replaceWith(responseData);
+			
+			var editBody = showBody.siblings('.edit.body').required();
+			
+			editBody.find('.note.prop').find('textarea').elastic();
+			
+			showFill(editBody);
+			formFocus(editBody.find('form').required());
+		}
 	}
 	
-	function handleError(node, xhrObj, errStr, expObj) {
+	function handleError(xhrObj, errStr, expObj) {
 		node.find('.body:first').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
