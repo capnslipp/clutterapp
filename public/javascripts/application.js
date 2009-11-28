@@ -277,6 +277,8 @@ $(function() {
 
 
 function itemCreate(form) {
+	form.required();
+	
 	$.ajax({
 		type: form.attr('method'), // 'post'
 		url: form.attr('action'),
