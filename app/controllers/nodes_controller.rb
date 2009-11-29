@@ -114,8 +114,13 @@ class NodesController < ApplicationController
       if child_id
         child = @node.children.find(child_id)
         
-        child.update_attributes!(child_attrs)
-        child.prop.update_attributes!(child_attrs[:prop_attributes]) # since Rails won't do it through a polymorphic relation
+        if child_attrs.delete(:_delete).present?
+          child.destroy()
+          @node.children.delete(child)
+        else
+          child.update_attributes!(child_attrs)
+          child.prop.update_attributes!(child_attrs[:prop_attributes]) # since Rails won't do it through a polymorphic relation
+        end
       else
         @node.children.create(child_attrs.merge(
           :parent => @node,

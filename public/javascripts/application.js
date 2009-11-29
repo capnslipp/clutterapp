@@ -523,7 +523,7 @@ function badgeAdd(link, addType) {
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
-	
+
 $(function() {
 	$('#add-bar a.add.text'		).live('click', function() { badgeAdd(this, 'text'		); return false; });
 	$('#add-bar a.add.check'	).live('click', function() { badgeAdd(this, 'check'		); return false; });
@@ -532,6 +532,77 @@ $(function() {
 	$('#add-bar a.add.tag'		).live('click', function() { badgeAdd(this, 'tag'		); return false; });
 	$('#add-bar a.add.time'		).live('click', function() { badgeAdd(this, 'time'		); return false; });
 	$('#add-bar a.add.pile-ref'	).live('click', function() { badgeAdd(this, 'pile-ref'	); return false; });
+});
+
+
+function badgeRemove(link) {
+	var deleteField = $(link).siblings('input[type=hidden]').required();
+	deleteField.val(1);
+	
+	var node = $(link).closest('.item_for_node').required();
+	
+	var state;
+	if (node.children('.new')[0])
+		state = 'new';
+	else if (node.children('.edit')[0])
+		state = 'edit';
+	else if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
+		console.assert('invalid state');
+	
+	var form = node.find('form').required();
+	var parentNode = node.parent().closest('.item_for_node').required();
+	
+	$.ajax({
+		type: 'get',
+		url: (state == 'new') ? form.attr('action').replace(/\?/, '/new?') : (node.attr('oc\:url') + '/edit'),
+		data: form.serialize(),
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		if (state == 'new')
+		{
+			var list = node.parent('.list').required();
+			
+			//var newBody = node.replaceWith(responseData); // possible?
+			node.replaceWith(responseData);
+			
+			var newBody = list.children('.item_for_node:last').find('.new.body').required();
+			
+			newBody.find('.note.prop').find('textarea').elastic();
+			
+			showFill(newBody);
+			
+			formFocus(newBody.find('form').required());
+		}
+		else if (state == 'edit')
+		{
+			var showBody = node.children('.show.body').required();
+			var editBody = showBody.siblings('.edit.body').required();
+			
+			//var editBody = node.replaceWith(responseData); // possible?
+			editBody.replaceWith(responseData);
+			
+			var editBody = showBody.siblings('.edit.body').required();
+			
+			editBody.find('.note.prop').find('textarea').elastic();
+			
+			showFill(editBody);
+			formFocus(editBody.find('form').required());
+		}
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+		node.find('.body:first').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+	}
+}
+
+$(function() {
+	$('.sub-line a.remove').live('click', function() { badgeRemove(this); return false; });
 });
 
 

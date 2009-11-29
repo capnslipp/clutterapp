@@ -14,7 +14,8 @@ class Node < ActiveRecord::Base
   
   
   #attr_accessible :node, :node_attributes, :prop, :prop_attributes, :children, :children_attributes
-  accepts_nested_attributes_for :prop, :children
+  accepts_nested_attributes_for :prop, :allow_destroy => true
+  accepts_nested_attributes_for :children, :allow_destroy => true
   
   
   named_scope :typed, lambda {|type|
