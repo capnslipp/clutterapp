@@ -15,7 +15,7 @@ module Cell
     
     def log_info(state_name)
       logger.prefixed 'Cell Dispatch', :light_yellow, "#{self.class} #{state_name}"
-      logger.debug ActiveSupport::BufferedLogger::PREFIX_SPACE * 2 + "Options: #{@opts.inspect}}"
+      #logger.debug ActiveSupport::BufferedLogger::PREFIX_SPACE * 2 + "Options: #{@opts.inspect}}"
     end
     
   end

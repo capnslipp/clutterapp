@@ -1,8 +1,8 @@
-<%- item.children.each do |child_node| -%>
+<%- item.children.non_badgeable.each do |child_node| -%>
 	<% content_tag_for :li, child_node, 'item_for', :class => dom_class(child_node, 'item_for'), :'oc:url' => polymorphic_path([child_node.pile.owner, child_node.pile, child_node]) do %>
-		<%= render_child(child_node, :body) %>
+		<%= render_cell('node_body', :show, :node => child_node) %>
 		<ul class="node list">
 			<%= render :partial => 'nodes/list_items', :locals => {:item => child_node} %>
 		</ul>
 	<% end %>
-<%- end unless item.children.empty? -%>
+<%- end -%>

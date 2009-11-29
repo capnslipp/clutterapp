@@ -39,10 +39,8 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem 'slippyd-colorist', :lib => 'colorist', :version => '>=0.0.5', :source => 'http://gemcutter.org'
   config.gem 'andand'
-  config.gem 'rspec', :lib => false, :version => '>= 1.2.9'
-  config.gem 'rspec-rails', :lib => false, :version => '>= 1.2.9'
-  config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :version => '>= 1.2.2', :source => 'http://gems.github.com'
-  config.gem "authlogic", :lib => "authlogic", :source => 'http://gemcutter.org'
+  config.gem 'authlogic', :lib => "authlogic", :source => 'http://gemcutter.org'
+  # config.gem for 'rspec', 'rpsec-rails', and 'thoughbot-factorygirl' are in config/environments/test.rb
   
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
@@ -115,6 +113,7 @@ Rails::Initializer.run do |config|
     require 'dont_do' # a simple little extension that uses blocks to "comment-out" code, while retaining syntax highlighting
     require 'scoped_block' # a crafty little extension to execute blocks with an object's scope
     require 'cell_dispatch_logging_extension' # adds nice colored logging to Cell::Base when a state is rendered
+    require 'actioncontroller_request_parameters_hacks' # fixes ActionController::Request::parameters (AKA params) to deeply merge GET query params and POST params
   end
   
 end

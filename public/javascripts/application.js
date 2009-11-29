@@ -189,20 +189,17 @@ function showGoogleChromeFrame() {
 }
 
 function showFill(modalElement) {
-	if (!$('#fill').is(':visible')) {
-		if (modalElement != undefined)
-		{
-			//alert(modalElement.cssPosition);
-			//if (modalElement.cssPosition != 'absolute') {
-			//	modalElement.attr('oc\:origPosition', modalElement.css('position'));
-			//	modalElement.css('position', 'relative');
-			//}
-			
-			modalElement.css('z-index', 1000);
-		}
-	
-		$('#fill').fadeIn(kDefaultTransitionDuration);
+	if (modalElement != undefined) {
+		//alert(modalElement.cssPosition);
+		//if (modalElement.cssPosition != 'absolute') {
+		//	modalElement.attr('oc\:origPosition', modalElement.css('position'));
+		//	modalElement.css('position', 'relative');
+		//}
+		modalElement.css('z-index', 1000);
 	}
+	
+	if (!$('#fill').is(':visible'))
+		$('#fill').fadeIn(kDefaultTransitionDuration);
 }
 
 function hideFill(modalElement) {
@@ -223,19 +220,18 @@ function hideFill(modalElement) {
 function itemNew(parentNode, type) {
 	$.ajax({
 		type: 'get',
-		data: {type: type, parent_id: nodeIDOfItem(parentNode)},
 		url: parentNode.closest('.pile').attr('oc\:nodes-url') + '/new',
+		data: {'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode)},
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(parentNode, type, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(parentNode, type, xhrObj, errStr, expObj); }
+		success: function(responseData) { handleSuccess(parentNode, responseData); },
+		error: function(xhrObj, errStr, expObj) { handleError(parentNode, xhrObj, errStr, expObj); }
 	});
 	
 	
-	function handleSuccess(parentNode, type, responseData) {
+	function handleSuccess(parentNode, responseData) {
 		collapseActionBar();
 		
-		var list = parentNode.children('.list');
-		list.required();
+		var list = parentNode.children('.list').required();
 		
 		if (list.children('#new-bar').length != 0)
 			list.children('#new-bar').before(responseData);
@@ -253,9 +249,9 @@ function itemNew(parentNode, type) {
 		formFocus(newBodyForm.required());
 	}
 	
-	function handleError(parentNode, type, xhrObj, errStr, expObj) {
+	function handleError(parentNode, xhrObj, errStr, expObj) {
 		parentNode.find('#new-bar:first')
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
 	
@@ -281,10 +277,12 @@ $(function() {
 
 
 function itemCreate(form) {
+	form.required();
+	
 	$.ajax({
 		type: form.attr('method'), // 'post'
 		url: form.attr('action'),
-		data: form.formSerialize(),
+		data: form.serialize(),
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(form, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
@@ -303,10 +301,10 @@ function itemCreate(form) {
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
-		var newProp = form.closest('.new.prop').required();
-		newProp.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		form.required();
 		
-		formFocus(form.required());
+		form.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		formFocus(form);
 	}
 }
 
@@ -348,7 +346,7 @@ function itemEdit(showBody) {
 	
 	function handleError(showBody, xhrObj, errStr, expObj) {
 		showBody
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
 
@@ -363,7 +361,7 @@ function itemUpdate(form) {
 	$.ajax({
 		type: form.attr('method'), // 'post' (PUT)
 		url: form.attr('action'),
-		data: form.formSerialize(),
+		data: form.serialize(),
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(form, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
@@ -382,10 +380,10 @@ function itemUpdate(form) {
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
-		form.closest('.edit.prop')
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		form.required();
 		
-		formFocus(form.required());
+		form.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		formFocus(form);
 	}
 }
 
@@ -400,8 +398,8 @@ $(function() {
 function itemMove(node, dir) {
 	$.ajax({
 		type: 'post',
-		data: {_method: 'put', dir: dir},
 		url: node.attr('oc\:url') + '/move',
+		data: {_method: 'put', dir: dir},
 		dataType: 'script',
 		success: function(responseData) { handleSuccess(node, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
@@ -413,8 +411,8 @@ function itemMove(node, dir) {
 	}
 	
 	function handleError(node, xhrObj, errStr, expObj) {
-		node.find('.body:first')
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		node.find('.body:first').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
 	
@@ -436,8 +434,8 @@ $(function() {
 function itemDelete(node) {
 	$.ajax({
 		type: 'post',
-		data: {_method: 'delete'},
 		url: node.attr('oc\:url'),
+		data: {_method: 'delete'},
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(node, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
@@ -450,8 +448,8 @@ function itemDelete(node) {
 	}
 	
 	function handleError(node, xhrObj, errStr, expObj) {
-		node.find('.body:first')
-			.effect('highlight', {color: 'rgba(153, 17, 0, 0.9)'}, 2000);
+		node.find('.body:first').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
 	
@@ -460,6 +458,151 @@ $(function() {
 	
 	actionButtons.find('a.delete')
 		.click(function() { itemDelete($(this).closest('.item_for_node')); return false; });
+});
+
+
+function badgeAdd(link, addType) {
+	var node = $(link).closest('.item_for_node').required();
+	
+	var state;
+	if (node.children('.new')[0])
+		state = 'new';
+	else if (node.children('.edit')[0])
+		state = 'edit';
+	else if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
+		console.assert('invalid state');
+	
+	var form = node.find('form').required();
+	var parentNode = node.parent().closest('.item_for_node').required();
+	
+	$.ajax({
+		type: 'get',
+		url: (state == 'new') ? form.attr('action').replace(/\?/, '/new?') : (node.attr('oc\:url') + '/edit'),
+		data: form.serialize() + '&' + $.param({'add[prop_type]': addType}),
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		if (state == 'new')
+		{
+			var list = node.parent('.list').required();
+			
+			//var newBody = node.replaceWith(responseData); // possible?
+			node.replaceWith(responseData);
+			
+			var newBody = list.children('.item_for_node:last').find('.new.body').required();
+			
+			newBody.find('.note.prop').find('textarea').elastic();
+			
+			showFill(newBody);
+			
+			formFocus(newBody.find('form').required());
+		}
+		else if (state == 'edit')
+		{
+			var showBody = node.children('.show.body').required();
+			var editBody = showBody.siblings('.edit.body').required();
+			
+			//var editBody = node.replaceWith(responseData); // possible?
+			editBody.replaceWith(responseData);
+			
+			var editBody = showBody.siblings('.edit.body').required();
+			
+			editBody.find('.note.prop').find('textarea').elastic();
+			
+			showFill(editBody);
+			formFocus(editBody.find('form').required());
+		}
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+		node.find('.body:first').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+	}
+}
+
+$(function() {
+	$('#add-bar a.add.text'		).live('click', function() { badgeAdd(this, 'text'		); return false; });
+	$('#add-bar a.add.check'	).live('click', function() { badgeAdd(this, 'check'		); return false; });
+	$('#add-bar a.add.note'		).live('click', function() { badgeAdd(this, 'note'		); return false; });
+	$('#add-bar a.add.priority'	).live('click', function() { badgeAdd(this, 'priority'	); return false; });
+	$('#add-bar a.add.tag'		).live('click', function() { badgeAdd(this, 'tag'		); return false; });
+	$('#add-bar a.add.time'		).live('click', function() { badgeAdd(this, 'time'		); return false; });
+	$('#add-bar a.add.pile-ref'	).live('click', function() { badgeAdd(this, 'pile-ref'	); return false; });
+});
+
+
+function badgeRemove(link) {
+	var deleteField = $(link).siblings('input[type=hidden]').required();
+	deleteField.val(1);
+	
+	var node = $(link).closest('.item_for_node').required();
+	
+	var state;
+	if (node.children('.new')[0])
+		state = 'new';
+	else if (node.children('.edit')[0])
+		state = 'edit';
+	else if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
+		console.assert('invalid state');
+	
+	var form = node.find('form').required();
+	var parentNode = node.parent().closest('.item_for_node').required();
+	
+	$.ajax({
+		type: 'get',
+		url: (state == 'new') ? form.attr('action').replace(/\?/, '/new?') : (node.attr('oc\:url') + '/edit'),
+		data: form.serialize(),
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		if (state == 'new')
+		{
+			var list = node.parent('.list').required();
+			
+			//var newBody = node.replaceWith(responseData); // possible?
+			node.replaceWith(responseData);
+			
+			var newBody = list.children('.item_for_node:last').find('.new.body').required();
+			
+			newBody.find('.note.prop').find('textarea').elastic();
+			
+			showFill(newBody);
+			
+			formFocus(newBody.find('form').required());
+		}
+		else if (state == 'edit')
+		{
+			var showBody = node.children('.show.body').required();
+			var editBody = showBody.siblings('.edit.body').required();
+			
+			//var editBody = node.replaceWith(responseData); // possible?
+			editBody.replaceWith(responseData);
+			
+			var editBody = showBody.siblings('.edit.body').required();
+			
+			editBody.find('.note.prop').find('textarea').elastic();
+			
+			showFill(editBody);
+			formFocus(editBody.find('form').required());
+		}
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+		node.find('.body:first').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+	}
+}
+
+$(function() {
+	$('.sub-line a.remove').live('click', function() { badgeRemove(this); return false; });
 });
 
 

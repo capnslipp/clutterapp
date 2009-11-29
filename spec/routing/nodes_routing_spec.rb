@@ -15,13 +15,7 @@ describe NodesController do
   
   describe "routing" do
     
-    it "recognizes and generates #index" do
-      expected_path = '/test-user/piles/1/nodes'
-      
-      { :get => expected_path }.should route_to(:controller => 'nodes', :action => 'index', :user_id => 'test-user', :pile_id => '1')
-      user_pile_nodes_path(:pile_id => 1, :user_id => 'test-user').should == expected_path
-      polymorphic_path([@user, @pile, :nodes]).should == expected_path
-    end
+    # valid routes
     
     it "recognizes and generates #new" do
       expected_path = '/test-user/piles/1/nodes/new'
@@ -32,14 +26,6 @@ describe NodesController do
       
       new_node = Factory.build(:node, :pile => @pile, :parent => @pile.root_node)
       new_polymorphic_path([@user, @pile, new_node]).should == expected_path
-    end
-    
-    it "recognizes and generates #show" do
-      expected_path = '/test-user/piles/1/nodes/2'
-      
-      { :get => expected_path }.should route_to(:controller => 'nodes', :action => 'show', :user_id => 'test-user', :pile_id => '1', :id => '2')
-      user_pile_node_path(:id => 2, :pile_id => 1, :user_id => 'test-user').should == expected_path
-      polymorphic_path([@user, @pile, @node]).should == expected_path
     end
     
     it "recognizes and generates #edit" do
@@ -73,6 +59,26 @@ describe NodesController do
       user_pile_node_path(:id => 2, :pile_id => 1, :user_id => 'test-user').should == expected_path
       polymorphic_path([@user, @pile, @node]).should == expected_path
     end
+    
+    it "recognizes and generates #move" do
+      expected_path = '/test-user/piles/1/nodes/2/move'
+      
+      { :put => expected_path }.should route_to(:controller => 'nodes', :action => 'move', :user_id => 'test-user', :pile_id => '1', :id => '2')
+      move_user_pile_node_path(:id => 2, :pile_id => 1, :user_id => 'test-user').should == expected_path
+      polymorphic_path([:move, @user, @pile, @node]).should == expected_path
+    end
+    
+    
+    # invalid routes
+    
+    it "doesn't recognize and generate #index" do
+      { :get => '/test-user/piles/1/nodes' }.should_not be_routeable
+    end
+    
+    # doesn't work; Rails bug?
+    it "doesn't recognize and generate #show" #do
+    #  { :get => '/test-user/piles/1/nodes/2' }.should_not be_routeable
+    #end
     
   end
 end

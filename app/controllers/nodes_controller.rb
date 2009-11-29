@@ -24,18 +24,28 @@ class NodesController < ApplicationController
   
   # GET /nodes/new
   def new
-    if params[:node]
-      node_attrs = params[:node]
-    else
-      node_attrs = {}
-      raise 'type param is required' if params[:type].nil?
-      prop_class = Prop.class_from_type(params[:type])
-      node_attrs[:prop] = prop_class.filler_new
+    node_attrs = params.delete(:node) || {}
+    
+    @parent = active_pile.nodes.find(node_attrs.delete(:parent_id))
+    node_attrs[:pile] = @parent.pile
+    
+    raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
+    node_attrs[:prop_attributes] ||= {}
+    node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
+    
+    @node = @parent.children.build(node_attrs)
+    
+    
+    if params[:add]
+      add_attrs = params.delete(:add)
+      
+      raise 'add[prop_type] param is required' if add_attrs[:prop_type].nil?
+      add_attrs[:prop_attributes] ||= {}
+      add_attrs[:prop_attributes][:type] = add_attrs.delete(:prop_type)
+      
+      @node.children.build(add_attrs)
     end
     
-    @parent = active_pile.nodes.find(params[:parent_id])
-    node_attrs.merge!(:pile => @parent.pile)
-    @node = @parent.children.build(node_attrs)
     
     @cell_state = :new
     render :partial => 'item', :locals => {:item => @node}
@@ -44,16 +54,24 @@ class NodesController < ApplicationController
   
   # POST /nodes
   def create
-    node_attrs = params[:node] || {}
-    prop_class = Prop.class_from_type(params[:type])
-    node_attrs[:prop] = prop_class.new(node_attrs.delete(:prop_attributes))
+    node_attrs = params.delete(:node) || {}
     
-    node_attrs[:pile] = Pile.find(params[:pile_id])
+    @parent = active_pile.nodes.find(node_attrs.delete(:parent_id))
+    node_attrs[:pile] = @parent.pile
     
-    @parent = active_pile.nodes.find(params[:parent_id])
+    raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
+    node_attrs[:prop_attributes] ||= {}
+    node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
+    
     @node = @parent.children.build(node_attrs)
     
+    @node.children.each do |child|
+      child.parent = @node
+      child.pile = @node.pile
+    end
+    
     @node.save!
+    
     
     @cell_state = :show
     render :partial => 'item', :locals => {:item => @node}
@@ -62,9 +80,42 @@ class NodesController < ApplicationController
   
   # GET /nodes/1/edit
   def edit
-    @node = active_pile.nodes.find params[:id]
+    @node = active_pile.nodes.find(params[:id])
     
-    render :inline => render_cell(cell_for_node(@node), :edit, :node => @node)
+    
+    params[:node][:children_attributes].each_value do |child_attrs| # since Rails won't do it for some dumb reason
+      child_id = child_attrs[:id]
+      delete_child = child_attrs.delete(:_delete) # otherwise Rails complains
+      
+      if child_id
+        child = @node.children.find(child_id)
+        if child && delete_child.present?
+          #child.destroy()
+          @node.children.destroy(child)
+        end
+      else
+        @node.children.create(child_attrs.merge(
+          :parent => @node,
+          :pile => @node.pile
+        ))
+      end
+    end if params[:node] && params[:node][:children_attributes]
+    
+    @node.attributes = params.delete(:node)
+    
+    
+    if params[:add]
+      add_attrs = params.delete(:add)
+      
+      raise 'add[prop_type] param is required' if add_attrs[:prop_type].nil?
+      add_attrs[:prop_attributes] ||= {}
+      add_attrs[:prop_attributes][:type] = add_attrs.delete(:prop_type)
+      
+      @node.children.build(add_attrs)
+    end
+    
+    
+    render :inline => render_cell('node_body', :edit, :node => @node)
   end
   
   
@@ -72,11 +123,30 @@ class NodesController < ApplicationController
   def update
     @node = active_pile.nodes.find(params[:id])
     
-    @node.update_attributes(params[:node])
-    @node.prop.update_attributes(params[:node][:prop_attributes]) # Node's "accepts_nested_attributes_for :prop" seems not to be working
+    @node.update_attributes!(params[:node])
+    @node.prop.update_attributes!(params[:node][:prop_attributes]) # since Rails won't do it through a polymorphic relation
+    
+    
+    params[:node][:children_attributes].each_value do |child_attrs| # since Rails won't do it for some dumb reason
+      child_id = child_attrs.delete(:id)
+      delete_child = child_attrs.delete(:_delete) # otherwise Rails complains
+      
+      if child_id
+        child = @node.children.find(child_id)
+        
+        child.update_attributes!(child_attrs)
+        child.prop.update_attributes!(child_attrs[:prop_attributes]) # since Rails won't do it through a polymorphic relation
+      else
+        @node.children.create(child_attrs.merge(
+          :parent => @node,
+          :pile => @node.pile
+        ))
+      end
+    end if params[:node] && params[:node][:children_attributes]
+    
     
     if @node.save
-      render :inline => render_cell(cell_for_node(@node), :show, :node => @node)
+      render :inline => render_cell('node_body', :show, :node => @node)
     else
       render :nothing => true, :status => :bad_request
     end
@@ -135,7 +205,7 @@ class NodesController < ApplicationController
         render :update do |page|
           page.call 'collapseActionBar'
           page.remove node_sel
-          page.insert_html insert_pos, orig_ref_sel, render_cell(cell_for_node(@node), :show, :node => @node)
+          page.insert_html insert_pos, orig_ref_sel, render_cell('node_body', :show, :node => @node)
           page.visual_effect :highlight, node_sel
         end
       end # format.js

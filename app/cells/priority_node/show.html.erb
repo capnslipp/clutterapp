@@ -1,3 +1,3 @@
-<div class="show priority prop <%= 'badge' unless @body -%>" style="background-color: <%=css_color_for_priority(@node.prop.priority)%>;">
+<div class="show priority prop <%= 'badge' if @node.prop.badged? -%>" style="background-color: <%=css_color_for_priority(@node.prop.priority)%>;">
 	<%= h @node.prop.priority %>
 </div>

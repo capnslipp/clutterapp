@@ -1,0 +1,18 @@
+<div class="new body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
+	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node], :'node[parent_id]' => @node.parent_id, :'node[prop_type]' => @node.prop.class.short_name), :html => {:method => 'post'} do |node_form| -%>
+		
+		<%= render_cell(cell_for_node(@node), :new, :node => @node, :form => node_form) %>
+		
+		<%- @node.children.each do |badge_node| -%><%# can't use children.badgeable here, since some of them may be unsaved %>
+			<%- next unless badge_node.prop.badged? -%>
+			<% node_form.fields_for 'children', badge_node do |badge_fields| %>
+				<%= render :partial => 'nodes/line_for_form', :locals => {:state => :new, :node => badge_node, :form => badge_fields} %>
+			<%- end -%>
+		<%- end -%>
+		
+		<%= render :partial => 'nodes/add_bar' %>
+		
+		<%# ✓ %><%= node_form.submit '&#10003;' %>
+		
+	<%- end -%>
+</div>

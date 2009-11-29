@@ -1,0 +1,30 @@
+<div class="show body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
+	<%= render :partial => 'nodes/action_stub' %>
+	
+	<% unless @check.blank? %>
+		<%= render_cell cell_for_node(@check), :show, :node => @check %>
+	<% end %>
+	<% unless @priority.blank? %>
+		<%= render_cell cell_for_node(@priority), :show, :node => @priority %>
+	<% end %>
+	
+	<%= render_cell(cell_for_node(@node), :show, :node => @node) %>
+	
+	<% unless @time.blank? %>
+		<div class="sub-line">
+			<%= render_cell cell_for_node(@time), :show, :node => @time %>
+		</div>
+	<% end %>
+	<% unless @tags.blank? %>
+		<div class="sub-line">
+			<%- for tag in @tags -%>
+				<%= render_cell cell_for_node(tag), :show, :node => tag %>
+			<%- end unless @tags.nil? -%>
+		</div>
+	<% end %>
+	<% unless @note.blank? %>
+		<div class="sub-line">
+			<%= render_cell cell_for_node(@note), :show, :node => @note %>
+		</div>
+	<% end %>
+</div>

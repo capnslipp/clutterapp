@@ -14,8 +14,7 @@ class Prop < ActiveRecord::Base
       type << 'Prop' unless type =~ /Prop$/
       type = type.constantize
     end
-    
-    raise %{type "#{type}" must be a subclass of Prop and not "Prop" itself (empty string passed in?)} unless type.superclass == Prop
+    raise %{type "#{type}" must be a subclass of Prop (not "Prop" itself; empty string passed in?)} unless type.superclass == Prop
     type
   end
   
@@ -32,19 +31,31 @@ class Prop < ActiveRecord::Base
   end
   
   def self::badgeable_types
-    types.select {|t| t.badgeable? }
+    @badgeable_types ||= types.select {|t| t.badgeable? }
+  end
+  def self::non_badgeable_types
+    @non_badgeable_types ||= types - badgeable_types
   end
   
   def self::stackable_types
-    types.select {|t| t.stackable? }
+    @stackable_types ||= types.select {|t| t.stackable? }
+  end
+  def self::non_stackable_types
+    @non_stackable_types ||= types - stackable_types
   end
   
   def self::nodeable_types
-    types.select {|t| t.nodeable? }
+    @nodeable_types ||= types.select {|t| t.nodeable? }
+  end
+  def self::non_nodeable_types
+    @non_nodeable_types ||= types - nodeable_types
   end
   
   def self::deepable_types
-    types.select {|t| t.deepable? }
+    @deepable_types ||= types.select {|t| t.deepable? }
+  end
+  def self::non_deepable_types
+    @non_deepable_types ||= types - deepable_types
   end
   
   

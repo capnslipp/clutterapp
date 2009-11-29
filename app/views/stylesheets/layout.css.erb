@@ -24,14 +24,14 @@ li { list-style-type: none; }
 	<% end %>
 }
 .item_for_node > .body {
-	min-height: 1.5em;
-	border-top: 1px dotted <%= divider_color %>;
-	margin-left: 23px;
-	
 	<% if debug? %>
 		<%= border_radius_decl %>
 		margin: 1px;
 	<% end %>
+	
+	min-height: 1.5em;
+	border-top: 1px dotted <%= divider_color %>;
+	margin-left: 23px;
 }
 .item_for_node > .show.body {
 	<% if debug? %>
@@ -78,7 +78,8 @@ li { list-style-type: none; }
 }
 .item_for_node > .body .sub-line {
 	/*overflow: auto; width: 100%; /* to contain floating elements */
-	margin-bottom: 6px;
+	margin-top: 2px;
+	margin-bottom: 4px;
 }
 
 /* page */
