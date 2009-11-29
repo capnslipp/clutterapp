@@ -105,17 +105,16 @@ class NodesController < ApplicationController
     @node = active_pile.nodes.find(params[:id])
     
     @node.update_attributes!(params[:node])
-    # Node's "accepts_nested_attributes_for :prop, :children" seems not to be fully working
-    @node.prop.update_attributes!(params[:node][:prop_attributes])
+    @node.prop.update_attributes!(params[:node][:prop_attributes]) # since Rails won't do it through a polymorphic relation
     
-    #@node.children.update_attributes(params[:node][:children_attributes])
-    params[:node][:children_attributes].each do |i, attributes|
+    
+    params[:node][:children_attributes].each_value do |attributes| # since Rails won't do it for some dumb reason
       child = @node.children.find(attributes.delete(:id))
       
       child.update_attributes!(attributes)
-      # Node's "accepts_nested_attributes_for :prop, :children" seems not to be fully working
-      child.prop.update_attributes!(attributes[:prop_attributes])
+      child.prop.update_attributes!(attributes[:prop_attributes]) # since Rails won't do it through a polymorphic relation
     end
+    
     
     if @node.save
       render :inline => render_cell('node_body', :show, :node => @node)
