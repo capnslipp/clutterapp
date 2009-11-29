@@ -108,11 +108,20 @@ class NodesController < ApplicationController
     @node.prop.update_attributes!(params[:node][:prop_attributes]) # since Rails won't do it through a polymorphic relation
     
     
-    params[:node][:children_attributes].each_value do |attributes| # since Rails won't do it for some dumb reason
-      child = @node.children.find(attributes.delete(:id))
+    params[:node][:children_attributes].each_value do |child_attrs| # since Rails won't do it for some dumb reason
+      child_id = child_attrs.delete(:id)
       
-      child.update_attributes!(attributes)
-      child.prop.update_attributes!(attributes[:prop_attributes]) # since Rails won't do it through a polymorphic relation
+      if child_id
+        child = @node.children.find(child_id)
+        
+        child.update_attributes!(child_attrs)
+        child.prop.update_attributes!(child_attrs[:prop_attributes]) # since Rails won't do it through a polymorphic relation
+      else
+        @node.children.create(child_attrs.merge(
+          :parent => @node,
+          :pile => @node.pile
+        ))
+      end
     end
     
     
