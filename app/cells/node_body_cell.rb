@@ -39,7 +39,7 @@ protected
         if t.stackable?
           instance_variable_set(:"@#{short_name.pluralize}", @node.children.typed(short_name)) # i.e. @tags
         else
-          instance_variable_set(:"@#{short_name}", @node.children.typed(short_name).first) # i.e. @check, @priority, @time
+          instance_variable_set(:"@#{short_name}", @node.children.typed(short_name).first) # i.e. @check, @priority, @time, @note
         end
       end
       @check = @node.children.typed(:check).first

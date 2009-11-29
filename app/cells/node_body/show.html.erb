@@ -22,4 +22,9 @@
 			<%- end unless @tags.nil? -%>
 		</div>
 	<% end %>
+	<% unless @note.blank? %>
+		<div class="sub-line">
+			<%= render_cell cell_for_node(@note), :show, :node => @note %>
+		</div>
+	<% end %>
 </div>

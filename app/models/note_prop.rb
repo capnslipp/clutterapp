@@ -7,7 +7,7 @@ class NoteProp < Prop
   validates_format_of :note, :with => /\w+/
   
   
-  is_stackable
+  is_badgeable
   
   
   def self::rand_new
