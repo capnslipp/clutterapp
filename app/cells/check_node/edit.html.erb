@@ -1,1 +1,5 @@
-@todo: cells/check_node/edit view
+<div class="edit note prop <%= 'badge' if @node.prop.badged? -%>">
+	<%- @form.fields_for :prop do |prop_form| -%>
+		<%= prop_form.check_box :checked, :class => 'field' %>
+	<%- end -%>
+</div>
