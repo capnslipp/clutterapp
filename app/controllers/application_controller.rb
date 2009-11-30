@@ -112,7 +112,7 @@ protected
   
   def current_user
     return @current_user if defined?(@current_user)
-    @current_user = current_user_session.andand.user
+    @current_user = current_user_session.user if current_user_session
   end
   
   def current_user?
