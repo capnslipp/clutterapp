@@ -6,3 +6,10 @@ vendor/plugins/awesome_nested_set:
   type: git
   revision: 14c0843b95b13bda59b9c031911bd473b2f9cf2c
   remote: braid/vendor/plugins/awesome-nested-set
+vendor/plugins/cells: 
+  squashed: true
+  url: git://github.com/slippyd/cells.git
+  branch: master
+  type: git
+  revision: 34db9ac62cca6e484afa30d9ea01c00163697ec1
+  remote: braid/vendor/plugins/cells
