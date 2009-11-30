@@ -1,0 +1,8 @@
+--- 
+vendor/plugins/awesome_nested_set: 
+  squashed: true
+  url: git://github.com/slippyd/awesome_nested_set.git
+  branch: master
+  type: git
+  revision: 14c0843b95b13bda59b9c031911bd473b2f9cf2c
+  remote: braid/vendor/plugins/awesome-nested-set
