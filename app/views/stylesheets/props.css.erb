@@ -48,6 +48,8 @@
 	margin-bottom: 6px;
 	
 	border-color: <%= generic_border_color.to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %>
+	
+	background: <%= ((bright_bg_color - bg_color) / 2.0 + bg_color).to_s %>;
 }
 .note.prop, .note.prop textarea { line-height: 15px; }
 .note.prop textarea { height: 1px; }
@@ -94,6 +96,8 @@
 	display: inline-block;
 	
 	padding: 0 2px;
+	
+	background: <%= bright_bg_color %>;
 }
 .time.prop.badge { /*float: left;*/ }
 

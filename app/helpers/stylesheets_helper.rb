@@ -17,9 +17,12 @@ module StylesheetsHelper
   end
   
   
-  BG_COLOR = Color.new(0xffffff)
+  BG_COLOR = Color.new(0xf6f6f6)
   def bg_color
     inverted? ? BG_COLOR.invert : BG_COLOR
+  end
+  def bright_bg_color
+    bg_color.text_color.invert
   end
   def text_color
     bg_color.text_color
@@ -30,7 +33,7 @@ module StylesheetsHelper
     inverted? ? ACCENT_COLOR.invert : ACCENT_COLOR
   end
   
-  WASH_COLOR = Color.new(0x666666)
+  WASH_COLOR = Color.new(0x4444444)
   def wash_color
     inverted? ? WASH_COLOR.invert : WASH_COLOR
   end
@@ -75,7 +78,7 @@ module StylesheetsHelper
   	%W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{shallow_shadow(m)};" }.join(' ')
   end
   
-  FILL_COLOR = Color.new(0xffffff, 0.75)
+  FILL_COLOR = Color.new(0xeeeeee, 0.75)
   def fill_color
     inverted? ? FILL_COLOR.invert : FILL_COLOR
   end
