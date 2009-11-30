@@ -190,13 +190,13 @@ class NodesController < ApplicationController
       when :up:   "##{dom_id(orig_ref_node, 'item_for')}"
       when :down: "##{dom_id(orig_ref_node, 'item_for')}"
       when :in:   "##{dom_id(orig_ref_node, 'item_for')} > .node.list"
-      when :out:  "##{dom_id(orig_ref_node, 'item_for')}"
+      when :out:  "##{dom_id(orig_ref_node, 'item_for')} > .node.list"
     end
     insert_pos = case dir
       when :up:   :before
       when :down: :after
       when :in:   :bottom
-      when :out:  :after
+      when :out:  :bottom
     end
     
     respond_to do |format|
@@ -205,7 +205,8 @@ class NodesController < ApplicationController
         render :update do |page|
           page.call 'collapseActionBar'
           page.remove node_sel
-          page.insert_html insert_pos, orig_ref_sel, render_cell('node_body', :show, :node => @node)
+          @cell_state = :show
+          page.insert_html insert_pos, orig_ref_sel, :partial => 'item', :locals => {:item => @node}
           page.visual_effect :highlight, node_sel
         end
       end # format.js
