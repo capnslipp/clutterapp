@@ -8,10 +8,12 @@ ul.list ul.list {
 
 li { list-style-type: none; }
 
-.item_for_node.pile > .name { display: inline-block; margin-bottom: 0.5em; }
-.item_for_node.pile > .body { display: inline-block; width: auto; border: none; }
-.item_for_node.pile > .body > .stub,
-.item_for_node.pile > .body > .bar { float: none; }
+.pile.item_for_node > .name { display: inline-block; margin-bottom: 18px; }
+.pile.item_for_node > .body { float: right; width: auto; border: none; }
+.pile.item_for_node > .body > .stub,
+.pile.item_for_node > .body > .bar {
+	float: none;
+}
 
 .item_for_node {
 	position: relative;
@@ -31,7 +33,7 @@ li { list-style-type: none; }
 	
 	min-height: 1.5em;
 	border-top: 1px dotted <%= divider_color %>;
-	margin-left: 23px;
+	margin-left: 24px; /* for "> .bullet" */
 }
 .item_for_node > .show.body {
 	<% if debug? %>
@@ -81,10 +83,26 @@ li { list-style-type: none; }
 	margin-top: 2px;
 	margin-bottom: 4px;
 }
+.item_for_node > .body > .bullet {
+	float: left;
+	margin-left: -20px;
+	width: 16px;
+	margin-right: 4px;
+	text-align: center;
+	vertical-align: middle;
+}
+.item_for_node > .body > .bullet .sym { font-size: 2em; line-height: 1em; }
+
+.item_for_node > .body > .action.stub {
+	float: right;
+}
+.item_for_node > .body > #action-bar {
+	float: right;
+}
 
 /* page */
 #page {
-	padding: 24px; padding-top: 12px;
+	padding: 24px; padding-top: 18px;
 }
 
 
