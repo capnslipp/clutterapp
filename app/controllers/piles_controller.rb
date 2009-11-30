@@ -7,6 +7,7 @@ class PilesController < ApplicationController
   # GET /piles
   # GET /piles.xml
   def index
+    @owner = active_owner
     @piles = active_owner.piles
     
     respond_to do |format|
@@ -18,6 +19,7 @@ class PilesController < ApplicationController
   # GET /piles/1
   # GET /piles/1.xml
   def show
+    @owner = active_owner
     @pile = active_pile
     
     respond_to do |format|
@@ -29,6 +31,7 @@ class PilesController < ApplicationController
   # GET /piles/new
   # GET /piles/new.xml
   def new
+    @owner = active_owner
     @pile = active_owner.piles.build
     
     respond_to do |format|
@@ -39,6 +42,7 @@ class PilesController < ApplicationController
   
   # GET /piles/1/edit
   def edit
+    @owner = active_owner
     @pile = active_owner.piles.find(params[:id])
     
     respond_to do |format|
@@ -50,6 +54,7 @@ class PilesController < ApplicationController
   # POST /piles
   # POST /piles.xml
   def create
+    @owner = active_owner
     pile_params = params[:pile] || {}
     #pile_params.update(:owner => active_owner) # necessary?
     @pile = active_owner.piles.build(pile_params)
@@ -58,7 +63,7 @@ class PilesController < ApplicationController
       
       if @pile.save
         flash[:notice] = 'Pile was successfully created.'
-        format.html { redirect_to @pile }
+        format.html { redirect_to [@owner, @pile] }
       else
         format.html { render :action => 'new' }
       end
@@ -70,13 +75,14 @@ class PilesController < ApplicationController
   # PUT /piles/1
   # PUT /piles/1.xml
   def update
+    @owner = active_owner
     @pile = active_owner.piles.find(params[:id])
     
     respond_to do |format|
       
       if @pile.update_attributes(params[:pile])
         flash[:notice] = 'Pile was successfully updated.'
-        format.html { redirect_to @pile }
+        format.html { redirect_to [@owner, @pile] }
       else
         format.html { render :action => 'edit' }
       end
@@ -88,12 +94,13 @@ class PilesController < ApplicationController
   # DELETE /piles/1
   # DELETE /piles/1.xml
   def destroy
+    @owner = active_owner
     @pile = active_owner.piles.find(params[:id])
     
     respond_to do |format|
       
       if @pile.destroy
-        format.html { redirect_to piles_url(@pile) }
+        format.html { redirect_to [@owner, :piles] }
       else
         format.html { render :action => 'index' }
       end 

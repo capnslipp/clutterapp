@@ -1,12 +1,14 @@
 <h1>Editing pile</h1>
 
-<% form_for @pile, :url => polymorphic_path([@pile.owner, @pile]) do |f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.submit 'Update' %>
-  </p>
+<% form_for @pile, :url => [@owner, @pile] do |f| %>
+	<%= f.error_messages %>
+	
+	<%= f.text_field :name %>
+	
+	<p>
+		<%= f.submit 'Update' %>
+	</p>
 <% end %>
 
-<%= link_to 'Show', polymorphic_path([@pile.owner, @pile]) %> |
-<%= link_to 'Back', polymorphic_path([@pile.owner, :piles]) %>
+<%= link_to 'Show', [@owner, @pile] %> |
+<%= link_to 'Back', [@owner, :piles] %>

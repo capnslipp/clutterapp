@@ -1,6 +1,8 @@
 class Pile < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
-  validates_presence_of   :owner_id, :message => 'is required'
+  validates_presence_of :owner_id, :message => 'is required'
+  
+  validates_length_of :name, :within => 1..255
   
   has_many :nodes, :dependent => :destroy, :autosave => true
   

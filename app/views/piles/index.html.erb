@@ -6,13 +6,13 @@
 
 <% @piles.each do |pile| %>
   <tr>
-    <td><%= link_to 'Show', polymorphic_path([@pile_owner, pile]) %></td>
-    <td><%= link_to 'Edit', edit_polymorphic_path([@pile_owner, pile]) %></td>
-    <td><%= link_to 'Destroy', polymorphic_path([@pile_owner, pile]), :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Show', [@owner, pile] %></td>
+    <td><%= link_to 'Edit', [:edit, @owner, pile] %></td>
+    <td><%= link_to 'Destroy', [@owner, pile], :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New pile', new_polymorphic_path([@pile_owner, :pile]) %>
+<%= link_to 'New pile', [:new, @owner, :pile] %>
