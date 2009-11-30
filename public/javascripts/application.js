@@ -320,7 +320,9 @@ function formFocus(form) {
 		.focus();
 }
 
-function itemEdit(showBody) {
+function itemEdit(link) {
+	var showBody = $(link).closest('.show.body').required();
+	
 	$.ajax({
 		type: 'get',
 		url: showBody.closest('.node').attr('oc\:url') + '/edit',
@@ -351,8 +353,11 @@ function itemEdit(showBody) {
 }
 
 $(function() {
-	$('.item_for_node > .show.body').live('click', function() {
-		itemEdit($(this)); return false;
+	$('.item_for_node > .show.body > .cont').live('dblclick', function() {
+		itemEdit(this); return false;
+	});
+	$('#action-bar > .buttons > a.edit').click(function() {
+		itemEdit(this); return false;
 	});
 });
 
