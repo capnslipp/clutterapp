@@ -73,7 +73,13 @@ end
 #  run "ln -sfn #{shared_path}/backups #{release_path}/project/backups"
 #end
 
+desc "Update the database.yml config file."
+task :symlink_database_config, :roles => :app do
+  run "ln -sfn #{shared_path}/config/database.yml #{release_path}/config/database.yml"
+end
+
 desc "Do these tasks after you update the code"
 task :after_update_code do
   #symlink_backups_dir
+  symlink_database_config
 end
