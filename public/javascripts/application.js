@@ -115,8 +115,6 @@ function expandActionBar(node) {
 }
 
 function collapseActionBar() {
-	hideItemNewBar();
-	
 	$('#action-bar')
 		.hide()
 	
@@ -139,28 +137,6 @@ $(function() {
 	});
 });
 
-
-function toggleItemNewBar(node) {
-	if ($('#new-bar').is(':visible'))
-		hideItemNewBar(node);
-	else
-		showItemNewBar(node);
-}
-
-function showItemNewBar(node) {
-	if (node.find('#new-bar').length == 0)
-		$('#new-bar').appendTo(node.children('.list'));
-	
-	// since it may be initially-hidden
-	safeShow($('#new-bar'));
-}
-
-function hideItemNewBar() {
-	$('#new-bar')
-		.hide()
-		.appendTo($('.pile:first')); // in case the parent item gets deleted
-}
-
 $(function() {
 	$('.action.stub .widget.collapsed a').live('click', function() {
 		expandActionBar($(this).closest('.item_for_node')); return false;
@@ -168,14 +144,6 @@ $(function() {
 	
 	$('#action-bar .widget.expanded a')
 		.click(function() { collapseActionBar(); return false; });
-	
-	var actionButtons = $('#action-bar .buttons').required();
-	
-	actionButtons.find('a.toggle.new-bar')
-		.click(function() { toggleItemNewBar($(this).closest('.item_for_node')); return false; });
-	
-	$('#new-bar .widget.expanded a')
-		.click(function() { hideItemNewBar(); return false; });
 });
 
 
@@ -227,7 +195,9 @@ function hideFill(modalElement) {
 }
 
 
-function itemNew(parentNode, type) {
+function itemNew(button, type) {
+	var parentNode = $(button).closest('.item_for_node');
+	
 	$.ajax({
 		type: 'get',
 		url: parentNode.closest('.pile').attr('oc\:nodes-url') + '/new',
@@ -243,10 +213,7 @@ function itemNew(parentNode, type) {
 		
 		var list = parentNode.children('.list').required();
 		
-		if (list.children('#new-bar').length != 0)
-			list.children('#new-bar').before(responseData);
-		else
-			list.append(responseData);
+		list.append(responseData);
 		
 		var newBody = list.children('.item_for_node:last').find('.new.body').required();
 		newBody.hide().fadeIn(kDefaultTransitionDuration);
@@ -261,27 +228,13 @@ function itemNew(parentNode, type) {
 	
 	function handleError(parentNode, xhrObj, errStr, expObj) {
 		parentNode.find('#new-bar:first')
-			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000); // @todo: fix
 	}
 }
 	
 $(function() {
-	var newButtons = $('#new-bar .buttons').required();
-	
-	newButtons.find('a.new.text')
-		.click(function() { itemNew($(this).closest('.item_for_node'), 'text'); return false; });
-	newButtons.find('a.new.check')
-		.click(function() { itemNew($(this).closest('.item_for_node'), 'check'); return false; });
-	newButtons.find('a.new.note')
-		.click(function() { itemNew($(this).closest('.item_for_node'), 'note'); return false; });
-	newButtons.find('a.new.priority')
-		.click(function() { itemNew($(this).closest('.item_for_node'), 'priority'); return false; });
-	newButtons.find('a.new.tag')
-		.click(function() { itemNew($(this).closest('.item_for_node'), 'tag'); return false; });
-	newButtons.find('a.new.time')
-		.click(function() { itemNew($(this).closest('.item_for_node'), 'time'); return false; });
-	newButtons.find('a.new.pile-ref')
-		.click(function() { itemNew($(this).closest('.item_for_node'), 'pile-ref'); return false; });
+	var actionButtons = $('#action-bar > .buttons > a.new').required()
+		.click(function() { itemNew(this, 'text'); return false; });
 });
 
 

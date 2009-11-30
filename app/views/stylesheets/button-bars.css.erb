@@ -43,14 +43,11 @@
  #action-bar .widget { /*margin-left: -18px;*/ }
 
 .action.stub .widget,
- #action-bar .widget,
-    #new-bar .widget { margin-top: 4px; }
+ #action-bar .widget { margin-top: 4px; }
 .action.stub .widget, .action.stub .widget a,
- #action-bar .widget,  #action-bar .widget a,
-    #new-bar .widget,     #new-bar .widget a { color: <%= widget_color %>; }
+ #action-bar .widget,  #action-bar .widget a { color: <%= widget_color %>; }
 .action.stub .widget a:hover,
- #action-bar .widget a:hover,
-    #new-bar .widget a:hover { color: <%= active_widget_color %>; }
+ #action-bar .widget a:hover { color: <%= active_widget_color %>; }
 
 #action-bar .buttons {
 	background: <%= accent_color %>;
@@ -73,12 +70,6 @@
 	padding-left: 0.25em;
 }
 
-#new-bar .buttons {
-	position: absolute;
-	top: 4px; left: 0;
-	padding: 0 0.5em;
-	vertical-align: middle;
-}
 .button {
 	/*position: absolute;*/
 	float: left;
@@ -94,14 +85,11 @@
 	padding: 0 0.5em;
 }
 
-#new-bar .buttons, #new-bar .buttons a,
 #add-bar a.button,
 a.button, a.button .sym { color: <%= wash_text_color %>; }
 
-#new-bar .buttons a,
 #add-bar a { margin-right: 0.25em; }
 
-#new-bar .buttons a:hover,
 #add-bar a:hover {
 	text-shadow:	0 2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
 					0 -2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
