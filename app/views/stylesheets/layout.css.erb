@@ -8,13 +8,12 @@ ul.list ul.list {
 
 li { list-style-type: none; }
 
-.pile.item_for_node > .name { display: inline-block; margin-bottom: 18px; }
-.pile.item_for_node > .name > .owner { opacity: 0.25; }
-.pile.item_for_node > .body { float: right; width: auto; border: none; }
-.pile.item_for_node > .body > .stub,
-.pile.item_for_node > .body > .bar {
-	float: none;
-}
+.pile.item_for_node > .body { display: block; margin-bottom: 18px; border: none; }
+.pile.item_for_node > .body > .header {}
+.pile.item_for_node > .body > .header > .owner { opacity: 0.25; }
+.pile.item_for_node > .body > .header > .owner,
+.pile.item_for_node > .body > .header > .name { white-space: nowrap; }
+.pile.item_for_node > .body > .action.stub { float: right; width: auto; border: none; }
 
 .item_for_node {
 	position: relative;

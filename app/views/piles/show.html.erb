@@ -1,7 +1,7 @@
 <section id="<%=dom_id(@pile.root_node, 'item_for')%>" class="<%=dom_class(@pile.root_node, 'item_for')%> pile" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
-	<h1 class="name"><span class="owner"><%= @owner.name %> »</span> <%= @pile.name %></h1>
 	<div class="body">
 		<%= render :partial => 'nodes/action_stub' %>
+		<h1 class="header"><span class="owner"><%= @owner.name %> »</span> <span class="name"><%= @pile.name %></span></h1>
 	</div>
 	
 	<ul class="node list">
