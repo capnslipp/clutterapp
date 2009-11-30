@@ -132,7 +132,7 @@ $(function() {
 	$('.item_for_node > .show.body > .cont').live('click', function() {
 		expandActionBar($(this).closest('.item_for_node')); return false;
 	});
-	$('.pile.item_for_node > .name').live('click', function() {
+	$('.pile.item_for_node > .body > .header').live('click', function() {
 		expandActionBar($(this).closest('.item_for_node')); return false;
 	});
 });
