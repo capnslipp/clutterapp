@@ -15,19 +15,19 @@
 		<%= render_cell(cell_for_node(@node), :show, :node => @node) %>
 		
 		<% if @time.present? %>
-			<div class="sub-line">
+			<div class="line">
 				<%= render_cell cell_for_node(@time), :show, :node => @time %>
 			</div>
 		<% end %>
 		<% if @tags.present? %>
-			<div class="sub-line">
+			<div class="line">
 				<%- for tag in @tags -%>
 					<%= render_cell cell_for_node(tag), :show, :node => tag %>
 				<%- end unless @tags.nil? -%>
 			</div>
 		<% end %>
 		<% if @note.present? %>
-			<div class="sub-line">
+			<div class="line">
 				<%= render_cell cell_for_node(@note), :show, :node => @note %>
 			</div>
 		<% end %>

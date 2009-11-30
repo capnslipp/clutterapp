@@ -570,7 +570,7 @@ function badgeRemove(link) {
 }
 
 $(function() {
-	$('.sub-line a.remove').live('click', function() { badgeRemove(this); return false; });
+	$('.line a.remove').live('click', function() { badgeRemove(this); return false; });
 });
 
 

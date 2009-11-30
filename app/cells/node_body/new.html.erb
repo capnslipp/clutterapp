@@ -2,7 +2,7 @@
 	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node], :'node[parent_id]' => @node.parent_id, :'node[prop_type]' => @node.prop.class.short_name), :html => {:method => 'post'} do |node_form| -%>
 		<div class="cont">
 			
-			<%= render_cell(cell_for_node(@node), :new, :node => @node, :form => node_form) %>
+			<div class="line"><%= render_cell(cell_for_node(@node), :new, :node => @node, :form => node_form) %></div>
 			
 			<%- @node.children.each do |badge_node| -%><%# can't use children.badgeable here, since some of them may be unsaved %>
 				<%- next unless badge_node.prop.badged? -%>

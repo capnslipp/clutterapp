@@ -3,7 +3,7 @@
 <div class="show text prop <%= 'badge' if @node.prop.badged? -%>">
 	<%= h @node.prop.text %>
 </div>
-<%#div class="sub-line">
+<%#div class="line">
 	<%= render_cell cell_for_node(@time), :show, :node => @time unless @time.nil? % >
 	<%- for tag in @tags -% >
 		<%= render_cell cell_for_node(tag), :show, :node => tag % >
