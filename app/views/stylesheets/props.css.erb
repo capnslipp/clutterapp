@@ -82,6 +82,9 @@
 .text.prop {
 	display: inline-block;
 }
+.edit.text.prop, .new.text.prop {
+	display: block;
+}
 
 .time.prop {
 	color: <%= text_color.with(:a => 0.75).to_s(:css_rgba) %>;
