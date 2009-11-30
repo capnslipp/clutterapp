@@ -24,7 +24,7 @@
 .widget a, .buttons a, a.button { text-decoration: none; }
 
 .stub, .bar {
-	font-size: 12px;
+	font-size: 14px;
 	line-height: 16px;
 	height: 16px;
 	/*width: 16px;*/
@@ -42,10 +42,10 @@
 .action.stub .widget,
  #action-bar .widget { /*margin-left: -18px;*/ }
 
+.action.stub .widget, .action.stub .widget a,
+ #action-bar .widget,  #action-bar .widget a { color: <%= widget_color %>; padding: 0 4px; margin: 0 -4px; }
 .action.stub .widget,
  #action-bar .widget { margin-top: 4px; }
-.action.stub .widget, .action.stub .widget a,
- #action-bar .widget,  #action-bar .widget a { color: <%= widget_color %>; }
 .action.stub .widget a:hover,
  #action-bar .widget a:hover { color: <%= active_widget_color %>; }
 
@@ -53,12 +53,12 @@
 	background: <%= accent_color %>;
 	position: absolute;
 	top: 4px; right: 0;
-	padding: 0 0.5em;
+	padding: 0 8px;
 	vertical-align: middle;
-	margin-right: 22px;
+	margin-right: 24px;
 }
 #action-bar .buttons, #action-bar .buttons a { color: <%= wash_text_color %>; }
-#action-bar .buttons a {}
+#action-bar .buttons a { padding: 0 4px; margin: 0 -4px; }
 #action-bar .buttons a:hover {
 	text-shadow:	0 2px	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
 					0 -2px	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
@@ -75,20 +75,20 @@
 	float: left;
 	top: 4px; left: 0;
 	width: 1em;
-	margin-right: 0.25em;
+	padding: 0 4px;
 	vertical-align: middle;
 	text-align: center;
 }
 
 #add-bar .button {
 	width: auto;
-	padding: 0 0.5em;
+	padding: 0 8px;
 }
 
 #add-bar a.button,
 a.button, a.button .sym { color: <%= wash_text_color %>; }
 
-#add-bar a { margin-right: 0.25em; }
+#add-bar a { margin-right: 4px; }
 
 #add-bar a:hover {
 	text-shadow:	0 2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
