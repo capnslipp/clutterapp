@@ -130,6 +130,16 @@ function collapseActionBar() {
 		.appendTo($('.pile:first')); // in case the parent item gets deleted
 }
 
+$(function() {
+	$('.item_for_node > .show.body > .cont').live('click', function() {
+		expandActionBar($(this).closest('.item_for_node')); return false;
+	});
+	$('.pile.item_for_node > .name').live('click', function() {
+		expandActionBar($(this).closest('.item_for_node')); return false;
+	});
+});
+
+
 function toggleItemNewBar(node) {
 	if ($('#new-bar').is(':visible'))
 		hideItemNewBar(node);

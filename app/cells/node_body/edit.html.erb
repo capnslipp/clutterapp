@@ -1,4 +1,4 @@
-<div class="edit body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
+<div class="edit body">
 	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node]), :html => {:method => 'put'} do |node_form| -%>
 		<div class="cont">
 			

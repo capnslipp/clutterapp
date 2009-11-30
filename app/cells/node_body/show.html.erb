@@ -1,4 +1,4 @@
-<div class="show body" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
+<div class="show body">
 	<div class="bullet">
 		<% if @check.present? %>
 			<%= render_cell cell_for_node(@check), :show, :node => @check %>
@@ -7,7 +7,7 @@
 		<% end %>
 	</div>
 	<%= render :partial => 'nodes/action_stub' %>
-	<div class="cont">
+	<div class="cont" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 		<% if @priority.present? %>
 			<%= render_cell cell_for_node(@priority), :show, :node => @priority %>
 		<% end %>
