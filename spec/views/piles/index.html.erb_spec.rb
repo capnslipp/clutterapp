@@ -15,6 +15,8 @@ describe "/piles/index.html.erb" do
   
   
   it "renders a list of piles" do
+    assigns[:owner] = @owner = @user
+    
     render
   end
   

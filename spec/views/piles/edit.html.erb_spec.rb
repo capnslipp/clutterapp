@@ -11,6 +11,8 @@ describe "/piles/edit.html.erb" do
   
   
   it "renders the edit pile form" do
+    assigns[:owner] = @owner = @user
+    
     render
     
     response.should have_tag("form[action=?][method=post]", user_pile_path(:user_id => @user, :id => @pile)) do

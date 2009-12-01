@@ -12,6 +12,8 @@ describe "/piles/show.html.erb" do
   
   
   it "renders attributes in <p>" do
+    assigns[:owner] = @owner = @user
+    
     render
   end
   
