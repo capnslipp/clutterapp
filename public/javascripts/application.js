@@ -100,14 +100,13 @@ function safeShow(elem) {
 function expandActionBar(node) {
 	collapseActionBar();
 	
+	var nodeBody = node.children('.body').required();
 	
-	node.children('.body').children('.action.stub')
-		.hide();
+	nodeBody.children('.action.stub').hide();
 	
-	var nodeBody = node.children('.body');
-	nodeBody.required();
+	nodeBody.addClass('active');
 	
-	if (nodeBody.find('#action-bar').length == 0)
+	if (!nodeBody.find('#action-bar')[0])
 		$('#action-bar').prependTo(nodeBody);
 	
 	// since it may be initially-hidden
@@ -115,17 +114,16 @@ function expandActionBar(node) {
 }
 
 function collapseActionBar() {
-	$('#action-bar')
-		.hide()
+	$('#action-bar').hide()
 	
-	var node = $('#action-bar').closest('.item_for_node');
-	node.required();
+	var node = $('#action-bar').closest('.item_for_node').required();;
+	var nodeBody = node.children('.body').required();
 	
-	node.children('.body').children('.action.stub')
-		.show();
+	nodeBody.children('.action.stub').show();
+	
+	nodeBody.removeClass('active');
 		
-	$('#action-bar')
-		.appendTo($('.pile:first')); // in case the parent item gets deleted
+	$('#action-bar').appendTo($('.pile:first')); // in case the parent item gets deleted
 }
 
 $(function() {

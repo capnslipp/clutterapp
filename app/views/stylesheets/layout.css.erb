@@ -42,6 +42,10 @@ li { list-style-type: none; }
 		border: 2px solid rgba(127, 191, 0, 0.5);
 	<% end %>
 }
+.item_for_node > .show.body.active {
+	background: #fff;
+	<%= deep_shadow_decl('#fff') %>
+}
 .item_for_node > .new.body,
 .item_for_node > .edit.body {
 	margin: -12px 8px;
