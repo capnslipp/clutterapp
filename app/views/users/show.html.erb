@@ -3,6 +3,27 @@
 
 <h3>Public Piles</h3>
 
-<% for pile in @public_piles %>
-	<%= link_to h("#{pile.name} (P#{pile.id} - N#{pile.root_node.id})"), user_pile_path(:user_id => pile.owner, :id => pile) %>
-<% end %>
+<ul class="pile-list">
+	<% for pile in @public_piles %>
+		<li>
+			<div class="name">
+				<span class="sym">&there4;</span>
+				<%= link_to h(pile.name), [pile.owner, pile] %>
+			</div>
+		</li>
+	<% end %>
+</ul>
+
+
+<h3>Piles Shared with You</h3>
+
+<ul class="pile-list">
+	<% for pile in @shared_piles %>
+		<li>
+			<div class="name">
+				<span class="sym">&there4;</span>
+				<%= link_to h(pile.name), [pile.owner, pile] %>
+			</div>
+		</li>
+	<% end %>
+</ul>

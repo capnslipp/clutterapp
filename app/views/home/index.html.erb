@@ -2,6 +2,16 @@
 
 <h3>Your Piles</h3>
 
-<% for pile in current_user.piles %>
-	<%= link_to h("P#{pile.id} - N#{pile.root_node.id}"), user_pile_path(:user_id => pile.owner, :id => pile) %>
-<% end %>
+<ul class="pile-list">
+	<% for pile in current_user.piles %>
+		<li>
+			<div class="name">
+				<span class="sym">&there4;</span>
+				<%= link_to h(pile.name), [pile.owner, pile] %>
+			</div>
+		</li>
+	<% end %>
+</ul>
+
+<%= link_to 'Create a New Pile', [:new, current_user, :pile] %>
+

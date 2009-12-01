@@ -1,18 +1,19 @@
 <h1>Listing piles</h1>
 
-<table>
-  <tr>
-  </tr>
 
-<% @piles.each do |pile| %>
-  <tr>
-    <td><%= link_to 'Show', [@owner, pile] %></td>
-    <td><%= link_to 'Edit', [:edit, @owner, pile] %></td>
-    <td><%= link_to 'Destroy', [@owner, pile], :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
+<ul class="pile-list">
+	<% @piles.each do |pile| %>
+		<li>
+			<div class="name">
+				<span class="sym">&there4;</span>
+				<%= link_to h(pile.name), [@owner, pile] %>
+			</div>
+			<div class="line">
+				<%= link_to 'Edit', [:edit, @owner, pile] %>
+				<%= link_to 'Destroy', [@owner, pile], :confirm => 'Are you sure?', :method => :delete %>
+			</div>
+		</li>
+	<% end %>
+</ul>
 
-<br />
-
-<%= link_to 'New pile', [:new, @owner, :pile] %>
+<%= link_to 'New Pile', [:new, @owner, :pile] %>
