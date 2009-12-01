@@ -51,6 +51,7 @@ end
 =end
 
 describe NodeCell do
+<<<<<<< HEAD
   integrate_views
   include NodeSpecHelper
   
@@ -336,6 +337,3 @@ describe NodeBodyCell do
       #@result.should include(@time_now.to_s)
     end
   end
-  
-  
-end

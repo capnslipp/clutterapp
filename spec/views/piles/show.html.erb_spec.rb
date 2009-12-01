@@ -10,11 +10,9 @@ describe "/piles/show.html.erb" do
     assigns[:base_node] = @pile.root_node
   end
   
-  
   it "renders attributes in <p>" do
     assigns[:owner] = @owner = @user
     
     render
   end
-  
 end

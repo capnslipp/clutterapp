@@ -12,12 +12,10 @@ describe "/piles/index.html.erb" do
       Factory.create(:pile, :owner => @user)
     ]
   end
-  
-  
+
   it "renders a list of piles" do
     assigns[:owner] = @owner = @user
     
     render
   end
-  
 end
