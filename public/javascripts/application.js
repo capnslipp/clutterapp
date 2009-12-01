@@ -424,8 +424,12 @@ function itemDelete(node) {
 $(function() {
 	var actionButtons = $('#action-bar .buttons').required();
 	
-	actionButtons.find('a.delete')
-		.click(function() { itemDelete($(this).closest('.item_for_node')); return false; });
+	actionButtons.find('a.delete').click(function() {
+		if (confirm("Are you sure?\n\nThis will delete this item and all of its sub-items."))
+			itemDelete($(this).closest('.item_for_node'));
+		
+		return false;
+	});
 });
 
 
