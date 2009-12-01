@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   has_many :followees, :through => :followships
   
   has_many :shares
-  has_many :shared_piles, :through => :shares
+  has_many :authorized_piles, :through => :shares
   
   # @fix: get it to properly alias tables so that "a_user.followees.followers_of(self)" works
   named_scope :followers_of, proc {|a_user| {
@@ -58,9 +58,9 @@ class User < ActiveRecord::Base
   #Followship methods
   
   def follow(user_to_follow)
-    followship = followships.build(:followee => user_to_follow)
+    followship = followships.create(:followee => user_to_follow)
     
-    logger.debug "User is already following #{user_to_follow.login}" unless followship.save
+    #logger.debug "User is already following #{user_to_follow.login}" unless followship.save
   end
   
   # Combining the two into the follow one above
@@ -97,6 +97,14 @@ class User < ActiveRecord::Base
   end
   
   
+  #sharing methods
+  def share_pile_with_user(user, pile)
+    share = shares.create(:user => user, :authorized_pile => pile)
+  end
+  
+  def shared_piles
+    Share.find(:all, :conditions => {:shared_pile_id => default_pile.id})
+  end
   
   # validating setters and utils
   

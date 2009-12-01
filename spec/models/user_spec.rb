@@ -72,6 +72,28 @@ describe User do
     
   end
   
+  describe "sharing" do
+    before(:each) do
+      @user2 = Factory.create(:user)
+    end
+    it "should be able to share 1 pile with 1 followee" do
+      @user.follow(@user2)
+      @user.share_pile_with_user(@user2, @user.default_pile)
+      @user2.authorized_piles.count.should == 1
+      @user.shared_piles.count.should == 1
+    end
+    
+    it "should be able to share 1 pile with 1 follower" do
+      @user2.follow(@user)
+      @user.share_pile_with_user(@user2, @user.default_pile)
+      @user2.authorized_piles.count.should == 1
+      @user.shared_piles.count.should == 1
+    end
+    
+    
+  end
+  
+  
   
   describe "followees" do
     it "should be able to add 1 followee" do
