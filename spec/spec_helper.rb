@@ -86,6 +86,11 @@ Spec::Runner.configure do |config|
   
   # Other Mocks/Stubs
   
+  def active_owner(override_user = nil)
+    @active_owner = override_user || current_user unless @active_owner
+    @active_owner
+  end
+  
   def active_pile(overrides = {})
     @active_pile ||= Pile.generate(overrides)
   end
