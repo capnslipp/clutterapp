@@ -14,10 +14,12 @@
 			{:src => 'jquery.color'},
 			{:src => 'jquery.form'},
 			{:src => 'jquery.elastic', :min => 'jquery.elastic.min'},
+			{:src => 'util'},
 			{:src => 'application'},
 		] %>
 	<%= javascript_include_tag js_files.collect{|file_h| file_h[:src] } unless ActionController::Base.perform_caching %>
 	<%= javascript_include_tag js_files.collect{|file_h| file_h[:min] || file_h[:src] }, :cache => true if ActionController::Base.perform_caching %>
+	<%= javascript_include_tag 'item' if @enable_item_view_js %>
 </head>
 <body>
 

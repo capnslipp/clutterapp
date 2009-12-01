@@ -22,6 +22,8 @@ class PilesController < ApplicationController
     @owner = active_owner
     @pile = active_pile
     
+    @enable_item_view_js = true
+    
     respond_to do |format|
       format.html # show.html.erb
     end
