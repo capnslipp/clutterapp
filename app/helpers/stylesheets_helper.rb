@@ -61,21 +61,26 @@ module StylesheetsHelper
   end
   
   SHADOW_COLOR = Color.new(0x000000, 0.75)
-  def shadow_color(m = 1.0)
-    color = inverted? ? SHADOW_COLOR.invert : SHADOW_COLOR
-    Color.from_rgba(color.r, color.g, color.b, color.a * m)
+  def shadow_color(alpha_multiplier_or_color = 1.0)
+    if alpha_multiplier_or_color.is_a? String
+      alpha_multiplier_or_color.to_color
+    else
+      color = inverted? ? SHADOW_COLOR.invert : SHADOW_COLOR
+      Color.from_rgba(color.r, color.g, color.b, color.a * alpha_multiplier_or_color)
+    end
   end
-  def deep_shadow(m = 1.0)
-  	"0px 1px 6px #{shadow_color(m).to_s(:css_rgba)}"
+  def deep_shadow(alpha_multiplier_or_color = 1.0)
+  	"0px 1px 6px #{shadow_color(alpha_multiplier_or_color).to_s(:css_rgba)}"
   end
-  def shallow_shadow(m = 1.0)
-  	"0px 1px 4px #{shadow_color(m * 0.5).to_s(:css_rgba)}"
+  def shallow_shadow(alpha_multiplier_or_color = 1.0)
+    alpha_multiplier_or_color *= 0.5 unless alpha_multiplier_or_color.is_a?(String) || alpha_multiplier_or_color.is_a?(Color)
+  	"0px 1px 4px #{shadow_color(alpha_multiplier_or_color).to_s(:css_rgba)}"
   end
-  def deep_shadow_decl(m = 1.0)
-    %W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{deep_shadow(m)};" }.join(' ')
+  def deep_shadow_decl(alpha_multiplier_or_color = 1.0)
+    %W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{deep_shadow(alpha_multiplier_or_color)};" }.join(' ')
   end
-  def shallow_shadow_decl(m = 1.0)
-  	%W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{shallow_shadow(m)};" }.join(' ')
+  def shallow_shadow_decl(alpha_multiplier_or_color = 1.0)
+  	%W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{shallow_shadow(alpha_multiplier_or_color)};" }.join(' ')
   end
   
   FILL_COLOR = Color.new(0xeeeeee, 0.75)
