@@ -264,9 +264,9 @@ function itemCreate(form) {
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
-		form.required();
+		form.closest('.new.body').find('.cont').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 		
-		form.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 		formFocus(form);
 	}
 }
@@ -348,9 +348,9 @@ function itemUpdate(form) {
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
-		form.required();
+		form.closest('.edit.body').find('.cont').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 		
-		form.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 		formFocus(form);
 	}
 }
@@ -379,7 +379,7 @@ function itemMove(node, dir) {
 	}
 	
 	function handleError(node, xhrObj, errStr, expObj) {
-		node.find('.body:first').required()
+		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
@@ -416,7 +416,7 @@ function itemDelete(node) {
 	}
 	
 	function handleError(node, xhrObj, errStr, expObj) {
-		node.find('.body:first').required()
+		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
@@ -491,7 +491,7 @@ function badgeAdd(link, addType) {
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
-		node.find('.body:first').required()
+		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
@@ -568,7 +568,7 @@ function badgeRemove(link) {
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
-		node.find('.body:first').required()
+		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
