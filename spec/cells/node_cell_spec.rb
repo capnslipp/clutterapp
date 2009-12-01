@@ -9,23 +9,29 @@ require 'spec_helper'
 module NodeSpecHelper
   
   def mocked_node_children_empty
-    @mocked_node_children_empty ||= mock(
-      Array,
-      :typed => [],
-      :empty? => true,
-      :badgeable => [],
-      :non_badgeable => []
-    )
+    unless @mocked_node_children_empty
+      @mocked_node_children_empty = []
+      @mocked_node_children_empty.stubs(
+        :typed => [],
+        :badgeable => [],
+        :non_badgeable => []
+      )
+    end
+    
+    @mocked_node_children_empty
   end
   
   def mocked_node_children_with_filler_nodes
-    @mocked_node_children_with_filler_nodes ||= mock(
-      Array,
-      :typed => Prop.types.collect {|t| Node.new(:prop => t.rand_new) },
-      :empty? => true,
-      :badgeable => Prop.badgeable_types.collect {|t| Node.new(:prop => t.rand_new) },
-      :non_badgeable => Prop.non_badgeable_types.collect {|t| Node.new(:prop => t.rand_new) }
-    )
+    unless @mocked_node_children_with_filler_nodes
+      @mocked_node_children_with_filler_nodes = []
+      @mocked_node_children_with_filler_nodes.stubs(
+        :typed => Prop.types.collect {|t| Node.new(:prop => t.rand_new) },
+        :badgeable => Prop.badgeable_types.collect {|t| Node.new(:prop => t.rand_new) },
+        :non_badgeable => Prop.non_badgeable_types.collect {|t| Node.new(:prop => t.rand_new) }
+      )
+    end
+    
+    @mocked_node_children_with_filler_nodes
   end
   
   def mock_node(stubs={})
@@ -242,7 +248,7 @@ describe NodeBodyCell do
       describe("edit action") { it_should_behave_like "Editing a NodeCell" }
       describe("new action") { it_should_behave_like "Newing a NodeCell" }
       
-      after(:each) { @result.should have_tag('input[type=text]') }
+      after(:each) { @result.should have_tag('input[type=radio]') }
     end
     
     after(:each) do
