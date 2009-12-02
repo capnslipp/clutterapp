@@ -1,5 +1,5 @@
 <div class="line">
-	<%= form.hidden_field(:_delete) %>
+	<%= form.hidden_field(:_destroy) %>
 	<a href="#" class="remove button" onclick="return false;"><span class="sym"><%# ✖ %>&#10006;</span></a>
 	<em><%= node.prop.class.short_name %></em>
 	<%= render_cell cell_for_node(node), state, :node => node, :form => form %>

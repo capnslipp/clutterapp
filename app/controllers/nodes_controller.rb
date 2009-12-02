@@ -83,21 +83,26 @@ class NodesController < ApplicationController
     @node = active_pile.nodes.find(params[:id])
     
     
-    params[:node][:children_attributes].each_value do |child_attrs| # since Rails won't do it for some dumb reason
+    params[:node][:children_attributes].each do |i, child_attrs| # since Rails won't do it for some dumb reason
       child_id = child_attrs[:id]
-      delete_child = child_attrs.delete(:_delete) # otherwise Rails complains
+      delete_child = child_attrs.delete(:_destroy) # otherwise Rails complains
       
       if child_id
         child = @node.children.find(child_id)
+        
         if child && delete_child.present?
           #child.destroy()
           @node.children.destroy(child)
         end
       else
-        @node.children.create(child_attrs.merge(
-          :parent => @node,
-          :pile => @node.pile
-        ))
+        if delete_child.present?
+          params[:node][:children_attributes].delete(i)
+        else
+          @node.children.create(child_attrs.merge(
+            :parent => @node,
+            :pile => @node.pile
+          ))
+        end
       end
     end if params[:node] && params[:node][:children_attributes]
     
@@ -129,7 +134,7 @@ class NodesController < ApplicationController
     
     params[:node][:children_attributes].each_value do |child_attrs| # since Rails won't do it for some dumb reason
       child_id = child_attrs.delete(:id)
-      delete_child = child_attrs.delete(:_delete) # otherwise Rails complains
+      delete_child = child_attrs.delete(:_destroy) # otherwise Rails complains
       
       if child_id
         child = @node.children.find(child_id)
