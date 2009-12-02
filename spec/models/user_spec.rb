@@ -95,7 +95,8 @@ describe User do
     end
     
     it "should not let users access piles that aren't shared" do
-      @user.shared_piles << @user2.default_pile.should_not be_valid
+      @user.shared_piles << @user2.default_pile
+      @user.shared_piles.should == 1
     end
     
     it "should be able to share pile with " do
