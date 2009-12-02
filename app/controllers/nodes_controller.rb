@@ -164,9 +164,9 @@ class NodesController < ApplicationController
     
     @node = active_pile.nodes.find(params[:id])
     orig_ref_node = case dir
-      when :up:   @node.left_sibling
-      when :down: @node.right_sibling
-      when :in:   @node.left_sibling
+      when :up:   @node.left_non_badgeable_sibling
+      when :down: @node.right_non_badgeable_sibling
+      when :in:   @node.left_non_badgeable_sibling
       when :out:  @node.parent
     end
     

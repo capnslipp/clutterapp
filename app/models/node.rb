@@ -77,6 +77,24 @@ class Node < ActiveRecord::Base
   end
   
   
+  def self_and_non_badgeable_siblings
+    nested_set_scope.scoped :conditions => { parent_column_name => parent_id, :prop_type => Prop.non_badgeable_types.collect(&:to_s) }
+  end
+  
+  def non_badgeable_siblings
+    without_self self_and_non_badgeable_siblings
+  end
+  
+  def left_non_badgeable_sibling
+    non_badgeable_siblings.find(:first, :conditions => ["#{self.class.quoted_table_name}.#{quoted_left_column_name} < ?", left],
+      :order => "#{self.class.quoted_table_name}.#{quoted_left_column_name} DESC")
+  end
+  
+  def right_non_badgeable_sibling
+    non_badgeable_siblings.find(:first, :conditions => ["#{self.class.quoted_table_name}.#{quoted_left_column_name} > ?", left])
+  end
+  
+  
 protected
   
   def validate
