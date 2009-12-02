@@ -1,291 +1,339 @@
 require 'spec_helper'
 
-describe User do
+=begin
+  Helper Module
+=end
+
+module NodeSpecHelper
+  
+  def mocked_node_children_empty
+    unless @mocked_node_children_empty
+      @mocked_node_children_empty = []
+      @mocked_node_children_empty.stubs(
+        :typed => [],
+        :badgeable => [],
+        :non_badgeable => []
+      )
+    end
+    
+    @mocked_node_children_empty
+  end
+  
+  def mocked_node_children_with_filler_nodes
+    unless @mocked_node_children_with_filler_nodes
+      @mocked_node_children_with_filler_nodes = []
+      @mocked_node_children_with_filler_nodes.stubs(
+        :typed => Prop.types.collect {|t| Node.new(:prop => t.rand_new) },
+        :badgeable => Prop.badgeable_types.collect {|t| Node.new(:prop => t.rand_new) },
+        :non_badgeable => Prop.non_badgeable_types.collect {|t| Node.new(:prop => t.rand_new) }
+      )
+    end
+    
+    @mocked_node_children_with_filler_nodes
+  end
+  
+  def mock_node(stubs={})
+    @mock_node ||= mock_model(
+      Node,
+      {
+        :pile => mock_model(Pile, :owner => mock_model(User)),
+        :parent_id => 2600
+      }.merge(stubs)
+    )
+  end
+  
+end
+
+
+
+=begin
+  Base NodeCell Specs
+=end
+
+describe NodeCell do
+  integrate_views
+  include NodeSpecHelper
+  
+  before(:all) { @mocked_node_children = mocked_node_children_empty }
   
   before(:each) do
-    activate_authlogic
-    
-    @user = Factory.create(:user)
-  end
-    
-  it "should be created" do
-    assert_difference 'User.count' do
-      u = Factory.create(:user)
-      u.new_record?.should == false
-    end
+    mock_node(:prop => mock_model(Prop), :children => @mocked_node_children)
   end
   
-  
-  describe "login" do
-    
-    it "should require login" do
-      assert_no_difference 'User.count' do
-        u = User.create( Factory.attributes_for(:user).merge!(:login => nil) )
-        u.errors.on(:login).should_not be_nil
-      end
+  describe "show action" do
+    it "raises an error (since it's the base class)" do
+      proc {
+        @result = render_cell(:show, :node => @mock_node)
+      }.should raise_error(ActionView::MissingTemplate)
     end
-    
   end
   
-  
-  describe "password" do
-    
-    it "should require password" do
-      assert_no_difference 'User.count' do
-        u = User.create( Factory.attributes_for(:user).merge!(:password => nil) )
-        u.errors.on(:password).should_not be_nil
-      end
+  describe "edit action" do
+    it "raises an error (since it's the base class)" do
+      proc {
+        @result = render_cell(:edit, :node => @mock_node)
+      }.should raise_error(ActionView::MissingTemplate)
     end
-    
-    it "should require password confirmation" do
-      assert_no_difference 'User.count' do
-        u = User.create( Factory.attributes_for(:user).merge!(:password_confirmation => nil) )
-        u.errors.on(:password_confirmation).should_not be_nil
-      end
-    end
-    
-    it "should reset password" do
-      u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalP4ssword')
-      
-      u.update_attributes(:password => 'n3wP4ssword', :password_confirmation => 'n3wP4ssword')
-      #User.authenticate('original_username', 'n3wP4ssword').should == u
-    end
-    
-    it "should not rehash password" do
-      u = Factory.create(:user, :login => 'original_username', :password => 'or1ginalp4ssword')
-      u.update_attributes(:login => 'new_username')
-      u.password.should == 'or1ginalp4ssword'
-      # User.('new_username', 'or1ginalp4ssword').should == u
-    end
-    
   end
   
-  
-  describe "email" do
-    
-    it "should require email" do
-      assert_no_difference 'User.count' do
-        u = User.create( Factory.attributes_for(:user).merge!(:email => nil) )
-        u.errors.on(:email).should_not be_nil
-      end
-    end
-    
-  end
-  
-  
-  describe "followees" do
-    it "should be able to add 1 followee" do
-      @user.follow(Factory.create(:user))
-      @user.followees.count.should == 1
-    end
-    
-    #For this test, the @user follows @user2
-    #So how should @user2 have access to @user?
-    #I'm thinking the user_id in Followship should be akin to 
-    #follower_id. and @user.followers should be 1?
-    it "should be able to follow 1 user" do
-      @user2 = Factory.create(:user)
-      @user.follow(@user2)
-      @user.followees.count.should == 1
-    end
-    
-    it "should be able to follow 10 Users and have a followees count of 10" do
-      1.upto(10) do
-        @user.follow(Factory.create(:user))
-      end
-      @user.followees.count.should == 10
-    end
-    
-    it "should be able to follow 10 Users and each of them should be followed by it" do
-      @followees = []
-      
-      1.upto(10) do
-        @followees << followee_user = Factory.create(:user)
-        @user.follow(followee_user)
-      end
-      
-      @followees.each do |fu|
-        fu.should be_followed_by(@user)
-      end
-    end
-    
-    it "should be able to have 10 Users follow it and have a followers count of 10" do
-      1.upto(10) do
-        Factory.create(:user).follow(@user)
-      end
-      
-      @user.followers.count.should == 10
-    end
-    
-    it "should be able to have 10 Users follow it and each of them should be following it" do
-      @followers = []
-      
-      1.upto(10) do
-        @followers << follower_user = Factory.create(:user)
-        follower_user.follow(@user)
-      end
-      
-      @followers.each do |fu|
-        fu.should be_following(@user)
-      end
-    end
-    
-    it "should let followees follow the user" do
-      followee_user = Factory.create(:user)
-      @user.follow(followee_user)
-      followee_user.followers.count.should == 1
-    end
+end
 
-    it "should let user access who follows it" do
-      u1 = Factory.create(:user)
-      u2 = Factory.create(:user)
-      u1.follow(@user)
-      u2.follow(@user)
-      @user.followers.count.should == 2
+
+
+=begin
+  Shared Examples
+=end
+
+share_examples_for "All NodeCells" do
+  integrate_views
+  include NodeSpecHelper
+  
+  before(:all) { @mocked_node_children = mocked_node_children_empty }
+  
+  after(:each) do
+    opts[:node].should be(@mock_node)
+    @result.should_not be_blank
+  end
+  
+end
+
+
+share_examples_for "Showing a NodeCell" do
+  it("runs the state and renders valid output") { @result = render_cell(:show, :node => @mock_node) }
+  
+  after(:each) do
+    @result.should have_tag('*[class*=show][class*=body]')
+    @result.should have_tag('*[class*=show][class*=prop]')
+  end
+end
+
+share_examples_for "(NYI) Showing a NodeCell" do
+  it("runs the state and renders valid output")
+end
+
+share_examples_for "Editing a NodeCell" do
+  it("runs the state and renders valid output") { @result = render_cell(:edit, :node => @mock_node) }
+  
+  after(:each) do
+    @result.should have_tag('*[class*=edit][class*=body]')
+    @result.should have_tag('*[class*=edit][class*=prop]')
+  end
+end
+
+share_examples_for "(NYI) Editing a NodeCell" do
+  it("runs the state and renders valid output")
+end
+
+share_examples_for "Newing a NodeCell" do
+  it("runs the state and renders valid output") { @result = render_cell(:new, :node => @mock_node) }
+  
+  after(:each) do
+    @result.should have_tag('*[class*=new][class*=body]')
+    @result.should have_tag('*[class*=new][class*=prop]')
+  end
+end
+
+share_examples_for "(NYI) Newing a NodeCell" do
+  it("runs the state and renders valid output")
+end
+
+
+
+=begin
+  NodeCell Variant (via NodeBodyCell) Specs
+=end
+
+
+describe NodeBodyCell do
+  
+  
+  describe 'leading to', CheckNodeCell do
+    it_should_behave_like "All NodeCells"
+    
+    before(:each) do
+      mock_node(
+        :prop => mock_model(CheckProp, :checked? => false, :badged? => CheckProp::badgeable?),
+        :children => @mocked_node_childre
+      )
+      @mock_node.prop.stubs(:class => CheckProp)
     end
     
-    it "should let user access who it follows" do
-      u1 = Factory.create(:user)
-      u2 = Factory.create(:user)
-      @user.follow(u1)
-      @user.follow(u2)
-      @user.followees.count.should == 2
+    describe("show action") { it_should_behave_like "Showing a NodeCell" }
+    
+    describe "form-based" do
+      describe("edit action") { it_should_behave_like "(NYI) Editing a NodeCell" }
+      describe("new action") { it_should_behave_like "(NYI) Newing a NodeCell" }
     end
     
-    it "should find unique users by who the user follows" do
-      10.times do |f|
-        Followship.create(:user_id => Factory.create(:user).id, :followee_id => @user.id)
-        Followship.create(:user_id => Factory.create(:user).id, :followee_id => Factory.create(:user).id)
-      end
-      followships = User.followers_of(@user)
-      followships.count.should == 10
+    after(:each) do
+      @result.should have_tag('input[type=checkbox]')
+    end
+  end
+  
+  
+  describe 'leading to', NoteNodeCell do
+    it_should_behave_like "All NodeCells"
+    
+    before(:each) do
+      mock_node(
+        :prop => mock_model(NoteProp, :note => 'A test note for >> you.', :badged? => NoteProp::badgeable?),
+        :children => @mocked_node_children
+      )
+      @mock_node.prop.stubs(:class => NoteProp)
     end
     
-    it "should be mutual friends when both users are following each other" do
-      another_user = Factory.create(:user)
-      @user.follow(another_user)
-      another_user.follow(@user)
+    describe("show action") { it_should_behave_like "Showing a NodeCell" }
+    
+    describe "form-based" do
+      describe("edit action") { it_should_behave_like "Editing a NodeCell" }
+      describe("new action") { it_should_behave_like "Newing a NodeCell" }
       
-      @user.should be_friends_with(another_user)
-      another_user.should be_friends_with(@user)
+      after(:each) { @result.should have_tag('textarea') }
     end
     
-    it "should be included in each other's friends list when both users are following each other" do
-      another_user = Factory.create(:user)
-      @user.follow(another_user)
-      another_user.follow(@user)
+    after(:each) do
+      # @fix: Doesn't work via testing for some reason.
+      #@result.should include('A test note for &gt;&gt; you.') # make sure HTML escaping is being done
+    end
+  end
+  
+  
+  describe 'leading to', PileRefNodeCell do
+    it_should_behave_like "All NodeCells"
+    
+    before(:each) do
+      mock_node(
+        :prop => mock_model(PileRefProp, :ref_pile => mock_model(Pile), :badged? => PileRefProp::badgeable?),
+        :children => @mocked_node_children
+      )
+      @mock_node.prop.ref_pile.should_receive(:name).and_return("A Test Ref'd Pile & Stuff")
+      @mock_node.prop.ref_pile.stub(:owner).and_return(mock_model(User))
+      @mock_node.prop.ref_pile.should_receive(:root_node).at_least(:once).and_return(mock_model(Node))
+      @mock_node.prop.ref_pile.root_node.stub(:children).and_return([])
+      @mock_node.prop.stubs(:class => PileRefProp)
+    end
+    
+    describe("show action") { it_should_behave_like "Showing a NodeCell" }
+    
+    describe "form-based" do
+      describe("edit action") { it_should_behave_like "(NYI) Editing a NodeCell" }
+      describe("new action") { it_should_behave_like "(NYI) Newing a NodeCell" }
       
-      @user.friends.should be_include(another_user)
-      another_user.friends.should be_include(@user)
+      #after(:each) {  @result.should have_tag('input[type=text]') }
     end
     
+    after(:each) do
+      #@result.should have_tag('section')
+      @result.should include("A Test Ref'd Pile &amp; Stuff") # make sure HTML escaping is being done
+    end
   end
   
   
-  describe "invite" do
+  describe 'leading to', PriorityNodeCell do
+    it_should_behave_like "All NodeCells"
     
-    it "should accept invite" do
-      u = Factory.create(:user, :invite => Factory.create(:invite))
+    before(:each) do
+      mock_node(
+        :prop => mock_model(PriorityProp, :priority => 110000000000, :badged? => PriorityProp::badgeable?),
+        :children => @mocked_node_children
+      )
+      @mock_node.prop.stubs(:class => PriorityProp)
+    end
+    
+    describe("show action") { it_should_behave_like "Showing a NodeCell" }
+    
+    describe "form-based" do
+      describe("edit action") { it_should_behave_like "Editing a NodeCell" }
+      describe("new action") { it_should_behave_like "Newing a NodeCell" }
       
-      u.errors.on(:invite).should be_nil
+      after(:each) { @result.should have_tag('input[type=radio]') }
     end
     
-    it "should NOT require invite" do
-      u = Factory.create(:user, :invite => nil)
+    after(:each) do
+      # @fix: Doesn't work via testing for some reason.
+      #@result.should include('110000000000')
+    end
+  end
+  
+  
+  describe 'leading to', TagNodeCell do
+    it_should_behave_like "All NodeCells"
+    
+    before(:each) do
+      mock_node(
+        :prop => mock_model(TagProp, :tag => 'test-tag', :badged? => TagProp::badgeable?),
+        :children => @mocked_node_children
+      )
+      @mock_node.prop.stubs(:class => TagProp)
+    end
+    
+    describe("show action") { it_should_behave_like "Showing a NodeCell" }
+    
+    describe "form-based" do
+      describe("edit action") { it_should_behave_like "Editing a NodeCell" }
+      describe("new action") { it_should_behave_like "Newing a NodeCell" }
       
-      u.errors.on(:invite).should be_nil
+      after(:each) { @result.should have_tag('input[type=text]') }
     end
     
-    it "be able to create multiple users without invites" do
-      u1, u2 = (1..2).to_a.collect { Factory.create(:user, :invite => nil) }
+    after(:each) do
+      # @fix: Doesn't work via testing for some reason.
+      #@result.should include('test-tag')
+    end
+  end
+  
+  
+  describe 'leading to', TextNodeCell do
+    it_should_behave_like "All NodeCells"
+    
+    before(:each) do
+      mock_node(
+        :prop => mock_model(TextProp, :text => 'test text', :badged? => TextProp::badgeable?),
+        :children => @mocked_node_children
+      )
+      @mock_node.prop.stubs(:class => TextProp)
+    end
+    
+    describe("show action") { it_should_behave_like "Showing a NodeCell" }
+    
+    describe "form-based" do
+      describe("edit action") { it_should_behave_like "Editing a NodeCell" }
+      describe("new action") { it_should_behave_like "Newing a NodeCell" }
       
-      [u1, u2].each { |u| u.errors.on(:invite).should be_nil }
+      after(:each) { @result.should have_tag('input[type=text]') }
     end
     
-  end
-  
-  
-  it "should create 2 Piles, when creating 2 Users" do
-    assert_difference 'Pile.count', +2 do
-      u1, u2 = 2.times { Factory.create(:user) }
+    after(:each) do
+      # @fix: Doesn't work via testing for some reason.
+      #@result.should include('test text')
     end
   end
   
-  it "should create 1 Pile for each new user, when creating 2 Users" do
-    u1, u2 = Factory.create(:user), Factory.create(:user)
-    
-    u1.piles.count.should == 1
-    Pile.find_all_by_owner_id(u1.id).count.should == 1
-    Pile.find_all_by_owner_id(u2.id).count.should == 1
-  end
   
-  it "should create 2 Nodes, when creating 2 Users" do
-    assert_difference 'Node.count', +2 do
-      u1, u2 = 2.times { Factory.create(:user) }
+  describe 'leading to', TimeNodeCell do
+    it_should_behave_like "All NodeCells"
+    
+    before(:each) do
+      @time_now = Time.now
+      mock_node(
+        :prop => mock_model(TimeProp, :time => @time_now, :badged? => TimeProp::badgeable?),
+        :children => @mocked_node_children
+      )
+      @mock_node.prop.stubs(:class => TimeProp)
+    end
+    
+    describe("show action") { it_should_behave_like "Showing a NodeCell" }
+    
+    describe "form-based" do
+      describe("edit action") { it_should_behave_like "Editing a NodeCell" }
+      describe("new action") { it_should_behave_like "Newing a NodeCell" }
+      
+      after(:each) { @result.should have_tag('input[type=text]') }
+    end
+    
+    after(:each) do
+      # @fix: Doesn't work via testing for some reason.
+      #@result.should include(@time_now.to_s)
     end
   end
-  
-  it "should create 1 Node for each new User, when creating 2 Users" do
-    u1, u2 = Factory.create(:user), Factory.create(:user)
-    
-    Node.all.select {|n| n.root.pile.owner == u1 }.count.should == 1
-    Node.all.select {|n| n.root.pile.owner == u2 }.count.should == 1
-  end
-  
-  
-  it "should give back the invite's token if it has an invite" do
-    i = Factory.create(:invite)
-    u = Factory.create(:user, :invite => i)
-    
-    u.invite_token.should == i.token
-  end
-  
-  it "should give back nil if it doesn't have an invite" do
-    u = Factory.create(:user, :invite => nil)
-    
-    u.invite_token.should be_nil
-  end
-  
-  it "should find and set the correct invite, given it's token" do
-    i = Factory.create(:invite)
-    u = Factory.create(:user, :invite => nil)
-    
-    u.invite_token = i.token
-    
-    u.invite.should == i
-  end
-  
-  
-  it "should have infinite invites_remaining, given invite_limit of nil" do
-    u = Factory.create(:user)
-    u.invite_limit = nil
-    
-    u.invites_remaining.should be_infinite
-  end
-  
-  
-  it "should raise exception on create_default_pile!, given it already having Pile(s)" do
-    u = Factory.create(:user)
-    u.piles.create(Factory.attributes_for(:pile))
-    
-    u.piles.count.should == 2
-    
-    Proc.new {
-      u.send(:create_default_pile!)
-    }.should raise_error
-  end
-  
-  
-  it "should not raise exception on create_default_pile!, given it having no Piles" do
-    u = Factory.create(:user)
-    u.stub!(:piles).and_return([])
-    
-    u.piles.count.should == 0
-    
-    Proc.new {
-      u.send(:create_default_pile!)
-    }.should_not raise_error
-  end
-  
-  
 end
