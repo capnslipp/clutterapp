@@ -17,4 +17,5 @@ describe Share do
     @share = Share.new(:user_id => @user1.id, :shared_pile_id => @user1.id)
     @share.should_not be_valid
   end
+  
 end
