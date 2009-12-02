@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+
+
 =begin
   Helper Module
 =end
@@ -336,4 +338,6 @@ describe NodeBodyCell do
       #@result.should include(@time_now.to_s)
     end
   end
+  
+  
 end
