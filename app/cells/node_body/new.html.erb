@@ -11,7 +11,7 @@
 				<%- end -%>
 			<%- end -%>
 			
-			<%= render :partial => 'nodes/add_bar' %>
+			<%= render :partial => 'nodes/add_bar', :locals => {:node => @node} %>
 			
 			<%# ✓ %><%= node_form.submit '&#10003; done' %>
 			
