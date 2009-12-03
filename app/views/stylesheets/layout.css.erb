@@ -26,6 +26,8 @@ li { list-style-type: none; }
 	<% end %>
 }
 .item_for_node > .body {
+	position: relative;
+	
 	<% if debug? %>
 		<%= border_radius_decl %>
 		margin: 1px;
@@ -101,10 +103,9 @@ li { list-style-type: none; }
 	float: right;
 }
 .item_for_node > .body > .bullet {
-	float: left;
-	margin-left: -20px;
+	position: absolute;;
+	left: 4px;
 	width: 16px;
-	margin-right: 4px;
 	text-align: center;
 	vertical-align: middle;
 }
