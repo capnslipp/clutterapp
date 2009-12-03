@@ -24,7 +24,7 @@ function idForNodeModel(recordID, prefix) {
 
 
 function nodeIDOfItem(itemForNode) {
-	return itemForNode.attr('id').substring('item_for_node_'.length);
+	return itemForNode.getAttr('id').substring('item_for_node_'.length);
 }
 
 
@@ -90,7 +90,7 @@ function itemNew(button, type) {
 	
 	$.ajax({
 		type: 'get',
-		url: parentNode.closest('.pile').attr('oc\:nodes-url') + '/new',
+		url: parentNode.closest('.pile').getAttr('oc\:nodes-url') + '/new',
 		data: {'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode)},
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(parentNode, responseData); },
@@ -133,8 +133,8 @@ function itemCreate(form) {
 	form.required();
 	
 	$.ajax({
-		type: form.attr('method'), // 'post'
-		url: form.attr('action'),
+		type: form.getAttr('method'), // 'post'
+		url: form.getAttr('action'),
 		data: form.serialize(),
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(form, responseData); },
@@ -174,7 +174,7 @@ function itemEdit(link) {
 	
 	$.ajax({
 		type: 'get',
-		url: showBody.closest('.node').attr('oc\:url') + '/edit',
+		url: showBody.closest('.node').getAttr('oc\:url') + '/edit',
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(showBody, responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(showBody, xhrObj, errStr, expObj); }
@@ -213,8 +213,8 @@ $(function() {
 
 function itemUpdate(form) {
 	$.ajax({
-		type: form.attr('method'), // 'post' (PUT)
-		url: form.attr('action'),
+		type: form.getAttr('method'), // 'post' (PUT)
+		url: form.getAttr('action'),
 		data: form.serialize(),
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(form, responseData); },
@@ -252,7 +252,7 @@ $(function() {
 function itemMove(node, dir) {
 	$.ajax({
 		type: 'post',
-		url: node.attr('oc\:url') + '/move',
+		url: node.getAttr('oc\:url') + '/move',
 		data: {_method: 'put', dir: dir},
 		dataType: 'script',
 		success: function(responseData) { handleSuccess(node, responseData); },
@@ -288,7 +288,7 @@ $(function() {
 function itemDelete(node) {
 	$.ajax({
 		type: 'post',
-		url: node.attr('oc\:url'),
+		url: node.getAttr('oc\:url'),
 		data: {_method: 'delete'},
 		dataType: 'html',
 		success: function(responseData) { handleSuccess(node, responseData); },
@@ -335,7 +335,7 @@ function badgeAdd(link, addType) {
 	
 	$.ajax({
 		type: 'get',
-		url: (state == 'new') ? form.attr('action').replace(/\?/, '/new?') : (node.attr('oc\:url') + '/edit'),
+		url: (state == 'new') ? form.getAttr('action').replace(/\?/, '/new?') : (node.getAttr('oc\:url') + '/edit'),
 		data: form.serialize() + '&' + $.param({'add[prop_type]': addType}),
 		dataType: 'html',
 		success: handleSuccess,
@@ -412,7 +412,7 @@ function badgeRemove(link) {
 	
 	$.ajax({
 		type: 'get',
-		url: (state == 'new') ? form.attr('action').replace(/\?/, '/new?') : (node.attr('oc\:url') + '/edit'),
+		url: (state == 'new') ? form.getAttr('action').replace(/\?/, '/new?') : (node.getAttr('oc\:url') + '/edit'),
 		data: form.serialize(),
 		dataType: 'html',
 		success: handleSuccess,
