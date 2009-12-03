@@ -14,4 +14,11 @@ module ApplicationHelper
     end
   end
   
+  # @from: <http://lostincode.net/svn/rails_plugins/button_tag/>
+  def button_tag(value, options = {})
+    options.stringify_keys!
+    tag :input, { 'type' => 'button', 'name' => (options[:name] || 'button'), 'value' => value }.merge(options)
+  end
+  
+  
 end
