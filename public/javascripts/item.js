@@ -121,7 +121,7 @@ function itemNew(button, type) {
 	function handleError(parentNode, xhrObj, errStr, expObj) {
 		hideFill();
 		
-		parentNode.find('#new-bar:first')
+		parentNode.children('.show.body')
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000); // @todo: fix
 	}
 }
