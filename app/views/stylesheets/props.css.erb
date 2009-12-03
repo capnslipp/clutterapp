@@ -2,8 +2,7 @@
 
 .prop {
 	display: block;
-	line-height: 12px;
-	margin: 4px 0;
+	line-height: 15px;
 	
 	border: <%= border_width %>px solid transparent;
 	<%= border_radius_decl %>
@@ -20,6 +19,7 @@
 	line-height: 12px;
 	height: 12px;
 	
+	margin: 4px 0;
 	margin-left: 2px; margin-right: 2px;
 	
 	border-color: <%= generic_border_color(0.5).to_s(:css_rgba) %>;
@@ -42,8 +42,6 @@
 	display: block;
 	padding: 4px;
 	vertical-align: top;
-	
-	line-height: 18px;
 	
 	margin-bottom: 6px;
 	
@@ -85,7 +83,7 @@
 .tag.prop.badge { /*float: left;*/ }
 
 .text.prop {
-	display: inline-block;
+	display: inline;
 }
 .edit.text.prop, .new.text.prop {
 	display: block;
