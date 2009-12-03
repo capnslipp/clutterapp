@@ -86,6 +86,8 @@ function formFocus(form) {
 
 
 function itemNew(button, type) {
+	showFill();
+	
 	var parentNode = $(button).closest('.item_for_node');
 	
 	$.ajax({
@@ -117,6 +119,8 @@ function itemNew(button, type) {
 	}
 	
 	function handleError(parentNode, xhrObj, errStr, expObj) {
+		hideFill();
+		
 		parentNode.find('#new-bar:first')
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000); // @todo: fix
 	}
@@ -170,6 +174,8 @@ $(function() {
 
 
 function itemEdit(link) {
+	showFill();
+	
 	var showBody = $(link).closest('.show.body').required();
 	
 	$.ajax({
@@ -196,6 +202,8 @@ function itemEdit(link) {
 	}
 	
 	function handleError(showBody, xhrObj, errStr, expObj) {
+		hideFill();
+		
 		showBody
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
