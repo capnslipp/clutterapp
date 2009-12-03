@@ -1,14 +1,17 @@
 <% if current_user -%>
 	<span id="user-bar-greeting">Logged in as <strong><%= link_to current_user.login,home_path %></strong>.</span>
-	<span id="user-bar-action"><%= link_to "Log out", logout_path, :method => :delete %></span>
+	<span id="user-bar-action"><%= link_to 'Log out', logout_path, :method => :delete %></span>
 <% else -%>
 	<span id="user-bar-greeting">
-		<% form_tag user_session_path do %>
-			username: <%= text_field_tag :login, params[:login] %>
-			password: <%= password_field_tag :password, params[:password] %>
-			<%= submit_tag 'Sign In' %>
-		<% end %>
+		<%= link_to 'Log In', login_path %>
 	</span>
+	<%#span id="user-bar-greeting">
+		<% form_tag user_session_path do % >
+			username: <%= text_field_tag :login, params[:login] % >
+			password: <%= password_field_tag :password, params[:password] % >
+			<%= submit_tag 'Sign In' % >
+		<% end % >
+	</span%>
 	<%#div id="user-bar-action">
 		Or <%= link_to "sign up for an invite", new_user_path % >
 	</div%>
