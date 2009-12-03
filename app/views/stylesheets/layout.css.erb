@@ -32,15 +32,16 @@ li { list-style-type: none; }
 	<% end %>
 	
 	/*min-height: 1.5em;*/
-	border-top: 1px dotted <%= divider_color %>;
-	padding: 2px 0;
-	padding-left: 24px; /* for "> .bullet" */
 }
 .item_for_node > .show.body {
 	<% if debug? %>
 		background: rgba(127, 191, 0, 0.125);
 		border: 2px solid rgba(127, 191, 0, 0.5);
 	<% end %>
+	
+	border-top: 1px dotted <%= divider_color %>;
+	padding: 2px 0;
+	padding-left: 24px; /* for "> .bullet" */
 }
 .item_for_node > .show.body.active {
 	background: <%= bright_bg_color %>;
