@@ -62,7 +62,9 @@ module StylesheetsHelper
   
   SHADOW_COLOR = Color.new(0x000000, 0.75)
   def shadow_color(alpha_multiplier_or_color = 1.0)
-    if alpha_multiplier_or_color.is_a? String
+    if alpha_multiplier_or_color.is_a? Color
+      alpha_multiplier_or_color
+    elsif alpha_multiplier_or_color.is_a? String
       alpha_multiplier_or_color.to_color
     else
       color = inverted? ? SHADOW_COLOR.invert : SHADOW_COLOR
