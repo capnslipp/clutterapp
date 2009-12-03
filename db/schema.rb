@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091119222409) do
+ActiveRecord::Schema.define(:version => 20091202012313) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(:version => 20091119222409) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "authorized",     :default => false
+    t.boolean  "public",         :default => false
   end
 
   create_table "tag_props", :force => true do |t|
