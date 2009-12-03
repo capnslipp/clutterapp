@@ -13,7 +13,10 @@
 			
 			<%= render :partial => 'nodes/add_bar' %>
 			
-			<%# ✓ %><%= node_form.submit '&#10003; done' %>
+			<div class="finish line">
+				<%= button_tag '&#10006; cancel', :class => 'cancel' %>
+				<%# ✓ %><%= node_form.submit '&#10003; done', :class => 'done' %>
+			</div>
 			
 		</div>
 	<%- end -%>

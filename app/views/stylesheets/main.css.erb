@@ -62,7 +62,10 @@ input[type='text'], input[type='password'], textarea {
 	padding: 0;
 	<%= border_radius_decl %>
 }
-input[type='text']:focus, input[type='password']:focus, textarea:focus { background: <%= (wash_color * 0.5).with(:a => 0.99).to_s(:css_rgba) %>; border-color: <%= focus_color %>; }
+input[type='text']:focus, input[type='password']:focus, textarea:focus {
+	background: <%= (wash_color * 0.5).with(:a => 0.99).to_s(:css_rgba) %>;
+	border-color: <%= focus_color %>;
+}
 
 input[type='button'], input[type='submit'] {
 	background: <%= (wash_color * 0.5).with(:a => 0.9).to_s(:css_rgba) %>;
@@ -70,8 +73,21 @@ input[type='button'], input[type='submit'] {
 	color: <%= wash_text_color %>;
 	<%= border_radius_decl %>
 }
-input[type='button']:active, input[type='submit']:active { background: <%= (wash_color * 0.5).with(:a => 0.99).to_s(:css_rgba) %>; border-color: <%= accent_color %>; }
+input[type='button']:active, input[type='submit']:active {
+	background: <%= (wash_color * 0.5).with(:a => 0.99).to_s(:css_rgba) %>;
+	border-color: <%= accent_color %>;
+}
 
+
+input[type='button'].cancel {
+	background-color: <%= bg_color.with(:a => 0.9).to_s(:css_rgba) %>;
+	border-color: <%= (bg_color * 0.75) %>;
+	color: <%= text_color %>;
+}
+input[type='button'].cancel:active {
+	background: <%= bg_color.with(:a => 0.99).to_s(:css_rgba) %>;
+	border-color: <%= accent_color %>;
+}
 
 /* general-purpose */
 

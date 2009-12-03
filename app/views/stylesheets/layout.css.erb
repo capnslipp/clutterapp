@@ -65,6 +65,11 @@ li { list-style-type: none; }
 	background: <%= bright_bg_color %>;
 	padding: 8px;
 }
+/* contain-float-after */
+.item_for_node > .new.body > .cont:after,  .item_for_node > .new.body > form > .cont:after,
+.item_for_node > .edit.body > .cont:after, .item_for_node > .edit.body > form > .cont:after {
+	content: ""; display: block; height: 0; clear: both; visibility: hidden; /* (FF, S2, O9) */
+}
 .item_for_node > .edit.body {
 	position: absolute;
 	/*width: 100%;*/ left: 0; right: 0;
@@ -90,6 +95,10 @@ li { list-style-type: none; }
 	/*overflow: auto; width: 100%; /* to contain floating elements */
 	margin-top: 2px;
 	margin-bottom: 4px;
+}
+.item_for_node > .new.body .finish.line,
+.item_for_node > .edit.body .finish.line {
+	float: right;
 }
 .item_for_node > .body > .bullet {
 	float: left;

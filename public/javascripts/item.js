@@ -133,6 +133,26 @@ $(function() {
 
 
 
+function itemNewCancel(button) {
+	var form = button.closest('form.new_node').required();
+	
+	var newBody = form.closest('.new.body').required();
+	
+	hideFill();
+	
+	newBody.fadeOut(kDefaultTransitionDuration, function() {
+		$(this).closest('.item_for_node').required().remove();
+	});
+}
+
+$(function() {
+	$('form.new_node input.cancel').live('click', function() {
+		itemNewCancel($(this)); return false;
+	});
+});
+
+
+
 function itemCreate(form) {
 	form.required();
 	
@@ -154,7 +174,9 @@ function itemCreate(form) {
 		
 		hideFill();
 		
-		newBody.fadeOut(kDefaultTransitionDuration, function() { $(this).closest('.item_for_node').required().remove(); });
+		newBody.fadeOut(kDefaultTransitionDuration, function() {
+			$(this).closest('.item_for_node').required().remove();
+		});
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
@@ -219,7 +241,30 @@ $(function() {
 });
 
 
+
+function itemEditCancel(button) {
+	var form = button.closest('form.edit_node').required();
+	
+	var editBody = form.closest('.edit.body').required();
+	
+	hideFill();
+	
+	editBody.fadeOut(kDefaultTransitionDuration, function() {
+		$(this).remove();
+	});
+}
+
+$(function() {
+	$('form.edit_node input.cancel').live('click', function() {
+		itemEditCancel($(this)); return false;
+	});
+});
+
+
+
 function itemUpdate(form) {
+	form.required();
+	
 	$.ajax({
 		type: form.getAttr('method'), // 'post' (PUT)
 		url: form.getAttr('action'),
