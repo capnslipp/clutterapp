@@ -1,7 +1,7 @@
 class PileRefProp < Prop
   has_one :node, :as => :prop
   
-  belongs_to :ref_pile, :class_name => Pile.to_s
+  belongs_to :ref_pile, :class_name => Pile.name
   
   validates_presence_of :node, :on => :update # less stringent when the Prop is new in order to prevent circular dependencies
   validates_presence_of :ref_pile
@@ -25,7 +25,7 @@ class PileRefProp < Prop
 protected
   
   def ensure_ref_pile
-    ref_pile ||= node.pile.owner.piles.new
+    self.ref_pile ||= node.pile.owner.piles.new
   end
   
 end
