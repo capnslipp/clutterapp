@@ -155,7 +155,7 @@ describe NodeBodyCell do
     before(:each) do
       mock_node(
         :prop => mock_model(CheckProp, :checked? => false, :badged? => CheckProp::badgeable?),
-        :children => @mocked_node_childre
+        :children => @mocked_node_children
       )
       @mock_node.prop.stub(:class => CheckProp)
     end
@@ -163,8 +163,8 @@ describe NodeBodyCell do
     describe("show action") { it_should_behave_like "Showing a NodeCell" }
     
     describe "form-based" do
-      describe("edit action") { it_should_behave_like "(NYI) Editing a NodeCell" }
-      describe("new action") { it_should_behave_like "(NYI) Newing a NodeCell" }
+      describe("edit action") { it_should_behave_like "Editing a NodeCell" }
+      describe("new action") { it_should_behave_like "Newing a NodeCell" }
     end
     
     after(:each) do
