@@ -93,13 +93,14 @@ describe User do
     end
     
     it "should be able to share a pile publicly" do
+      pending
       @share = @user.share_pile_with_public(@user.default_pile)
       @share.should be_instance_of(Share)
     end
     
     it "should not let users access piles that aren't shared" do
-      @user.shared_piles << @user2.default_pile
-      @user.shared_piles.count.should == 0
+      @user.authorized_piles << @user2.default_pile
+      @user.authorized_piles.count.should == 0
     end
     
     it "should have access to the sharees you share a pile with" do
@@ -109,6 +110,7 @@ describe User do
     end
     
     it "should be able to share pile with followers" do
+      pending
       @user.share_pile_with_followers(@pile1)
       @user.followers.each do |follower|
         follower.authorized_piles.first.should == @pile1
