@@ -37,7 +37,7 @@ class BrowsingTest < ActionController::PerformanceTest
 protected
   
   def bypass_authentication
-    PilesController.any_instance.stubs(
+    PilesController.any_instance.stub(
       :current_user => @user
     )
   end

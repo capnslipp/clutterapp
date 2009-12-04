@@ -11,7 +11,7 @@ module NodeSpecHelper
   def mocked_node_children_empty
     unless @mocked_node_children_empty
       @mocked_node_children_empty = []
-      @mocked_node_children_empty.stubs(
+      @mocked_node_children_empty.stub(
         :typed => [],
         :badgeable => [],
         :non_badgeable => []
@@ -24,7 +24,7 @@ module NodeSpecHelper
   def mocked_node_children_with_filler_nodes
     unless @mocked_node_children_with_filler_nodes
       @mocked_node_children_with_filler_nodes = []
-      @mocked_node_children_with_filler_nodes.stubs(
+      @mocked_node_children_with_filler_nodes.stub(
         :typed => Prop.types.collect {|t| Node.new(:prop => t.rand_new) },
         :badgeable => Prop.badgeable_types.collect {|t| Node.new(:prop => t.rand_new) },
         :non_badgeable => Prop.non_badgeable_types.collect {|t| Node.new(:prop => t.rand_new) }
@@ -157,7 +157,7 @@ describe NodeBodyCell do
         :prop => mock_model(CheckProp, :checked? => false, :badged? => CheckProp::badgeable?),
         :children => @mocked_node_childre
       )
-      @mock_node.prop.stubs(:class => CheckProp)
+      @mock_node.prop.stub(:class => CheckProp)
     end
     
     describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -181,7 +181,7 @@ describe NodeBodyCell do
         :prop => mock_model(NoteProp, :note => 'A test note for >> you.', :badged? => NoteProp::badgeable?),
         :children => @mocked_node_children
       )
-      @mock_node.prop.stubs(:class => NoteProp)
+      @mock_node.prop.stub(:class => NoteProp)
     end
     
     describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -212,7 +212,7 @@ describe NodeBodyCell do
       @mock_node.prop.ref_pile.stub(:owner).and_return(mock_model(User))
       @mock_node.prop.ref_pile.should_receive(:root_node).at_least(:once).and_return(mock_model(Node))
       @mock_node.prop.ref_pile.root_node.stub(:children).and_return([])
-      @mock_node.prop.stubs(:class => PileRefProp)
+      @mock_node.prop.stub(:class => PileRefProp)
     end
     
     describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -239,7 +239,7 @@ describe NodeBodyCell do
         :prop => mock_model(PriorityProp, :priority => 110000000000, :badged? => PriorityProp::badgeable?),
         :children => @mocked_node_children
       )
-      @mock_node.prop.stubs(:class => PriorityProp)
+      @mock_node.prop.stub(:class => PriorityProp)
     end
     
     describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -266,7 +266,7 @@ describe NodeBodyCell do
         :prop => mock_model(TagProp, :tag => 'test-tag', :badged? => TagProp::badgeable?),
         :children => @mocked_node_children
       )
-      @mock_node.prop.stubs(:class => TagProp)
+      @mock_node.prop.stub(:class => TagProp)
     end
     
     describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -293,7 +293,7 @@ describe NodeBodyCell do
         :prop => mock_model(TextProp, :text => 'test text', :badged? => TextProp::badgeable?),
         :children => @mocked_node_children
       )
-      @mock_node.prop.stubs(:class => TextProp)
+      @mock_node.prop.stub(:class => TextProp)
     end
     
     describe("show action") { it_should_behave_like "Showing a NodeCell" }
@@ -321,7 +321,7 @@ describe NodeBodyCell do
         :prop => mock_model(TimeProp, :time => @time_now, :badged? => TimeProp::badgeable?),
         :children => @mocked_node_children
       )
-      @mock_node.prop.stubs(:class => TimeProp)
+      @mock_node.prop.stub(:class => TimeProp)
     end
     
     describe("show action") { it_should_behave_like "Showing a NodeCell" }
