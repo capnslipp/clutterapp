@@ -8,7 +8,7 @@ class Node < ActiveRecord::Base
   #before_move :increment_parent_version
   #after_move :increment_version # necessary?
   
-  belongs_to :prop, :polymorphic => true, :autosave => true
+  belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true
   
   belongs_to :pile
   
