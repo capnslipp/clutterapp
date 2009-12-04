@@ -63,14 +63,7 @@ class NodesController < ApplicationController
     node_attrs[:prop_attributes] ||= {}
     node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
     
-    @node = @parent.children.build(node_attrs)
-    
-    @node.children.each do |child|
-      child.parent = @node
-      child.pile = @node.pile
-    end
-    
-    @node.save!
+    @node = @parent.children.create(node_attrs)
     
     
     @cell_state = :show
