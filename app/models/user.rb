@@ -167,6 +167,12 @@ class User < ActiveRecord::Base
     @default_pile ||= piles.first || create_default_pile
   end
   
+  # Method to send reset password
+  def deliver_password_reset_instructions!
+    reset_perishable_token!
+    Notifier.deliver_password_reset_instructions(self)
+  end
+  
   
 protected
   
