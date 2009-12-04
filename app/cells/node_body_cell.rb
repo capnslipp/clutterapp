@@ -38,9 +38,9 @@ protected
       Prop.badgeable_types.each do |t|
         short_name = t.short_name
         if t.stackable?
-          instance_variable_set(:"@#{short_name.pluralize}", @node.children.typed(short_name)) # i.e. @tags
+          instance_variable_set(:"@#{short_name.underscore.pluralize}", @node.children.typed(short_name)) # i.e. @tags
         else
-          instance_variable_set(:"@#{short_name}", @node.children.typed(short_name).first) # i.e. @check, @priority, @time, @note
+          instance_variable_set(:"@#{short_name.underscore}", @node.children.typed(short_name).first) # i.e. @check, @priority, @time, @note
         end
       end
       @check = @node.children.typed(:check).first
