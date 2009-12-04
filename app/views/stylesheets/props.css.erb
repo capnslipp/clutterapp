@@ -45,9 +45,11 @@
 	
 	margin-bottom: 6px;
 	
-	border-color: <%= generic_border_color.to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %>
+	border-color: <%= generic_border_color.with(:a => 0.05).to_s(:css_rgba) %>;
+	<%= shallow_shadow_decl(0.25) %>
 	
-	background: <%= ((bright_bg_color - bg_color) / 2.0 + bg_color).to_s %>;
+	background: <%= bg_color.to_s %>;
+	color: <%= text_color + '#222'.to_color %>
 }
 .note.prop, .note.prop textarea { line-height: 15px; }
 .note.prop textarea { height: 1px; }

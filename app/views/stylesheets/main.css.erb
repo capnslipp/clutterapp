@@ -47,7 +47,7 @@ h5 { font-size: 14px; line-height: 14px; color: <%= accent_color %>; }
 section section section section section section h1,
 h6 { font-size: 13px; line-height: 13px; color: <%= wash_color %>; }
 
-em { font-weight: bold; font-style: normal; color: <%= (inverted? ? '#222'.to_color.invert : '#222'.to_color).to_s(:css) %>; }
+em { font-weight: bold; font-style: normal; color: <%= '#222'.to_color.to_s(:css) %>; }
 
 
 form {

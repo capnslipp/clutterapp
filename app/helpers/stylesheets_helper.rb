@@ -17,57 +17,47 @@ module StylesheetsHelper
   end
   
   
-  BG_COLOR = Color.new(0xf6f6f6)
-  def bg_color
-    inverted? ? BG_COLOR.invert : BG_COLOR
-  end
+  BG_COLOR = '#fff'.to_color
+  const_reader :bg_color
   def bright_bg_color
     bg_color.text_color.invert
   end
   def text_color
-    bg_color.text_color
+    bg_color.text_color + '#444'.to_color
   end
   
-  ACCENT_COLOR = Color.new(0xcc3300)
-  def accent_color
-    inverted? ? ACCENT_COLOR.invert : ACCENT_COLOR
-  end
+  ACCENT_COLOR = '#c30'.to_color
+  const_reader :accent_color
   
-  WASH_COLOR = Color.new(0x4444444)
-  def wash_color
-    inverted? ? WASH_COLOR.invert : WASH_COLOR
-  end
+  WASH_COLOR = '#444'.to_color
+  const_reader :wash_color
   def wash_text_color
     wash_color.text_color
   end
   
-  GENERIC_BORDER_COLOR = Color.new(0x000000, 0.2)
+  GENERIC_BORDER_COLOR = '#000'.to_color.with(:a => 0.2)
   def generic_border_color(m = 1.0)
-    color = inverted? ? GENERIC_BORDER_COLOR.invert : GENERIC_BORDER_COLOR
+    color = GENERIC_BORDER_COLOR
     color.with(:a => color.a * m)
   end
   
   BORDER_WIDTH = 1
-  def border_width
-    BORDER_WIDTH
-  end
+  const_reader :border_width
   
   FOCUS_COLOR = ACCENT_COLOR
-  def focus_color
-    inverted? ? FOCUS_COLOR.invert : FOCUS_COLOR
-  end
+  const_reader :focus_color
   def focus_back
     focus_color.with(:a => 0.25).to_s(:css_rgba)
   end
   
-  SHADOW_COLOR = Color.new(0x000000, 0.75)
+  SHADOW_COLOR = '#000'.to_color.with(:a => 0.75)
   def shadow_color(alpha_multiplier_or_color = 1.0)
     if alpha_multiplier_or_color.is_a? Color
       alpha_multiplier_or_color
     elsif alpha_multiplier_or_color.is_a? String
       alpha_multiplier_or_color.to_color
     else
-      color = inverted? ? SHADOW_COLOR.invert : SHADOW_COLOR
+      color = SHADOW_COLOR
       Color.from_rgba(color.r, color.g, color.b, color.a * alpha_multiplier_or_color)
     end
   end
@@ -85,32 +75,21 @@ module StylesheetsHelper
   	%W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{shallow_shadow(alpha_multiplier_or_color)};" }.join(' ')
   end
   
-  FILL_COLOR = Color.new(0xeeeeee, 0.75)
-  def fill_color
-    inverted? ? FILL_COLOR.invert : FILL_COLOR
-  end
+  FILL_COLOR = '#eee'.to_color.with(:a => 0.75)
+  const_reader :fill_color
   
-  DIVIDER_COLOR = Color.new(0xcccccc)
-  def divider_color
-    inverted? ? DIVIDER_COLOR.invert : DIVIDER_COLOR
-  end
+  DIVIDER_COLOR = '#ccc'.to_color
+  const_reader :divider_color
   
-  WIDGET_COLOR = Color.new(0xdddddd)
-  def widget_color
-    inverted? ? WIDGET_COLOR.invert : WIDGET_COLOR
-  end
+  WIDGET_COLOR = '#ddd'.to_color
+  const_reader :widget_color
   def active_widget_color
-    inverted? ? widget_color + Color.new(0x333333) : widget_color - Color.new(0x333333)
+    widget_color - '#333'.to_color
   end
   
   
   
   CSS_DIRECTION_QUARTET = [:top, :right, :bottom, :left]
   const_reader :css_direction_quartet
-  
-  
-protected
-  
-  def inverted?; false; end
   
 end
