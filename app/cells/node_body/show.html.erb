@@ -1,6 +1,8 @@
 <div class="show body">
 	<div class="bullet">
-		<% if @check.present? %>
+		<% if @node.prop.is_a? PileRefProp %>
+			<span class="sym"><%# ∴ %>&there4;</span>
+		<% elsif @check.present? %>
 			<%= render_cell cell_for_node(@check), :show, :node => @check %>
 		<% else %>
 			<span class="sym">•</span>

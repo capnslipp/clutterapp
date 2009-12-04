@@ -103,13 +103,17 @@ li { list-style-type: none; }
 	float: right;
 }
 .item_for_node > .body > .bullet {
-	position: absolute;;
+	position: absolute;
 	left: 4px;
 	width: 16px;
 	text-align: center;
 	vertical-align: middle;
 }
 .item_for_node > .body > .bullet .sym { font-size: 2em; line-height: 1em; }
+.sub-pile.item_for_node > .body > .bullet {
+	left: 0;
+}
+.sub-pile.item_for_node > .body > .bullet .sym { font-size: 2em; line-height: 0.66em; }
 
 .item_for_node > .body > .action.stub,
 .item_for_node > .body > #action-bar {
