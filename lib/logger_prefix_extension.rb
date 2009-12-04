@@ -68,3 +68,12 @@ module ActiveSupport
     
   end
 end
+
+
+# @todo: Add a method that can be called from an initializer like this:
+#   custom_logger :finder_call, :name => lambda {|klass, method_name| klass.name + '#' + method_name }, :color => :light_blue
+# which will then add a custom logger method, allowing you to do the following anywhere in your code:
+#   logger.finder_call [self.class, 'some_method'], 'doing a find_by_blah(5)'
+# and which will log the following:
+#   MyClass#some_method   doing a find_by_blah(5)
+# with the "MyClass#some_method" part in light blue.
