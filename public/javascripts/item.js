@@ -156,27 +156,34 @@ $(function() {
 function itemCreate(form) {
 	form.required();
 	
+	var fadeOutDone = false;
+	var ajaxReqDone = false;
+	
+	var newBody = form.closest('.new.body').required();
+	var newItem = newBody.closest('.item_for_node').required();
+	
+	newBody.fadeOut(kDefaultTransitionDuration, function() {
+		fadeOutDone = true;
+		deleteNewItemIfReady();
+	});
+	
 	$.ajax({
 		type: form.getAttr('method'), // 'post'
 		url: form.getAttr('action'),
 		data: form.serialize(),
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(form, responseData); },
+		success: function(responseData) { handleSuccess(responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
 	});
 	
 	
-	function handleSuccess(form, responseData) {
-		var newBody = form.closest('.new.body').required();
-		var newItem = newBody.closest('.item_for_node').required();
-		
+	function handleSuccess(responseData) {
 		newItem.after(responseData);
 		
-		hideFill();
+		ajaxReqDone = true;
+		deleteNewItemIfReady();
 		
-		newBody.fadeOut(kDefaultTransitionDuration, function() {
-			$(this).closest('.item_for_node').required().remove();
-		});
+		hideFill();
 	}
 	
 	function handleError(form, xhrObj, errStr, expObj) {
@@ -184,6 +191,13 @@ function itemCreate(form) {
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 		
 		formFocus(form);
+	}
+	
+	// avoid trying to double-delete the element by first checking to see if both the fade-out is done and the AJAX request is done
+	// (whichever is 2nd will end up doing the delete)
+	function deleteNewItemIfReady() {
+		if (fadeOutDone && ajaxReqDone)
+			newItem.remove();
 	}
 }
 
@@ -265,23 +279,25 @@ $(function() {
 function itemUpdate(form) {
 	form.required();
 	
+	var editBody = form.closest('.edit.body').required();
+	var showBody = editBody.siblings('.show.body').required();
+	
+	editBody.fadeOut(kDefaultTransitionDuration, function() {
+		$(this).remove();
+	});
+	
 	$.ajax({
 		type: form.getAttr('method'), // 'post' (PUT)
 		url: form.getAttr('action'),
 		data: form.serialize(),
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(form, responseData); },
+		success: function(responseData) { handleSuccess(responseData); },
 		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
 	});
 	
 	
-	function handleSuccess(form, responseData) {
-		var editBody = form.closest('.edit.body').required();
-		var showBody = editBody.siblings('.show.body').required();
-		
+	function handleSuccess(responseData) {
 		hideFill();
-		
-		editBody.fadeOut(kDefaultTransitionDuration, function() { $(this).remove(); });
 		
 		showBody.replaceWith(responseData);
 	}
