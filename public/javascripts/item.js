@@ -136,6 +136,8 @@ $(function() {
 function itemNewCancel(button) {
 	var form = button.closest('form.new_node').required();
 	
+	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
+	
 	var newBody = form.closest('.new.body').required();
 	
 	hideFill();
@@ -155,6 +157,8 @@ $(function() {
 
 function itemCreate(form) {
 	form.required();
+	
+	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
 	var fadeOutDone = false;
 	var ajaxReqDone = false;
@@ -259,6 +263,8 @@ $(function() {
 function itemEditCancel(button) {
 	var form = button.closest('form.edit_node').required();
 	
+	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
+	
 	var editBody = form.closest('.edit.body').required();
 	
 	hideFill();
@@ -278,6 +284,8 @@ $(function() {
 
 function itemUpdate(form) {
 	form.required();
+	
+	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
 	var editBody = form.closest('.edit.body').required();
 	var showBody = editBody.siblings('.show.body').required();
