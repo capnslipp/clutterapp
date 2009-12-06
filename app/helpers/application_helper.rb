@@ -21,4 +21,26 @@ module ApplicationHelper
   end
   
   
+  def node_body_partial(state)
+    "nodes/#{state}_body"
+  end
+  
+  
+  def prop_partial(node, state)
+    "props/#{node.prop.class.short_name.underscore}/#{state}"
+  end
+  
+  
+  def css_color_for_priority(priority)
+    case priority 
+      when 1: '#c30'
+      when 2: '#960'
+      when 3: '#990'
+      when 4: '#390'
+      when 5: '#069'
+      else    '#666'
+    end
+  end
+  
+  
 end
