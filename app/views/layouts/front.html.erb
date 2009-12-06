@@ -5,8 +5,9 @@
 	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 	<title>OrgClut: Organize Your Clutter » open-ended easy hierarchical flexible convenient information organizer web app - Coming Late 2009</title>
 	<meta http-equiv="X-UA-Compatible" content="chrome=1;IE=edge"/>
-	<%= stylesheet_link_tag 'reset', :media => 'all', :cache => true %>
-	<%= stylesheet_link_tag 'main', 'front', :media => 'all' %><%# can't cache these ones, since they're dynamic %>
+	<%= stylesheet_link_tag (StylesheetsController::STATIC_STYLESHEET_NAMES + StylesheetsController::DYNAMIC_STYLESHEET_NAMES), :media => 'all' unless ActionController::Base.perform_caching %>
+	<%= stylesheet_link_tag 'all', :media => 'all' if ActionController::Base.perform_caching %><%# all these are cached together by the StylesheetsController %>
+	<%= stylesheet_link_tag 'front', :media => 'all' %><%# can't cache this one, since the all.css will override the StylesheetsController#all action/route %>
 	<% js_files = [
 			{:src => 'jquery', :min => 'jquery.min'},
 			{:src => 'jquery-ui', :min => 'jquery-ui.min'},
