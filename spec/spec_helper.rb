@@ -69,7 +69,7 @@ Spec::Runner.configure do |config|
   def current_user_session(stubs = {}, user_overrides = {})
     @current_user_session ||= mock_model(
       UserSession,
-      { :user => current_user(user_overrides) }.merge(stubs)
+      { :user => current_user(user_overrides), :record => true }.merge(stubs)
     )
   end
   
@@ -91,8 +91,16 @@ Spec::Runner.configure do |config|
     @active_owner
   end
   
+  def have_owner
+    active_owner
+  end
+  
   def active_pile(overrides = {})
     @active_pile ||= Factory.build(:pile, overrides)
+  end
+  
+  def have_pile
+    active_pile
   end
   
 end
