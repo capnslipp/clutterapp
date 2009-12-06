@@ -1,34 +1,36 @@
 <div class="show body">
 	<div class="bullet">
-		<% if @check.present? %>
-			<%= render :partial => prop_partial(@check, :show), :node => @check %>
+		<% if node.check_badge? %>
+			<%= render :partial => prop_partial(node.check_badge, :show), :locals => {:node => node.check_badge} %>
 		<% else %>
 			<span class="sym">•</span>
 		<% end %>
 	</div>
+	
 	<%= render :partial => 'nodes/action_stub' %>
+	
 	<div class="cont" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
-		<% if @priority.present? %>
-			<%= render :partial => prop_partial(@priority, :show), :node => @priority %>
+		<% if node.priority_badge? %>
+			<%= render :partial => prop_partial(node.priority_badge, :show), :locals => {:node => node.priority_badge} %>
 		<% end %>
 		
 		<%= render :partial => prop_partial(node, :show), :locals => {:node => node} %>
 		
-		<% if @time.present? %>
+		<% if node.time_badge? %>
 			<div class="line">
-				<%= render :partial => prop_partial(@time, :show), :node => @time %>
+				<%= render :partial => prop_partial(node.time_badge, :show), :locals => {:node => node.time_badge} %>
 			</div>
 		<% end %>
-		<% if @tags.present? %>
+		<% if node.tag_badges? %>
 			<div class="line">
-				<%- for tag in @tags -%>
-					<%= render :partial => prop_partial(tag, :show), :node => tag %>
-				<%- end unless @tags.nil? -%>
+				<%- node.tag_badges.each do |tag_badge| -%>
+					<%= render :partial => prop_partial(tag_badge, :show), :locals => {:node => tag_badge} %>
+				<%- end -%>
 			</div>
 		<% end %>
-		<% if @note.present? %>
+		<% if node.note_badge? %>
 			<div class="line">
-				<%= render :partial => prop_partial(@note, :show), :node => @note %>
+				<%= render :partial => prop_partial(node.note_badge, :show), :locals => {:node => node.note_badge} %>
 			</div>
 		<% end %>
 	</div>
