@@ -1,5 +1,6 @@
 class NodesController < ApplicationController
   include ERB::Util
+  include ApplicationHelper
   layout nil
   
   before_filter :be_xhr_request
@@ -119,7 +120,7 @@ class NodesController < ApplicationController
     end
     
     
-    render :inline => render_cell('node_body', :edit, :node => @node)
+    render :partial => node_body_partial(:edit), :locals => {:node => @node}
   end
   
   
