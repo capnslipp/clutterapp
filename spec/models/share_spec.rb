@@ -12,12 +12,12 @@ describe Share do
   end
 
   it "should create a new instance given valid attributes" do
-    @share = Share.new(:user_id => @user1.id, :shared_pile_id => @user1.root_pile.id)
+    @share = Share.new(:user_id => @user1.id, :pile_id => @user1.root_pile.id)
     @share.should be_valid
   end
   
   it "should not create a new instance given invalid attributes" do
-    @share = Share.new(:user_id => @user1.id, :shared_pile_id => @user1.id)
+    @share = Share.new(:user_id => @user1.id, :pile_id => @user1.id)
     @share.should_not be_valid
   end
   

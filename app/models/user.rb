@@ -105,12 +105,29 @@ class User < ActiveRecord::Base
   end
   
   def shared_piles
-    Share.find(:all, :conditions => {:shared_pile_id => root_pile.id})
+    Share.find(:all, :conditions => {:pile_id => piles})
   end
 
   def share_pile_with_public(pile)
     shares.create(:user => self, :pile => pile, :public => true)
   end
+  
+  def sharees
+    Share.find(:all, :conditions => {:pile_id => piles}).collect(&:user)
+  end
+  
+  def share_pile_with_followers(pile)
+    followers.each {|f| share_pile_with_user(f, pile) }
+  end
+  
+  def share_pile_with_followees(pile)
+    followees.each {|f| share_pile_with_user(f, pile) }
+  end
+  
+  def sharers
+    authorized_piles.collect(&:owner)
+  end
+  
   
   # validating setters and utils
   

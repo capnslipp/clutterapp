@@ -138,8 +138,30 @@ describe User do
       users(:slippy_douglas).followers.each do |follower|
         follower.authorized_piles.first.should == users(:slippy_douglas).root_pile
       end
+      
+      #@user2.follow(@user)
+      #@user.followers.count.should == 1
+      #@user.share_pile_with_followers(@pile1)
+      #for follower in @user.followers
+      #  follower.authorized_piles.first.should == @pile1
+      #end
     end
     
+    it "should be able to share pile with followees" do
+      pending
+      @user.follow(@user2)
+      @user.share_pile_with_followees(@pile1)
+      @user.followees.each do |followee|
+        followee.authorized_piles.first.should == @pile1
+      end
+    end
+    
+    it "should have access to people sharing with you" do
+      pending
+      @user.share_pile_with_user(@user2, @pile1)
+      @user2.sharers.count.should == 1
+      @user2.sharers.first.should == @user
+    end
   end
   
   
