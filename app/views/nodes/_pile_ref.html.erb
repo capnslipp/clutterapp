@@ -1,8 +1,11 @@
 <% content_tag_for :li, item, 'item_for', :class => dom_class(item, 'item_for'), :'oc:url' => path_for([item.pile.owner, item.pile, item]) do -%>
 	<section id="<%= dom_id(item.prop.ref_pile.root_node, 'item_for') %>" class="<%= dom_class(item.prop.ref_pile.root_node, 'item_for') %> pile" oc:nodes-url="<%=path_for([item.prop.ref_pile.owner, item.prop.ref_pile, :nodes])%>">
+		
 		<%= render :partial => node_body_partial(@cell_state), :locals => {:node => item} %>
+		
 		<ul class="node list">
 			<%= render :partial => 'nodes/list_items', :locals => {:item => item.prop.ref_pile.root_node} %>
 		</ul>
+		
 	</section>
 <% end -%>
