@@ -1,7 +1,7 @@
 <div class="show body">
 	<div class="bullet">
 		<% if @check.present? %>
-			<%= render_cell cell_for_node(@check), :show, :node => @check %>
+			<%= render :partial => prop_partial(@check, :show), :node => @check %>
 		<% else %>
 			<span class="sym">•</span>
 		<% end %>
@@ -9,26 +9,26 @@
 	<%= render :partial => 'nodes/action_stub' %>
 	<div class="cont" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 		<% if @priority.present? %>
-			<%= render_cell cell_for_node(@priority), :show, :node => @priority %>
+			<%= render :partial => prop_partial(@priority, :show), :node => @priority %>
 		<% end %>
 		
-		<%= render_cell(cell_for_node(@node), :show, :node => @node) %>
+		<%= render :partial => prop_partial(node, :show), :locals => {:node => node} %>
 		
 		<% if @time.present? %>
 			<div class="line">
-				<%= render_cell cell_for_node(@time), :show, :node => @time %>
+				<%= render :partial => prop_partial(@time, :show), :node => @time %>
 			</div>
 		<% end %>
 		<% if @tags.present? %>
 			<div class="line">
 				<%- for tag in @tags -%>
-					<%= render_cell cell_for_node(tag), :show, :node => tag %>
+					<%= render :partial => prop_partial(tag, :show), :node => tag %>
 				<%- end unless @tags.nil? -%>
 			</div>
 		<% end %>
 		<% if @note.present? %>
 			<div class="line">
-				<%= render_cell cell_for_node(@note), :show, :node => @note %>
+				<%= render :partial => prop_partial(@note, :show), :node => @note %>
 			</div>
 		<% end %>
 	</div>

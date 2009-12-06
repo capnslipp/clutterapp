@@ -1,4 +1,4 @@
-<div class="new priority prop <%= 'badge' if @node.prop.badged? -%>">
+<div class="new priority prop <%= 'badge' if node.prop.badged? -%>">
 	<%- @form.fields_for :prop do |prop_form| -%>
 		<%= prop_form.hidden_field :type, :class => PriorityProp.short_name %>
 		1<%= prop_form.radio_button :priority, '1', :class => 'field' %>

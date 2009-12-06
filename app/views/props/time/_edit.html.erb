@@ -1,4 +1,4 @@
-<div class="edit time prop <%= 'badge' if @node.prop.badged? -%>">
+<div class="edit time prop <%= 'badge' if node.prop.badged? -%>">
 	<%- @form.fields_for :prop do |prop_form| -%>
 		<%= prop_form.text_field :time, :class => 'field', :autocomplete => 'off' %>
 	<%- end -%>

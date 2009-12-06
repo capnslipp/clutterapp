@@ -1,4 +1,4 @@
-<div class="edit check prop <%= 'badge' if @node.prop.badged? -%>">
+<div class="edit check prop <%= 'badge' if node.prop.badged? -%>">
 	<%- @form.fields_for :prop do |prop_form| -%>
 		<%= prop_form.check_box :checked, :class => 'field' %>
 	<%- end -%>

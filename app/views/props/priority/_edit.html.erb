@@ -1,4 +1,4 @@
-<div class="edit priority prop <%= 'badge' if @node.prop.badged? -%>">
+<div class="edit priority prop <%= 'badge' if node.prop.badged? -%>">
 	<%- @form.fields_for :prop do |prop_form| -%>
 		1<%= prop_form.radio_button :priority, '1', :class => 'field' %>
 		2<%= prop_form.radio_button :priority, '2', :class => 'field' %>

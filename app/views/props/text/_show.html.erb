@@ -1,11 +1,3 @@
-<%#= render_cell cell_for_node(@check), :show, :node => @check unless @check.nil? %>
-<%#= render_cell cell_for_node(@priority), :show, :node => @priority unless @priority.nil? %>
-<div class="show text prop <%= 'badge' if @node.prop.badged? -%>">
-	<%= h @node.prop.text %>
+<div class="show text prop <%= 'badge' if node.prop.badged? -%>">
+	<%= h node.prop.text %>
 </div>
-<%#div class="line">
-	<%= render_cell cell_for_node(@time), :show, :node => @time unless @time.nil? % >
-	<%- for tag in @tags -% >
-		<%= render_cell cell_for_node(tag), :show, :node => tag % >
-	<%- end unless @tags.nil? || !(@tags.size > 1) -% >
-</div%>
