@@ -151,7 +151,7 @@ class NodesController < ApplicationController
     
     
     if @node.save
-      render :inline => render_cell('node_body', :show, :node => @node)
+      render :partial => node_body_partial(:show), :locals => {:node => @node}
     else
       render :nothing => true, :status => :bad_request
     end

@@ -1,5 +1,5 @@
 <div class="new check prop <%= 'badge' if node.prop.badged? -%>">
-	<%- @form.fields_for :prop do |prop_form| -%>
+	<%- form.fields_for :prop do |prop_form| -%>
 		<%= prop_form.hidden_field :type, :class => CheckProp.short_name %>
 		<%= prop_form.check_box :checked, :class => 'field' %>
 	<%- end -%>
