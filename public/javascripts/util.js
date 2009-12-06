@@ -15,8 +15,8 @@ jQuery.fn.walk = function() {
 }
 
 jQuery.fn.required = function() {
-	if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
-		console.assert(this[0]);
+	if (window.console && window.console.assert)
+		window.console.assert(this[0]);
 	
 	return this;
 }
