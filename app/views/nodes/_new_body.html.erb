@@ -1,5 +1,5 @@
 <div class="new body">
-	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node], :'node[parent_id]' => @node.parent_id, :'node[prop_type]' => @node.prop.class.short_name), :html => {:method => 'post'} do |node_form| -%>
+	<%- form_for @node, :url => path_for([@node.pile.owner, @node.pile, @node], :'node[parent_id]' => @node.parent_id, :'node[prop_type]' => @node.prop.class.short_name), :html => {:method => 'post'} do |node_form| -%>
 		<div class="cont">
 			
 			<div class="line"><%= render :partial => prop_partial(@node, :new), :node => @node, :form => node_form %></div>

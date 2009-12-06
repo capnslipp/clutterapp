@@ -1,5 +1,5 @@
 <div class="edit body">
-	<%- form_for @node, :url => polymorphic_path([@node.pile.owner, @node.pile, @node]), :html => {:method => 'put'} do |node_form| -%>
+	<%- form_for @node, :url => path_for([@node.pile.owner, @node.pile, @node]), :html => {:method => 'put'} do |node_form| -%>
 		<div class="cont">
 			
 			<div class="line"><%= render :partial => prop_partial(@node, :edit), :node => @node, :form => node_form %></div>
