@@ -63,7 +63,7 @@ Spec::Runner.configure do |config|
   # AuthLogic Mocks/Stubs
   
   def current_user(overrides = {})
-    @current_user ||= User.generate(overrides)
+    @current_user ||= Factory.build(:user, overrides)
   end
   
   def current_user_session(stubs = {}, user_overrides = {})
@@ -92,7 +92,7 @@ Spec::Runner.configure do |config|
   end
   
   def active_pile(overrides = {})
-    @active_pile ||= Pile.generate(overrides)
+    @active_pile ||= Factory.build(:pile, overrides)
   end
   
 end
