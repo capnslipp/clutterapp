@@ -1,5 +1,4 @@
 class NodesController < ApplicationController
-  include CellHelper
   include ERB::Util
   layout nil
   
