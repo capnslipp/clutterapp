@@ -45,7 +45,7 @@
 	
 	margin-bottom: 6px;
 	
-	border-color: <%= (generic_border_color + 0.2).to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %>
+	border-color: <%= (generic_border_color + 0.2).to_s(:css_rgba) %>;
 	
 	color: <%= text_color.with(:a => 0.8).to_s(:css_rgba) %>;
 	background: <%= ((bright_bg_color - bg_color) / 2.0 + bg_color).to_s %>;
@@ -55,7 +55,10 @@
 }
 .note.prop textarea { height: 1px; }
 .note.prop.badge { height: auto; }
-.show.note.prop.badge { margin-right: 10px; }
+.show.note.prop.badge {
+	margin-right: 10px;
+	<%= shallow_shadow_decl(0.25) %>
+}
 
 .priority.prop {
 	width: 12px; /* same as height and line-height */
@@ -72,6 +75,9 @@
 .priority.prop input { }
 .priority.prop.badge { /*float: left; margin-right: 6px;*/ }
 .edit.priority.prop, .new.priority.prop { width: auto; color: <%= text_color %>; }
+.show.priority.prop {
+	<%= shallow_shadow_decl(0.5) %>
+}
 
 .tag.prop {
 	display: inline-block;
@@ -84,6 +90,9 @@
 .tag.prop, .tag.prop input { font-weight: bold; text-transform: uppercase; }
 .tag.prop input { }
 .tag.prop.badge { /*float: left;*/ }
+.show.tag.prop {
+	<%= shallow_shadow_decl(0.5) %>
+}
 
 .text.prop {
 	display: inline-block; /* to prevent font magnification in horizontal mode on iPhone */
@@ -93,8 +102,6 @@
 }
 
 .time.prop {
-	border: none; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none;
-	
 	color: <%= text_color.with(:a => 0.5).to_s(:css_rgba) %>;
 	
 	display: inline-block;
@@ -106,6 +113,9 @@
 	font-weight: bold;
 }
 .time.prop.badge { /*float: left;*/ }
+.show.time.prop {
+	border: none;
+}
 
 
 .new.prop, .edit.prop {
@@ -114,8 +124,6 @@
 	background: <%= focus_back %>;
 	border-width: 2px;
 	border-color: <%= focus_color %>;
-	
-	<%= deep_shadow_decl(0.5) %>
 }
 /*.new.prop.badge, .edit.prop.badge { margin: 0 2px; }*/
 
