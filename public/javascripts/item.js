@@ -87,9 +87,10 @@ function formFocus(form) {
 
 
 function itemNew(button, type) {
-	showFill();
-	
 	var parentNode = $(button).closest('.item_for_node').required();
+	
+	parentNode.showProgressOverlay();
+	showFill();
 	
 	$.ajax({
 		type: 'get',
@@ -103,6 +104,7 @@ function itemNew(button, type) {
 	
 	function handleSuccess(responseData) {
 		collapseActionBar();
+		hideProgressOverlay();
 		
 		var list = parentNode.children('.list').required();
 		
@@ -120,6 +122,7 @@ function itemNew(button, type) {
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
 		hideFill();
 		
 		parentNode.children('.show.body')
@@ -223,9 +226,8 @@ $(function() {
 function itemEdit(link) {
 	var showBody = $(link).closest('.show.body').required();
 	
-	showFill();
-	
 	showBody.showProgressOverlay();
+	showFill();
 	
 	$.ajax({
 		type: 'get',
@@ -237,6 +239,7 @@ function itemEdit(link) {
 	
 	
 	function handleSuccess(responseData) {
+		hideProgressOverlay();
 		collapseActionBar();
 		
 		showBody.before(responseData);
@@ -251,6 +254,7 @@ function itemEdit(link) {
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
 		hideFill();
 		
 		showBody
