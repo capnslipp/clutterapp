@@ -16,18 +16,15 @@
 		
 		<%= render :partial => prop_partial(node, :show), :locals => {:node => node} %>
 		
-		<% if node.time_badge? %>
-			<div class="line">
-				<%= render :partial => prop_partial(node.time_badge, :show), :locals => {:node => node.time_badge} %>
-			</div>
-		<% end %>
 		<% if node.tag_badges? %>
-			<div class="line">
-				<%- node.tag_badges.each do |tag_badge| -%>
-					<%= render :partial => prop_partial(tag_badge, :show), :locals => {:node => tag_badge} %>
-				<%- end -%>
-			</div>
+			<%- node.tag_badges.each do |tag_badge| -%>
+				<%= render :partial => prop_partial(tag_badge, :show), :locals => {:node => tag_badge} %>
+			<%- end -%>
 		<% end %>
+		<% if node.time_badge? %>
+			<%= render :partial => prop_partial(node.time_badge, :show), :locals => {:node => node.time_badge} %>
+		<% end %>
+		
 		<% if node.note_badge? %>
 			<div class="line">
 				<%= render :partial => prop_partial(node.note_badge, :show), :locals => {:node => node.note_badge} %>
