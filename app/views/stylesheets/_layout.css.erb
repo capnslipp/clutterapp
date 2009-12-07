@@ -44,6 +44,7 @@ li { list-style-type: none; }
 	border-top: 1px dotted <%= divider_color %>;
 	padding: 2px 0;
 	padding-left: 24px; /* for "> .bullet" */
+	padding-right: 14px; /* for "> .action.stub" */
 }
 .item_for_node > .show.body.active {
 	background: <%= bright_bg_color %>;
@@ -103,7 +104,7 @@ li { list-style-type: none; }
 	float: right;
 }
 .item_for_node > .body > .bullet {
-	position: absolute;;
+	position: absolute;
 	left: 4px;
 	width: 16px;
 	text-align: center;
@@ -113,8 +114,8 @@ li { list-style-type: none; }
 
 .item_for_node > .body > .action.stub,
 .item_for_node > .body > #action-bar {
-	float: right;
-	margin-right: 4px;
+	position: absolute;
+	right: 4px;
 }
 
 /* page */

@@ -55,7 +55,7 @@
 }
 .note.prop textarea { height: 1px; }
 .note.prop.badge { height: auto; }
-.show.note.prop.badge { margin-right: 24px; }
+.show.note.prop.badge { margin-right: 10px; }
 
 .priority.prop {
 	width: 12px; /* same as height and line-height */
@@ -86,7 +86,7 @@
 .tag.prop.badge { /*float: left;*/ }
 
 .text.prop {
-	display: inline;
+	display: inline-block; /* to prevent font magnification in horizontal mode on iPhone */
 }
 .edit.text.prop, .new.text.prop {
 	display: block;
