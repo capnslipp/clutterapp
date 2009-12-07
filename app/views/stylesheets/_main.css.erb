@@ -110,6 +110,21 @@ a.sym, a .sym, .sym a {
 .initially-hidden { display: none; }
 .clear { clear: both; }
 
+.overlay {
+	position: absolute; z-index: 50;
+	top: 0; bottom: 0; left: 0; right: 0;
+	/*width: 100%; height: 100%;*/ /* width & height don't work so well when the parent element has padding */
+	background: repeat 0 0;
+}
+
+.show.body .overlay {
+	left: -4px; right: -4px;
+	<%= border_radius_decl %>
+}
+
+.edit.body .overlay, .new.body .overlay {
+	<%= border_radius_decl('8px') %>
+}
 
 /* flash messages, notices, and warnings */
 

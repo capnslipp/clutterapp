@@ -1,11 +1,11 @@
 // ClutterApp item view functionality JS
 
 
-JOIN = '_';
-NEW = 'new';
+var JOIN = '_';
+var NEW = 'new';
 
-kDefaultTransitionDuration = 250;
-kQuickTransitionDuration = 125;
+var kDefaultTransitionDuration = 250;
+var kQuickTransitionDuration = 125;
 
 
 function classForNodeModels(prefix) {
@@ -87,22 +87,24 @@ function formFocus(form) {
 
 
 function itemNew(button, type) {
-	showFill();
+	var parentNode = $(button).closest('.item_for_node').required();
 	
-	var parentNode = $(button).closest('.item_for_node');
+	collapseActionBar();
+	parentNode.showProgressOverlay();
+	showFill();
 	
 	$.ajax({
 		type: 'get',
 		url: parentNode.closest('.pile').getAttr('oc\:nodes-url') + '/new',
 		data: {'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode)},
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(parentNode, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(parentNode, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(parentNode, responseData) {
-		collapseActionBar();
+	function handleSuccess(responseData) {
+		hideProgressOverlay();
 		
 		var list = parentNode.children('.list').required();
 		
@@ -119,7 +121,8 @@ function itemNew(button, type) {
 		formFocus(newBodyForm.required());
 	}
 	
-	function handleError(parentNode, xhrObj, errStr, expObj) {
+	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
 		hideFill();
 		
 		parentNode.children('.show.body')
@@ -161,16 +164,10 @@ function itemCreate(form) {
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
-	var fadeOutDone = false;
-	var ajaxReqDone = false;
-	
 	var newBody = form.closest('.new.body').required();
 	var newItem = newBody.closest('.item_for_node').required();
 	
-	newBody.fadeOut(kDefaultTransitionDuration, function() {
-		fadeOutDone = true;
-		deleteItemIfReady();
-	});
+	newBody.showProgressOverlay({opacity: 0.25});
 	
 	$.ajax({
 		type: form.getAttr('method'), // 'post'
@@ -184,14 +181,17 @@ function itemCreate(form) {
 	
 	function handleSuccess(responseData) {
 		newItem.after(responseData);
-		
-		ajaxReqDone = true;
-		deleteItemIfReady();
+	
+		newBody.fadeOut(kDefaultTransitionDuration, function() {
+			newItem.remove();
+		});
 		
 		hideFill();
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
+		
 		newBody.required()
 			.stop(true, true)
 			.fadeIn(kQuickTransitionDuration, function()
@@ -202,13 +202,6 @@ function itemCreate(form) {
 		
 		form.find('input[type=submit], input[type=button]').required().removeAttr('disabled');
 		formFocus(form);
-	}
-	
-	// avoid trying to double-delete the element by first checking to see if both the fade-out is done and the AJAX request is done
-	// (whichever is 2nd will end up doing the delete)
-	function deleteItemIfReady() {
-		if (fadeOutDone && ajaxReqDone)
-			newItem.remove();
 	}
 }
 
@@ -221,21 +214,23 @@ $(function() {
 
 
 function itemEdit(link) {
-	showFill();
-	
 	var showBody = $(link).closest('.show.body').required();
+	
+	collapseActionBar();
+	showBody.showProgressOverlay();
+	showFill();
 	
 	$.ajax({
 		type: 'get',
 		url: showBody.closest('.node').getAttr('oc\:url') + '/edit',
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(showBody, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(showBody, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(showBody, responseData) {
-		collapseActionBar();
+	function handleSuccess(responseData) {
+		hideProgressOverlay();
 		
 		showBody.before(responseData);
 		
@@ -248,7 +243,8 @@ function itemEdit(link) {
 		formFocus(editBody.find('form').required());
 	}
 	
-	function handleError(showBody, xhrObj, errStr, expObj) {
+	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
 		hideFill();
 		
 		showBody
@@ -294,16 +290,10 @@ function itemUpdate(form) {
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
-	var fadeOutDone = false;
-	var ajaxReqDone = false;
-	
 	var editBody = form.closest('.edit.body').required();
 	var showBody = editBody.siblings('.show.body').required();
 	
-	editBody.fadeOut(kDefaultTransitionDuration, function() {
-		fadeOutDone = true;
-		deleteItemIfReady();
-	});
+	editBody.showProgressOverlay({opacity: 0.25});
 	
 	$.ajax({
 		type: form.getAttr('method'), // 'post' (PUT)
@@ -316,15 +306,17 @@ function itemUpdate(form) {
 	
 	
 	function handleSuccess(responseData) {
+		editBody.fadeOut(kDefaultTransitionDuration, function() {
+			editBody.remove();
+		});
 		hideFill();
-		
-		ajaxReqDone = true;
-		deleteItemIfReady();
 		
 		showBody.replaceWith(responseData);
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
+		
 		editBody.required()
 			.stop(true, true)
 			.fadeIn(kQuickTransitionDuration, function()
@@ -335,13 +327,6 @@ function itemUpdate(form) {
 		
 		form.find('input[type=submit], input[type=button]').required().removeAttr('disabled');
 		formFocus(form);
-	}
-	
-	// avoid trying to double-delete the element by first checking to see if both the fade-out is done and the AJAX request is done
-	// (whichever is 2nd will end up doing the delete)
-	function deleteItemIfReady() {
-		if (fadeOutDone && ajaxReqDone)
-			editBody.remove();
 	}
 }
 
@@ -354,21 +339,24 @@ $(function() {
 
 
 function itemMove(node, dir) {
+	node.required();
+	
+	
 	$.ajax({
 		type: 'post',
 		url: node.getAttr('oc\:url') + '/move',
 		data: {_method: 'put', dir: dir},
 		dataType: 'script',
-		success: function(responseData) { handleSuccess(node, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(node, responseData) {
+	function handleSuccess(responseData) {
 		// nothing for now; @todo: do the actual element movement here
 	}
 	
-	function handleError(node, xhrObj, errStr, expObj) {
+	function handleError(xhrObj, errStr, expObj) {
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
@@ -395,17 +383,17 @@ function itemDelete(node) {
 		url: node.getAttr('oc\:url'),
 		data: {_method: 'delete'},
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(node, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(node, responseData) {
+	function handleSuccess(responseData) {
 		collapseActionBar();
 		node.remove();
 	}
 	
-	function handleError(node, xhrObj, errStr, expObj) {
+	function handleError(xhrObj, errStr, expObj) {
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
@@ -431,8 +419,8 @@ function badgeAdd(link, addType) {
 		state = 'new';
 	else if (node.children('.edit')[0])
 		state = 'edit';
-	else if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
-		console.assert('invalid state');
+	else if (window.console && window.console.assert)
+		window.console.assert('invalid state');
 	
 	var form = node.find('form').required();
 	var parentNode = node.parent().closest('.item_for_node').required();

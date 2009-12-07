@@ -1,6 +1,9 @@
 // ClutterApp main application JS
 
 
+var ClutterApp = {};
+
+
 jQuery.ajaxSetup({beforeSend: function(xhr) {
 	xhr.setRequestHeader("Accept", "text/javascript");
 } });
@@ -37,9 +40,9 @@ function updateCheckPropField(checkbox, checked) {
 
 
 // currently unused
-kSlideHideArgs = {width: 'hide'};
-kSlideShowArgs = {width: 'show'};
-kSlideToggleArgs = {width: 'toggle'};
+var kSlideHideArgs = {width: 'hide'};
+var kSlideShowArgs = {width: 'show'};
+var kSlideToggleArgs = {width: 'toggle'};
 
 
 // for elements that may have been initially-hidden
@@ -60,6 +63,7 @@ function showGoogleChromeFrame() {
 		.show()
 		.animate({opacity: 0.5, easing: 'linear'}, 4000);
 }
+
 
 function showFill(modalElement) {
 	if (modalElement != undefined) {
@@ -85,6 +89,95 @@ function hideFill(modalElement) {
 		if (modalElement.getData('origPosition'))
 			modalElement.setCSS('position', modalElement.getData('origPosition'));
 	}
+}
+
+
+
+var kPreShowProgressDelay = 500;
+
+// first creates a "#progress-overlay" element as a child of the element called on, then fades and animates it in
+jQuery.fn.showProgressOverlay = function(options) {
+	if (options == undefined) options = {};
+	var targetOpacity = options.opacity || 0.75;
+	
+	if ($('#progress-overlay')[0]) {
+		var oldOverlay = hideProgressOverlay();
+		oldOverlay.setAttr('id', '');
+	}
+	
+	// only act on one element
+	var parent = $(this[0]).required();
+	parent.prepend('<div id="progress-overlay" class="overlay"></div>');
+	
+	var overlay = $('#progress-overlay').required();
+	
+	overlay.setCSS(
+		{opacity: 0.0}
+	).animate(
+		{opacity: 0.0}, kPreShowProgressDelay, 'linear', // delay for a bit before starting
+		function() {
+			overlay.setCSS(
+				{opacity: 0.1, backgroundPosition: '0px 0px', backgroundImage: 'url("/images/anim.progress.in.bk-tr-aliased-white.16x32.gif")'}
+			).animate(
+				{opacity: targetOpacity, backgroundPosition: '16px 0px'}, 500, 'easeInQuad',
+				function() {
+					setTimeout('animateProgressOverlay()', 0);
+				}
+			);
+		}
+	);
+	
+	return overlay;
+}
+
+// animates out the "#progress-overlay" element for a while, then loops by calling itself
+function animateProgressOverlay() {
+	var overlay = $("#progress-overlay");
+	
+	// early out if the overlay is already gone
+	if (!overlay[0])
+		return null;
+	
+	overlay.setCSS(
+		{backgroundPosition: '0px 0px', backgroundImage: 'url("/images/anim.progress.full.bk-tr.16x32.png")'}
+	).animate(
+		{backgroundPosition: '1600px 0px'}, 50000, 'linear',
+		function() {
+			setTimeout('animateProgressOverlay()', 0);
+		}
+	);
+	
+	return overlay;
+}
+
+// fades and animates out the "#progress-overlay" element
+function hideProgressOverlay() {
+	var overlay = $('#progress-overlay').required();
+	
+	overlay.stop(true, false);
+	
+	var overlayOpacity = overlay.getCSS('opacity');
+	if (overlayOpacity < 0.1) {
+		// if barely visible, just hide it
+		overlay.remove();
+	} else {
+		// if already visible, fade out
+		var overlayBGPosX = overlay.getCSS('backgroundPosition').asBGPosToArray()[0];
+		
+		/*overlay.setCSS(
+			{backgroundImage: 'url("/images/anim.progress.out.bk-tr-aliased-white.16x32.gif")'}
+		)*/ // setting the backgroundImage to the last frame may cause a jump in animation
+		overlay.animate(
+			{opacity: 0.1, backgroundPosition: (overlayBGPosX + 16) + 'px 0px'},
+			500,
+			'easeOutQuad',
+			function() {
+				overlay.remove(); // remove this specific instance, in case it has lost the "progress-overlay" id
+			}
+		);
+	}
+	
+	return overlay;
 }
 
 
