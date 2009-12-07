@@ -92,6 +92,9 @@ function hideFill(modalElement) {
 }
 
 
+
+var kPreShowProgressDelay = 500;
+
 // first creates a "#progress-overlay" element as a child of the element called on, then fades and animates it in
 jQuery.fn.showProgressOverlay = function() {
 	if ($('#progress-overlay')[0]) {
@@ -106,12 +109,19 @@ jQuery.fn.showProgressOverlay = function() {
 	var overlay = $('#progress-overlay').required();
 	
 	overlay.setCSS(
-		{opacity: 0.1, backgroundPosition: '0px 0px', backgroundImage: 'url("/images/anim.progress.in.bk-tr-aliased-white.16x32.gif")'}
+		{opacity: 0.0}
 	).animate(
-		{opacity: 0.75, backgroundPosition: '16px 0px'},
-		1000,
-		'easeInQuad',
-		function() { setTimeout('animateProgressOverlay()', 0); }
+		{opacity: 0.0}, kPreShowProgressDelay, 'linear', // delay for a bit before starting
+		function() {
+			overlay.setCSS(
+				{opacity: 0.1, backgroundPosition: '0px 0px', backgroundImage: 'url("/images/anim.progress.in.bk-tr-aliased-white.16x32.gif")'}
+			).animate(
+				{opacity: 0.75, backgroundPosition: '16px 0px'}, 500, 'easeInQuad',
+				function() {
+					setTimeout('animateProgressOverlay()', 0);
+				}
+			);
+		}
 	);
 	
 	return overlay;
@@ -124,10 +134,10 @@ function animateProgressOverlay() {
 	overlay.setCSS(
 		{backgroundPosition: '0px 0px', backgroundImage: 'url("/images/anim.progress.full.bk-tr.16x32.png")'}
 	).animate(
-		{backgroundPosition: '1600px 0px'},
-		50000,
-		'linear',
-		function() { setTimeout('animateProgressOverlay()', 0); }
+		{backgroundPosition: '1600px 0px'}, 50000, 'linear',
+		function() {
+			setTimeout('animateProgressOverlay()', 0);
+		}
 	);
 	
 	return overlay;
@@ -138,15 +148,27 @@ function hideProgressOverlay() {
 	var overlay = $('#progress-overlay').required();
 	
 	overlay.stop(true, false);
-	var overlayBGPosX = overlay.getCSS('backgroundPosition').asBGPosToArray()[0];
-	overlay.setCSS(
-		{backgroundImage: 'url("/images/anim.progress.out.bk-tr-aliased-white.16x32.gif")'}
-	).animate(
-		{opacity: 0.1, backgroundPosition: (overlayBGPosX + 16) + 'px 0px'},
-		1000,
-		'easeOutQuad',
-		function() { overlay.remove(); } /* remove this specific instance, in case it has lost the "progress-overlay" id */
-	);
+	
+	var overlayOpacity = overlay.getCSS('opacity');
+	if (overlayOpacity < 0.1) {
+		// if barely visible, just hide it
+		overlay.remove();
+	} else {
+		// if already visible, fade out
+		var overlayBGPosX = overlay.getCSS('backgroundPosition').asBGPosToArray()[0];
+		
+		/*overlay.setCSS(
+			{backgroundImage: 'url("/images/anim.progress.out.bk-tr-aliased-white.16x32.gif")'}
+		)*/ // setting the backgroundImage to the last frame may cause a jump in animation
+		overlay.animate(
+			{opacity: 0.1, backgroundPosition: (overlayBGPosX + 16) + 'px 0px'},
+			500,
+			'easeOutQuad',
+			function() {
+				overlay.remove(); // remove this specific instance, in case it has lost the "progress-overlay" id
+			}
+		);
+	}
 	
 	return overlay;
 }
