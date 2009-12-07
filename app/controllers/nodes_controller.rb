@@ -98,10 +98,10 @@ class NodesController < ApplicationController
         if delete_child.present?
           params[:node][:children_attributes].delete(i)
         else
-          @node.children.create(child_attrs.merge(
-            :parent => @node,
-            :pile => @node.pile
-          ))
+          #@node.children.create(child_attrs.merge(
+          #  :parent => @node,
+          #  :pile => @node.pile
+          #))
         end
       end
     end if params[:node] && params[:node][:children_attributes]
