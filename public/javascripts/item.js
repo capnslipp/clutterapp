@@ -89,6 +89,7 @@ function formFocus(form) {
 function itemNew(button, type) {
 	var parentNode = $(button).closest('.item_for_node').required();
 	
+	collapseActionBar();
 	parentNode.showProgressOverlay();
 	showFill();
 	
@@ -103,7 +104,6 @@ function itemNew(button, type) {
 	
 	
 	function handleSuccess(responseData) {
-		collapseActionBar();
 		hideProgressOverlay();
 		
 		var list = parentNode.children('.list').required();
@@ -226,6 +226,7 @@ $(function() {
 function itemEdit(link) {
 	var showBody = $(link).closest('.show.body').required();
 	
+	collapseActionBar();
 	showBody.showProgressOverlay();
 	showFill();
 	
@@ -240,7 +241,6 @@ function itemEdit(link) {
 	
 	function handleSuccess(responseData) {
 		hideProgressOverlay();
-		collapseActionBar();
 		
 		showBody.before(responseData);
 		
