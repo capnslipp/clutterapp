@@ -89,19 +89,19 @@ function formFocus(form) {
 function itemNew(button, type) {
 	showFill();
 	
-	var parentNode = $(button).closest('.item_for_node');
+	var parentNode = $(button).closest('.item_for_node').required();
 	
 	$.ajax({
 		type: 'get',
 		url: parentNode.closest('.pile').getAttr('oc\:nodes-url') + '/new',
 		data: {'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode)},
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(parentNode, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(parentNode, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(parentNode, responseData) {
+	function handleSuccess(responseData) {
 		collapseActionBar();
 		
 		var list = parentNode.children('.list').required();
@@ -119,7 +119,7 @@ function itemNew(button, type) {
 		formFocus(newBodyForm.required());
 	}
 	
-	function handleError(parentNode, xhrObj, errStr, expObj) {
+	function handleError(xhrObj, errStr, expObj) {
 		hideFill();
 		
 		parentNode.children('.show.body')
@@ -229,12 +229,12 @@ function itemEdit(link) {
 		type: 'get',
 		url: showBody.closest('.node').getAttr('oc\:url') + '/edit',
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(showBody, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(showBody, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(showBody, responseData) {
+	function handleSuccess(responseData) {
 		collapseActionBar();
 		
 		showBody.before(responseData);
@@ -248,7 +248,7 @@ function itemEdit(link) {
 		formFocus(editBody.find('form').required());
 	}
 	
-	function handleError(showBody, xhrObj, errStr, expObj) {
+	function handleError(xhrObj, errStr, expObj) {
 		hideFill();
 		
 		showBody
@@ -354,21 +354,24 @@ $(function() {
 
 
 function itemMove(node, dir) {
+	node.required();
+	
+	
 	$.ajax({
 		type: 'post',
 		url: node.getAttr('oc\:url') + '/move',
 		data: {_method: 'put', dir: dir},
 		dataType: 'script',
-		success: function(responseData) { handleSuccess(node, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(node, responseData) {
+	function handleSuccess(responseData) {
 		// nothing for now; @todo: do the actual element movement here
 	}
 	
-	function handleError(node, xhrObj, errStr, expObj) {
+	function handleError(xhrObj, errStr, expObj) {
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
@@ -395,17 +398,17 @@ function itemDelete(node) {
 		url: node.getAttr('oc\:url'),
 		data: {_method: 'delete'},
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(node, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(node, responseData) {
+	function handleSuccess(responseData) {
 		collapseActionBar();
 		node.remove();
 	}
 	
-	function handleError(node, xhrObj, errStr, expObj) {
+	function handleError(xhrObj, errStr, expObj) {
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
@@ -431,8 +434,8 @@ function badgeAdd(link, addType) {
 		state = 'new';
 	else if (node.children('.edit')[0])
 		state = 'edit';
-	else if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
-		console.assert('invalid state');
+	else if (window.console && window.console.assert)
+		window.console.assert('invalid state');
 	
 	var form = node.find('form').required();
 	var parentNode = node.parent().closest('.item_for_node').required();
