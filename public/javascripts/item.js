@@ -221,9 +221,11 @@ $(function() {
 
 
 function itemEdit(link) {
+	var showBody = $(link).closest('.show.body').required();
+	
 	showFill();
 	
-	var showBody = $(link).closest('.show.body').required();
+	showBody.showProgressOverlay();
 	
 	$.ajax({
 		type: 'get',
