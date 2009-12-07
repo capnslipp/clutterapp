@@ -10,8 +10,13 @@ class UsersController < ApplicationController
   
   
   def create
-    
     @user = User.new(params[:user])
+    
+    unless params[:signup_code] == current_signup_code
+      flash[:error]  = "Na na na! Na na na! That's not the correct sign-up code! Na na na…"
+      return render :action => 'new'
+    end
+    
     success = @user && @user.save
     if success && @user.errors.empty?
       # Protects against session fixation attacks, causes request forgery protection if visitor resubmits an earlier form using back button. Uncomment if you understand the tradeoffs.
@@ -39,6 +44,21 @@ class UsersController < ApplicationController
       flash[:error]  = %{Couldn't find user by the name of "#{params[:id]}".}
       redirect_to home_path
     end
+  end
+  
+  
+protected
+  
+  def current_signup_code
+    today = Date.today
+    
+    first_letter_of_day_of_week = today.strftime('%A')[0,1]
+    last_digit_of_day_of_month = today.strftime('%d')[1,1]
+    first_letter_of_month = today.strftime('%b')[0,1]
+    last_digit_of_year = today.strftime('%Y')[3,1]
+    
+    secret_code = first_letter_of_day_of_week + last_digit_of_day_of_month + '-' + first_letter_of_month + last_digit_of_year
+    "#{secret_code}"
   end
   
 end
