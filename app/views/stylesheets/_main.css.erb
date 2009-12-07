@@ -122,6 +122,10 @@ a.sym, a .sym, .sym a {
 	<%= border_radius_decl %>
 }
 
+.edit.body .overlay, .new.body .overlay {
+	<%= border_radius_decl('8px') %>
+}
+
 /* flash messages, notices, and warnings */
 
 .flash.message { color: <%= wash_text_color * 0.8 %>; }
