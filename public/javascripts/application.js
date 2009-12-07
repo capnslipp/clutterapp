@@ -96,7 +96,10 @@ function hideFill(modalElement) {
 var kPreShowProgressDelay = 500;
 
 // first creates a "#progress-overlay" element as a child of the element called on, then fades and animates it in
-jQuery.fn.showProgressOverlay = function() {
+jQuery.fn.showProgressOverlay = function(options) {
+	if (options == undefined) options = {};
+	var targetOpacity = options.opacity || 0.75;
+	
 	if ($('#progress-overlay')[0]) {
 		var oldOverlay = hideProgressOverlay();
 		oldOverlay.setAttr('id', '');
@@ -116,7 +119,7 @@ jQuery.fn.showProgressOverlay = function() {
 			overlay.setCSS(
 				{opacity: 0.1, backgroundPosition: '0px 0px', backgroundImage: 'url("/images/anim.progress.in.bk-tr-aliased-white.16x32.gif")'}
 			).animate(
-				{opacity: 0.75, backgroundPosition: '16px 0px'}, 500, 'easeInQuad',
+				{opacity: targetOpacity, backgroundPosition: '16px 0px'}, 500, 'easeInQuad',
 				function() {
 					setTimeout('animateProgressOverlay()', 0);
 				}
