@@ -1,11 +1,11 @@
 // ClutterApp item view functionality JS
 
 
-JOIN = '_';
-NEW = 'new';
+var JOIN = '_';
+var NEW = 'new';
 
-kDefaultTransitionDuration = 250;
-kQuickTransitionDuration = 125;
+var kDefaultTransitionDuration = 250;
+var kQuickTransitionDuration = 125;
 
 
 function classForNodeModels(prefix) {

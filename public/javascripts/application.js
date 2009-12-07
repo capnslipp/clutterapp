@@ -40,9 +40,9 @@ function updateCheckPropField(checkbox, checked) {
 
 
 // currently unused
-kSlideHideArgs = {width: 'hide'};
-kSlideShowArgs = {width: 'show'};
-kSlideToggleArgs = {width: 'toggle'};
+var kSlideHideArgs = {width: 'hide'};
+var kSlideShowArgs = {width: 'show'};
+var kSlideToggleArgs = {width: 'toggle'};
 
 
 // for elements that may have been initially-hidden
