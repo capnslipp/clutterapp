@@ -53,6 +53,11 @@
 .action.stub .widget a:hover,
  #action-bar .widget a:hover { color: <%= active_widget_color %>; }
 
+.action.stub .expanded.widget a,
+ #action-bar .expanded.widget a { color: <%= widget_color - 0.3 %>; }
+.action.stub .expanded.widget a:hover,
+ #action-bar .expanded.widget a:hover { color: <%= active_widget_color - 0.3 %>; }
+
 #action-bar .buttons {
 	background: <%= accent_color %>;
 	position: absolute;
@@ -61,6 +66,10 @@
 	vertical-align: middle;
 	margin-right: 24px;
 	line-height: 1.5em;
+	
+	        border-top-right-radius: 0;
+	    -moz-border-radius-topright: 0;
+	-webkit-border-top-right-radius: 0;
 }
 #action-bar .buttons, #action-bar .buttons a { color: <%= wash_text_color %>; }
 #action-bar .buttons a { padding: 0 4px; margin: 0 -2px; }
