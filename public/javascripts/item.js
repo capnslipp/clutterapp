@@ -111,7 +111,30 @@ function itemNew(button, type) {
 		list.append(responseData);
 		
 		var newBody = list.children('.item_for_node:last').find('.new.body').required();
-		newBody.hide().fadeIn(kDefaultTransitionDuration);
+		
+		var startScaleX = 0.95; var endScaleX = 1.0;
+		var startScaleY = 0.0; var endScaleY = 1.0;
+		newBody.setCSS({
+			opacity: 0.0,
+			        'transform-origin': '50% 25%',
+			   '-moz-transform-origin': '50% 25%',
+			'-webkit-transform-origin': '50% 25%'
+		}).animate(
+			{opacity: 1.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeOutQuad',
+				step: function(ratio) {
+					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+					newBody.setCSS({
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					})
+				}
+			}
+		);
 		
 		newBody.find('.note.prop').find('textarea').elastic();
 		
@@ -145,10 +168,33 @@ function itemNewCancel(button) {
 	var newBody = form.closest('.new.body').required();
 	
 	hideFill();
-	
-	newBody.fadeOut(kDefaultTransitionDuration, function() {
-		$(this).closest('.item_for_node').required().remove();
-	});
+		
+	var startScaleX = 1.05; var endScaleX = 1.0;
+	var startScaleY = 1.25; var endScaleY = 1.0;
+	newBody.setCSS({
+		opacity: 1.0,
+		        'transform-origin': '50% 25%',
+		   '-moz-transform-origin': '50% 25%',
+		'-webkit-transform-origin': '50% 25%'
+	}).animate(
+		{opacity: 0.0},
+		{
+			duration: kDefaultTransitionDuration,
+			easing: 'easeInQuad',
+			step: function(ratio) {
+				var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+				var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+				newBody.setCSS({
+					        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+					   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+					'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+				})
+			},
+			complete: function() {
+				newBody.closest('.item_for_node').required().remove();
+			}
+		}
+	);
 }
 
 $(function() {
@@ -181,10 +227,33 @@ function itemCreate(form) {
 	
 	function handleSuccess(responseData) {
 		newItem.after(responseData);
-	
-		newBody.fadeOut(kDefaultTransitionDuration, function() {
-			newItem.remove();
-		});
+		
+		var startScaleX = 0.95; var endScaleX = 1.0;
+		var startScaleY = 0.75; var endScaleY = 1.0;
+		newBody.setCSS({
+			opacity: 1.0,
+			        'transform-origin': '50% 25%',
+			   '-moz-transform-origin': '50% 25%',
+			'-webkit-transform-origin': '50% 25%'
+		}).animate(
+			{opacity: 0.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeInQuad',
+				step: function(ratio) {
+					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+					newBody.setCSS({
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					})
+				},
+				complete: function() {
+					newItem.remove();
+				}
+			}
+		);
 		
 		hideFill();
 	}
@@ -235,7 +304,30 @@ function itemEdit(link) {
 		showBody.before(responseData);
 		
 		var editBody = showBody.siblings('.edit.body').required();
-		editBody.hide().fadeIn(kDefaultTransitionDuration);
+		
+		var startScaleX = 0.95; var endScaleX = 1.0;
+		var startScaleY = 0.75; var endScaleY = 1.0;
+		editBody.setCSS({
+			opacity: 0.0,
+			        'transform-origin': '50% 25%',
+			   '-moz-transform-origin': '50% 25%',
+			'-webkit-transform-origin': '50% 25%'
+		}).animate(
+			{opacity: 1.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeOutQuad',
+				step: function(ratio) {
+					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+					editBody.setCSS({
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					})
+				}
+			}
+		);
 		
 		editBody.find('.note.prop').find('textarea').elastic();
 		
@@ -272,9 +364,32 @@ function itemEditCancel(button) {
 	
 	hideFill();
 	
-	editBody.fadeOut(kDefaultTransitionDuration, function() {
-		$(this).remove();
-	});
+	var startScaleX = 1.05; var endScaleX = 1.0;
+	var startScaleY = 1.25; var endScaleY = 1.0;
+	editBody.setCSS({
+		opacity: 1.0,
+		        'transform-origin': '50% 25%',
+		   '-moz-transform-origin': '50% 25%',
+		'-webkit-transform-origin': '50% 25%'
+	}).animate(
+		{opacity: 0.0},
+		{
+			duration: kDefaultTransitionDuration,
+			easing: 'easeInQuad',
+			step: function(ratio) {
+				var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+				var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+				editBody.setCSS({
+					        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+					   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+					'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+				})
+			},
+			complete: function() {
+				editBody.remove();
+			}
+		}
+	);
 }
 
 $(function() {
@@ -306,9 +421,33 @@ function itemUpdate(form) {
 	
 	
 	function handleSuccess(responseData) {
-		editBody.fadeOut(kDefaultTransitionDuration, function() {
-			editBody.remove();
-		});
+		var startScaleX = 0.95; var endScaleX = 1.0;
+		var startScaleY = 0.75; var endScaleY = 1.0;
+		editBody.setCSS({
+			opacity: 1.0,
+			        'transform-origin': '50% 25%',
+			   '-moz-transform-origin': '50% 25%',
+			'-webkit-transform-origin': '50% 25%'
+		}).animate(
+			{opacity: 0.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeInQuad',
+				step: function(ratio) {
+					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+					editBody.setCSS({
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					})
+				},
+				complete: function() {
+					editBody.remove();
+				}
+			}
+		);
+		
 		hideFill();
 		
 		showBody.replaceWith(responseData);
