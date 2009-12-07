@@ -92,13 +92,16 @@ function hideFill(modalElement) {
 }
 
 
+// first creates a "#progress-overlay" element as a child of the element called on, then fades and animates it in
 jQuery.fn.showProgressOverlay = function() {
 	if ($('#progress-overlay')[0]) {
 		var oldOverlay = hideProgressOverlay();
 		oldOverlay.setAttr('id', '');
 	}
 	
-	this.prepend('<div id="progress-overlay" class="overlay"></div>');
+	// only act on one element
+	var parent = $(this[0]).required();
+	parent.prepend('<div id="progress-overlay" class="overlay"></div>');
 	
 	var overlay = $('#progress-overlay').required();
 	
@@ -114,6 +117,7 @@ jQuery.fn.showProgressOverlay = function() {
 	return overlay;
 }
 
+// animates out the "#progress-overlay" element for a while, then loops by calling itself
 function animateProgressOverlay() {
 	var overlay = $("#progress-overlay").required();
 	
@@ -129,9 +133,9 @@ function animateProgressOverlay() {
 	return overlay;
 }
 
+// fades and animates out the "#progress-overlay" element
 function hideProgressOverlay() {
 	var overlay = $('#progress-overlay').required();
-	
 	
 	overlay.stop(true, false);
 	var overlayBGPosX = overlay.getCSS('backgroundPosition').asBGPosToArray()[0];
