@@ -45,11 +45,14 @@
 	
 	margin-bottom: 6px;
 	
-	border-color: <%= generic_border_color.to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %>
+	border-color: <%= (generic_border_color + 0.2).to_s(:css_rgba) %>; <%= shallow_shadow_decl(0.25) %>
 	
+	color: <%= text_color.with(:a => 0.8).to_s(:css_rgba) %>;
 	background: <%= ((bright_bg_color - bg_color) / 2.0 + bg_color).to_s %>;
 }
-.note.prop, .note.prop textarea { line-height: 15px; }
+.note.prop, .note.prop textarea {
+	font: oblique 14px/18px Times, 'Times New Roman', serif;
+}
 .note.prop textarea { height: 1px; }
 .note.prop.badge { height: auto; }
 .show.note.prop.badge { margin-right: 24px; }
@@ -90,13 +93,17 @@
 }
 
 .time.prop {
-	color: <%= text_color.with(:a => 0.75).to_s(:css_rgba) %>;
+	border: none; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none;
+	
+	color: <%= text_color.with(:a => 0.5).to_s(:css_rgba) %>;
 	
 	display: inline-block;
 	
 	padding: 0 2px;
+	/*background: <%= bright_bg_color %>;*/
 	
-	background: <%= bright_bg_color %>;
+	font-size: 15px;
+	font-weight: bold;
 }
 .time.prop.badge { /*float: left;*/ }
 
