@@ -164,16 +164,10 @@ function itemCreate(form) {
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
-	var fadeOutDone = false;
-	var ajaxReqDone = false;
-	
 	var newBody = form.closest('.new.body').required();
 	var newItem = newBody.closest('.item_for_node').required();
 	
-	newBody.fadeOut(kDefaultTransitionDuration, function() {
-		fadeOutDone = true;
-		deleteItemIfReady();
-	});
+	newBody.showProgressOverlay({opacity: 0.25});
 	
 	$.ajax({
 		type: form.getAttr('method'), // 'post'
@@ -187,14 +181,17 @@ function itemCreate(form) {
 	
 	function handleSuccess(responseData) {
 		newItem.after(responseData);
-		
-		ajaxReqDone = true;
-		deleteItemIfReady();
+	
+		newBody.fadeOut(kDefaultTransitionDuration, function() {
+			newItem.remove();
+		});
 		
 		hideFill();
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
+		
 		newBody.required()
 			.stop(true, true)
 			.fadeIn(kQuickTransitionDuration, function()
@@ -205,13 +202,6 @@ function itemCreate(form) {
 		
 		form.find('input[type=submit], input[type=button]').required().removeAttr('disabled');
 		formFocus(form);
-	}
-	
-	// avoid trying to double-delete the element by first checking to see if both the fade-out is done and the AJAX request is done
-	// (whichever is 2nd will end up doing the delete)
-	function deleteItemIfReady() {
-		if (fadeOutDone && ajaxReqDone)
-			newItem.remove();
 	}
 }
 
@@ -300,16 +290,10 @@ function itemUpdate(form) {
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
-	var fadeOutDone = false;
-	var ajaxReqDone = false;
-	
 	var editBody = form.closest('.edit.body').required();
 	var showBody = editBody.siblings('.show.body').required();
 	
-	editBody.fadeOut(kDefaultTransitionDuration, function() {
-		fadeOutDone = true;
-		deleteItemIfReady();
-	});
+	editBody.showProgressOverlay({opacity: 0.25});
 	
 	$.ajax({
 		type: form.getAttr('method'), // 'post' (PUT)
@@ -322,15 +306,17 @@ function itemUpdate(form) {
 	
 	
 	function handleSuccess(responseData) {
+		editBody.fadeOut(kDefaultTransitionDuration, function() {
+			editBody.remove();
+		});
 		hideFill();
-		
-		ajaxReqDone = true;
-		deleteItemIfReady();
 		
 		showBody.replaceWith(responseData);
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
+		
 		editBody.required()
 			.stop(true, true)
 			.fadeIn(kQuickTransitionDuration, function()
@@ -341,13 +327,6 @@ function itemUpdate(form) {
 		
 		form.find('input[type=submit], input[type=button]').required().removeAttr('disabled');
 		formFocus(form);
-	}
-	
-	// avoid trying to double-delete the element by first checking to see if both the fade-out is done and the AJAX request is done
-	// (whichever is 2nd will end up doing the delete)
-	function deleteItemIfReady() {
-		if (fadeOutDone && ajaxReqDone)
-			editBody.remove();
 	}
 }
 
