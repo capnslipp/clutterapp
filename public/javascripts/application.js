@@ -132,7 +132,11 @@ jQuery.fn.showProgressOverlay = function(options) {
 
 // animates out the "#progress-overlay" element for a while, then loops by calling itself
 function animateProgressOverlay() {
-	var overlay = $("#progress-overlay").required();
+	var overlay = $("#progress-overlay");
+	
+	// early out if the overlay is already gone
+	if (!overlay[0])
+		return null;
 	
 	overlay.setCSS(
 		{backgroundPosition: '0px 0px', backgroundImage: 'url("/images/anim.progress.full.bk-tr.16x32.png")'}
