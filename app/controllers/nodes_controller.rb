@@ -245,7 +245,8 @@ class NodesController < ApplicationController
     @parent = active_pile.nodes.find(params[:parent_id])
     @node.move_to_child_of(@parent)
     
-    render :nothing => true, :status => :accepted
+    @cell_state = :show
+    render :partial => 'item', :locals => {:item => @parent}
   end
   
   

@@ -647,21 +647,29 @@ $(function() {
 
 
 $(function() {
-	$('.show.body').droppable({
+	$('li.item_for_node').setupReparentDraggable();
+	$('.show.body').setupReparentDroppable();
+});
+
+jQuery.fn.setupReparentDraggable = function() {
+	this.draggable({
+		axis: 'y',
+		cancel: '.body>.cont, .body>.bullet, .body>.action.stub, .edit.body, .new.body',
+		handle: '#action-bar a.move.reparent',
+		opacity: 0.5,
+		revert: 'invalid',
+		scroll: true,
+		zIndex: 1000,
+	});
+}
+
+jQuery.fn.setupReparentDroppable = function() {
+	this.droppable({
 		accept: 'li.item_for_node',
 		tolerance: 'intersect',
 		over: dropover,
 		out: dropout,
 		drop: drop,
-	});
-	
-	$('li.item_for_node').draggable({
-		containment: '#active-sorting-container',
-		handle: '#action-bar .move.reparent',
-		opacity: 0.5,
-		revert: true,
-		scroll: true,
-		zIndex: 1000,
 	});
 	
 	function dropover(event, ui) {
@@ -675,34 +683,47 @@ $(function() {
 	function drop(event, ui) {
 		itemReparent(ui.draggable, this);
 	}
-	
-	function itemReparent(node, parentNode) {
-		node.required();
-		parentNode = $(parentNode).closest('.item_for_node').required();
-		
-		$.ajax({
-			type: 'post',
-			url: node.getAttr('oc\:url') + '/reparent',
-			data: {_method: 'put', parent_id: nodeIDOfItem(parentNode)},
-			dataType: 'html',
-			success: handleSuccess,
-			error: handleError
-		});
-		
-		
-		function handleSuccess(responseData) {
-			parentNode.removeClass('active');
-		}
-		
-		function handleError(xhrObj, errStr, expObj) {
-			parentNode.removeClass('active');
-			
-			node.find('.body:first .cont').required()
-				.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
-		}
-	}
-});
+}
 
+
+function itemReparent(node, parentNode) {
+	node.required();
+	parentNode = $(parentNode).closest('.item_for_node').required();
+	
+	collapseActionBar(); // so it doesn't get deleted
+	node.draggable('destroy');
+	node.remove();
+	
+	$.ajax({
+		type: 'post',
+		url: node.getAttr('oc\:url') + '/reparent',
+		data: {_method: 'put', parent_id: nodeIDOfItem(parentNode)},
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		parentNode.removeClass('active');
+		
+		$('li.item_for_node', parentNode).draggable('destroy');
+		$('.show.body', parentNode).droppable('destroy');
+		
+		var superParent = parentNode.parent();
+		parentNode.replaceWith(responseData);
+		
+		superParent.find('li.item_for_node').setupReparentDraggable();
+		superParent.find('.show.body').setupReparentDroppable();
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+		parentNode.removeClass('active');
+		
+		node.find('.body:first .cont').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+	}
+}
 
 
 function badgeAdd(link, addType) {
