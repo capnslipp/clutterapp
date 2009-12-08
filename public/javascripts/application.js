@@ -80,14 +80,22 @@ function showFill(modalElement) {
 }
 
 function hideFill(modalElement) {
-	if ($('#fill').is(':visible'))
-		$('#fill').fadeOut(kDefaultTransitionDuration);
+	if ($('#fill').is(':visible')) {
+		$('#fill').fadeOut(
+			kDefaultTransitionDuration,
+			showModalElement
+		);
+	} else {
+		showModalElement();
+	}
 	
-	if (modalElement != undefined) {
-		modalElement.setCSS('z-index', 0);
-		
-		if (modalElement.getData('origPosition'))
-			modalElement.setCSS('position', modalElement.getData('origPosition'));
+	function showModalElement() {
+		if (modalElement != undefined) {
+			modalElement.setCSS('z-index', 0);
+			
+			if (modalElement.getData('origPosition'))
+				modalElement.setCSS('position', modalElement.getData('origPosition'));
+		}
 	}
 }
 
