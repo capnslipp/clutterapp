@@ -552,6 +552,7 @@ $(function() {
 
 $(function() {
 	var elementHeight;
+	var origPrevSiblingID;
 	
 	$('ul.node.list').sortable({
 		axis: 'y',
@@ -601,9 +602,13 @@ $(function() {
 		var list = ui.item.parent('ul.node.list').required();
 		showFill(list);
 		list.addClass('active');
+		
+		var origPrevSibling = ui.item.prev('.item_for_node');
+		origPrevSiblingID = origPrevSibling[0] ? nodeIDOfItem(origPrevSibling) : '';
 	}
 	
 	function stop(event, ui) {
+		console.log(ui.item);
 		var list = ui.item.parent('ul.node.list').required();
 		
 		$('#active-sorting-container').required().replaceWith(
@@ -611,8 +616,18 @@ $(function() {
 		);
 		list.setCSS({margin: ''});
 		
+		// @todo: optimize so this isn't being done twice
+		var prevSibling = ui.item.prev('.item_for_node');
+		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
+		// only if the prevSibling has changed
+		console.log(prevSibling); console.log(prevSiblingID);
 		
-		itemReorder(ui.item);
+		if (prevSiblingID != origPrevSiblingID) {
+			itemReorder(ui.item);
+		} else {
+			hideFill(list);
+			list.removeClass('active');
+		}
 	}
 	
 	function itemReorder(node) {
@@ -621,11 +636,12 @@ $(function() {
 		var list = node.parent('ul.node.list').required();
 		
 		var prevSibling = node.prev('.item_for_node');
+		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
 		
 		$.ajax({
 			type: 'post',
 			url: node.getAttr('oc\:url') + '/reorder',
-			data: {_method: 'put', prev_sibling_id: (prevSibling[0] ? nodeIDOfItem(prevSibling) : '')},
+			data: {_method: 'put', prev_sibling_id: prevSiblingID},
 			dataType: 'html',
 			success: handleSuccess,
 			error: handleError
@@ -658,6 +674,7 @@ jQuery.fn.setupReparentDraggable = function() {
 		handle: '#action-bar a.move.reparent',
 		opacity: 0.5,
 		revert: 'invalid',
+		scope: 'item-reparent',
 		scroll: true,
 		zIndex: 1000,
 	});
@@ -666,25 +683,16 @@ jQuery.fn.setupReparentDraggable = function() {
 jQuery.fn.setupReparentDroppable = function() {
 	this.droppable({
 		accept: 'li.item_for_node',
+		hoverClass: 'active',
+		scope: 'item-reparent',
 		tolerance: 'intersect',
-		over: dropover,
-		out: dropout,
 		drop: drop,
 	});
-	
-	function dropover(event, ui) {
-		$(this).addClass('active');
-	}
-	
-	function dropout(event, ui) {
-		$(this).removeClass('active');
-	}
 	
 	function drop(event, ui) {
 		itemReparent(ui.draggable, this);
 	}
 }
-
 
 function itemReparent(node, parentNode) {
 	node.required();
@@ -726,6 +734,7 @@ function itemReparent(node, parentNode) {
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
 }
+
 
 
 function badgeAdd(link, addType) {
