@@ -27,9 +27,14 @@ body, input, textarea {
 }
 
 #fill {
-	position: absolute; z-index: 100;
+	position: absolute; z-index: 500;
 	background: <%= fill_color.to_s(:css_rgba) %>;
 }
+
+.over-fill {
+	z-index: 600;
+}
+
 
 
 a { color: <%= text_color %>; }
