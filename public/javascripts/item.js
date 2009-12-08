@@ -550,7 +550,7 @@ $(function() {
 
 
 
-function itemMoveResort(liNode) {
+function itemMoveReorder(liNode) {
 	liNode.required();
 	
 	//liNode
@@ -563,7 +563,7 @@ $(function() {
 		axis: 'y',
 		containment: '#active-sorting-container',
 		tolerance: 'intersect',
-		handle: '#action-bar .move.resort',
+		handle: '#action-bar .move.reorder',
 		helper: function(event, element) {
 			// save the height for future use
 			elementHeight = $(element).height();
@@ -606,7 +606,7 @@ $(function() {
 		};
 		list.wrap('<div id="active-sorting-container"></div>');
 		
-		var containmentPadding = (elementHeight / 2) + 4;
+		var containmentPadding = (elementHeight / 2) + 32; // an extra bit for the difference between the middle of the item and the drag handle
 		$('#active-sorting-container').required().setCSS({
 			margin: -containmentPadding - 1,
 			border: '1px solid transparent', // this is necessary for the expaned container to work for some odd reasone
