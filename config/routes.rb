@@ -28,6 +28,7 @@ ActionController::Routing::Routes.draw do |map|
       piles.resources :nodes, :except => [:index, :show], :member => {
         :move => :put,
         :update_check_prop_checked => :put
+        :reorder => :put,
       }
       
       # /:user_id/piles/:pile_id/props/:type

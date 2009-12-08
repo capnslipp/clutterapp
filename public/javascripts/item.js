@@ -550,12 +550,6 @@ $(function() {
 
 
 
-function itemMoveReorder(liNode) {
-	liNode.required();
-	
-	//liNode
-}
-	
 $(function() {
 	var elementHeight;
 	
@@ -564,35 +558,24 @@ $(function() {
 		containment: '#active-sorting-container',
 		tolerance: 'intersect',
 		handle: '#action-bar .move.reorder',
-		helper: function(event, element) {
-			// save the height for future use
-			elementHeight = $(element).height();
-			
-			earlyStart(event, element);
-			
-			var helper = $(element).clone();
-			//helper.setCSS({ height: 0 });
-			return helper[0];
-		},
+		helper: helper,
 		opacity: 0.5,
 		revert: true,
 		scroll: true,
-		start: function(event, ui) {
-			var list = ui.item.parent('ul.node.list').required();
-			showFill(list);
-			list.addClass('active');
-		},
-		stop: function(event, ui) {
-			var list = ui.item.parent('ul.node.list').required();
-			hideFill(list);
-			list.removeClass('active');
-			
-			$('#active-sorting-container').required().replaceWith(
-				$('#active-sorting-container > ul.node.list').required()
-			);
-			list.setCSS({margin: ''});
-		}
+		start: start,
+		stop: stop
 	});
+	
+	function helper(event, element) {
+		// save the height for future use
+		elementHeight = $(element).height();
+		
+		earlyStart(event, element);
+		
+		var helper = $(element).clone();
+		//helper.setCSS({ height: 0 });
+		return helper[0];
+	}
 	
 	function earlyStart(event, element) {
 		element = $(element);
@@ -612,6 +595,52 @@ $(function() {
 			border: '1px solid transparent', // this is necessary for the expaned container to work for some odd reasone
 		});
 		list.setCSS({margin: containmentPadding});
+	}
+	
+	function start(event, ui) {
+		var list = ui.item.parent('ul.node.list').required();
+		showFill(list);
+		list.addClass('active');
+	}
+	
+	function stop(event, ui) {
+		var list = ui.item.parent('ul.node.list').required();
+		
+		$('#active-sorting-container').required().replaceWith(
+			$('#active-sorting-container > ul.node.list').required()
+		);
+		list.setCSS({margin: ''});
+		
+		
+		itemReorder(ui.item);
+	}
+	
+	function itemReorder(node) {
+		node.required();
+		
+		var list = node.parent('ul.node.list').required();
+		
+		var prevSibling = node.prev('.item_for_node');
+		
+		$.ajax({
+			type: 'post',
+			url: node.getAttr('oc\:url') + '/reorder',
+			data: {_method: 'put', prev_sibling_id: (prevSibling[0] ? nodeIDOfItem(prevSibling) : '')},
+			dataType: 'html',
+			success: handleSuccess,
+			error: handleError
+		});
+		
+		
+		function handleSuccess(responseData) {
+			hideFill(list);
+			list.removeClass('active');
+		}
+		
+		function handleError(xhrObj, errStr, expObj) {
+			node.find('.body:first .cont').required()
+				.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		}
 	}
 });
 
