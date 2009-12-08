@@ -608,7 +608,6 @@ $(function() {
 	}
 	
 	function stop(event, ui) {
-		console.log(ui.item);
 		var list = ui.item.parent('ul.node.list').required();
 		
 		$('#active-sorting-container').required().replaceWith(
@@ -619,9 +618,8 @@ $(function() {
 		// @todo: optimize so this isn't being done twice
 		var prevSibling = ui.item.prev('.item_for_node');
 		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
-		// only if the prevSibling has changed
-		console.log(prevSibling); console.log(prevSiblingID);
 		
+		// only if the prevSibling has changed
 		if (prevSiblingID != origPrevSiblingID) {
 			itemReorder(ui.item);
 		} else {
