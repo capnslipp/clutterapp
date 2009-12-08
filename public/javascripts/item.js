@@ -648,7 +648,7 @@ $(function() {
 
 $(function() {
 	$('li.item_for_node').setupReparentDraggable();
-	$('.show.body').setupReparentDroppable();
+	$('.item_for_node>.show.body, .pile.item_for_node>.body').setupReparentDroppable();
 });
 
 jQuery.fn.setupReparentDraggable = function() {
@@ -705,16 +705,18 @@ function itemReparent(node, parentNode) {
 	
 	
 	function handleSuccess(responseData) {
-		parentNode.removeClass('active');
+		parentNode.children('.body').removeClass('active');
 		
-		$('li.item_for_node', parentNode).draggable('destroy');
-		$('.show.body', parentNode).droppable('destroy');
+		var list = parentNode.children('.node.list').required();
 		
-		var superParent = parentNode.parent();
-		parentNode.replaceWith(responseData);
+		$('li.item_for_node', list).draggable('destroy');
+		$('.show.body', list).droppable('destroy');
 		
-		superParent.find('li.item_for_node').setupReparentDraggable();
-		superParent.find('.show.body').setupReparentDroppable();
+		var listParent = list.parent();
+		list.html(responseData);
+		
+		listParent.find('li.item_for_node').setupReparentDraggable();
+		listParent.find('.show.body').setupReparentDroppable();
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {

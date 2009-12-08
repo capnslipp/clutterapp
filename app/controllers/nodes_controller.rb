@@ -246,7 +246,7 @@ class NodesController < ApplicationController
     @node.move_to_child_of(@parent)
     
     @cell_state = :show
-    render :partial => 'item', :locals => {:item => @parent}
+    render :partial => 'list_items', :locals => {:item => @parent}
   end
   
   
