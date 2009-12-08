@@ -237,6 +237,18 @@ class NodesController < ApplicationController
   end
   
   
+  # PUT /nodes/1/reparent?parent_id=2
+  def reparent
+    @node = active_pile.nodes.find(params[:id])
+    
+    # put it as the last child of the parent
+    @parent = active_pile.nodes.find(params[:parent_id])
+    @node.move_to_child_of(@parent)
+    
+    render :nothing => true, :status => :accepted
+  end
+  
+  
   # DELETE /nodes/1
   # DELETE /nodes/1.xml
   def destroy

@@ -646,6 +646,65 @@ $(function() {
 
 
 
+$(function() {
+	$('.show.body').droppable({
+		accept: 'li.item_for_node',
+		tolerance: 'intersect',
+		over: dropover,
+		out: dropout,
+		drop: drop,
+	});
+	
+	$('li.item_for_node').draggable({
+		containment: '#active-sorting-container',
+		handle: '#action-bar .move.reparent',
+		opacity: 0.5,
+		revert: true,
+		scroll: true,
+		zIndex: 1000,
+	});
+	
+	function dropover(event, ui) {
+		$(this).addClass('active');
+	}
+	
+	function dropout(event, ui) {
+		$(this).removeClass('active');
+	}
+	
+	function drop(event, ui) {
+		itemReparent(ui.draggable, this);
+	}
+	
+	function itemReparent(node, parentNode) {
+		node.required();
+		parentNode = $(parentNode).closest('.item_for_node').required();
+		
+		$.ajax({
+			type: 'post',
+			url: node.getAttr('oc\:url') + '/reparent',
+			data: {_method: 'put', parent_id: nodeIDOfItem(parentNode)},
+			dataType: 'html',
+			success: handleSuccess,
+			error: handleError
+		});
+		
+		
+		function handleSuccess(responseData) {
+			parentNode.removeClass('active');
+		}
+		
+		function handleError(xhrObj, errStr, expObj) {
+			parentNode.removeClass('active');
+			
+			node.find('.body:first .cont').required()
+				.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		}
+	}
+});
+
+
+
 function badgeAdd(link, addType) {
 	var node = $(link).closest('.item_for_node').required();
 	
