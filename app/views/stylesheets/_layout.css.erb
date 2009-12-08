@@ -22,6 +22,13 @@ ul.node.list > li.item_for_node.ui-sortable-helper {
 ul.node.list.active {
 	background: <%= bright_bg_color %>;
 	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
+	
+	//padding-top: 16px;
+	//padding-bottom: 16px;
+}
+ul.node.list.active > li.item_for_node {
+	//margin-top: 16px;
+	//margin-bottom: 16px;
 }
 
 li { list-style-type: none; }
