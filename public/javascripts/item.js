@@ -557,18 +557,24 @@ function itemMoveResort(liNode) {
 }
 	
 $(function() {
+	var elementHeight;
+	
 	$('ul.node.list').sortable({
 		axis: 'y',
-		//containment: 'parent',
+		containment: '#active-sorting-container',
 		tolerance: 'intersect',
 		handle: '#action-bar .move.resort',
 		helper: function(event, element) {
+			// save the height for future use
+			elementHeight = $(element).height();
+			
 			earlyStart(event, element);
 			
 			var helper = $(element).clone();
+			//helper.setCSS({ height: 0 });
 			return helper[0];
 		},
-		opacity: 0.9,
+		opacity: 0.5,
 		revert: true,
 		scroll: true,
 		start: function(event, ui) {
@@ -580,10 +586,32 @@ $(function() {
 			var list = ui.item.parent('ul.node.list').required();
 			hideFill(list);
 			list.removeClass('active');
+			
+			$('#active-sorting-container').required().replaceWith(
+				$('#active-sorting-container > ul.node.list').required()
+			);
+			list.setCSS({margin: ''});
 		}
 	});
 	
 	function earlyStart(event, element) {
+		element = $(element);
+		var list = element.parent('ul.node.list').required();
+		
+		var bounds = {
+			top: list.position().top,
+			height: list.height(),
+			left: list.position().left,
+			width: list.width(),
+		};
+		list.wrap('<div id="active-sorting-container"></div>');
+		
+		var containmentPadding = (elementHeight / 2) + 4;
+		$('#active-sorting-container').required().setCSS({
+			margin: -containmentPadding - 1,
+			border: '1px solid transparent', // this is necessary for the expaned container to work for some odd reasone
+		});
+		list.setCSS({margin: containmentPadding});
 	}
 });
 
