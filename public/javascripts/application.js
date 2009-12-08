@@ -138,9 +138,10 @@ function animateProgressOverlay() {
 	if (!overlay[0])
 		return null;
 	
-	overlay.setCSS(
-		{backgroundPosition: '0px 0px', backgroundImage: 'url("/images/anim.progress.full.bk-tr.16x32.png")'}
-	).animate(
+	overlay.setCSS({
+		backgroundPosition: '0px 0px',
+		/*backgroundImage: 'url("/images/anim.progress.full.bk-tr.16x32.png")'*/ // setting the backgroundImage to the last frame may cause a jump in animation
+	}).animate(
 		{backgroundPosition: '1600px 0px'}, 50000, 'linear',
 		function() {
 			setTimeout('animateProgressOverlay()', 0);
@@ -164,10 +165,9 @@ function hideProgressOverlay() {
 		// if already visible, fade out
 		var overlayBGPosX = overlay.getCSS('backgroundPosition').asBGPosToArray()[0];
 		
-		/*overlay.setCSS(
+		overlay.setCSS(
 			{backgroundImage: 'url("/images/anim.progress.out.bk-tr-aliased-white.16x32.gif")'}
-		)*/ // setting the backgroundImage to the last frame may cause a jump in animation
-		overlay.animate(
+		).animate(
 			{opacity: 0.1, backgroundPosition: (overlayBGPosX + 16) + 'px 0px'},
 			500,
 			'easeOutQuad',
