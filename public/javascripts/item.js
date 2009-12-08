@@ -4,6 +4,7 @@
 var JOIN = '_';
 var NEW = 'new';
 
+var kSlowTransitionDuration = 375;
 var kDefaultTransitionDuration = 250;
 var kQuickTransitionDuration = 125;
 
@@ -169,7 +170,7 @@ function itemNewCancel(button) {
 	
 	hideFill();
 		
-	var startScaleX = 1.05; var endScaleX = 1.0;
+	var startScaleX = 1.25; var endScaleX = 1.0;
 	var startScaleY = 1.25; var endScaleY = 1.0;
 	newBody.setCSS({
 		opacity: 1.0,
@@ -179,7 +180,7 @@ function itemNewCancel(button) {
 	}).animate(
 		{opacity: 0.0},
 		{
-			duration: kDefaultTransitionDuration,
+			duration: kSlowTransitionDuration,
 			easing: 'easeInQuad',
 			step: function(ratio) {
 				var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
@@ -364,25 +365,23 @@ function itemEditCancel(button) {
 	
 	hideFill();
 	
-	var startScaleX = 1.05; var endScaleX = 1.0;
-	var startScaleY = 1.25; var endScaleY = 1.0;
+	var startScale = 1.25; var endScale = 1.0;
 	editBody.setCSS({
 		opacity: 1.0,
-		        'transform-origin': '50% 25%',
-		   '-moz-transform-origin': '50% 25%',
-		'-webkit-transform-origin': '50% 25%'
+		        'transform-origin': '50% 50%',
+		   '-moz-transform-origin': '50% 50%',
+		'-webkit-transform-origin': '50% 50%'
 	}).animate(
 		{opacity: 0.0},
 		{
-			duration: kDefaultTransitionDuration,
+			duration: kSlowTransitionDuration,
 			easing: 'easeInQuad',
 			step: function(ratio) {
-				var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
-				var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+				var scaleVal = (endScale - startScale) * ratio + startScale;
 				editBody.setCSS({
-					        'transform': 'scale('+scaleValX+', '+scaleValY+')',
-					   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
-					'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					        'transform': 'scale('+scaleVal+')',
+					   '-moz-transform': 'scale('+scaleVal+')',
+					'-webkit-transform': 'scale('+scaleVal+')'
 				})
 			},
 			complete: function() {
