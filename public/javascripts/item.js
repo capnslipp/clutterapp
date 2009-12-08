@@ -608,7 +608,6 @@ $(function() {
 	}
 	
 	function stop(event, ui) {
-		console.log(ui.item);
 		var list = ui.item.parent('ul.node.list').required();
 		
 		$('#active-sorting-container').required().replaceWith(
@@ -619,9 +618,8 @@ $(function() {
 		// @todo: optimize so this isn't being done twice
 		var prevSibling = ui.item.prev('.item_for_node');
 		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
-		// only if the prevSibling has changed
-		console.log(prevSibling); console.log(prevSiblingID);
 		
+		// only if the prevSibling has changed
 		if (prevSiblingID != origPrevSiblingID) {
 			itemReorder(ui.item);
 		} else {
@@ -822,8 +820,8 @@ function badgeRemove(link) {
 		state = 'new';
 	else if (node.children('.edit')[0])
 		state = 'edit';
-	else if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
-		console.assert('invalid state');
+	else if (window.console && window.console.assert)
+		window.console.assert('invalid state');
 	
 	var form = node.find('form').required();
 	var parentNode = node.parent().closest('.item_for_node').required();
