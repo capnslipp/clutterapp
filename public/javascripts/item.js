@@ -549,6 +549,36 @@ $(function() {
 });
 
 
+
+function itemMoveResort(liNode) {
+	liNode.required();
+	
+	//liNode
+}
+	
+$(function() {
+	//var actionButtons = $('#action-bar .buttons').required();
+	//
+	//actionButtons.find('a.move.resort').click(function() {
+	//	itemMoveResort($(this).closest('li.item_for_node')); return false;
+	//});
+	
+	$('ul.node.list').sortable({
+		axis: 'y',
+		containment: 'parent',
+		tolerance: 'pointer',
+		//handle: '#action-bar .move.resort'
+		start: function(event, ui) {
+			showFill( ui.item.parent('ul.node.list').required() )
+		},
+		stop: function(event, ui) {
+			hideFill( ui.item.parent('ul.node.list').required() )
+		}
+	});
+});
+
+
+
 function badgeAdd(link, addType) {
 	var node = $(link).closest('.item_for_node').required();
 	
