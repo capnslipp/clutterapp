@@ -219,6 +219,37 @@ class NodesController < ApplicationController
   end
   
   
+  # PUT /nodes/1/reorder?prev_sibling_id=2
+  def reorder
+    @node = active_pile.nodes.find(params[:id])
+    
+    # put it after the given sibling
+    if params[:prev_sibling_id].present?
+      @prev_sibling = @node.siblings.find(params[:prev_sibling_id])
+      @node.move_to_right_of(@prev_sibling)
+      
+    # put it first
+    else
+      @node.move_to_left_of(@node.siblings.first)
+    end
+    
+    render :nothing => true, :status => :accepted
+  end
+  
+  
+  # PUT /nodes/1/reparent?parent_id=2
+  def reparent
+    @node = active_pile.nodes.find(params[:id])
+    
+    # put it as the last child of the parent
+    @parent = active_pile.nodes.find(params[:parent_id])
+    @node.move_to_child_of(@parent)
+    
+    @cell_state = :show
+    render :partial => 'list_items', :locals => {:item => @parent}
+  end
+  
+  
   # DELETE /nodes/1
   # DELETE /nodes/1.xml
   def destroy

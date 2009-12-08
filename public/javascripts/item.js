@@ -549,6 +549,194 @@ $(function() {
 });
 
 
+
+$(function() {
+	var elementHeight;
+	var origPrevSiblingID;
+	
+	$('ul.node.list').sortable({
+		axis: 'y',
+		containment: '#active-sorting-container',
+		tolerance: 'intersect',
+		handle: '#action-bar .move.reorder',
+		helper: helper,
+		opacity: 0.5,
+		revert: true,
+		scroll: true,
+		start: start,
+		stop: stop
+	});
+	
+	function helper(event, element) {
+		// save the height for future use
+		elementHeight = $(element).height();
+		
+		earlyStart(event, element);
+		
+		var helper = $(element).clone();
+		//helper.setCSS({ height: 0 });
+		return helper[0];
+	}
+	
+	function earlyStart(event, element) {
+		element = $(element);
+		var list = element.parent('ul.node.list').required();
+		
+		var bounds = {
+			top: list.position().top,
+			height: list.height(),
+			left: list.position().left,
+			width: list.width(),
+		};
+		list.wrap('<div id="active-sorting-container"></div>');
+		
+		var containmentPadding = (elementHeight / 2) + 32; // an extra bit for the difference between the middle of the item and the drag handle
+		$('#active-sorting-container').required().setCSS({
+			margin: -containmentPadding - 1,
+			border: '1px solid transparent', // this is necessary for the expaned container to work for some odd reasone
+		});
+		list.setCSS({margin: containmentPadding});
+	}
+	
+	function start(event, ui) {
+		var list = ui.item.parent('ul.node.list').required();
+		showFill(list);
+		list.addClass('active');
+		
+		var origPrevSibling = ui.item.prev('.item_for_node');
+		origPrevSiblingID = origPrevSibling[0] ? nodeIDOfItem(origPrevSibling) : '';
+	}
+	
+	function stop(event, ui) {
+		console.log(ui.item);
+		var list = ui.item.parent('ul.node.list').required();
+		
+		$('#active-sorting-container').required().replaceWith(
+			$('#active-sorting-container > ul.node.list').required()
+		);
+		list.setCSS({margin: ''});
+		
+		// @todo: optimize so this isn't being done twice
+		var prevSibling = ui.item.prev('.item_for_node');
+		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
+		// only if the prevSibling has changed
+		console.log(prevSibling); console.log(prevSiblingID);
+		
+		if (prevSiblingID != origPrevSiblingID) {
+			itemReorder(ui.item);
+		} else {
+			hideFill(list);
+			list.removeClass('active');
+		}
+	}
+	
+	function itemReorder(node) {
+		node.required();
+		
+		var list = node.parent('ul.node.list').required();
+		
+		var prevSibling = node.prev('.item_for_node');
+		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
+		
+		$.ajax({
+			type: 'post',
+			url: node.getAttr('oc\:url') + '/reorder',
+			data: {_method: 'put', prev_sibling_id: prevSiblingID},
+			dataType: 'html',
+			success: handleSuccess,
+			error: handleError
+		});
+		
+		
+		function handleSuccess(responseData) {
+			hideFill(list);
+			list.removeClass('active');
+		}
+		
+		function handleError(xhrObj, errStr, expObj) {
+			node.find('.body:first .cont').required()
+				.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		}
+	}
+});
+
+
+
+$(function() {
+	$('li.item_for_node').setupReparentDraggable();
+	$('.item_for_node>.show.body, .pile.item_for_node>.body').setupReparentDroppable();
+});
+
+jQuery.fn.setupReparentDraggable = function() {
+	this.draggable({
+		axis: 'y',
+		cancel: '.body>.cont, .body>.bullet, .body>.action.stub, .edit.body, .new.body',
+		handle: '#action-bar a.move.reparent',
+		opacity: 0.5,
+		revert: 'invalid',
+		scope: 'item-reparent',
+		scroll: true,
+		zIndex: 1000,
+	});
+}
+
+jQuery.fn.setupReparentDroppable = function() {
+	this.droppable({
+		accept: 'li.item_for_node',
+		hoverClass: 'active',
+		scope: 'item-reparent',
+		tolerance: 'intersect',
+		drop: drop,
+	});
+	
+	function drop(event, ui) {
+		itemReparent(ui.draggable, this);
+	}
+}
+
+function itemReparent(node, parentNode) {
+	node.required();
+	parentNode = $(parentNode).closest('.item_for_node').required();
+	
+	collapseActionBar(); // so it doesn't get deleted
+	node.draggable('destroy');
+	node.remove();
+	
+	$.ajax({
+		type: 'post',
+		url: node.getAttr('oc\:url') + '/reparent',
+		data: {_method: 'put', parent_id: nodeIDOfItem(parentNode)},
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		parentNode.children('.body').removeClass('active');
+		
+		var list = parentNode.children('.node.list').required();
+		
+		$('li.item_for_node', list).draggable('destroy');
+		$('.show.body', list).droppable('destroy');
+		
+		var listParent = list.parent();
+		list.html(responseData);
+		
+		listParent.find('li.item_for_node').setupReparentDraggable();
+		listParent.find('.show.body').setupReparentDroppable();
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+		parentNode.removeClass('active');
+		
+		node.find('.body:first .cont').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+	}
+}
+
+
+
 function badgeAdd(link, addType) {
 	var node = $(link).closest('.item_for_node').required();
 	

@@ -26,8 +26,9 @@ ActionController::Routing::Routes.draw do |map|
       # /:user_id/piles/:pile_id/nodes
       # /:user_id/piles/:pile_id/nodes/...
       piles.resources :nodes, :except => [:index, :show], :member => {
-        :move => :put,
-        :update_check_prop_checked => :put
+        :reorder => :put,
+        :reparent => :put,
+        :update_check_prop_checked => :put # the action that won't die (it just keeps going and going and…)
       }
       
       # /:user_id/piles/:pile_id/props/:type
