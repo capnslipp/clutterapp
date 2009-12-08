@@ -13,6 +13,17 @@ ul.node.list > li.item_for_node {
 	margin-left: 18px;
 }
 
+ul.node.list > li.item_for_node.ui-sortable-placeholder {
+}
+
+ul.node.list > li.item_for_node.ui-sortable-helper {
+	/*height: 0 !important;*/
+}
+ul.node.list.active {
+	background: <%= bright_bg_color %>;
+	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
+}
+
 li { list-style-type: none; }
 
 .pile.item_for_node > .body { display: block; margin-bottom: 18px; margin-left: 0; border: none; }

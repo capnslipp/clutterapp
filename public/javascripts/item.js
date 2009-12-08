@@ -563,16 +563,51 @@ $(function() {
 	//	itemMoveResort($(this).closest('li.item_for_node')); return false;
 	//});
 	
+	var elementHeight;
+	
 	$('ul.node.list').sortable({
 		axis: 'y',
 		containment: 'parent',
-		tolerance: 'pointer',
-		//handle: '#action-bar .move.resort'
+		tolerance: 'intersect',
+		handle: '#action-bar .move.resort',
+		helper: function(event, element) {
+			elementHeight = $(element).height();
+			
+			var helper = $(element).clone();
+			// save the height before setting it to zero
+			helper.setCSS({height: 0});
+			return helper[0];
+		},
+		opacity: 0.9,
+		revert: true,
+		scroll: true,
 		start: function(event, ui) {
-			showFill( ui.item.parent('ul.node.list').required() )
+			var list = ui.item.parent('ul.node.list').required();
+			showFill(list);
+			list.addClass('active');
+			//list.children('li.item_for_node.ui-sortable-placeholder').required().setCSS({
+			//	height: helperHeight
+			//});
+			//list.setCSS({
+			//	marginTop: -$(element).height(),
+			//	marginBottom: -$(element).height(),
+			//	paddingTop: $(element).height(),
+			//	paddingBottom: $(element).height(),
+			//});
+			
+			//$(this).sortable('refreshPositions');
 		},
 		stop: function(event, ui) {
-			hideFill( ui.item.parent('ul.node.list').required() )
+			var list = ui.item.parent('ul.node.list').required();
+			hideFill(list);
+			list.removeClass('active');
+			//list.setCSS({
+			//	position: 'static',
+			//	top: '',
+			//	bottom: '',
+			//	paddingTop: '',
+			//	paddingBottom: '',
+			//});
 		}
 	});
 });
