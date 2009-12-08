@@ -1,9 +1,16 @@
-/* item list (old) */
-
 ul.list ul.list {
 	border-left: 1px dotted <%= divider_color * 0.5 + "#fff".to_color * 0.5 %>;
-	padding-left: 18px;/*
+	/*padding-left: 18px;*/
 	/*margin-left: -1em;*/
+}
+
+ul.node.list {
+	position: relative;
+}
+
+ul.node.list > li.item_for_node {
+	position: relative;
+	margin-left: 18px;
 }
 
 li { list-style-type: none; }
