@@ -820,8 +820,8 @@ function badgeRemove(link) {
 		state = 'new';
 	else if (node.children('.edit')[0])
 		state = 'edit';
-	else if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
-		console.assert('invalid state');
+	else if (window.console && window.console.assert)
+		window.console.assert('invalid state');
 	
 	var form = node.find('form').required();
 	var parentNode = node.parent().closest('.item_for_node').required();
