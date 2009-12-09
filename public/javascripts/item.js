@@ -214,7 +214,7 @@ function itemCreate(form) {
 	var newBody = form.closest('.new.body').required();
 	var newItem = newBody.closest('.item_for_node').required();
 	
-	newBody.showProgressOverlay({opacity: 0.25});
+	newBody.showProgressOverlay();
 	
 	$.ajax({
 		type: form.getAttr('method'), // 'post'
@@ -413,7 +413,7 @@ function itemUpdate(form) {
 	var editBody = form.closest('.edit.body').required();
 	var showBody = editBody.siblings('.show.body').required();
 	
-	editBody.showProgressOverlay({opacity: 0.25});
+	editBody.showProgressOverlay();
 	
 	$.ajax({
 		type: form.getAttr('method'), // 'post' (PUT)
@@ -642,6 +642,8 @@ function itemReorder(node) {
 	
 	var list = node.parent('ul.node.list').required();
 	
+	list.showProgressOverlay();
+	
 	var prevSibling = node.prev('.item_for_node');
 	var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
 	
@@ -656,11 +658,15 @@ function itemReorder(node) {
 	
 	
 	function handleSuccess(responseData) {
+		hideProgressOverlay();
+		
 		hideFill(list);
 		list.removeClass('active');
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
+		
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
@@ -727,6 +733,7 @@ function itemReparent(node, parentNode) {
 	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
 	node.children('.body').addClass('active');
 	node.setCSS('opacity', 0.5); // doesn't seem to be working (perhaps being overridden via jQueryUI code?)
+	node.showProgressOverlay();
 	
 	$.ajax({
 		type: 'post',
