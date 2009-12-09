@@ -229,6 +229,11 @@ function itemCreate(form) {
 	function handleSuccess(responseData) {
 		newItem.after(responseData);
 		
+		var createdItem = newItem.next('.item_for_node').required();
+		createdItem.hide();
+		createdItem.applyReparentability();
+		createdItem.applyReorderability();
+		
 		var startScaleX = 0.95; var endScaleX = 1.0;
 		var startScaleY = 0.75; var endScaleY = 1.0;
 		newBody.setCSS({
