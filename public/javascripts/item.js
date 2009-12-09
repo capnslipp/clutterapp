@@ -714,6 +714,8 @@ jQuery.fn.setupReparentDroppable = function() {
 	}
 	
 	function drop(event, ui) {
+		removeHyper($(this));
+		
 		itemReparent(ui.draggable, this);
 	}
 }
