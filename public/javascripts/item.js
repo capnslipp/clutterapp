@@ -128,7 +128,7 @@ function itemNew(button, type) {
 				step: function(ratio) {
 					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
 					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
-					newBody.setCSS({
+					$(this).setCSS({
 						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
@@ -185,7 +185,7 @@ function itemNewCancel(button) {
 			step: function(ratio) {
 				var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
 				var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
-				newBody.setCSS({
+				$(this).setCSS({
 					        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 					   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 					'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
@@ -249,7 +249,7 @@ function itemCreate(form) {
 				step: function(ratio) {
 					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
 					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
-					newBody.setCSS({
+					$(this).setCSS({
 						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
@@ -327,7 +327,7 @@ function itemEdit(link) {
 				step: function(ratio) {
 					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
 					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
-					editBody.setCSS({
+					$(this).setCSS({
 						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
@@ -384,7 +384,7 @@ function itemEditCancel(button) {
 			easing: 'easeInQuad',
 			step: function(ratio) {
 				var scaleVal = (endScale - startScale) * ratio + startScale;
-				editBody.setCSS({
+				$(this).setCSS({
 					        'transform': 'scale('+scaleVal+')',
 					   '-moz-transform': 'scale('+scaleVal+')',
 					'-webkit-transform': 'scale('+scaleVal+')'
@@ -441,7 +441,7 @@ function itemUpdate(form) {
 				step: function(ratio) {
 					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
 					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
-					editBody.setCSS({
+					$(this).setCSS({
 						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
