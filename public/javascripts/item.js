@@ -687,7 +687,7 @@ jQuery.fn.setupReparentDraggable = function() {
 		revert: 'invalid',
 		scope: 'item-reparent',
 		scroll: true,
-		zIndex: 1000,
+		zIndex: 500,
 	});
 	return this;
 }
@@ -725,7 +725,8 @@ function itemReparent(node, parentNode) {
 	parentNode = $(parentNode).closest('.item_for_node').required();
 	
 	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
-	//node.draggable('destroy');
+	node.children('.body').addClass('active');
+	node.setCSS('opacity', 0.5); // doesn't seem to be working (perhaps being overridden via jQueryUI code?)
 	
 	$.ajax({
 		type: 'post',
@@ -789,6 +790,7 @@ function itemReparent(node, parentNode) {
 		}
 		
 		function nodeOutFinish() {
+			node.draggable('destroy');
 			node.remove();
 			
 			listCrossStart();
