@@ -9,6 +9,101 @@ jQuery.ajaxSetup({beforeSend: function(xhr) {
 } });
 
 
+ClutterApp.fsm = {
+	// changes the action, state, and context, given not being busy with something else already
+	changeAction: function(newAction, newState, newContext) {
+		if (this._action != null) // check that there is no current action
+			return false; // busy with an action already
+		
+		if (this._state != null) // check that there is no current state 
+			return false; // busy with a state already
+		
+		
+		if (!(newAction.constructor == String))
+			return null;
+		
+		if (!(newState.constructor == String))
+			return null;
+		
+		if (newContext == undefined)
+			newContext = null;
+		if (!(newContext == null || newContext instanceof jQuery))
+			return null;
+		
+		
+		this._action = newAction;
+		this._state = newState;
+		this._context = newContext;
+		
+		return true;
+	},
+	
+	// clears out both the action and the state, leaving it back in the complete idle state (thus, any action allowed)
+	finishAction: function(checkAction, checkState) {
+		if (this._action != checkAction)
+			return false; // a different action than expected is active; sorry, no change
+		if (this._state != checkState)
+			return false; // a different state than expected is active; sorry, no change
+		
+		
+		this._action = null; // action is back to none
+		this._state = null; // state is back to idling
+		
+		return true;
+	},
+	
+	// changes the state and context, given already being in the given action and not being busy with something else already
+	changeState: function(checkAction, newState, newContext) {
+		if (this._action != checkAction) // check that the action matches (finishAction to clear out the action)
+			return false; // busy with a different action already
+		
+		if (this._state != null) // check that there is no current state 
+			return false; // busy with a state already
+		
+		
+		if (!(newState.constructor == String))
+			return null;
+		
+		if (newContext == undefined)
+			newContext = null;
+		if (!(newContext == null || newContext instanceof jQuery))
+			return null;
+		
+		
+		this._state = newState;
+		this._context = newContext;
+		
+		return true;
+	},
+	
+	// clears out the state, leaving it in an idle state for the current action (thus, new state for this action allowed)
+	finishState: function(checkAction, checkState) {
+		if (this._action != checkAction)
+			return false; // a different action than expected is active; sorry, no change
+		if (this._state != checkState)
+			return false; // a different state than expected is active; sorry, no change
+		
+		
+		this._state = null; // state is back to idling (in this action)
+		
+		return true;
+	},
+	
+	// "action" is a string corresponding to the current Rails action or null if not currently in an action.
+	_action: null,
+	action: function() { return this._action; },
+	
+	// "state" is a string corresponding to the state of the action (entering, exiting, waiting, etc.), or null if waiting on the user's next move.
+	_state: 'loading',
+	state: function() { return this._state; },
+	
+	// "context" is an optional jQuery object pointing to the element(s) currently being manipulated.
+	// Possible future use: allowing multiple calls to the server at a time, as long as they don't overlap.
+	_context: null,
+	context: function() { return this._content; },
+};
+
+
 
 function elementsForNodeModels(prefix) {
 	return $('.' + classForNodeModels(prefix))
