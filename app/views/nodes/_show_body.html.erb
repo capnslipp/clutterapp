@@ -1,4 +1,6 @@
 <div class="show body">
+	<div class="back"></div>
+	
 	<div class="bullet">
 		<% if node.check_badge? %>
 			<%= render :partial => prop_partial(node.check_badge, :show), :locals => {:node => node.check_badge} %>

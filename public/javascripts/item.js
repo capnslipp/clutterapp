@@ -610,6 +610,9 @@ jQuery.fn.setupReorderSortable = function() {
 		
 		var origPrevSibling = ui.item.prev('.item_for_node');
 		origPrevSiblingID = origPrevSibling[0] ? nodeIDOfItem(origPrevSibling) : '';
+		
+		var placeholder = ui.placeholder.required();
+		placeholder.prepend('<div class="back"></div> <div class="cont"></div>');
 	}
 	
 	function stop(event, ui) {
@@ -695,9 +698,20 @@ jQuery.fn.setupReparentDroppable = function() {
 		hoverClass: 'active',
 		scope: 'item-reparent',
 		tolerance: 'intersect',
+		over: function(event, ui) { makeHyper($(this)); },
+		out: function(event, ui) { removeHyper($(this)); },
 		drop: drop,
 	});
 	return this;
+	
+	
+	function makeHyper(dropBody) {
+		dropBody.prepend('<div class="hyper"></div>');
+	}
+	
+	function removeHyper(dropBody) {
+		dropBody.children('.hyper').remove();
+	}
 	
 	function drop(event, ui) {
 		itemReparent(ui.draggable, this);
