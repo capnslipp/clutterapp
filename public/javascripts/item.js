@@ -253,15 +253,16 @@ function itemCreate(form) {
 						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
-					})
+					});
 				},
 				complete: function() {
+					hideFill();
+					
 					newItem.remove();
+					createdItem.fadeIn(kDefaultTransitionDuration);
 				}
 			}
 		);
-		
-		hideFill();
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
@@ -447,12 +448,13 @@ function itemUpdate(form) {
 					})
 				},
 				complete: function() {
+					hideFill();
+					
 					editBody.remove();
 				}
 			}
 		);
 		
-		hideFill();
 		
 		showBody.replaceWith(responseData);
 	}
