@@ -496,7 +496,34 @@ function itemDelete(node) {
 	
 	function handleSuccess(responseData) {
 		collapseActionBar();
-		node.remove();
+		
+		
+		var startScaleX = 0.95; var endScaleX = 1.0;
+		var startScaleY = 0.25; var endScaleY = 1.0;
+		node.find('.show.body').setCSS({
+			opacity: 1.0,
+			        'transform-origin': '50% 0%',
+			   '-moz-transform-origin': '50% 0%',
+			'-webkit-transform-origin': '50% 0%'
+		}).animate(
+			{opacity: 0.0},
+			{
+				duration: kSlowTransitionDuration,
+				easing: 'easeInQuad',
+				step: function(ratio) {
+					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+					$(this).setCSS({
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					})
+				},
+				complete: function() {
+					node.remove();
+				}
+			}
+		);
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
