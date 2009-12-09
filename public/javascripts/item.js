@@ -708,9 +708,8 @@ function itemReparent(node, parentNode) {
 	node.required();
 	parentNode = $(parentNode).closest('.item_for_node').required();
 	
-	collapseActionBar(); // so it doesn't get deleted
-	node.draggable('destroy');
-	node.remove();
+	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
+	//node.draggable('destroy');
 	
 	$.ajax({
 		type: 'post',
@@ -730,11 +729,90 @@ function itemReparent(node, parentNode) {
 		$('li.item_for_node', list).draggable('destroy');
 		$('.show.body', list).droppable('destroy');
 		
-		var listParent = list.parent();
-		list.html(responseData);
+		nodeOutStart();
 		
-		listParent.applyReparentability();
-		listParent.applyReorderability();
+		
+		var oldListHeight;
+		var newListHeight;
+		var listPlaceholder;
+		
+		var newList;
+		
+		function nodeOutStart() {
+			node.show();
+			
+			var actualNodeHeight = node.height();
+			
+			node.setCSS({
+				overflow: 'visible',
+			}).animate(
+				{opacity: 0.0},
+				{
+					duration: kQuickTransitionDuration,
+					easing: 'easeInQuad',
+					step: function(ratio) {
+						$(this).setCSS('height', actualNodeHeight * ratio);
+					},
+					complete: nodeOutFinish,
+				}
+			);
+		}
+		
+		function nodeOutFinish() {
+			node.remove();
+			
+			listCrossStart();
+		}
+		
+		function listCrossStart() {
+			// get old height
+			oldListHeight = list.height();
+			
+			// set up placeholder
+			list.after('<div id="list-placeholder" style="height: '+oldListHeight+'px;"></div>');
+			listPlaceholder = $('#list-placeholder');
+			
+			list.setCSS({
+				position: 'absolute',
+				width: '100%',
+			});
+			
+			
+			list.clone().insertAfter(list).html(responseData);
+			newList = list.next('.node.list').required();
+			
+			newListHeight = newList.height();
+			newList.setCSS('opacity', 0.0);
+			
+			newList.applyReparentability();
+			newList.applyReorderability();
+			
+			newList.setCSS({
+				opacity: 0.0
+			}).animate(
+				{opacity: 1.0},
+				{
+					duration: kDefaultTransitionDuration,
+					easing: 'easeOutQuad',
+					step: function(ratio) {
+						list.setCSS('opacity', 1.0 - ratio); // fade old list out as the new list fades in
+						listPlaceholder.setCSS('height', (newListHeight - oldListHeight) * ratio + oldListHeight);
+					},
+					complete: listCrossFinish,
+				}
+			);
+		}
+		
+		function listCrossFinish() {
+			listPlaceholder.remove();
+			list.remove();
+			// return to normal positioning and remove unnecessary styles
+			newList.setCSS({
+				position: '',
+				width: '',
+				opacity: '',
+			});
+		}
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
