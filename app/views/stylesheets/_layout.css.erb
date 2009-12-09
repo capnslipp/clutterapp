@@ -51,15 +51,37 @@ ul.node.list.active {
 
 li { list-style-type: none; }
 
-.pile.item_for_node > .body { display: block; margin: -16px; margin-bottom: 0; padding: 16px; padding-bottom: 18px; border: none; }
-.pile.item_for_node > .body > .header {}
+.pile.item_for_node > .body {
+	display: block;
+	margin: -16px; margin-bottom: 0;
+	padding: 16px; padding-bottom: 18px;
+	border: none;
+}
+.pile.item_for_node > .body > .header { position: relative; }
 .pile.item_for_node > .body > .header > .owner { opacity: 0.25; }
 .pile.item_for_node > .body > .header > .owner,
 .pile.item_for_node > .body > .header > .name { white-space: nowrap; }
 .pile.item_for_node > .body > .action.stub { float: right; width: auto; border: none; }
 .pile.item_for_node > .body.active {
+}
+.pile.item_for_node > .body.active > * {
+	z-index: 2;
+}
+.pile.item_for_node > .body.active > .back {
+	position: absolute; z-index: 1;
+	top: 0; bottom: 0; left: 0; right: 0;
+	
 	background: <%= bright_bg_color %>;
 	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
+}
+.item_for_node > .body.active > .hyper { /* used to super-highlight items */
+	position: absolute; z-index: 0;
+	top: 0; bottom: 0; left: -2px; right: -2px;
+	
+	background: <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
+	<%= border_radius_decl('8px') %>
+	border: 4px solid transparent;
+	margin: -4px;
 }
 
 .item_for_node {
