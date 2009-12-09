@@ -128,7 +128,7 @@ function itemNew(button, type) {
 				step: function(ratio) {
 					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
 					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
-					newBody.setCSS({
+					$(this).setCSS({
 						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
@@ -185,7 +185,7 @@ function itemNewCancel(button) {
 			step: function(ratio) {
 				var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
 				var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
-				newBody.setCSS({
+				$(this).setCSS({
 					        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 					   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 					'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
@@ -214,7 +214,7 @@ function itemCreate(form) {
 	var newBody = form.closest('.new.body').required();
 	var newItem = newBody.closest('.item_for_node').required();
 	
-	newBody.showProgressOverlay({opacity: 0.25});
+	newBody.showProgressOverlay();
 	
 	$.ajax({
 		type: form.getAttr('method'), // 'post'
@@ -228,6 +228,11 @@ function itemCreate(form) {
 	
 	function handleSuccess(responseData) {
 		newItem.after(responseData);
+		
+		var createdItem = newItem.next('.item_for_node').required();
+		createdItem.hide();
+		createdItem.applyReparentability();
+		createdItem.applyReorderability();
 		
 		var startScaleX = 0.95; var endScaleX = 1.0;
 		var startScaleY = 0.75; var endScaleY = 1.0;
@@ -244,19 +249,20 @@ function itemCreate(form) {
 				step: function(ratio) {
 					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
 					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
-					newBody.setCSS({
+					$(this).setCSS({
 						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
-					})
+					});
 				},
 				complete: function() {
+					hideFill();
+					
 					newItem.remove();
+					createdItem.fadeIn(kDefaultTransitionDuration);
 				}
 			}
 		);
-		
-		hideFill();
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
@@ -321,7 +327,7 @@ function itemEdit(link) {
 				step: function(ratio) {
 					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
 					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
-					editBody.setCSS({
+					$(this).setCSS({
 						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
@@ -378,7 +384,7 @@ function itemEditCancel(button) {
 			easing: 'easeInQuad',
 			step: function(ratio) {
 				var scaleVal = (endScale - startScale) * ratio + startScale;
-				editBody.setCSS({
+				$(this).setCSS({
 					        'transform': 'scale('+scaleVal+')',
 					   '-moz-transform': 'scale('+scaleVal+')',
 					'-webkit-transform': 'scale('+scaleVal+')'
@@ -407,7 +413,7 @@ function itemUpdate(form) {
 	var editBody = form.closest('.edit.body').required();
 	var showBody = editBody.siblings('.show.body').required();
 	
-	editBody.showProgressOverlay({opacity: 0.25});
+	editBody.showProgressOverlay();
 	
 	$.ajax({
 		type: form.getAttr('method'), // 'post' (PUT)
@@ -435,19 +441,20 @@ function itemUpdate(form) {
 				step: function(ratio) {
 					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
 					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
-					editBody.setCSS({
+					$(this).setCSS({
 						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
 					})
 				},
 				complete: function() {
+					hideFill();
+					
 					editBody.remove();
 				}
 			}
 		);
 		
-		hideFill();
 		
 		showBody.replaceWith(responseData);
 	}
@@ -476,45 +483,6 @@ $(function() {
 
 
 
-function itemMove(node, dir) {
-	node.required();
-	
-	
-	$.ajax({
-		type: 'post',
-		url: node.getAttr('oc\:url') + '/move',
-		data: {_method: 'put', dir: dir},
-		dataType: 'script',
-		success: handleSuccess,
-		error: handleError
-	});
-	
-	
-	function handleSuccess(responseData) {
-		// nothing for now; @todo: do the actual element movement here
-	}
-	
-	function handleError(xhrObj, errStr, expObj) {
-		node.find('.body:first .cont').required()
-			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
-	}
-}
-	
-$(function() {
-	var actionButtons = $('#action-bar .buttons').required();
-	
-	actionButtons.find('a.move.out')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'out'); return false; });
-	actionButtons.find('a.move.up')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'up'); return false; });
-	actionButtons.find('a.move.down')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'down'); return false; });
-	actionButtons.find('a.move.in')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'in'); return false; });
-});
-
-
-
 function itemDelete(node) {
 	$.ajax({
 		type: 'post',
@@ -528,7 +496,40 @@ function itemDelete(node) {
 	
 	function handleSuccess(responseData) {
 		collapseActionBar();
-		node.remove();
+		
+		
+		var endScaleX = 0.95;
+		var endScaleY = 0.25;
+		var startHeight = node.height();
+		node.find('.show.body').setCSS({
+			opacity: 1.0,
+			overflow: 'visible',
+			        'transform-origin': '50% 0%',
+			   '-moz-transform-origin': '50% 0%',
+			'-webkit-transform-origin': '50% 0%',
+		}).animate(
+			{ opacity: 0.0 },
+			{
+				duration: kSlowTransitionDuration,
+				easing: 'easeInQuad',
+				step: function(opacity) {
+					var ratio = opacity;
+					
+					var scaleValX = (1.0 - endScaleX) * ratio + endScaleX;
+					var scaleValY = (1.0 - endScaleY) * ratio + endScaleY;
+					var heightVal = startHeight * ratio;
+					$(this).setCSS({
+						height: heightVal,
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					})
+				},
+				complete: function() {
+					node.remove();
+				}
+			}
+		);
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
@@ -551,14 +552,23 @@ $(function() {
 
 
 $(function() {
+	$().applyReorderability();
+});
+
+jQuery.fn.applyReorderability = function() {
+	$('ul.node.list', this).setupReorderSortable();
+	return this;
+}
+
+jQuery.fn.setupReorderSortable = function() {
 	var elementHeight;
 	var origPrevSiblingID;
 	
-	$('ul.node.list').sortable({
+	this.sortable({
 		axis: 'y',
 		containment: '#active-sorting-container',
 		tolerance: 'intersect',
-		handle: '#action-bar .move.reorder',
+		handle: '> .show.body > #action-bar .move.reorder',
 		helper: helper,
 		opacity: 0.5,
 		revert: true,
@@ -566,6 +576,7 @@ $(function() {
 		start: start,
 		stop: stop
 	});
+	return this;
 	
 	function helper(event, element) {
 		// save the height for future use
@@ -605,6 +616,9 @@ $(function() {
 		
 		var origPrevSibling = ui.item.prev('.item_for_node');
 		origPrevSiblingID = origPrevSibling[0] ? nodeIDOfItem(origPrevSibling) : '';
+		
+		var placeholder = ui.placeholder.required();
+		placeholder.prepend('<div class="back"></div> <div class="cont"></div>');
 	}
 	
 	function stop(event, ui) {
@@ -627,55 +641,67 @@ $(function() {
 			list.removeClass('active');
 		}
 	}
+}
+
+function itemReorder(node) {
+	node.required();
 	
-	function itemReorder(node) {
-		node.required();
+	var list = node.parent('ul.node.list').required();
+	
+	list.showProgressOverlay();
+	
+	var prevSibling = node.prev('.item_for_node');
+	var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
+	
+	$.ajax({
+		type: 'post',
+		url: node.getAttr('oc\:url') + '/reorder',
+		data: {_method: 'put', prev_sibling_id: prevSiblingID},
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		hideProgressOverlay();
 		
-		var list = node.parent('ul.node.list').required();
-		
-		var prevSibling = node.prev('.item_for_node');
-		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
-		
-		$.ajax({
-			type: 'post',
-			url: node.getAttr('oc\:url') + '/reorder',
-			data: {_method: 'put', prev_sibling_id: prevSiblingID},
-			dataType: 'html',
-			success: handleSuccess,
-			error: handleError
-		});
-		
-		
-		function handleSuccess(responseData) {
-			hideFill(list);
-			list.removeClass('active');
-		}
-		
-		function handleError(xhrObj, errStr, expObj) {
-			node.find('.body:first .cont').required()
-				.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
-		}
+		hideFill(list);
+		list.removeClass('active');
 	}
-});
+	
+	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
+		
+		node.find('.body:first .cont').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+	}
+}
 
 
 
 $(function() {
-	$('li.item_for_node').setupReparentDraggable();
-	$('.item_for_node>.show.body, .pile.item_for_node>.body').setupReparentDroppable();
+	$().applyReparentability();
 });
+
+jQuery.fn.applyReparentability = function() {
+	$('li.item_for_node', this).setupReparentDraggable();
+	$('.item_for_node > .show.body, .pile.item_for_node > .body', this).setupReparentDroppable();
+	return this;
+}
 
 jQuery.fn.setupReparentDraggable = function() {
 	this.draggable({
 		axis: 'y',
-		cancel: '.body>.cont, .body>.bullet, .body>.action.stub, .edit.body, .new.body',
-		handle: '#action-bar a.move.reparent',
+		cancel: '.body > .cont, .body > .bullet, .body > .action.stub, .edit.body, .new.body',
+		handle: '> .body > #action-bar a.move.reparent',
 		opacity: 0.5,
 		revert: 'invalid',
 		scope: 'item-reparent',
 		scroll: true,
-		zIndex: 1000,
+		zIndex: 500,
 	});
+	return this;
 }
 
 jQuery.fn.setupReparentDroppable = function() {
@@ -684,10 +710,24 @@ jQuery.fn.setupReparentDroppable = function() {
 		hoverClass: 'active',
 		scope: 'item-reparent',
 		tolerance: 'intersect',
+		over: function(event, ui) { makeHyper($(this)); },
+		out: function(event, ui) { removeHyper($(this)); },
 		drop: drop,
 	});
+	return this;
+	
+	
+	function makeHyper(dropBody) {
+		dropBody.prepend('<div class="hyper"></div>');
+	}
+	
+	function removeHyper(dropBody) {
+		dropBody.children('.hyper').remove();
+	}
 	
 	function drop(event, ui) {
+		removeHyper($(this));
+		
 		itemReparent(ui.draggable, this);
 	}
 }
@@ -696,9 +736,10 @@ function itemReparent(node, parentNode) {
 	node.required();
 	parentNode = $(parentNode).closest('.item_for_node').required();
 	
-	collapseActionBar(); // so it doesn't get deleted
-	node.draggable('destroy');
-	node.remove();
+	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
+	node.children('.body').addClass('active');
+	node.setCSS('opacity', 0.5); // doesn't seem to be working (perhaps being overridden via jQueryUI code?)
+	node.showProgressOverlay();
 	
 	$.ajax({
 		type: 'post',
@@ -718,11 +759,105 @@ function itemReparent(node, parentNode) {
 		$('li.item_for_node', list).draggable('destroy');
 		$('.show.body', list).droppable('destroy');
 		
-		var listParent = list.parent();
-		list.html(responseData);
+		nodeOutStart();
 		
-		listParent.find('li.item_for_node').setupReparentDraggable();
-		listParent.find('.show.body').setupReparentDroppable();
+		
+		var oldListHeight;
+		var newListHeight;
+		var listPlaceholder;
+		
+		var newList;
+		
+		function nodeOutStart() {
+			node.show();
+			
+			var actualNodeHeight = node.height();
+			
+			var startScaleX = 0.95; var endScaleX = 1.0;
+			var startScaleY = 0.25; var endScaleY = 1.0;
+			node.setCSS({
+				overflow: 'visible',
+				        'transform-origin': '50% 50%',
+				   '-moz-transform-origin': '50% 50%',
+				'-webkit-transform-origin': '50% 50%',
+			}).animate(
+				{opacity: 0.0},
+				{
+					duration: kQuickTransitionDuration,
+					easing: 'easeInQuad',
+					step: function(ratio) {
+						$(this).setCSS({
+							'height': actualNodeHeight * ratio,
+						});
+						var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+						var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+						$(this).setCSS({
+							        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+							   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+							'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						});
+					},
+					complete: nodeOutFinish,
+				}
+			);
+		}
+		
+		function nodeOutFinish() {
+			node.draggable('destroy');
+			node.remove();
+			
+			listCrossStart();
+		}
+		
+		function listCrossStart() {
+			// get old height
+			oldListHeight = list.height();
+			
+			// set up placeholder
+			list.after('<div id="list-placeholder" style="height: '+oldListHeight+'px;"></div>');
+			listPlaceholder = $('#list-placeholder');
+			
+			list.setCSS({
+				position: 'absolute',
+				width: '100%',
+			});
+			
+			
+			list.clone().insertAfter(list).html(responseData);
+			newList = list.next('.node.list').required();
+			
+			newListHeight = newList.height();
+			newList.setCSS('opacity', 0.0);
+			
+			newList.applyReparentability();
+			newList.applyReorderability();
+			
+			newList.setCSS({
+				opacity: 0.0
+			}).animate(
+				{opacity: 1.0},
+				{
+					duration: kDefaultTransitionDuration,
+					easing: 'easeOutQuad',
+					step: function(ratio) {
+						list.setCSS('opacity', 1.0 - ratio); // fade old list out as the new list fades in
+						listPlaceholder.setCSS('height', (newListHeight - oldListHeight) * ratio + oldListHeight);
+					},
+					complete: listCrossFinish,
+				}
+			);
+		}
+		
+		function listCrossFinish() {
+			listPlaceholder.remove();
+			list.remove();
+			// return to normal positioning and remove unnecessary styles
+			newList.setCSS({
+				position: '',
+				width: '',
+				opacity: '',
+			});
+		}
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {

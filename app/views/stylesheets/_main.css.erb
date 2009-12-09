@@ -123,7 +123,12 @@ a.sym, a .sym, .sym a {
 	background: repeat 0 0;
 }
 
-.show.body .overlay {
+.item_for_node > .show.body > .overlay {
+	left: -4px; right: -4px;
+	<%= border_radius_decl %>
+}
+
+.item_for_node > .overlay {
 	left: -4px; right: -4px;
 	<%= border_radius_decl %>
 }
