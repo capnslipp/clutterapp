@@ -516,7 +516,7 @@ $(function() {
 });
 
 jQuery.fn.applyReorderability = function() {
-	this.find('ul.node.list').setupReorderSortable();
+	$('ul.node.list', this).setupReorderSortable();
 	return this;
 }
 
@@ -636,8 +636,8 @@ $(function() {
 });
 
 jQuery.fn.applyReparentability = function() {
-	this.find('li.item_for_node').setupReparentDraggable();
-	this.find('.item_for_node>.show.body, .pile.item_for_node>.body').setupReparentDroppable();
+	$('li.item_for_node', this).setupReparentDraggable();
+	$('.item_for_node > .show.body, .pile.item_for_node > .body', this).setupReparentDroppable();
 	return this;
 }
 
