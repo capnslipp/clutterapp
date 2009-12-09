@@ -476,45 +476,6 @@ $(function() {
 
 
 
-function itemMove(node, dir) {
-	node.required();
-	
-	
-	$.ajax({
-		type: 'post',
-		url: node.getAttr('oc\:url') + '/move',
-		data: {_method: 'put', dir: dir},
-		dataType: 'script',
-		success: handleSuccess,
-		error: handleError
-	});
-	
-	
-	function handleSuccess(responseData) {
-		// nothing for now; @todo: do the actual element movement here
-	}
-	
-	function handleError(xhrObj, errStr, expObj) {
-		node.find('.body:first .cont').required()
-			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
-	}
-}
-	
-$(function() {
-	var actionButtons = $('#action-bar .buttons').required();
-	
-	actionButtons.find('a.move.out')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'out'); return false; });
-	actionButtons.find('a.move.up')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'up'); return false; });
-	actionButtons.find('a.move.down')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'down'); return false; });
-	actionButtons.find('a.move.in')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'in'); return false; });
-});
-
-
-
 function itemDelete(node) {
 	$.ajax({
 		type: 'post',
