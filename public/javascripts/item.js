@@ -551,14 +551,23 @@ $(function() {
 
 
 $(function() {
+	$().applyReorderability();
+});
+
+jQuery.fn.applyReorderability = function() {
+	this.find('ul.node.list').setupReorderSortable();
+	return this;
+}
+
+jQuery.fn.setupReorderSortable = function() {
 	var elementHeight;
 	var origPrevSiblingID;
 	
-	$('ul.node.list').sortable({
+	this.sortable({
 		axis: 'y',
 		containment: '#active-sorting-container',
 		tolerance: 'intersect',
-		handle: '#action-bar .move.reorder',
+		handle: '> .show.body > #action-bar .move.reorder',
 		helper: helper,
 		opacity: 0.5,
 		revert: true,
@@ -566,6 +575,7 @@ $(function() {
 		start: start,
 		stop: stop
 	});
+	return this;
 	
 	function helper(event, element) {
 		// save the height for future use
@@ -627,55 +637,61 @@ $(function() {
 			list.removeClass('active');
 		}
 	}
+}
+
+function itemReorder(node) {
+	node.required();
 	
-	function itemReorder(node) {
-		node.required();
-		
-		var list = node.parent('ul.node.list').required();
-		
-		var prevSibling = node.prev('.item_for_node');
-		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
-		
-		$.ajax({
-			type: 'post',
-			url: node.getAttr('oc\:url') + '/reorder',
-			data: {_method: 'put', prev_sibling_id: prevSiblingID},
-			dataType: 'html',
-			success: handleSuccess,
-			error: handleError
-		});
-		
-		
-		function handleSuccess(responseData) {
-			hideFill(list);
-			list.removeClass('active');
-		}
-		
-		function handleError(xhrObj, errStr, expObj) {
-			node.find('.body:first .cont').required()
-				.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
-		}
+	var list = node.parent('ul.node.list').required();
+	
+	var prevSibling = node.prev('.item_for_node');
+	var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
+	
+	$.ajax({
+		type: 'post',
+		url: node.getAttr('oc\:url') + '/reorder',
+		data: {_method: 'put', prev_sibling_id: prevSiblingID},
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		hideFill(list);
+		list.removeClass('active');
 	}
-});
+	
+	function handleError(xhrObj, errStr, expObj) {
+		node.find('.body:first .cont').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+	}
+}
 
 
 
 $(function() {
-	$('li.item_for_node').setupReparentDraggable();
-	$('.item_for_node>.show.body, .pile.item_for_node>.body').setupReparentDroppable();
+	$().applyReparentability();
 });
+
+jQuery.fn.applyReparentability = function() {
+	this.find('li.item_for_node').setupReparentDraggable();
+	this.find('.item_for_node>.show.body, .pile.item_for_node>.body').setupReparentDroppable();
+	return this;
+}
 
 jQuery.fn.setupReparentDraggable = function() {
 	this.draggable({
 		axis: 'y',
-		cancel: '.body>.cont, .body>.bullet, .body>.action.stub, .edit.body, .new.body',
-		handle: '#action-bar a.move.reparent',
+		cancel: '.body > .cont, .body > .bullet, .body > .action.stub, .edit.body, .new.body',
+		handle: '> .body > #action-bar a.move.reparent',
 		opacity: 0.5,
 		revert: 'invalid',
 		scope: 'item-reparent',
 		scroll: true,
 		zIndex: 1000,
 	});
+	return this;
 }
 
 jQuery.fn.setupReparentDroppable = function() {
@@ -686,6 +702,7 @@ jQuery.fn.setupReparentDroppable = function() {
 		tolerance: 'intersect',
 		drop: drop,
 	});
+	return this;
 	
 	function drop(event, ui) {
 		itemReparent(ui.draggable, this);
@@ -721,8 +738,8 @@ function itemReparent(node, parentNode) {
 		var listParent = list.parent();
 		list.html(responseData);
 		
-		listParent.find('li.item_for_node').setupReparentDraggable();
-		listParent.find('.show.body').setupReparentDroppable();
+		listParent.applyReparentability();
+		listParent.applyReorderability();
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
