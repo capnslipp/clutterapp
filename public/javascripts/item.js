@@ -743,15 +743,29 @@ function itemReparent(node, parentNode) {
 			
 			var actualNodeHeight = node.height();
 			
+			var startScaleX = 0.95; var endScaleX = 1.0;
+			var startScaleY = 0.25; var endScaleY = 1.0;
 			node.setCSS({
 				overflow: 'visible',
+				        'transform-origin': '50% 50%',
+				   '-moz-transform-origin': '50% 50%',
+				'-webkit-transform-origin': '50% 50%',
 			}).animate(
 				{opacity: 0.0},
 				{
 					duration: kQuickTransitionDuration,
 					easing: 'easeInQuad',
 					step: function(ratio) {
-						$(this).setCSS('height', actualNodeHeight * ratio);
+						$(this).setCSS({
+							'height': actualNodeHeight * ratio,
+						});
+						var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+						var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+						$(this).setCSS({
+							        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+							   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+							'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						});
 					},
 					complete: nodeOutFinish,
 				}
