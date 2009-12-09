@@ -498,22 +498,28 @@ function itemDelete(node) {
 		collapseActionBar();
 		
 		
-		var startScaleX = 0.95; var endScaleX = 1.0;
-		var startScaleY = 0.25; var endScaleY = 1.0;
+		var endScaleX = 0.95;
+		var endScaleY = 0.25;
+		var startHeight = node.height();
 		node.find('.show.body').setCSS({
 			opacity: 1.0,
+			overflow: 'visible',
 			        'transform-origin': '50% 0%',
 			   '-moz-transform-origin': '50% 0%',
-			'-webkit-transform-origin': '50% 0%'
+			'-webkit-transform-origin': '50% 0%',
 		}).animate(
-			{opacity: 0.0},
+			{ opacity: 0.0 },
 			{
 				duration: kSlowTransitionDuration,
 				easing: 'easeInQuad',
-				step: function(ratio) {
-					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
-					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+				step: function(opacity) {
+					var ratio = opacity;
+					
+					var scaleValX = (1.0 - endScaleX) * ratio + endScaleX;
+					var scaleValY = (1.0 - endScaleY) * ratio + endScaleY;
+					var heightVal = startHeight * ratio;
 					$(this).setCSS({
+						height: heightVal,
 						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
 						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
 						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
