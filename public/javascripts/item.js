@@ -35,6 +35,8 @@ function expandActionBar(node) {
 	if (ClutterApp.fsm.isBusy())
 		return;
 	
+	node.required();
+	
 	collapseActionBar();
 	
 	var nodeBody = node.children('.body').required();
@@ -48,13 +50,22 @@ function expandActionBar(node) {
 	
 	// since it may be initially-hidden
 	safeShow($('#action-bar'));
+	
+	
+	node.activateReparentDraggable();
+	node.closest('ul.node.list').required().activateReorderSortable();
 }
 
 function collapseActionBar() {
-	$('#action-bar').hide()
-	
 	var node = $('#action-bar').closest('.item_for_node').required();;
 	var nodeBody = node.children('.body').required();
+	
+	
+	node.deactivateReparentDraggable();
+	node.closest('ul.node.list').deactivateReorderSortable();
+	
+	
+	$('#action-bar').hide()
 	
 	nodeBody.children('.action.stub').show();
 	
@@ -64,17 +75,17 @@ function collapseActionBar() {
 }
 
 $(function() {
-	$('.item_for_node > .show.body > .cont').live('click', function() {
-		expandActionBar($(this).closest('.item_for_node')); return false;
+	$('li.item_for_node > .show.body > .cont').live('click', function() {
+		expandActionBar($(this).closest('li.item_for_node')); return false;
 	});
-	$('.pile.item_for_node > .body > .header').live('click', function() {
-		expandActionBar($(this).closest('.item_for_node')); return false;
+	$('section.pile.item_for_node > .body > .header').live('click', function() {
+		expandActionBar($(this).closest('li.item_for_node')); return false;
 	});
 });
 
 $(function() {
 	$('.action.stub .widget.collapsed a').live('click', function() {
-		expandActionBar($(this).closest('.item_for_node')); return false;
+		expandActionBar($(this).closest('li.item_for_node')); return false;
 	});
 	
 	$('#action-bar .widget.expanded a').click(function() {
@@ -99,7 +110,7 @@ function itemNew(button, type) {
 		return;
 	
 	
-	var parentNode = $(button).closest('.item_for_node').required();
+	var parentNode = $(button).closest('li.item_for_node').required();
 	
 	collapseActionBar();
 	parentNode.showProgressOverlay();
@@ -122,7 +133,7 @@ function itemNew(button, type) {
 		
 		list.append(responseData);
 		
-		var newBody = list.children('.item_for_node:last').find('.new.body').required();
+		var newBody = list.children('li.item_for_node:last').find('.new.body').required();
 		
 		var startScaleX = 0.95; var endScaleX = 1.0;
 		var startScaleY = 0.0; var endScaleY = 1.0;
@@ -213,7 +224,7 @@ function itemNewCancel(button) {
 				})
 			},
 			complete: function() {
-				newBody.closest('.item_for_node').required().remove();
+				newBody.closest('li.item_for_node').required().remove();
 				
 				ClutterApp.fsm.finishAction('itemNew', 'cancel');
 			}
@@ -239,7 +250,7 @@ function itemCreate(form) {
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
 	var newBody = form.closest('.new.body').required();
-	var newItem = newBody.closest('.item_for_node').required();
+	var newItem = newBody.closest('li.item_for_node').required();
 	
 	newBody.showProgressOverlay();
 	
@@ -256,10 +267,9 @@ function itemCreate(form) {
 	function handleSuccess(responseData) {
 		newItem.after(responseData);
 		
-		var createdItem = newItem.next('.item_for_node').required();
+		var createdItem = newItem.next('li.item_for_node').required();
 		createdItem.hide();
-		createdItem.applyReparentability();
-		createdItem.applyReorderability();
+		createdItem.applyReparentDroppability();
 		
 		var startScaleX = 0.95; var endScaleX = 1.0;
 		var startScaleY = 0.75; var endScaleY = 1.0;
@@ -395,7 +405,7 @@ function itemEdit(link) {
 }
 
 $(function() {
-	$('.item_for_node > .show.body > .cont').live('dblclick', function() {
+	$('li.item_for_node > .show.body > .cont').live('dblclick', function() {
 		itemEdit(this); return false;
 	});
 	$('#action-bar > .buttons > a.edit').click(function() {
@@ -609,7 +619,7 @@ $(function() {
 	
 	actionButtons.find('a.delete').click(function() {
 		if (confirm("Are you sure?\n\nThis will delete this item and all of its sub-items."))
-			itemDelete($(this).closest('.item_for_node'));
+			itemDelete($(this).closest('li.item_for_node'));
 		
 		return false;
 	});
@@ -617,19 +627,39 @@ $(function() {
 
 
 
-$(function() {
-	$().applyReorderability();
-});
+//$(function() {
+//	$().applyReorderability();
+//});
 
-jQuery.fn.applyReorderability = function() {
-	$('ul.node.list', this).setupReorderSortable();
+//jQuery.fn.applyReorderability = function() {
+//	var nodeLists = $(this).detect('ul.node.list');
+//	
+//	nodeLists.activateReorderSortable();
+//	
+//	return this;
+//}
+
+jQuery.fn.activateReorderSortable = function() {
+	var disabled = this.filter('.ui-sortable-disabled');
+	disabled.sortable('enable');
+	
+	var alreadySetup = this.filter('.ui-sortable');
+	alreadySetup.sortable('refresh');
+	
+	var toSetup = this.not('.ui-sortable');
+	toSetup.setupReorderSortable();
+	
+	return this;
+}
+
+jQuery.fn.deactivateReorderSortable = function() {
+	var alreadySetup = this.filter('.ui-sortable');
+	alreadySetup.sortable('disable');
+	
 	return this;
 }
 
 jQuery.fn.setupReorderSortable = function() {
-	var elementHeight;
-	var origPrevSiblingID;
-	
 	this.sortable({
 		axis: 'y',
 		containment: '#active-sorting-container',
@@ -643,6 +673,10 @@ jQuery.fn.setupReorderSortable = function() {
 		stop: stop
 	});
 	return this;
+	
+	
+	var elementHeight;
+	var origPrevSiblingID;
 	
 	function helper(event, element) {
 		// save the height for future use
@@ -680,7 +714,7 @@ jQuery.fn.setupReorderSortable = function() {
 		showFill(list);
 		list.addClass('active');
 		
-		var origPrevSibling = ui.item.prev('.item_for_node');
+		var origPrevSibling = ui.item.prev('li.item_for_node');
 		origPrevSiblingID = origPrevSibling[0] ? nodeIDOfItem(origPrevSibling) : '';
 		
 		var placeholder = ui.placeholder.required();
@@ -696,7 +730,7 @@ jQuery.fn.setupReorderSortable = function() {
 		list.setCSS({margin: ''});
 		
 		// @todo: optimize so this isn't being done twice
-		var prevSibling = ui.item.prev('.item_for_node');
+		var prevSibling = ui.item.prev('li.item_for_node');
 		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
 		
 		// only if the prevSibling has changed
@@ -722,7 +756,7 @@ function itemReorder(node) {
 	
 	list.showProgressOverlay();
 	
-	var prevSibling = node.prev('.item_for_node');
+	var prevSibling = node.prev('li.item_for_node');
 	var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
 	
 	$.ajax({
@@ -758,21 +792,29 @@ function itemReorder(node) {
 
 
 
-$(function() {
-	$().applyReparentability();
-});
-
-jQuery.fn.applyReparentability = function() {
-	$('li.item_for_node', this).setupReparentDraggable();
-	$('.item_for_node > .show.body, .pile.item_for_node > .body', this).setupReparentDroppable();
+jQuery.fn.activateReparentDraggable = function() {
+	var disabled = this.filter('.ui-draggable-disabled');
+	disabled.draggable('enable');
+	
+	var toSetup = this.not('.ui-draggable');
+	toSetup.setupReparentDraggable();
+	
 	return this;
 }
 
+jQuery.fn.deactivateReparentDraggable = function() {
+	var alreadySetup = this.filter('.ui-draggable');
+	alreadySetup.draggable('disable');
+	
+	return this;
+}
+
+// this is done when the actionbar opens
 jQuery.fn.setupReparentDraggable = function() {
 	this.draggable({
 		axis: 'y',
 		cancel: '.body > .cont, .body > .bullet, .body > .action.stub, .edit.body, .new.body',
-		handle: '> .body > #action-bar a.move.reparent',
+		handle: '#action-bar a.move.reparent',
 		opacity: 0.5,
 		revert: 'invalid',
 		scope: 'item-reparent',
@@ -782,8 +824,38 @@ jQuery.fn.setupReparentDraggable = function() {
 	return this;
 }
 
+
+
+$(function() {
+	$().applyReparentDroppability();
+});
+
+jQuery.fn.applyReparentDroppability = function() {
+	$(this).detect('li.item_for_node > .show.body, section.pile.item_for_node > .body').activateReparentDroppable();
+	return this;
+}
+
+jQuery.fn.activateReparentDroppable = function() {
+	var disabled = this.filter('.ui-droppable-disabled');
+	disabled.droppable('enable');
+	
+	var toSetup = this.not('.ui-droppable');
+	toSetup.setupReparentDroppable();
+	
+	return this;
+}
+
+jQuery.fn.deactivateReparentDroppable = function() {
+	var alreadySetup = this.filter('.ui-droppable');
+	alreadySetup.droppable('disable');
+	
+	return this;
+}
+
 jQuery.fn.setupReparentDroppable = function() {
-	this.droppable({
+	var toSetup = this.not('ui-droppable');
+	
+	toSetup.droppable({
 		accept: 'li.item_for_node',
 		hoverClass: 'active',
 		scope: 'item-reparent',
@@ -792,7 +864,7 @@ jQuery.fn.setupReparentDroppable = function() {
 		out: function(event, ui) { removeHyper($(this)); },
 		drop: drop,
 	});
-	return this;
+	return toSetup;
 	
 	
 	function makeHyper(dropBody) {
@@ -837,7 +909,7 @@ function itemReparent(node, parentNode) {
 	function handleSuccess(responseData) {
 		parentNode.children('.body').removeClass('active');
 		
-		var list = parentNode.children('.node.list').required();
+		var list = parentNode.children('ul.node.list').required();
 		
 		$('li.item_for_node', list).draggable('destroy');
 		$('.show.body', list).droppable('destroy');
@@ -907,13 +979,14 @@ function itemReparent(node, parentNode) {
 			
 			
 			list.clone().insertAfter(list).html(responseData);
-			newList = list.next('.node.list').required();
+			newList = list.next('ul.node.list').required();
+			// seems the sortable gets destroyed anyway, but the classes aren't removed; destroy again to be safe
+			newList.sortable('destroy').removeClass('ui-sortable ui-sortable-disabled ui-state-disabled');
 			
 			newListHeight = newList.height();
 			newList.setCSS('opacity', 0.0);
 			
-			newList.applyReparentability();
-			newList.applyReorderability();
+			newList.applyReparentDroppability();
 			
 			newList.setCSS({
 				opacity: 0.0
@@ -960,7 +1033,7 @@ function itemReparent(node, parentNode) {
 
 
 function badgeAdd(link, addType) {
-	var node = $(link).closest('.item_for_node').required();
+	var node = $(link).closest('li.item_for_node').required();
 	
 	var state;
 	if (node.children('.new')[0]) {
@@ -981,7 +1054,7 @@ function badgeAdd(link, addType) {
 	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('.item_for_node').required();
+	var parentNode = node.parent().closest('li.item_for_node').required();
 	
 	$.ajax({
 		type: 'get',
@@ -1001,7 +1074,7 @@ function badgeAdd(link, addType) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('.item_for_node:last').find('.new.body').required();
+			var newBody = list.children('li.item_for_node:last').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
@@ -1056,7 +1129,7 @@ function badgeRemove(link) {
 	var deleteField = $(link).siblings('input[type=hidden]').required();
 	deleteField.val(1);
 	
-	var node = $(link).closest('.item_for_node').required();
+	var node = $(link).closest('li.item_for_node').required();
 	
 	var state;
 	if (node.children('.new')[0]) {
@@ -1077,7 +1150,7 @@ function badgeRemove(link) {
 	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('.item_for_node').required();
+	var parentNode = node.parent().closest('li.item_for_node').required();
 	
 	$.ajax({
 		type: 'get',
@@ -1097,7 +1170,7 @@ function badgeRemove(link) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('.item_for_node:last').find('.new.body').required();
+			var newBody = list.children('li.item_for_node:last').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
