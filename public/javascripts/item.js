@@ -940,12 +940,22 @@ function badgeAdd(link, addType) {
 	var node = $(link).closest('.item_for_node').required();
 	
 	var state;
-	if (node.children('.new')[0])
+	if (node.children('.new')[0]) {
 		state = 'new';
-	else if (node.children('.edit')[0])
+		
+		if (!ClutterApp.fsm.changeState('itemNew', 'badgeAddLoad'))
+			return;
+	} else if (node.children('.edit')[0]) {
 		state = 'edit';
-	else if (window.console && window.console.assert)
-		window.console.assert('invalid state');
+		
+		if (!ClutterApp.fsm.changeState('itemEdit', 'badgeAddLoad'))
+			return;
+	} else {
+		if (window.console && window.console.assert)
+			window.console.assert('invalid state');
+		
+		return;
+	}
 	
 	var form = node.find('form').required();
 	var parentNode = node.parent().closest('.item_for_node').required();
@@ -975,6 +985,9 @@ function badgeAdd(link, addType) {
 			showFill(newBody);
 			
 			formFocus(newBody.find('form').required());
+			
+			
+			ClutterApp.fsm.finishState('itemNew', 'badgeAddLoad');
 		}
 		else if (state == 'edit')
 		{
@@ -990,12 +1003,18 @@ function badgeAdd(link, addType) {
 			
 			showFill(editBody);
 			formFocus(editBody.find('form').required());
+			
+			
+			ClutterApp.fsm.finishState('itemEdit', 'badgeAddLoad');
 		}
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		
+		
+		ClutterApp.fsm.finishState('itemNew', 'badgeAddLoad') || ClutterApp.fsm.finishState('itemEdit', 'badgeAddLoad');
 	}
 }
 
@@ -1017,12 +1036,22 @@ function badgeRemove(link) {
 	var node = $(link).closest('.item_for_node').required();
 	
 	var state;
-	if (node.children('.new')[0])
+	if (node.children('.new')[0]) {
 		state = 'new';
-	else if (node.children('.edit')[0])
+		
+		if (!ClutterApp.fsm.changeState('itemNew', 'badgeRemoveLoad'))
+			return;
+	} else if (node.children('.edit')[0]) {
 		state = 'edit';
-	else if (window.console && window.console.assert)
-		window.console.assert('invalid state');
+		
+		if (!ClutterApp.fsm.changeState('itemEdit', 'badgeRemoveLoad'))
+			return;
+	} else {
+		if (window.console && window.console.assert)
+			window.console.assert('invalid state');
+		
+		return;
+	}
 	
 	var form = node.find('form').required();
 	var parentNode = node.parent().closest('.item_for_node').required();
@@ -1052,6 +1081,9 @@ function badgeRemove(link) {
 			showFill(newBody);
 			
 			formFocus(newBody.find('form').required());
+			
+			
+			ClutterApp.fsm.finishState('itemNew', 'badgeRemoveLoad');
 		}
 		else if (state == 'edit')
 		{
@@ -1067,12 +1099,18 @@ function badgeRemove(link) {
 			
 			showFill(editBody);
 			formFocus(editBody.find('form').required());
+			
+			
+			ClutterApp.fsm.finishState('itemEdit', 'badgeRemoveLoad');
 		}
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		
+		
+		ClutterApp.fsm.finishState('itemNew', 'badgeRemoveLoad') || ClutterApp.fsm.finishState('itemEdit', 'badgeRemoveLoad');
 	}
 }
 
