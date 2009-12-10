@@ -92,11 +92,10 @@ describe User do
       @user.shared_piles.count.should == 1
     end
     
-    it "should be able to share a pile publicly" do
-      pending
-      @share = @user.share_pile_with_public(@user.default_pile)
-      @share.should be_instance_of(Share)
-    end
+    it "should be able to share a pile publicly"
+    #it "should be able to share a pile publicly" do
+    #  @user.share_pile_with_public(@user.default_pile)
+    #end
     
     it "should not let users access piles that aren't shared" do
       @user.authorized_piles << @user2.default_pile

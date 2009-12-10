@@ -1,6 +1,9 @@
 ActionController::Routing::Routes.draw do |map|
   
   map.resources :password_resets
+  #map.resources :followships, :only => [:index, :create, :destroy], :member => { :toggle_follow => :post }
+  
+  map.stylesheets '/stylesheets/all.css', :controller => 'stylesheets', :action => 'all'
   map.stylesheets '/stylesheets/:id.css', :controller => 'stylesheets', :action => 'show'
   
   map.login '/in',                        :controller => 'user_sessions',    :action => 'new',     :conditions => {:method => :get}
@@ -24,8 +27,9 @@ ActionController::Routing::Routes.draw do |map|
       # /:user_id/piles/:pile_id/nodes
       # /:user_id/piles/:pile_id/nodes/...
       piles.resources :nodes, :except => [:index, :show], :member => {
-        :move => :put,
-        :update_check_prop_checked => :put
+        :reorder => :put,
+        :reparent => :put,
+        :update_check_prop_checked => :put # the action that won't die (it just keeps going and going and…)
       }
       
       # /:user_id/piles/:pile_id/props/:type

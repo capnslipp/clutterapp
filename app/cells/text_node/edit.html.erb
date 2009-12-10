@@ -1,5 +1,0 @@
-<div class="edit text prop <%= 'badge' if @node.prop.badged? -%>">
-	<%- @form.fields_for :prop do |prop_form| -%>
-		<%= prop_form.text_field :text, :class => 'field', :autocomplete => 'off' %>
-	<%- end -%>
-</div>

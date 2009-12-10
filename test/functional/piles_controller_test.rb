@@ -70,7 +70,7 @@ class PilesControllerTest < ActionController::TestCase
 protected
   
   def bypass_authentication
-    PilesController.any_instance.stubs(:logged_in? => true, :current_user => users(:one))
+    PilesController.any_instance.stub(:logged_in? => true, :current_user => users(:one))
   end
   
 end

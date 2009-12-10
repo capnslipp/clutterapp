@@ -63,7 +63,7 @@ class NodesControllerTest < ActionController::TestCase
 protected
   
   def bypass_authentication
-    NodesController.any_instance.stubs(:logged_in? => true, :current_user => User.first)
+    NodesController.any_instance.stub(:logged_in? => true, :current_user => User.first)
   end
   
 end

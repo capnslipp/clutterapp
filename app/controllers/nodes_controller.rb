@@ -1,6 +1,6 @@
 class NodesController < ApplicationController
-  include CellHelper
   include ERB::Util
+  include ApplicationHelper
   layout nil
   
   before_filter :be_xhr_request
@@ -98,10 +98,10 @@ class NodesController < ApplicationController
         if delete_child.present?
           params[:node][:children_attributes].delete(i)
         else
-          @node.children.create(child_attrs.merge(
-            :parent => @node,
-            :pile => @node.pile
-          ))
+          #@node.children.create(child_attrs.merge(
+          #  :parent => @node,
+          #  :pile => @node.pile
+          #))
         end
       end
     end if params[:node] && params[:node][:children_attributes]
@@ -120,7 +120,7 @@ class NodesController < ApplicationController
     end
     
     
-    render :inline => render_cell('node_body', :edit, :node => @node)
+    render :partial => node_body_partial(:edit), :locals => {:node => @node}
   end
   
   
@@ -151,71 +151,41 @@ class NodesController < ApplicationController
     
     
     if @node.save
-      render :inline => render_cell('node_body', :show, :node => @node)
+      render :partial => node_body_partial(:show), :locals => {:node => @node}
     else
       render :nothing => true, :status => :bad_request
     end
   end
   
   
-  # PUT /nodes/1/move/:dir
-  def move
-    dir = params[:dir].to_sym
-    
+  # PUT /nodes/1/reorder?prev_sibling_id=2
+  def reorder
     @node = active_pile.nodes.find(params[:id])
-    orig_ref_node = case dir
-      when :up:   @node.left_non_badgeable_sibling
-      when :down: @node.right_non_badgeable_sibling
-      when :in:   @node.left_non_badgeable_sibling
-      when :out:  @node.parent
+    
+    # put it after the given sibling
+    if params[:prev_sibling_id].present?
+      @prev_sibling = @node.siblings.find(params[:prev_sibling_id])
+      @node.move_to_right_of(@prev_sibling)
+      
+    # put it first
+    else
+      @node.move_to_left_of(@node.siblings.first)
     end
     
-    cant_move = case dir
-      when :up:   orig_ref_node.nil?
-      when :down: orig_ref_node.nil?
-      when :in:   orig_ref_node.nil?
-      when :out:  orig_ref_node.nil? || orig_ref_node.root?
-      else        true
-    end
-    return render :nothing => true , :status => :bad_request if cant_move
+    render :nothing => true, :status => :accepted
+  end
+  
+  
+  # PUT /nodes/1/reparent?parent_id=2
+  def reparent
+    @node = active_pile.nodes.find(params[:id])
     
-    case dir
-      when :up:   @node.move_to_left_of orig_ref_node
-      when :down: @node.move_to_right_of orig_ref_node
-      when :in:   @node.move_to_child_of orig_ref_node
-      when :out:  @node.move_to_right_of orig_ref_node
-    end
+    # put it as the last child of the parent
+    @parent = active_pile.nodes.find(params[:parent_id])
+    @node.move_to_child_of(@parent)
     
-    orig_ref_node.reload #:select => :version # doesn't work some times, possibly due to being a named_scope?
-    @node.reload #:select => :version # doesn't work some times, possibly due to being a named_scope?
-    
-    node_sel = dom_id(@node, 'item_for')
-    
-    orig_ref_sel = case dir
-      when :up:   "##{dom_id(orig_ref_node, 'item_for')}"
-      when :down: "##{dom_id(orig_ref_node, 'item_for')}"
-      when :in:   "##{dom_id(orig_ref_node, 'item_for')} > .node.list"
-      when :out:  "##{dom_id(orig_ref_node, 'item_for')} > .node.list"
-    end
-    insert_pos = case dir
-      when :up:   :before
-      when :down: :after
-      when :in:   :bottom
-      when :out:  :bottom
-    end
-    
-    respond_to do |format|
-      format.js do
-        # keeping this as RJS for now, since it will soon be replaced with a drag-and-drop move system
-        render :update do |page|
-          page.call 'collapseActionBar'
-          page.remove node_sel
-          @cell_state = :show
-          page.insert_html insert_pos, orig_ref_sel, :partial => 'item', :locals => {:item => @node}
-          page.visual_effect :highlight, node_sel
-        end
-      end # format.js
-    end # respond_to
+    @cell_state = :show
+    render :partial => 'list_items', :locals => {:item => @parent}
   end
   
   

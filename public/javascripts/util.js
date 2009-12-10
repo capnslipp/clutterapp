@@ -15,8 +15,25 @@ jQuery.fn.walk = function() {
 }
 
 jQuery.fn.required = function() {
-	if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
-		console.assert(this[0]);
+	if (window.console && window.console.assert)
+		window.console.assert(this[0]);
 	
 	return this;
 }
+
+$.extend(String.prototype, {
+	// function derived from jQuery.backgroundPosition
+	asBGPosToArray: function() {
+		var strg = this; // make of copy of ourself (a string), so we don't change the contents
+		strg = strg.replace(/left|top/g, '0px');
+		strg = strg.replace(/right|bottom/g, '100%');
+		strg = strg.replace(/([0-9\.]+)(\s|\)|$)/g, "$1px$2");
+		var res = strg.match(/(-?[0-9\.]+)(px|\%|em|pt)\s(-?[0-9\.]+)(px|\%|em|pt)/);
+		return [
+			parseFloat(res[1], 10),
+			res[2],
+			parseFloat(res[3], 10),
+			res[4]
+		];
+	}
+});

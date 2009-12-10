@@ -72,11 +72,11 @@ module StylesheetsHelper
     end
   end
   def deep_shadow(alpha_multiplier_or_color = 1.0)
-  	"0px 1px 6px #{shadow_color(alpha_multiplier_or_color).to_s(:css_rgba)}"
+  	"0px 2px 6px #{shadow_color(alpha_multiplier_or_color).to_s(:css_rgba)}"
   end
   def shallow_shadow(alpha_multiplier_or_color = 1.0)
     alpha_multiplier_or_color *= 0.5 unless alpha_multiplier_or_color.is_a?(String) || alpha_multiplier_or_color.is_a?(Color)
-  	"0px 1px 4px #{shadow_color(alpha_multiplier_or_color).to_s(:css_rgba)}"
+  	"0px 1px 3px #{shadow_color(alpha_multiplier_or_color).to_s(:css_rgba)}"
   end
   def deep_shadow_decl(alpha_multiplier_or_color = 1.0)
     %W{box-shadow -moz-box-shadow -webkit-box-shadow}.collect {|p| "#{p}: #{deep_shadow(alpha_multiplier_or_color)};" }.join(' ')
