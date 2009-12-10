@@ -114,7 +114,7 @@ function itemNew(button, type) {
 		return;
 	
 	
-	var parentNode = $(button).closest('li.item_for_node').required();
+	var parentNode = $(button).closest('.item_for_node').required();
 	
 	collapseActionBar();
 	parentNode.showProgressOverlay();
