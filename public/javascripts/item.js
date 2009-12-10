@@ -48,6 +48,9 @@ function expandActionBar(node) {
 	if (!nodeBody.find('#action-bar')[0])
 		$('#action-bar').prependTo(nodeBody);
 	
+	if (node.hasClass('pile'))
+		$('#action-bar > .buttons > a:not(.new)').hide();
+	
 	// since it may be initially-hidden
 	safeShow($('#action-bar'));
 	
@@ -66,13 +69,17 @@ function collapseActionBar() {
 	node.closest('ul.node.list').deactivateReorderSortable();
 	
 	
-	$('#action-bar').hide()
+	$('#action-bar').hide();
 	
 	nodeBody.children('.action.stub').show();
 	
 	nodeBody.removeClass('active');
-		
+	
+	
 	$('#action-bar').appendTo($('.pile:first')); // in case the parent item gets deleted
+	
+	
+	$('#action-bar > .buttons > a').show();
 }
 
 $(function() {
