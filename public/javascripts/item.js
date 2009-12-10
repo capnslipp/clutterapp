@@ -32,6 +32,9 @@ function nodeIDOfItem(itemForNode) {
 
 
 function expandActionBar(node) {
+	if (ClutterApp.fsm.isBusy())
+		return;
+	
 	collapseActionBar();
 	
 	var nodeBody = node.children('.body').required();
@@ -74,8 +77,12 @@ $(function() {
 		expandActionBar($(this).closest('.item_for_node')); return false;
 	});
 	
-	$('#action-bar .widget.expanded a')
-		.click(function() { collapseActionBar(); return false; });
+	$('#action-bar .widget.expanded a').click(function() {
+		if (!ClutterApp.fsm.isBusy())
+			collapseActionBar();
+		
+		return false;
+	});
 });
 
 
@@ -88,6 +95,10 @@ function formFocus(form) {
 
 
 function itemNew(button, type) {
+	if (!ClutterApp.fsm.changeAction('itemNew', 'load'))
+		return;
+	
+	
 	var parentNode = $(button).closest('.item_for_node').required();
 	
 	collapseActionBar();
@@ -143,6 +154,9 @@ function itemNew(button, type) {
 		
 		var newBodyForm = newBody.find('form').required();
 		formFocus(newBodyForm.required());
+		
+		
+		ClutterApp.fsm.finishState('itemNew', 'load');
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
@@ -151,6 +165,9 @@ function itemNew(button, type) {
 		
 		parentNode.children('.show.body')
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000); // @todo: fix
+		
+		
+		ClutterApp.fsm.finishAction('itemNew', 'load');
 	}
 }
 	
@@ -162,6 +179,10 @@ $(function() {
 
 
 function itemNewCancel(button) {
+	if (!ClutterApp.fsm.changeState('itemNew', 'cancel'))
+		return;
+	
+	
 	var form = button.closest('form.new_node').required();
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
@@ -193,6 +214,8 @@ function itemNewCancel(button) {
 			},
 			complete: function() {
 				newBody.closest('.item_for_node').required().remove();
+				
+				ClutterApp.fsm.finishAction('itemNew', 'cancel');
 			}
 		}
 	);
@@ -207,6 +230,10 @@ $(function() {
 
 
 function itemCreate(form) {
+	if (!ClutterApp.fsm.changeState('itemNew', 'done'))
+		return;
+	
+	
 	form.required();
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
@@ -260,6 +287,9 @@ function itemCreate(form) {
 					
 					newItem.remove();
 					createdItem.fadeIn(kDefaultTransitionDuration);
+					
+					
+					ClutterApp.fsm.finishAction('itemNew', 'done');
 				}
 			}
 		);
@@ -278,6 +308,9 @@ function itemCreate(form) {
 		
 		form.find('input[type=submit], input[type=button]').required().removeAttr('disabled');
 		formFocus(form);
+		
+		
+		ClutterApp.fsm.finishState('itemNew', 'done');
 	}
 }
 
@@ -290,6 +323,10 @@ $(function() {
 
 
 function itemEdit(link) {
+	if (!ClutterApp.fsm.changeAction('itemEdit', 'load'))
+		return;
+	
+	
 	var showBody = $(link).closest('.show.body').required();
 	
 	collapseActionBar();
@@ -340,6 +377,9 @@ function itemEdit(link) {
 		
 		showFill(editBody);
 		formFocus(editBody.find('form').required());
+		
+		
+		ClutterApp.fsm.finishState('itemEdit', 'load');
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
@@ -348,6 +388,9 @@ function itemEdit(link) {
 		
 		showBody
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		
+		
+		ClutterApp.fsm.finishAction('itemEdit', 'load');
 	}
 }
 
@@ -363,6 +406,10 @@ $(function() {
 
 
 function itemEditCancel(button) {
+	if (!ClutterApp.fsm.changeState('itemEdit', 'cancel'))
+		return;
+	
+	
 	var form = button.closest('form.edit_node').required();
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
@@ -392,6 +439,8 @@ function itemEditCancel(button) {
 			},
 			complete: function() {
 				editBody.remove();
+				
+				ClutterApp.fsm.finishAction('itemEdit', 'cancel');
 			}
 		}
 	);
@@ -406,6 +455,10 @@ $(function() {
 
 
 function itemUpdate(form) {
+	if (!ClutterApp.fsm.changeState('itemEdit', 'done'))
+		return;
+	
+	
 	form.required();
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
@@ -451,6 +504,9 @@ function itemUpdate(form) {
 					hideFill();
 					
 					editBody.remove();
+					
+					
+					ClutterApp.fsm.finishAction('itemEdit', 'done');
 				}
 			}
 		);
@@ -472,6 +528,9 @@ function itemUpdate(form) {
 		
 		form.find('input[type=submit], input[type=button]').required().removeAttr('disabled');
 		formFocus(form);
+		
+		
+		ClutterApp.fsm.finishState('itemEdit', 'done');
 	}
 }
 
@@ -484,6 +543,10 @@ $(function() {
 
 
 function itemDelete(node) {
+	if (!ClutterApp.fsm.changeAction('itemDelete', 'load'))
+		return;
+	
+	
 	$.ajax({
 		type: 'post',
 		url: node.getAttr('oc\:url'),
@@ -527,6 +590,9 @@ function itemDelete(node) {
 				},
 				complete: function() {
 					node.remove();
+					
+					
+					ClutterApp.fsm.finishAction('itemDelete', 'load');
 				}
 			}
 		);
