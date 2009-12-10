@@ -51,9 +51,10 @@ function expandActionBar(node) {
 	// since it may be initially-hidden
 	safeShow($('#action-bar'));
 	
-	
-	node.activateReparentDraggable();
-	node.closest('ul.node.list').required().activateReorderSortable();
+	if (!node.hasClass('pile')) {
+		node.activateReparentDraggable();
+		node.closest('ul.node.list').required().activateReorderSortable();
+	}
 }
 
 function collapseActionBar() {
@@ -79,7 +80,7 @@ $(function() {
 		expandActionBar($(this).closest('li.item_for_node')); return false;
 	});
 	$('section.pile.item_for_node > .body > .header').live('click', function() {
-		expandActionBar($(this).closest('li.item_for_node')); return false;
+		expandActionBar($(this).closest('section.pile.item_for_node')); return false;
 	});
 });
 
