@@ -10,6 +10,36 @@ jQuery.ajaxSetup({beforeSend: function(xhr) {
 
 
 ClutterApp.fsm = {
+	// "action" is a string corresponding to the current Rails action or null if not currently in an action.
+	_action: null,
+	action: function() { return this._action; },
+	
+	// "state" is a string corresponding to the state of the action (entering, exiting, waiting, etc.), or null if waiting on the user's next move.
+	_state: 'loading',
+	state: function() { return this._state; },
+	
+	// "context" is an optional jQuery object pointing to the element(s) currently being manipulated.
+	// Possible future use: allowing multiple calls to the server at a time, as long as they don't overlap.
+	_context: null,
+	context: function() { return this._content; },
+	
+	
+	// checks to see if a state is active
+	isStateBusy: function() {
+		return this.state() != null;
+	},
+	
+	// checks to see if a action is active
+	isActionBusy: function() {
+		return this.action() != null;
+	},
+	
+	// checks to see if a state or action is active
+	isBusy: function() {
+		return this.isStateBusy() || this.isActionBusy();
+	},
+	
+	
 	// changes the action, state, and context, given not being busy with something else already
 	changeAction: function(newAction, newState, newContext) {
 		if (this._action != null) // check that there is no current action
@@ -88,20 +118,11 @@ ClutterApp.fsm = {
 		
 		return true;
 	},
-	
-	// "action" is a string corresponding to the current Rails action or null if not currently in an action.
-	_action: null,
-	action: function() { return this._action; },
-	
-	// "state" is a string corresponding to the state of the action (entering, exiting, waiting, etc.), or null if waiting on the user's next move.
-	_state: 'loading',
-	state: function() { return this._state; },
-	
-	// "context" is an optional jQuery object pointing to the element(s) currently being manipulated.
-	// Possible future use: allowing multiple calls to the server at a time, as long as they don't overlap.
-	_context: null,
-	context: function() { return this._content; },
 };
+
+$(function() {
+	ClutterApp.fsm.finishState(null, 'loading');
+});
 
 
 
