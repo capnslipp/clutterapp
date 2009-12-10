@@ -85,8 +85,11 @@ $(function() {
 });
 
 $(function() {
-	$('.action.stub .widget.collapsed a').live('click', function() {
+	$('li.item_for_node > .show.body > .action.stub .widget.collapsed a').live('click', function() {
 		expandActionBar($(this).closest('li.item_for_node')); return false;
+	});
+	$('section.pile.item_for_node > .body > .action.stub .widget.collapsed a').live('click', function() {
+		expandActionBar($(this).closest('section.pile.item_for_node')); return false;
 	});
 	
 	$('#action-bar .widget.expanded a').click(function() {
