@@ -710,6 +710,12 @@ jQuery.fn.setupReorderSortable = function() {
 }
 
 function itemReorder(node) {
+	if (!ClutterApp.fsm.changeAction('itemReorder', 'load')) {
+		handleError(); // return the item back for now, since we have no way to prevent the drag from starting
+		return;
+	}
+	
+	
 	node.required();
 	
 	var list = node.parent('ul.node.list').required();
@@ -734,6 +740,9 @@ function itemReorder(node) {
 		
 		hideFill(list);
 		list.removeClass('active');
+		
+		
+		ClutterApp.fsm.finishAction('itemReorder', 'load');
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
@@ -741,6 +750,9 @@ function itemReorder(node) {
 		
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		
+		
+		ClutterApp.fsm.finishAction('itemReorder', 'load');
 	}
 }
 
@@ -799,6 +811,11 @@ jQuery.fn.setupReparentDroppable = function() {
 }
 
 function itemReparent(node, parentNode) {
+	if (!ClutterApp.fsm.changeAction('itemReparent', 'load')) {
+		handleError(); // return the item back for now, since we have no way to prevent the drag from starting
+		return;
+	}
+	
 	node.required();
 	parentNode = $(parentNode).closest('.item_for_node').required();
 	
@@ -923,6 +940,9 @@ function itemReparent(node, parentNode) {
 				width: '',
 				opacity: '',
 			});
+			
+			
+			ClutterApp.fsm.finishAction('itemReparent', 'load');
 		}
 	}
 	
@@ -931,6 +951,9 @@ function itemReparent(node, parentNode) {
 		
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		
+		
+		ClutterApp.fsm.finishAction('itemReparent', 'load');
 	}
 }
 
