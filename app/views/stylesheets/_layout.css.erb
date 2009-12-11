@@ -360,12 +360,16 @@ li { list-style-type: none; }
 	
 	min-width: 230px;
 }
-#scope-panel > .ui-resizable-handle {
-	position: absolute;
+#scope-panel > .ui-resizable-handle,
+#scope-panel > .toggle {
+	position: absolute;  z-index: 101;
 	width: 16px; height: 100%;
 	left: -8px;
 	top: 0;
+	-moz-user-select: none;
 }
+#scope-panel > .toggle { z-index: 100; }
+#scope-panel > a.toggle { display: block; }
 
 .ui-resizable-helper { display: none; }
 

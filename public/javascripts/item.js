@@ -1316,7 +1316,7 @@ jQuery.fn.setupPanelResizable = function() {
 	var handle = this.children('.back');
 	
 	this.resizable({
-		handles: leftPanel ? 'e' : 'w',
+		handles: leftPanel ? {e: '.toggle.ui-resizable-handle.ui-resizable-e'} : {w: '.toggle.ui-resizable-handle.ui-resizable-w'},
 		resize: function(event, ui) {
 			panel.panelResize(ui.size.width);
 		},
@@ -1326,17 +1326,22 @@ jQuery.fn.setupPanelResizable = function() {
 		},
 		minWidth: this.panelMinWidth(),
 		maxWidth: this.panelMaxWidth(),
-		ghost: 'true',
+		delay: 20,
+		distance: 10,
+		ghost: true,
 	});
 	
 	return this;
 }
 
 
-jQuery.fn.setupPanelToggle = function() {
+jQuery.fn.setupPanelToggle = function(eventType) {
+	if (eventType == undefined)
+		eventType = 'click';
+	
 	var panel = $(this).filter('.panel').required();
 	
-	panel.children('a.toggle').click(function() {
+	panel.children('a.toggle').bind(eventType, function() {
 		if (panel.width() <= panel.defaultPanelSize()) {
 			panel.animate(
 				{ width: panel.panelMaxWidth() },
@@ -1371,5 +1376,5 @@ $(function() {
 	if (ClutterApp.hasMouseSupport)
 		panel.setupPanelResizable();
 	
-	panel.setupPanelToggle();
+	panel.setupPanelToggle(ClutterApp.hasMouseSupport ? 'dblclick' : 'click');
 });
