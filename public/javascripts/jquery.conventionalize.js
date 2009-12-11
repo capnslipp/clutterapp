@@ -18,6 +18,9 @@ jQuery.fn.setData = function(key, value) { return this.data(key, value); }
 jQuery.fn.getCSS = function(key) { return this.css(key); }
 jQuery.fn.setCSS = function(key, value) { return this.css(key, value); }
 
+jQuery.fn.setWidth = function(val) { return this.width(val); }
+jQuery.fn.setHeight = function(val) { return this.height(val); }
+
 
 // additional functionality that should be built into jQuery
 
