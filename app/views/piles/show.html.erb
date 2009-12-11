@@ -25,7 +25,10 @@
 		
 		<section id="<%=dom_id(@pile.root_node, 'item_for')%>" class="<%=dom_class(@pile.root_node, 'item_for')%> pile" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
 			<div class="body">
+				<div class="back"></div>
+				
 				<%= render :partial => 'nodes/action_stub' %>
+				
 				<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 					<span class="owner"><%= @owner.name %> »</span> <span class="name"><%= @pile.name %></span>
 				</h1>

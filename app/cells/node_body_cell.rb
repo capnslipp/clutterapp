@@ -1,4 +1,5 @@
 class NodeBodyCell < Cell::Base
+  helper :application
   helper :cell
   
   

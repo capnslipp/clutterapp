@@ -8,7 +8,7 @@ class Node < ActiveRecord::Base
   #before_move :increment_parent_version
   #after_move :increment_version # necessary?
   
-  belongs_to :prop, :polymorphic => true, :autosave => true
+  belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true
   
   belongs_to :pile
   
@@ -92,6 +92,36 @@ class Node < ActiveRecord::Base
   
   def right_non_badgeable_sibling
     non_badgeable_siblings.find(:first, :conditions => ["#{self.class.quoted_table_name}.#{quoted_left_column_name} > ?", left])
+  end
+  
+  
+  Prop.badgeable_types.each do |type|
+    type_name = type.short_name.underscore
+    
+    if !type.stackable? # singular versions
+      class_eval(<<-EOS, __FILE__, __LINE__)
+        def #{type_name}_badge?
+          # @todo: optimize
+          !!self.children.typed(:#{type_name}).first
+        end
+        
+        def #{type_name}_badge
+          self.children.typed(:#{type_name}).first
+        end
+      EOS
+      
+    else # plural versions
+      class_eval(<<-EOS, __FILE__, __LINE__)
+        def #{type_name}_badges?
+          # @todo: optimize
+          !self.children.typed(:#{type_name}).empty?
+        end
+        
+        def #{type_name}_badges
+          self.children.typed(:#{type_name})
+        end
+      EOS
+    end
   end
   
   

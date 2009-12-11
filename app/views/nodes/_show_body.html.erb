@@ -1,0 +1,36 @@
+<div class="show body">
+	<div class="back"></div>
+	
+	<div class="bullet">
+		<% if node.check_badge? %>
+			<%= render :partial => prop_partial(node.check_badge, :show), :locals => {:node => node.check_badge} %>
+		<% else %>
+			<span class="sym">•</span>
+		<% end %>
+	</div>
+	
+	<%= render :partial => 'nodes/action_stub' %>
+	
+	<div class="cont" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
+		<% if node.priority_badge? %>
+			<%= render :partial => prop_partial(node.priority_badge, :show), :locals => {:node => node.priority_badge} %>
+		<% end %>
+		
+		<%= render :partial => prop_partial(node, :show), :locals => {:node => node} %>
+		
+		<% if node.tag_badges? %>
+			<%- node.tag_badges.each do |tag_badge| -%>
+				<%= render :partial => prop_partial(tag_badge, :show), :locals => {:node => tag_badge} %>
+			<%- end -%>
+		<% end %>
+		<% if node.time_badge? %>
+			<%= render :partial => prop_partial(node.time_badge, :show), :locals => {:node => node.time_badge} %>
+		<% end %>
+		
+		<% if node.note_badge? %>
+			<div class="line">
+				<%= render :partial => prop_partial(node.note_badge, :show), :locals => {:node => node.note_badge} %>
+			</div>
+		<% end %>
+	</div>
+</div>

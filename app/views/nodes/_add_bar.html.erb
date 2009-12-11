@@ -1,5 +1,9 @@
-<li id="add-bar" class="add bar">
+<div id="add-bar" class="add bar">
 	
+	<%- # @hack: to get +note to be last
+sorted_badgeable_types = Prop.badgeable_types
+sorted_badgeable_types << sorted_badgeable_types.delete(NoteProp)
+	-%>
 	<%- Prop.badgeable_types.each do |t| -%>
 		<%#div class="buttons"%>
 			<%- ability_classes = Prop.abilities.select{|a| t.send("#{a}?") }.collect{|a| a.to_s }.join(' ') -%>
@@ -9,4 +13,4 @@
 		<%#/div%>
 	<%- end -%>
 	
-</li>
+</div>

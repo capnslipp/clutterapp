@@ -1,0 +1,7 @@
+<%- @static_stylesheet_filenames.each do |sf| -%>
+	<%= render :file => "#{RAILS_ROOT}/public/stylesheets/#{sf}" %>
+<%- end -%>
+
+<%- @dynamic_stylesheet_partials.each do |sp| -%>
+	<%= render :partial => sp %>
+<%- end -%>

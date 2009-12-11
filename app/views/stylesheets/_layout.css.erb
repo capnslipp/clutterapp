@@ -1,0 +1,371 @@
+ul.list ul.list {
+	border-left: 1px dotted <%= divider_color * 0.5 + "#fff".to_color * 0.5 %>;
+	/*padding-left: 18px;*/
+	/*margin-left: -1em;*/
+}
+
+ul.node.list {
+	position: relative;
+}
+
+ul.node.list > li.item_for_node {
+	position: relative;
+}
+
+ul.node.list ul.node.list > li.item_for_node {
+	margin-left: 18px;
+}
+
+ul.node.list > li.item_for_node.ui-sortable-placeholder {
+	visibility: visible !important;
+	
+	position: relative;
+}
+
+ul.node.list > li.item_for_node.ui-sortable-placeholder > .back {
+	position: absolute; z-index: 0;
+	top: 0; bottom: 0; left: -2px; right: -2px;
+	
+	background: <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
+	<%= border_radius_decl('8px') %>
+	border: 4px solid transparent;
+	margin: -4px;
+}
+
+ul.node.list > li.item_for_node.ui-sortable-placeholder > .cont {
+	position: absolute; z-index: 1;
+	top: 0; bottom: 0; left: -2px; right: -2px;
+	
+	background: <%= bright_bg_color %>;
+	<%= border_radius_decl('4px') %>
+	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
+}
+
+ul.node.list > li.item_for_node.ui-sortable-helper {
+	/*height: 0 !important;*/
+}
+ul.node.list.active {
+	background: <%= bright_bg_color %>;
+	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
+}
+
+li { list-style-type: none; }
+
+.pile.item_for_node > .body {
+	display: block;
+	margin: -16px; margin-bottom: 0;
+	padding: 16px; padding-bottom: 18px;
+	border: none;
+}
+.pile.item_for_node > .body > .header {
+	position: relative;
+	margin: -16px; margin-bottom: -18px;
+	padding: 16px; padding-bottom: 18px;
+}
+.pile.item_for_node > .body > .header > .owner { opacity: 0.25; }
+.pile.item_for_node > .body > .header > .owner,
+.pile.item_for_node > .body > .header > .name { white-space: nowrap; }
+.pile.item_for_node > .body > .action.stub { float: right; width: auto; border: none; }
+.pile.item_for_node > .body.active {
+}
+.pile.item_for_node > .body.active > * {
+	z-index: 2;
+}
+.pile.item_for_node > .body.active > .back {
+	position: absolute; z-index: 1;
+	top: 0; bottom: 0; left: 0; right: 0;
+	
+	background: <%= bright_bg_color %>;
+	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
+}
+.item_for_node > .body.active > .hyper { /* used to super-highlight items */
+	position: absolute; z-index: 0;
+	top: 0; bottom: 0; left: -2px; right: -2px;
+	
+	background: <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
+	<%= border_radius_decl('8px') %>
+	border: 4px solid transparent;
+	margin: -4px;
+}
+
+.item_for_node {
+	position: relative;
+	
+	<% if debug? %>
+		background: rgba(255, 127, 0, 0.125);
+		border: 2px solid rgba(255, 127, 0, 0.5);
+		<%= border_radius_decl %>
+		margin: 1px;
+	<% end %>
+}
+.item_for_node > .body {
+	position: relative;
+	
+	<% if debug? %>
+		<%= border_radius_decl %>
+		margin: 1px;
+	<% end %>
+	
+	/*min-height: 1.5em;*/
+}
+.item_for_node > .show.body {
+	<% if debug? %>
+		background: rgba(127, 191, 0, 0.125);
+		border: 2px solid rgba(127, 191, 0, 0.5);
+	<% end %>
+	
+	border-top: 1px dotted <%= divider_color %>;
+	padding: 2px 0;
+	padding-left: 24px; /* for "> .bullet" */
+	padding-right: 14px; /* for "> .action.stub" */
+}
+.item_for_node > .show.body.active {
+}
+.item_for_node > .show.body.active > .cont {
+	position: relative;
+}
+.item_for_node > .show.body.active > .cont,
+.item_for_node > .show.body.active > .bullet {
+	z-index: 2;
+}
+.item_for_node > .show.body.active > .back {
+	position: absolute; z-index: 1;
+	top: 0; bottom: 0; left: -2px; right: -2px;
+	
+	background: <%= bright_bg_color %>;
+	<%= border_radius_decl('4px') %>
+	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
+}
+.item_for_node > .show.body.active > .hyper { /* used to super-highlight items */
+	position: absolute; z-index: 0;
+	top: 0; bottom: 0; left: -2px; right: -2px;
+	
+	background: <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
+	<%= border_radius_decl('8px') %>
+	border: 4px solid transparent;
+	margin: -4px;
+}
+
+.item_for_node > .new.body,
+.item_for_node > .edit.body {
+	margin: -12px 8px;
+	
+	background: <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
+	<%= border_radius_decl('16px') %>
+	border: 8px solid transparent;
+}
+.item_for_node > .new.body > .cont,  .item_for_node > .new.body > form > .cont,
+.item_for_node > .edit.body > .cont, .item_for_node > .edit.body > form > .cont {
+	<%= border_radius_decl('8px') %>
+	<%= deep_shadow_decl(0.5) %>
+	
+	background: <%= bright_bg_color %>;
+	padding: 8px;
+}
+/* contain-float-after */
+.item_for_node > .new.body > .cont:after,  .item_for_node > .new.body > form > .cont:after,
+.item_for_node > .edit.body > .cont:after, .item_for_node > .edit.body > form > .cont:after {
+	content: ""; display: block; height: 0; clear: both; visibility: hidden; /* (FF, S2, O9) */
+}
+.item_for_node > .edit.body {
+	position: absolute;
+	/*width: 100%;*/ left: 0; right: 0;
+	
+	<% if debug? %>
+		background: rgba(191, 0, 127, 0.125);
+		border: 2px solid rgba(191, 0, 127, 0.5);
+	<% end %>
+}
+.item_for_node > .new.body {
+	position: relative;
+	
+	<% if debug? %>
+		background: rgba(0, 255, 191, 0.125);
+		border: 2px solid rgba(0, 255, 191, 0.5);
+	<% end %>
+}
+.new.item_for_node {
+	position: absolute;
+	/*width: 100%;*/ left: 0; right: 0;
+}
+.item_for_node > .body .line {
+	/*overflow: auto; width: 100%; /* to contain floating elements */
+	margin-top: 2px;
+	margin-bottom: 4px;
+}
+.item_for_node > .new.body .finish.line,
+.item_for_node > .edit.body .finish.line {
+	float: right;
+}
+.item_for_node > .body > .bullet {
+	position: absolute;
+	left: 4px;
+	width: 16px;
+	text-align: center;
+	/*vertical-align: middle;*/
+	/*line-height: 15px;*/
+}
+.item_for_node > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-top: 1px; }
+
+.item_for_node > .body > .action.stub,
+.item_for_node > .body > #action-bar {
+	position: absolute; z-index: 5;
+	right: 4px;
+}
+.pile.item_for_node > .body > .action.stub,
+.pile.item_for_node > .body > #action-bar {
+	right: 20px;
+}
+
+/* page */
+#page {
+	padding: 16px;
+}
+
+
+/* top-bar */
+
+#top-bar {
+	position: relative; z-index: 1000;
+}
+
+#top-bar, #top-bar a {
+	color: <%= wash_text_color %>;
+}
+
+/* contain-float-after */
+#top-bar:after { content: ""; display: block; height: 0; clear: both; visibility: hidden; /* (FF, S2, O9) */ }
+
+<%- top_bar_back_shadow_height = 10 -%>
+
+#top-bar > .back {
+	overflow: hidden;
+	
+	position: absolute;
+	width: 100%; height: 100%;
+	
+	padding-bottom: <%=top_bar_back_shadow_height%>px;
+}
+
+#top-bar > .back > .fill {
+	position: absolute;
+	z-index: -1;
+	top: 0; bottom: <%=top_bar_back_shadow_height%>px;
+	top: -26px; left: -26px; right: -26px;
+	
+	background: <%= wash_color %>;
+	
+	margin-bottom: -<%= border_width %>px;
+	border-bottom: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	
+	<%= deep_shadow_decl(0.33) %>
+}
+
+#top-bar > .logo {
+	font-weight: bold;
+	float: left;
+	background: <%= accent_color %>;
+	
+	margin-bottom: -1px;
+	border-bottom: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	border-right: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	
+	padding: 4px;
+	padding-right: 6px;
+	
+	font-size: 16px;
+	line-height: 16px;
+}
+
+#top-bar > .logo a {
+	text-decoration: none;
+	background: none;
+	color: #fff;
+}
+
+#top-bar > .content {
+	float: left;
+	margin-left: 4px;
+	position: relative;
+	z-index: 1;
+	padding: 2px;
+	height: 20px;
+	line-height: 20px;
+}
+
+#top-bar > .corner {
+	float: right;
+	margin-right: 4px;
+	position: relative;
+	z-index: 1;
+	padding: 2px;
+	height: 20px;
+	line-height: 20px;
+}
+
+
+
+/* scope sidebar and list */
+
+/* scope sidebar */
+#scope-box {
+	float: left; clear: left;
+	width: 15em;
+	margin: 1em;
+}
+/* root-level scope-list */
+#scope-list > ul.scope-list {
+	margin-left: 0;
+	border: none;
+	padding-left: 0.5em; /* 0em - scope-item's indent */
+}
+
+/* all nested scope-lists */
+ul.scope-list {
+	margin-left: -0.5em; /* 0em + scope-item's indent */
+	border-left: 1px solid #eee;
+	padding-left: 1.5em; /* 1em - scope-item's indent */
+}
+ul.scope-list > li.scope-item {
+	list-style-type: none;
+	margin-left: 0;
+	text-indent: -0.5em;
+}
+/*.scope-list > .scope-item > .body { font-size: 1.0em; font-weight: bold; }
+.scope-list > .scope-item > .body * { color: #666; }
+.scope-list > .scope-item.current > .body { color: <%= accent_color %>; }*/
+
+
+#sidebar-right {
+	float: right; clear: right;
+	position: relative; z-index: 1;
+}
+
+
+/* pile list */
+
+#pile-box {
+	float: left; clear: left;
+	width: 15em;
+	margin: 1em;
+}
+
+/*#pile-box > .pile { font-weight: bold; color: #666; }
+#pile-box > .current.pile { color: <%= accent_color %>; }
+#pile-box > .action {}*/
+
+
+#view-options-box {
+	float: left; clear: left;
+	width: 15em;
+	margin: 1em;
+}
+
+ul.pile-list { margin: 8px; }
+ul.pile-list li .name { font-size: 15px; font-weight: bold; }
+ul.pile-list li .line { font-size: 11px; }
+
+
+/* user-bar */
+
+#user-bar-greeting, #user-bar-action, #user-bar-greeting form { display: inline; }

@@ -3,6 +3,8 @@ class TimeProp < Prop
   
   validates_presence_of :node, :on => :update # less stringent when the Prop is new in order to prevent circular dependencies
   
+  validates_presence_of :time
+  
   
   is_badgeable
   

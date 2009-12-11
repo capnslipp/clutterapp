@@ -26,12 +26,17 @@ class User < ActiveRecord::Base
   #before_validation_on_create :create_default_pile!
   after_create :default_pile # ensures that it's created
   
+  #Piles associations
+  has_many :piles, :foreign_key => 'owner_id', :dependent => :destroy, :autosave => true
+  
   #Followship associations
   has_many :followships
   has_many :followees, :through => :followships
   
   has_many :shares
-  has_many :authorized_piles, :through => :shares
+  has_many :authorized_piles, :through => :shares, :source => :pile, :conditions => ["authorized = ?", true]
+  has_many :public_piles, :through => :shares, :source => :pile, :conditions => [ "public = ?", true ]
+
   
   # @fix: get it to properly alias tables so that "a_user.followees.followers_of(self)" works
   named_scope :followers_of, proc {|a_user| {
@@ -99,11 +104,15 @@ class User < ActiveRecord::Base
   
   #sharing methods
   def share_pile_with_user(user, pile)
-    share = shares.create(:user => user, :authorized_pile => pile)
+    shares.create(:user => user, :pile => pile, :authorized => true)
   end
   
   def shared_piles
     Share.find(:all, :conditions => {:shared_pile_id => default_pile.id})
+  end
+
+  def share_pile_with_public(pile)
+    shares.create(:user => self, :pile => pile, :public => true)
   end
   
   # validating setters and utils
@@ -158,6 +167,12 @@ class User < ActiveRecord::Base
     @default_pile ||= piles.first || create_default_pile
   end
   
+  # Method to send reset password
+  def deliver_password_reset_instructions!
+    reset_perishable_token!
+    Notifier.deliver_password_reset_instructions(self)
+  end
+  
   
 protected
   
@@ -175,5 +190,4 @@ protected
     raise Exception.new('A default Pile could not be created because one for this User already exists.') if piles.count > 0
     create_default_pile
   end
-  
 end

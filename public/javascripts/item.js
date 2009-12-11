@@ -1,10 +1,12 @@
 // ClutterApp item view functionality JS
 
 
-JOIN = '_';
-NEW = 'new';
+var JOIN = '_';
+var NEW = 'new';
 
-kDefaultTransitionDuration = 250;
+var kSlowTransitionDuration = 375;
+var kDefaultTransitionDuration = 250;
+var kQuickTransitionDuration = 125;
 
 
 function classForNodeModels(prefix) {
@@ -24,12 +26,17 @@ function idForNodeModel(recordID, prefix) {
 
 
 function nodeIDOfItem(itemForNode) {
-	return itemForNode.attr('id').substring('item_for_node_'.length);
+	return itemForNode.getAttr('id').substring('item_for_node_'.length);
 }
 
 
 
 function expandActionBar(node) {
+	if (ClutterApp.fsm.isBusy())
+		return;
+	
+	node.required();
+	
 	collapseActionBar();
 	
 	var nodeBody = node.children('.body').required();
@@ -41,39 +48,63 @@ function expandActionBar(node) {
 	if (!nodeBody.find('#action-bar')[0])
 		$('#action-bar').prependTo(nodeBody);
 	
+	if (node.hasClass('pile'))
+		$('#action-bar > .buttons > a:not(.new)').hide();
+	
 	// since it may be initially-hidden
 	safeShow($('#action-bar'));
+	
+	if (!node.hasClass('pile')) {
+		node.activateReparentDraggable();
+		node.closest('ul.node.list').required().activateReorderSortable();
+	}
 }
 
 function collapseActionBar() {
-	$('#action-bar').hide()
-	
 	var node = $('#action-bar').closest('.item_for_node').required();;
 	var nodeBody = node.children('.body').required();
+	
+	
+	node.deactivateReparentDraggable();
+	node.closest('ul.node.list').deactivateReorderSortable();
+	
+	
+	$('#action-bar').hide();
 	
 	nodeBody.children('.action.stub').show();
 	
 	nodeBody.removeClass('active');
-		
+	
+	
 	$('#action-bar').appendTo($('.pile:first')); // in case the parent item gets deleted
+	
+	
+	$('#action-bar > .buttons > a').show();
 }
 
 $(function() {
-	$('.item_for_node > .show.body > .cont').live('click', function() {
-		expandActionBar($(this).closest('.item_for_node')); return false;
+	$('li.item_for_node > .show.body > .cont').live('click', function() {
+		expandActionBar($(this).closest('li.item_for_node')); return false;
 	});
-	$('.pile.item_for_node > .body > .header').live('click', function() {
-		expandActionBar($(this).closest('.item_for_node')); return false;
+	$('section.pile.item_for_node > .body > .header').live('click', function() {
+		expandActionBar($(this).closest('section.pile.item_for_node')); return false;
 	});
 });
 
 $(function() {
-	$('.action.stub .widget.collapsed a').live('click', function() {
-		expandActionBar($(this).closest('.item_for_node')); return false;
+	$('li.item_for_node > .show.body > .action.stub .widget.collapsed a').live('click', function() {
+		expandActionBar($(this).closest('li.item_for_node')); return false;
+	});
+	$('section.pile.item_for_node > .body > .action.stub .widget.collapsed a').live('click', function() {
+		expandActionBar($(this).closest('section.pile.item_for_node')); return false;
 	});
 	
-	$('#action-bar .widget.expanded a')
-		.click(function() { collapseActionBar(); return false; });
+	$('#action-bar .widget.expanded a').click(function() {
+		if (!ClutterApp.fsm.isBusy())
+			collapseActionBar();
+		
+		return false;
+	});
 });
 
 
@@ -86,27 +117,58 @@ function formFocus(form) {
 
 
 function itemNew(button, type) {
-	var parentNode = $(button).closest('.item_for_node');
+	if (!ClutterApp.fsm.changeAction('itemNew', 'load'))
+		return;
+	
+	
+	var parentNode = $(button).closest('.item_for_node').required();
+	
+	collapseActionBar();
+	parentNode.showProgressOverlay();
+	showFill();
 	
 	$.ajax({
 		type: 'get',
-		url: parentNode.closest('.pile').attr('oc\:nodes-url') + '/new',
+		url: parentNode.closest('.pile').getAttr('oc\:nodes-url') + '/new',
 		data: {'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode)},
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(parentNode, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(parentNode, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(parentNode, responseData) {
-		collapseActionBar();
+	function handleSuccess(responseData) {
+		hideProgressOverlay();
 		
 		var list = parentNode.children('.list').required();
 		
 		list.append(responseData);
 		
-		var newBody = list.children('.item_for_node:last').find('.new.body').required();
-		newBody.hide().fadeIn(kDefaultTransitionDuration);
+		var newBody = list.children('li.item_for_node:last').find('.new.body').required();
+		
+		var startScaleX = 0.95; var endScaleX = 1.0;
+		var startScaleY = 0.0; var endScaleY = 1.0;
+		newBody.setCSS({
+			opacity: 0.0,
+			        'transform-origin': '50% 25%',
+			   '-moz-transform-origin': '50% 25%',
+			'-webkit-transform-origin': '50% 25%'
+		}).animate(
+			{opacity: 1.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeOutQuad',
+				step: function(ratio) {
+					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+					$(this).setCSS({
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					})
+				}
+			}
+		);
 		
 		newBody.find('.note.prop').find('textarea').elastic();
 		
@@ -114,11 +176,20 @@ function itemNew(button, type) {
 		
 		var newBodyForm = newBody.find('form').required();
 		formFocus(newBodyForm.required());
+		
+		
+		ClutterApp.fsm.finishState('itemNew', 'load');
 	}
 	
-	function handleError(parentNode, xhrObj, errStr, expObj) {
-		parentNode.find('#new-bar:first')
+	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
+		hideFill();
+		
+		parentNode.children('.show.body')
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000); // @todo: fix
+		
+		
+		ClutterApp.fsm.finishAction('itemNew', 'load');
 	}
 }
 	
@@ -129,35 +200,138 @@ $(function() {
 
 
 
+function itemNewCancel(button) {
+	if (!ClutterApp.fsm.changeState('itemNew', 'cancel'))
+		return;
+	
+	
+	var form = button.closest('form.new_node').required();
+	
+	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
+	
+	var newBody = form.closest('.new.body').required();
+	
+	hideFill();
+		
+	var startScaleX = 1.25; var endScaleX = 1.0;
+	var startScaleY = 1.25; var endScaleY = 1.0;
+	newBody.setCSS({
+		opacity: 1.0,
+		        'transform-origin': '50% 25%',
+		   '-moz-transform-origin': '50% 25%',
+		'-webkit-transform-origin': '50% 25%'
+	}).animate(
+		{opacity: 0.0},
+		{
+			duration: kSlowTransitionDuration,
+			easing: 'easeInQuad',
+			step: function(ratio) {
+				var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+				var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+				$(this).setCSS({
+					        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+					   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+					'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+				})
+			},
+			complete: function() {
+				newBody.closest('li.item_for_node').required().remove();
+				
+				ClutterApp.fsm.finishAction('itemNew', 'cancel');
+			}
+		}
+	);
+}
+
+$(function() {
+	$('form.new_node input.cancel').live('click', function() {
+		itemNewCancel($(this)); return false;
+	});
+});
+
+
+
 function itemCreate(form) {
+	if (!ClutterApp.fsm.changeState('itemNew', 'done'))
+		return;
+	
+	
 	form.required();
 	
+	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
+	
+	var newBody = form.closest('.new.body').required();
+	var newItem = newBody.closest('li.item_for_node').required();
+	
+	newBody.showProgressOverlay();
+	
 	$.ajax({
-		type: form.attr('method'), // 'post'
-		url: form.attr('action'),
+		type: form.getAttr('method'), // 'post'
+		url: form.getAttr('action'),
 		data: form.serialize(),
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(form, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(form, responseData) {
-		var newBody = form.closest('.new.body').required();
-		var newItem = newBody.closest('.item_for_node').required();
-		
+	function handleSuccess(responseData) {
 		newItem.after(responseData);
 		
-		hideFill();
+		var createdItem = newItem.next('li.item_for_node').required();
+		createdItem.hide();
+		createdItem.applyReparentDroppability();
 		
-		newBody.fadeOut(kDefaultTransitionDuration, function() { $(this).closest('.item_for_node').required().remove(); });
+		var startScaleX = 0.95; var endScaleX = 1.0;
+		var startScaleY = 0.75; var endScaleY = 1.0;
+		newBody.setCSS({
+			opacity: 1.0,
+			        'transform-origin': '50% 25%',
+			   '-moz-transform-origin': '50% 25%',
+			'-webkit-transform-origin': '50% 25%'
+		}).animate(
+			{opacity: 0.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeInQuad',
+				step: function(ratio) {
+					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+					$(this).setCSS({
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					});
+				},
+				complete: function() {
+					hideFill();
+					
+					newItem.remove();
+					createdItem.fadeIn(kDefaultTransitionDuration);
+					
+					
+					ClutterApp.fsm.finishAction('itemNew', 'done');
+				}
+			}
+		);
 	}
 	
-	function handleError(form, xhrObj, errStr, expObj) {
-		form.closest('.new.body').find('.cont').required()
-			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
 		
+		newBody.required()
+			.stop(true, true)
+			.fadeIn(kQuickTransitionDuration, function()
+		{
+			newBody.find('.cont').required()
+				.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		});
+		
+		form.find('input[type=submit], input[type=button]').required().removeAttr('disabled');
 		formFocus(form);
+		
+		
+		ClutterApp.fsm.finishState('itemNew', 'done');
 	}
 }
 
@@ -170,39 +344,79 @@ $(function() {
 
 
 function itemEdit(link) {
+	if (!ClutterApp.fsm.changeAction('itemEdit', 'load'))
+		return;
+	
+	
 	var showBody = $(link).closest('.show.body').required();
+	
+	collapseActionBar();
+	showBody.showProgressOverlay();
+	showFill();
 	
 	$.ajax({
 		type: 'get',
-		url: showBody.closest('.node').attr('oc\:url') + '/edit',
+		url: showBody.closest('.node').getAttr('oc\:url') + '/edit',
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(showBody, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(showBody, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(showBody, responseData) {
-		collapseActionBar();
+	function handleSuccess(responseData) {
+		hideProgressOverlay();
 		
 		showBody.before(responseData);
 		
 		var editBody = showBody.siblings('.edit.body').required();
-		editBody.hide().fadeIn(kDefaultTransitionDuration);
+		
+		var startScaleX = 0.95; var endScaleX = 1.0;
+		var startScaleY = 0.75; var endScaleY = 1.0;
+		editBody.setCSS({
+			opacity: 0.0,
+			        'transform-origin': '50% 25%',
+			   '-moz-transform-origin': '50% 25%',
+			'-webkit-transform-origin': '50% 25%'
+		}).animate(
+			{opacity: 1.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeOutQuad',
+				step: function(ratio) {
+					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+					$(this).setCSS({
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					})
+				}
+			}
+		);
 		
 		editBody.find('.note.prop').find('textarea').elastic();
 		
 		showFill(editBody);
 		formFocus(editBody.find('form').required());
+		
+		
+		ClutterApp.fsm.finishState('itemEdit', 'load');
 	}
 	
-	function handleError(showBody, xhrObj, errStr, expObj) {
+	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
+		hideFill();
+		
 		showBody
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		
+		
+		ClutterApp.fsm.finishAction('itemEdit', 'load');
 	}
 }
 
 $(function() {
-	$('.item_for_node > .show.body > .cont').live('dblclick', function() {
+	$('li.item_for_node > .show.body > .cont').live('dblclick', function() {
 		itemEdit(this); return false;
 	});
 	$('#action-bar > .buttons > a.edit').click(function() {
@@ -211,33 +425,133 @@ $(function() {
 });
 
 
+
+function itemEditCancel(button) {
+	if (!ClutterApp.fsm.changeState('itemEdit', 'cancel'))
+		return;
+	
+	
+	var form = button.closest('form.edit_node').required();
+	
+	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
+	
+	var editBody = form.closest('.edit.body').required();
+	
+	hideFill();
+	
+	var startScale = 1.25; var endScale = 1.0;
+	editBody.setCSS({
+		opacity: 1.0,
+		        'transform-origin': '50% 50%',
+		   '-moz-transform-origin': '50% 50%',
+		'-webkit-transform-origin': '50% 50%'
+	}).animate(
+		{opacity: 0.0},
+		{
+			duration: kSlowTransitionDuration,
+			easing: 'easeInQuad',
+			step: function(ratio) {
+				var scaleVal = (endScale - startScale) * ratio + startScale;
+				$(this).setCSS({
+					        'transform': 'scale('+scaleVal+')',
+					   '-moz-transform': 'scale('+scaleVal+')',
+					'-webkit-transform': 'scale('+scaleVal+')'
+				})
+			},
+			complete: function() {
+				editBody.remove();
+				
+				ClutterApp.fsm.finishAction('itemEdit', 'cancel');
+			}
+		}
+	);
+}
+
+$(function() {
+	$('form.edit_node input.cancel').live('click', function() {
+		itemEditCancel($(this)); return false;
+	});
+});
+
+
+
 function itemUpdate(form) {
+	if (!ClutterApp.fsm.changeState('itemEdit', 'done'))
+		return;
+	
+	
+	form.required();
+	
+	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
+	
+	var editBody = form.closest('.edit.body').required();
+	var showBody = editBody.siblings('.show.body').required();
+	
+	editBody.showProgressOverlay();
+	
 	$.ajax({
-		type: form.attr('method'), // 'post' (PUT)
-		url: form.attr('action'),
+		type: form.getAttr('method'), // 'post' (PUT)
+		url: form.getAttr('action'),
 		data: form.serialize(),
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(form, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(form, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(form, responseData) {
-		var editBody = form.closest('.edit.body').required();
-		var showBody = editBody.siblings('.show.body').required();
+	function handleSuccess(responseData) {
+		var startScaleX = 0.95; var endScaleX = 1.0;
+		var startScaleY = 0.75; var endScaleY = 1.0;
+		editBody.setCSS({
+			opacity: 1.0,
+			        'transform-origin': '50% 25%',
+			   '-moz-transform-origin': '50% 25%',
+			'-webkit-transform-origin': '50% 25%'
+		}).animate(
+			{opacity: 0.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeInQuad',
+				step: function(ratio) {
+					var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+					var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+					$(this).setCSS({
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					})
+				},
+				complete: function() {
+					hideFill();
+					
+					editBody.remove();
+					
+					
+					ClutterApp.fsm.finishAction('itemEdit', 'done');
+				}
+			}
+		);
 		
-		hideFill();
-		
-		editBody.fadeOut(kDefaultTransitionDuration, function() { $(this).remove(); });
 		
 		showBody.replaceWith(responseData);
 	}
 	
-	function handleError(form, xhrObj, errStr, expObj) {
-		form.closest('.edit.body').find('.cont').required()
-			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
 		
+		editBody.required()
+			.stop(true, true)
+			.fadeIn(kQuickTransitionDuration, function()
+		{
+			editBody.find('.cont').required()
+				.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		});
+		
+		form.find('input[type=submit], input[type=button]').required().removeAttr('disabled');
 		formFocus(form);
+		
+		
+		ClutterApp.fsm.finishState('itemEdit', 'done');
 	}
 }
 
@@ -249,59 +563,63 @@ $(function() {
 
 
 
-function itemMove(node, dir) {
-	$.ajax({
-		type: 'post',
-		url: node.attr('oc\:url') + '/move',
-		data: {_method: 'put', dir: dir},
-		dataType: 'script',
-		success: function(responseData) { handleSuccess(node, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
-	});
-	
-	
-	function handleSuccess(node, responseData) {
-		// nothing for now; @todo: do the actual element movement here
-	}
-	
-	function handleError(node, xhrObj, errStr, expObj) {
-		node.find('.body:first .cont').required()
-			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
-	}
-}
-	
-$(function() {
-	var actionButtons = $('#action-bar .buttons').required();
-	
-	actionButtons.find('a.move.out')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'out'); return false; });
-	actionButtons.find('a.move.up')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'up'); return false; });
-	actionButtons.find('a.move.down')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'down'); return false; });
-	actionButtons.find('a.move.in')
-		.click(function() { itemMove($(this).closest('.item_for_node'), 'in'); return false; });
-});
-
-
-
 function itemDelete(node) {
+	if (!ClutterApp.fsm.changeAction('itemDelete', 'load'))
+		return;
+	
+	
 	$.ajax({
 		type: 'post',
-		url: node.attr('oc\:url'),
+		url: node.getAttr('oc\:url'),
 		data: {_method: 'delete'},
 		dataType: 'html',
-		success: function(responseData) { handleSuccess(node, responseData); },
-		error: function(xhrObj, errStr, expObj) { handleError(node, xhrObj, errStr, expObj); }
+		success: handleSuccess,
+		error: handleError
 	});
 	
 	
-	function handleSuccess(node, responseData) {
+	function handleSuccess(responseData) {
 		collapseActionBar();
-		node.remove();
+		
+		
+		var endScaleX = 0.95;
+		var endScaleY = 0.25;
+		var startHeight = node.height();
+		node.find('.show.body').setCSS({
+			opacity: 1.0,
+			overflow: 'visible',
+			        'transform-origin': '50% 0%',
+			   '-moz-transform-origin': '50% 0%',
+			'-webkit-transform-origin': '50% 0%',
+		}).animate(
+			{ opacity: 0.0 },
+			{
+				duration: kSlowTransitionDuration,
+				easing: 'easeInQuad',
+				step: function(opacity) {
+					var ratio = opacity;
+					
+					var scaleValX = (1.0 - endScaleX) * ratio + endScaleX;
+					var scaleValY = (1.0 - endScaleY) * ratio + endScaleY;
+					var heightVal = startHeight * ratio;
+					$(this).setCSS({
+						height: heightVal,
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')'
+					})
+				},
+				complete: function() {
+					node.remove();
+					
+					
+					ClutterApp.fsm.finishAction('itemDelete', 'load');
+				}
+			}
+		);
 	}
 	
-	function handleError(node, xhrObj, errStr, expObj) {
+	function handleError(xhrObj, errStr, expObj) {
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 	}
@@ -312,30 +630,446 @@ $(function() {
 	
 	actionButtons.find('a.delete').click(function() {
 		if (confirm("Are you sure?\n\nThis will delete this item and all of its sub-items."))
-			itemDelete($(this).closest('.item_for_node'));
+			itemDelete($(this).closest('li.item_for_node'));
 		
 		return false;
 	});
 });
 
 
+
+//$(function() {
+//	$().applyReorderability();
+//});
+
+//jQuery.fn.applyReorderability = function() {
+//	var nodeLists = $(this).detect('ul.node.list');
+//	
+//	nodeLists.activateReorderSortable();
+//	
+//	return this;
+//}
+
+jQuery.fn.activateReorderSortable = function() {
+	var disabled = this.filter('.ui-sortable-disabled');
+	disabled.sortable('enable');
+	
+	var alreadySetup = this.filter('.ui-sortable');
+	alreadySetup.sortable('refresh');
+	
+	var toSetup = this.not('.ui-sortable');
+	toSetup.setupReorderSortable();
+	
+	return this;
+}
+
+jQuery.fn.deactivateReorderSortable = function() {
+	var alreadySetup = this.filter('.ui-sortable');
+	alreadySetup.sortable('disable');
+	
+	return this;
+}
+
+jQuery.fn.setupReorderSortable = function() {
+	this.sortable({
+		axis: 'y',
+		containment: '#active-sorting-container',
+		tolerance: 'intersect',
+		handle: '> .show.body > #action-bar .move.reorder',
+		helper: helper,
+		opacity: 0.5,
+		revert: true,
+		scroll: true,
+		start: start,
+		stop: stop
+	});
+	return this;
+	
+	
+	var elementHeight;
+	var origPrevSiblingID;
+	
+	function helper(event, element) {
+		// save the height for future use
+		elementHeight = $(element).height();
+		
+		earlyStart(event, element);
+		
+		var helper = $(element).clone();
+		//helper.setCSS({ height: 0 });
+		return helper[0];
+	}
+	
+	function earlyStart(event, element) {
+		element = $(element);
+		var list = element.parent('ul.node.list').required();
+		
+		var bounds = {
+			top: list.position().top,
+			height: list.height(),
+			left: list.position().left,
+			width: list.width(),
+		};
+		list.wrap('<div id="active-sorting-container"></div>');
+		
+		var containmentPadding = (elementHeight / 2) + 32; // an extra bit for the difference between the middle of the item and the drag handle
+		$('#active-sorting-container').required().setCSS({
+			margin: -containmentPadding - 1,
+			border: '1px solid transparent', // this is necessary for the expaned container to work for some odd reasone
+		});
+		list.setCSS({margin: containmentPadding});
+	}
+	
+	function start(event, ui) {
+		var list = ui.item.parent('ul.node.list').required();
+		showFill(list);
+		list.addClass('active');
+		
+		var origPrevSibling = ui.item.prev('li.item_for_node');
+		origPrevSiblingID = origPrevSibling[0] ? nodeIDOfItem(origPrevSibling) : '';
+		
+		var placeholder = ui.placeholder.required();
+		placeholder.prepend('<div class="back"></div> <div class="cont"></div>');
+	}
+	
+	function stop(event, ui) {
+		var list = ui.item.parent('ul.node.list').required();
+		
+		$('#active-sorting-container').required().replaceWith(
+			$('#active-sorting-container > ul.node.list').required()
+		);
+		list.setCSS({margin: ''});
+		
+		// @todo: optimize so this isn't being done twice
+		var prevSibling = ui.item.prev('li.item_for_node');
+		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
+		
+		// only if the prevSibling has changed
+		if (prevSiblingID != origPrevSiblingID) {
+			itemReorder(ui.item);
+		} else {
+			hideFill(list);
+			list.removeClass('active');
+		}
+	}
+}
+
+function itemReorder(node) {
+	if (!ClutterApp.fsm.changeAction('itemReorder', 'load')) {
+		handleError(); // return the item back for now, since we have no way to prevent the drag from starting
+		return;
+	}
+	
+	
+	node.required();
+	
+	var list = node.parent('ul.node.list').required();
+	
+	list.showProgressOverlay();
+	
+	var prevSibling = node.prev('li.item_for_node');
+	var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
+	
+	$.ajax({
+		type: 'post',
+		url: node.getAttr('oc\:url') + '/reorder',
+		data: {_method: 'put', prev_sibling_id: prevSiblingID},
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		hideProgressOverlay();
+		
+		hideFill(list);
+		list.removeClass('active');
+		
+		
+		ClutterApp.fsm.finishAction('itemReorder', 'load');
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+		hideProgressOverlay();
+		
+		node.find('.body:first .cont').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		
+		
+		ClutterApp.fsm.finishAction('itemReorder', 'load');
+	}
+}
+
+
+
+jQuery.fn.activateReparentDraggable = function() {
+	var disabled = this.filter('.ui-draggable-disabled');
+	disabled.draggable('enable');
+	
+	var toSetup = this.not('.ui-draggable');
+	toSetup.setupReparentDraggable();
+	
+	return this;
+}
+
+jQuery.fn.deactivateReparentDraggable = function() {
+	var alreadySetup = this.filter('.ui-draggable');
+	alreadySetup.draggable('disable');
+	
+	return this;
+}
+
+// this is done when the actionbar opens
+jQuery.fn.setupReparentDraggable = function() {
+	this.draggable({
+		axis: 'y',
+		cancel: '.body > .cont, .body > .bullet, .body > .action.stub, .edit.body, .new.body',
+		handle: '#action-bar a.move.reparent',
+		opacity: 0.5,
+		revert: 'invalid',
+		scope: 'item-reparent',
+		scroll: true,
+		zIndex: 500,
+	});
+	return this;
+}
+
+
+
+$(function() {
+	$().applyReparentDroppability();
+});
+
+jQuery.fn.applyReparentDroppability = function() {
+	$(this).detect('li.item_for_node > .show.body, section.pile.item_for_node > .body').activateReparentDroppable();
+	return this;
+}
+
+jQuery.fn.activateReparentDroppable = function() {
+	var disabled = this.filter('.ui-droppable-disabled');
+	disabled.droppable('enable');
+	
+	var toSetup = this.not('.ui-droppable');
+	toSetup.setupReparentDroppable();
+	
+	return this;
+}
+
+jQuery.fn.deactivateReparentDroppable = function() {
+	var alreadySetup = this.filter('.ui-droppable');
+	alreadySetup.droppable('disable');
+	
+	return this;
+}
+
+jQuery.fn.setupReparentDroppable = function() {
+	var toSetup = this.not('ui-droppable');
+	
+	toSetup.droppable({
+		accept: 'li.item_for_node',
+		hoverClass: 'active',
+		scope: 'item-reparent',
+		tolerance: 'intersect',
+		over: function(event, ui) { makeHyper($(this)); },
+		out: function(event, ui) { removeHyper($(this)); },
+		drop: drop,
+	});
+	return toSetup;
+	
+	
+	function makeHyper(dropBody) {
+		dropBody.prepend('<div class="hyper"></div>');
+	}
+	
+	function removeHyper(dropBody) {
+		dropBody.children('.hyper').remove();
+	}
+	
+	function drop(event, ui) {
+		removeHyper($(this));
+		
+		itemReparent(ui.draggable, this);
+	}
+}
+
+function itemReparent(node, parentNode) {
+	if (!ClutterApp.fsm.changeAction('itemReparent', 'load')) {
+		handleError(); // return the item back for now, since we have no way to prevent the drag from starting
+		return;
+	}
+	
+	node.required();
+	parentNode = $(parentNode).closest('.item_for_node').required();
+	
+	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
+	node.children('.body').addClass('active');
+	node.setCSS('opacity', 0.5); // doesn't seem to be working (perhaps being overridden via jQueryUI code?)
+	node.showProgressOverlay();
+	
+	$.ajax({
+		type: 'post',
+		url: node.getAttr('oc\:url') + '/reparent',
+		data: {_method: 'put', parent_id: nodeIDOfItem(parentNode)},
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		parentNode.children('.body').removeClass('active');
+		
+		var list = parentNode.children('ul.node.list').required();
+		
+		$('li.item_for_node', list).draggable('destroy');
+		$('.show.body', list).droppable('destroy');
+		
+		nodeOutStart();
+		
+		
+		var oldListHeight;
+		var newListHeight;
+		var listPlaceholder;
+		
+		var newList;
+		
+		function nodeOutStart() {
+			node.show();
+			
+			var actualNodeHeight = node.height();
+			
+			var startScaleX = 0.95; var endScaleX = 1.0;
+			var startScaleY = 0.25; var endScaleY = 1.0;
+			node.setCSS({
+				overflow: 'visible',
+				        'transform-origin': '50% 50%',
+				   '-moz-transform-origin': '50% 50%',
+				'-webkit-transform-origin': '50% 50%',
+			}).animate(
+				{opacity: 0.0},
+				{
+					duration: kQuickTransitionDuration,
+					easing: 'easeInQuad',
+					step: function(ratio) {
+						$(this).setCSS({
+							'height': actualNodeHeight * ratio,
+						});
+						var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
+						var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
+						$(this).setCSS({
+							        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+							   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+							'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						});
+					},
+					complete: nodeOutFinish,
+				}
+			);
+		}
+		
+		function nodeOutFinish() {
+			node.draggable('destroy');
+			node.remove();
+			
+			listCrossStart();
+		}
+		
+		function listCrossStart() {
+			// get old height
+			oldListHeight = list.height();
+			
+			// set up placeholder
+			list.after('<div id="list-placeholder" style="height: '+oldListHeight+'px;"></div>');
+			listPlaceholder = $('#list-placeholder');
+			
+			list.setCSS({
+				position: 'absolute',
+				width: '100%',
+			});
+			
+			
+			list.clone().insertAfter(list).html(responseData);
+			newList = list.next('ul.node.list').required();
+			// seems the sortable gets destroyed anyway, but the classes aren't removed; destroy again to be safe
+			newList.sortable('destroy').removeClass('ui-sortable ui-sortable-disabled ui-state-disabled');
+			
+			newListHeight = newList.height();
+			newList.setCSS('opacity', 0.0);
+			
+			newList.applyReparentDroppability();
+			
+			newList.setCSS({
+				opacity: 0.0
+			}).animate(
+				{opacity: 1.0},
+				{
+					duration: kDefaultTransitionDuration,
+					easing: 'easeOutQuad',
+					step: function(ratio) {
+						list.setCSS('opacity', 1.0 - ratio); // fade old list out as the new list fades in
+						listPlaceholder.setCSS('height', (newListHeight - oldListHeight) * ratio + oldListHeight);
+					},
+					complete: listCrossFinish,
+				}
+			);
+		}
+		
+		function listCrossFinish() {
+			listPlaceholder.remove();
+			list.remove();
+			// return to normal positioning and remove unnecessary styles
+			newList.setCSS({
+				position: '',
+				width: '',
+				opacity: '',
+			});
+			
+			
+			ClutterApp.fsm.finishAction('itemReparent', 'load');
+		}
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+		parentNode.removeClass('active');
+		
+		node.find('.body:first .cont').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		
+		
+		ClutterApp.fsm.finishAction('itemReparent', 'load');
+	}
+}
+
+
+
 function badgeAdd(link, addType) {
-	var node = $(link).closest('.item_for_node').required();
+	var node = $(link).closest('li.item_for_node').required();
 	
 	var state;
-	if (node.children('.new')[0])
+	if (node.children('.new')[0]) {
 		state = 'new';
-	else if (node.children('.edit')[0])
+		
+		if (!ClutterApp.fsm.changeState('itemNew', 'badgeAddLoad'))
+			return;
+	} else if (node.children('.edit')[0]) {
 		state = 'edit';
-	else if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
-		console.assert('invalid state');
+		
+		if (!ClutterApp.fsm.changeState('itemEdit', 'badgeAddLoad'))
+			return;
+	} else {
+		if (window.console && window.console.assert)
+			window.console.assert('invalid state');
+		
+		return;
+	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('.item_for_node').required();
+	var parentNode = node.parent().closest('li.item_for_node').required();
 	
 	$.ajax({
 		type: 'get',
-		url: (state == 'new') ? form.attr('action').replace(/\?/, '/new?') : (node.attr('oc\:url') + '/edit'),
+		url: (state == 'new') ? form.getAttr('action').replace(/\?/, '/new?') : (node.getAttr('oc\:url') + '/edit'),
 		data: form.serialize() + '&' + $.param({'add[prop_type]': addType}),
 		dataType: 'html',
 		success: handleSuccess,
@@ -351,13 +1085,16 @@ function badgeAdd(link, addType) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('.item_for_node:last').find('.new.body').required();
+			var newBody = list.children('li.item_for_node:last').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
 			showFill(newBody);
 			
 			formFocus(newBody.find('form').required());
+			
+			
+			ClutterApp.fsm.finishState('itemNew', 'badgeAddLoad');
 		}
 		else if (state == 'edit')
 		{
@@ -373,12 +1110,18 @@ function badgeAdd(link, addType) {
 			
 			showFill(editBody);
 			formFocus(editBody.find('form').required());
+			
+			
+			ClutterApp.fsm.finishState('itemEdit', 'badgeAddLoad');
 		}
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		
+		
+		ClutterApp.fsm.finishState('itemNew', 'badgeAddLoad') || ClutterApp.fsm.finishState('itemEdit', 'badgeAddLoad');
 	}
 }
 
@@ -397,22 +1140,32 @@ function badgeRemove(link) {
 	var deleteField = $(link).siblings('input[type=hidden]').required();
 	deleteField.val(1);
 	
-	var node = $(link).closest('.item_for_node').required();
+	var node = $(link).closest('li.item_for_node').required();
 	
 	var state;
-	if (node.children('.new')[0])
+	if (node.children('.new')[0]) {
 		state = 'new';
-	else if (node.children('.edit')[0])
+		
+		if (!ClutterApp.fsm.changeState('itemNew', 'badgeRemoveLoad'))
+			return;
+	} else if (node.children('.edit')[0]) {
 		state = 'edit';
-	else if (typeof(console) != 'undefined' && typeof(console.assert) != 'undefined')
-		console.assert('invalid state');
+		
+		if (!ClutterApp.fsm.changeState('itemEdit', 'badgeRemoveLoad'))
+			return;
+	} else {
+		if (window.console && window.console.assert)
+			window.console.assert('invalid state');
+		
+		return;
+	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('.item_for_node').required();
+	var parentNode = node.parent().closest('li.item_for_node').required();
 	
 	$.ajax({
 		type: 'get',
-		url: (state == 'new') ? form.attr('action').replace(/\?/, '/new?') : (node.attr('oc\:url') + '/edit'),
+		url: (state == 'new') ? form.getAttr('action').replace(/\?/, '/new?') : (node.getAttr('oc\:url') + '/edit'),
 		data: form.serialize(),
 		dataType: 'html',
 		success: handleSuccess,
@@ -428,13 +1181,16 @@ function badgeRemove(link) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('.item_for_node:last').find('.new.body').required();
+			var newBody = list.children('li.item_for_node:last').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
 			showFill(newBody);
 			
 			formFocus(newBody.find('form').required());
+			
+			
+			ClutterApp.fsm.finishState('itemNew', 'badgeRemoveLoad');
 		}
 		else if (state == 'edit')
 		{
@@ -450,12 +1206,18 @@ function badgeRemove(link) {
 			
 			showFill(editBody);
 			formFocus(editBody.find('form').required());
+			
+			
+			ClutterApp.fsm.finishState('itemEdit', 'badgeRemoveLoad');
 		}
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		
+		
+		ClutterApp.fsm.finishState('itemNew', 'badgeRemoveLoad') || ClutterApp.fsm.finishState('itemEdit', 'badgeRemoveLoad');
 	}
 }
 

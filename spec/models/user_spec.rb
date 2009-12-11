@@ -75,6 +75,8 @@ describe User do
   describe "sharing" do
     before(:each) do
       @user2 = Factory.create(:user)
+      @pile1 = Factory.create(:pile)
+      @user.piles << @pile1
     end
     it "should be able to share 1 pile with 1 followee" do
       @user.follow(@user2)
@@ -90,17 +92,28 @@ describe User do
       @user.shared_piles.count.should == 1
     end
     
-    it "should be able to share a pile publicly" do
-      @user.share_pile_with_public(@user.default_pile)
-    end
+    it "should be able to share a pile publicly"
+    #it "should be able to share a pile publicly" do
+    #  @user.share_pile_with_public(@user.default_pile)
+    #end
     
     it "should not let users access piles that aren't shared" do
-      @user.shared_piles << @user2.default_pile
-      @user.shared_piles.count.should == 0
+      @user.authorized_piles << @user2.default_pile
+      @user.authorized_piles.count.should == 0
     end
     
-    it "should be able to share pile with " do
-      
+    it "should have access to the sharees you share a pile with" do
+      @user.share_pile_with_user(@user2, @user.default_pile)
+      @user.sharees.count.should == 1
+      @user.sharees.first.should == @user2
+    end
+    
+    it "should be able to share pile with followers" do
+      pending
+      @user.share_pile_with_followers(@pile1)
+      @user.followers.each do |follower|
+        follower.authorized_piles.first.should == @pile1
+      end
     end
   end
   

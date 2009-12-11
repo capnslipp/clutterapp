@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:oc="http://orgclut.com/oc" lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 	<title><%= "ClutterApp » #{controller.controller_name} » #{controller.action_name} #{params[:id]}" %></title>
 	<meta http-equiv="X-UA-Compatible" content="chrome=1"/>
 	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
-	<%= stylesheet_link_tag 'reset', :media => 'all', :cache => true %>
-	<%= stylesheet_link_tag 'main', 'layout', 'button-bars', 'props', :media => 'all' %><%# can't cache these ones, since it's dynamic %>
+	<%= stylesheet_link_tag (StylesheetsController::STATIC_STYLESHEET_NAMES + StylesheetsController::DYNAMIC_STYLESHEET_NAMES), :media => 'all' unless ActionController::Base.perform_caching %>
+	<%= stylesheet_link_tag 'all', :media => 'all' if ActionController::Base.perform_caching %><%# all these are cached together by the StylesheetsController %>
 	<% js_files = [
 			{:src => 'jquery', :min => 'jquery.min'},
 			{:src => 'jquery-ui', :min => 'jquery-ui.min'},
 			{:src => 'jrails'},
-			{:src => 'jquery.color'},
-			{:src => 'jquery.form'},
+			{:src => 'jquery.easing', :min => 'jquery.easing.min'},
+			{:src => 'jquery.color', :min => 'jquery.color.min'},
+			{:src => 'jquery.backgroundPosition', :min => 'jquery.backgroundPosition.min'},
 			{:src => 'jquery.elastic', :min => 'jquery.elastic.min'},
+			{:src => 'jquery.conventionalize'},
 			{:src => 'util'},
 			{:src => 'application'},
 		] %>
 	<%= javascript_include_tag js_files.collect{|file_h| file_h[:src] } unless ActionController::Base.perform_caching %>
 	<%= javascript_include_tag js_files.collect{|file_h| file_h[:min] || file_h[:src] }, :cache => true if ActionController::Base.perform_caching %>
 	<%= javascript_include_tag 'item' if @enable_item_view_js %>
+	<%= render :partial => 'shared/analytics_header' if analytics? %>
 </head>
 <body>
 

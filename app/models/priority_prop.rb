@@ -3,6 +3,7 @@ class PriorityProp < Prop
   
   validates_presence_of :node, :on => :update # less stringent when the Prop is new in order to prevent circular dependencies
   
+  validates_presence_of :priority
   validate :in_range
   
   

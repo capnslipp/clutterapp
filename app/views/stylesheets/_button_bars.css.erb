@@ -1,0 +1,124 @@
+/* buttons/bars */
+
+.widget {
+	margin-right: 0.5em;
+	
+	height: 1.25em;
+	line-height: 1.25em;
+}
+
+.buttons, .button {
+	<%= shallow_shadow_decl %>
+	
+	margin: -<%= border_width %>px;
+	border: <%= border_width %>px solid <%= generic_border_color.to_s(:css_rgba) %>;
+	<%= border_radius_decl('6px') %>
+	background: <%= accent_color %>;
+	
+	line-height: 1em;
+}
+
+.widget, .button, .buttons { white-space: nowrap; }
+
+.widget a, .buttons a, a.button { text-decoration: none; }
+
+.stub, .bar {
+	font-size: 12px;
+	line-height: 16px;
+	height: 16px;
+	/*width: 16px;*/
+}
+.stub .sym, .bar .sym {
+	font-size: 14px;
+	line-height: 12px;
+	height: 12px;
+}
+
+.bar {
+	position: relative;
+	z-index: 10;
+}
+
+.stub { float: left; }
+
+.action.bar { float: left; }
+
+.action.stub .widget,
+ #action-bar .widget { /*margin-left: -18px;*/ }
+
+.action.stub .widget, .action.stub .widget a,
+ #action-bar .widget,  #action-bar .widget a { color: <%= widget_color %>; padding: 0 4px; margin: 0 -4px; }
+.action.stub .widget,
+ #action-bar .widget { margin-top: 4px; }
+.action.stub .widget a:hover,
+ #action-bar .widget a:hover { color: <%= active_widget_color %>; }
+
+.action.stub .expanded.widget a,
+ #action-bar .expanded.widget a { color: <%= widget_color - 0.3 %>; }
+.action.stub .expanded.widget a:hover,
+ #action-bar .expanded.widget a:hover { color: <%= active_widget_color - 0.3 %>; }
+
+#action-bar .buttons {
+	background: <%= accent_color %>;
+	position: absolute;
+	top: 4px; right: 0;
+	padding: 2px 4px;
+	vertical-align: middle;
+	margin-right: 18px;
+	line-height: 1.5em;
+	
+	        border-top-right-radius: 0;
+	    -moz-border-radius-topright: 0;
+	-webkit-border-top-right-radius: 0;
+}
+#action-bar .buttons, #action-bar .buttons a { color: <%= wash_text_color %>; }
+#action-bar .buttons a { padding: 0 4px; margin: 0 -2px; }
+#action-bar .buttons a.full-width { display: block; }
+#action-bar .buttons a:hover {
+	text-shadow:	0 2px	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
+					0 -2px	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
+					2px 0	3px <%= shadow_color(0.5).to_s(:css_rgba) %>,
+					-2px 0	3px <%= shadow_color(0.5).to_s(:css_rgba) %>;
+}
+
+#add-bar {
+	padding-left: 0.25em;
+	float: left;
+	height: auto;
+}
+
+.button {
+	/*position: absolute;*/
+	float: left;
+	top: 4px; left: 0;
+	width: 1em;
+	padding: 0 2px;
+	margin: 0 2px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+#add-bar .button {
+	width: auto;
+	padding: 0 8px;
+}
+
+#add-bar a.button,
+a.button, a.button .sym { color: <%= wash_text_color %>; }
+
+#add-bar a { margin-right: 4px; }
+
+#add-bar a:hover {
+	text-shadow:	0 2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
+					0 -2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
+					2px 0	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
+					-2px 0	3px <%= shadow_color(1.0).to_s(:css_rgba) %>;
+}
+
+/*.widget, .widget a { color: #ddd; }
+.widget a:hover {  }
+
+.buttons, .buttons a { color: <%= wash_color %>; }
+.buttons a:hover { background: #b10; }*/
+
+/*.new.buttons { margin-left: 2em; }*/

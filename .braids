@@ -20,17 +20,3 @@ vendor/plugins/default_routing:
   type: git
   revision: baf836a68d7bf77138b029a872d4eda8c6309c03
   remote: braid/vendor/plugins/default-routing
-vendor/plugins/cells: 
-  squashed: true
-  url: git://github.com/slippyd/cells.git
-  branch: master
-  type: git
-  revision: 34db9ac62cca6e484afa30d9ea01c00163697ec1
-  remote: braid/vendor/plugins/cells
-vendor/plugins/rspec-cells: 
-  squashed: true
-  url: git://github.com/kpumuk/rspec-cells.git
-  branch: master
-  type: git
-  revision: b1279890aa1c565c21eae69cc683cf0924c52baa
-  remote: braid/vendor/plugins/rspec-cells
