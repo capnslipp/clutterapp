@@ -864,9 +864,7 @@ jQuery.fn.deactivateReparentDroppable = function() {
 }
 
 jQuery.fn.setupReparentDroppable = function() {
-	var toSetup = this.not('ui-droppable');
-	
-	toSetup.droppable({
+	this.droppable({
 		accept: 'li.item_for_node',
 		hoverClass: 'active',
 		scope: 'item-reparent',
@@ -875,7 +873,7 @@ jQuery.fn.setupReparentDroppable = function() {
 		out: function(event, ui) { removeHyper($(this)); },
 		drop: drop,
 	});
-	return toSetup;
+	return this;
 	
 	
 	function makeHyper(dropBody) {
@@ -1224,3 +1222,43 @@ function badgeRemove(link) {
 $(function() {
 	$('.line a.remove').live('click', function() { badgeRemove(this); return false; });
 });
+
+
+
+jQuery.fn.setupPanelResizable = function() {
+	var leftPanel = false, rightPanel = false;
+	if (this.hasClass('left'))
+		var leftPanel = true;
+	if (this.hasClass('right'))
+		var rightPanel = true;
+	
+	if (window.console && window.console.assert) {
+		if (!leftPanel && !rightPanel)
+			window.console.assert('panel must be left or right');
+		if (leftPanel && rightPanel)
+			window.console.assert('panel cannot be both left and right');
+	}
+	
+	var center = $('#item-area');
+	var handle = this.children('.back');
+	
+	this.resizable({
+		handles: leftPanel ? 'e' : 'w',
+		resize: function(event, ui) { resizeCenter(ui.size.width) },
+		stop: function(event, ui) { resizeCenter(ui.size.width) },
+	});
+	return this;
+	
+	
+	function resizeCenter(panelWidth) {
+		if (leftPanel)
+			center.setCSS('margin-left', panelWidth);
+		if (rightPanel)
+			center.setCSS('margin-right', panelWidth);
+	}
+}
+
+$(function() {
+	$('#scope-panel').setupPanelResizable();
+});
+

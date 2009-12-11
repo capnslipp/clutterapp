@@ -310,7 +310,7 @@ li { list-style-type: none; }
 /* scope sidebar */
 
 #scope-panel {
-    position: absolute;
+    position: absolute; z-index: 50;
     width: 360px;
     
     background: #e5e5e5;
@@ -348,6 +348,12 @@ li { list-style-type: none; }
 #scope-panel > .cont {
     padding: 16px;
 }
+#scope-panel > .ui-resizable-handle {
+	position: absolute;
+	width: 16px; height: 100%;
+	left: -8px;
+}
+
 #item-area.left,
 #item-area.middle {
     margin-right: 360px;
