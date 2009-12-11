@@ -1240,121 +1240,136 @@ ClutterApp.panelToggleMode = function() {
 	return ClutterApp.centerAreaMinWidth + ClutterApp.panelMinWidth > window.innerWidth;
 }
 
-jQuery.fn.setupPanelResizable = function() {
-	var leftPanel = false, rightPanel = false;
-	if (this.hasClass('left'))
-		var leftPanel = true;
-	if (this.hasClass('right'))
-		var rightPanel = true;
+
+jQuery.fn.panelResize = function(panelWidth) {
+	var panel = $(this).filter('.panel').required();
+	var center = $('#item-area').required();
 	
-	if (window.console && window.console.assert) {
-		if (!leftPanel && !rightPanel)
-			window.console.assert('panel must be left or right');
-		if (leftPanel && rightPanel)
-			window.console.assert('panel cannot be both left and right');
-	}
+	var leftPanel = this.hasClass('left');
+	var rightPanel = this.hasClass('right');
+	
+	// set manually here to keep them from lagging relative to each other
+	panel.setCSS('width', panelWidth + 'px'); // setWidth() doesn't seem to work here initially, nor does setCSS('width', …) w/o the "+ 'px'"
+	
+	if (leftPanel)
+		center.setCSS('margin-left', panelWidth + 'px');
+	if (rightPanel)
+		center.setCSS('margin-right', panelWidth + 'px');
+}
+
+
+// saves the panel size as a cookie (and possibly sends it to the server in the future)
+jQuery.fn.savePanelSize = function() {
+	var panel = $(this).filter('.panel').required();
+	
+	$.cookie(
+		panel.setAttr('id') + '.width',
+		panel.width(),
+		{ expires: 365, path: '/' }
+	);
+}
+
+jQuery.fn.loadPanelSize = function() {
+	var panel = $(this).filter('.panel').required();
+	
+	var savedPanelWidth = $.cookie(panel.setAttr('id') + '.width');
+	
+	if (savedPanelWidth)
+		panel.panelResize(savedPanelWidth);
+	else
+		panel.panelResize( panel.defaultPanelSize() );
+}
+
+jQuery.fn.defaultPanelSize = function() {
+	var panel = $(this).filter('.panel').required();
+	
+	if (ClutterApp.panelToggleMode())
+		return 10;
+	else
+		return ClutterApp.defaultPanelWidth;
+}
+
+jQuery.fn.panelMinWidth = function() {
+	var panel = $(this).filter('.panel').required();
+	
+	if (ClutterApp.panelToggleMode())
+		return 10;
+	else
+		return ClutterApp.panelMinWidth;
+}
+
+jQuery.fn.panelMaxWidth = function() {
+	var panel = $(this).filter('.panel').required();
+	
+	if (ClutterApp.panelToggleMode())
+		return window.innerWidth - 10;
+	else
+		return window.innerWidth - ClutterApp.centerAreaMinWidth;
+}
+
+
+jQuery.fn.setupPanelResizable = function() {
+	var leftPanel = this.hasClass('left');
+	var rightPanel = this.hasClass('right');
 	
 	var panel = $(this); // for later use
-	var center = $('#item-area');
 	var handle = this.children('.back');
-	
-	loadPanelSize(panel);
 	
 	this.resizable({
 		handles: leftPanel ? 'e' : 'w',
 		resize: function(event, ui) {
-			resizeCenter(ui.size.width);
+			panel.panelResize(ui.size.width);
 		},
 		stop: function(event, ui) {
-			resizeCenter(ui.size.width);
-			savePanelSize(this);
+			panel.panelResize(ui.size.width);
+			panel.savePanelSize();
 		},
-		minWidth: panelMinWidth(this),
-		maxWidth: panelMaxWidth(this),
+		minWidth: this.panelMinWidth(),
+		maxWidth: this.panelMaxWidth(),
 		ghost: 'true',
 	});
 	
-	this.children('a.toggle').click(function() {
-		if (panel.width() <= defaultPanelSize(panel)) {
+	return this;
+}
+
+
+jQuery.fn.setupPanelToggle = function() {
+	var panel = $(this).filter('.panel').required();
+	
+	panel.children('a.toggle').click(function() {
+		if (panel.width() <= panel.defaultPanelSize()) {
 			panel.animate(
-				{ width: panelMaxWidth(panel) },
+				{ width: panel.panelMaxWidth() },
 				{
 					duration: kSlowTransitionDuration * 2,
 					easing: 'easeInOutBack',
-					step: resizeCenter,
-					complete: function() { savePanelSize(panel); },
+					step: function(width) { panel.panelResize(width); },
+					complete: function() { panel.savePanelSize(); },
 				}
 			);
 		} else {
 			panel.animate(
-				{ width: panelMinWidth(panel) },
+				{ width: panel.panelMinWidth() },
 				{
 					duration: kSlowTransitionDuration * 2,
 					easing: 'easeInOutBack',
-					step: resizeCenter,
-					complete: function() { savePanelSize(panel); },
+					step: function(width) { panel.panelResize(width); },
+					complete: function() { panel.savePanelSize(); },
 				}
 			);
 		}
 		return false;
 	});
-	
-	return this;
-	
-	
-	function resizeCenter(panelWidth) {
-		// set manually here to keep them from lagging relative to each other
-		panel.setCSS('width', panelWidth + 'px'); // setWidth() doesn't seem to work here initially, nor does setCSS('width', …) w/o the "+ 'px'"
-		
-		if (leftPanel)
-			center.setCSS('margin-left', panelWidth + 'px');
-		if (rightPanel)
-			center.setCSS('margin-right', panelWidth + 'px');
-	}
-	
-	
-	// saves the panel size as a cookie (and possibly sends it to the server in the future)
-	function savePanelSize(panel) {
-		panel = $(panel);
-		
-		$.cookie(
-			panel.setAttr('id') + '.width',
-			panel.width(),
-			{ expires: 365, path: '/' }
-		);
-	}
-	
-	function loadPanelSize(panel) {
-		var savedPanelWidth = $.cookie(panel.setAttr('id') + '.width');
-		
-		if (savedPanelWidth)
-			resizeCenter(savedPanelWidth);
-		else
-			resizeCenter(defaultPanelSize(panel));
-	}
-	
-	function defaultPanelSize(panel) {
-		if (ClutterApp.panelToggleMode())
-			return 10;
-		else
-			return ClutterApp.defaultPanelWidth;
-	}
-	
-	function panelMinWidth(panel) {
-		if (ClutterApp.panelToggleMode())
-			return 10;
-		else
-			return ClutterApp.panelMinWidth;
-	}
-	
-	function panelMaxWidth(panel) {
-		if (ClutterApp.panelToggleMode())
-			return window.innerWidth - 10;
-		else
-			return window.innerWidth - ClutterApp.centerAreaMinWidth;
-	}
 }
 
+
 $(function() {
-	$('#scope-panel').setupPanelResizable();
+	var panel = $('#scope-panel');
+	
+	panel.loadPanelSize();
+	
+	if (ClutterApp.hasMouseSupport)
+		panel.setupPanelResizable();
+	
+	panel.setupPanelToggle();
 });
