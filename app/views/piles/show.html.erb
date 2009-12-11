@@ -1,4 +1,4 @@
-<div id="scope-panel" class="left panel">
+<div id="scope-panel" class="right panel">
 	<div class="back">
 		<div class="shadow"></div>
 	</div>
@@ -20,7 +20,7 @@
 	</div>
 </div
 
-<div id="item-area">
+<div id="item-area" class="left">
 	<div class="cont">
 		
 		<section id="<%=dom_id(@pile.root_node, 'item_for')%>" class="<%=dom_class(@pile.root_node, 'item_for')%> pile" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">

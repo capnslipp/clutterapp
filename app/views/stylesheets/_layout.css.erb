@@ -308,32 +308,53 @@ li { list-style-type: none; }
 /* scope sidebar and list */
 
 /* scope sidebar */
+
 #scope-panel {
     position: absolute;
-    top: 24px; bottom: 0; left: 0;
-    width: 240px;
+    width: 360px;
     
     background: #e5e5e5;
 }
+#scope-panel.left {
+    top: 24px; bottom: 0; left: 0;
+}
+#scope-panel.right {
+    top: 24px; bottom: 0; right: 0;
+}
 #scope-panel > .back {
     position: absolute;
-    right: 0;
     height: 100%;
     width: 8px;
     overflow: hidden;
 }
+#scope-panel.left > .back {
+    right: 0;
+}
+#scope-panel.right > .back {
+    left: 0;
+}
 #scope-panel > .back > .shadow {
     position: relative;
-    right: -8px;
     height: 100%;
     
-    <%= shallow_shadow_decl %>
+    <%= deep_shadow_decl(0.25) %>
+}
+#scope-panel.left > .back > .shadow {
+    right: -8px;
+}
+#scope-panel.right > .back > .shadow {
+    left: -8px;
 }
 #scope-panel > .cont {
     padding: 16px;
 }
-#item-area {
-    margin-left: 240px;
+#item-area.left,
+#item-area.middle {
+    margin-right: 360px;
+}
+#item-area.right,
+#item-area.middle {
+    margin-left: 360px;
 }
 #item-area > .cont {
 }
