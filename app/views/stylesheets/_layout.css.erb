@@ -308,10 +308,34 @@ li { list-style-type: none; }
 /* scope sidebar and list */
 
 /* scope sidebar */
-#scope-box {
-	float: left; clear: left;
-	width: 15em;
-	margin: 1em;
+#scope-panel {
+    position: absolute;
+    top: 24px; bottom: 0; left: 0;
+    width: 240px;
+    
+    background: #e5e5e5;
+}
+#scope-panel > .back {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 8px;
+    overflow: hidden;
+}
+#scope-panel > .back > .shadow {
+    position: relative;
+    right: -8px;
+    height: 100%;
+    
+    <%= shallow_shadow_decl %>
+}
+#scope-panel > .cont {
+    padding: 16px;
+}
+#item-area {
+    margin-left: 240px;
+}
+#item-area > .cont {
 }
 /* root-level scope-list */
 #scope-list > ul.scope-list {
