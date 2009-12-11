@@ -1239,6 +1239,7 @@ jQuery.fn.setupPanelResizable = function() {
 			window.console.assert('panel cannot be both left and right');
 	}
 	
+	var panel = $(this);
 	var center = $('#item-area');
 	var handle = this.children('.back');
 	
@@ -1246,11 +1247,15 @@ jQuery.fn.setupPanelResizable = function() {
 		handles: leftPanel ? 'e' : 'w',
 		resize: function(event, ui) { resizeCenter(ui.size.width) },
 		stop: function(event, ui) { resizeCenter(ui.size.width) },
+		ghost: 'true',
 	});
 	return this;
 	
 	
 	function resizeCenter(panelWidth) {
+		// set manually here to keep them from lagging relative to each other
+		panel.setCSS('width', panelWidth);
+		
 		if (leftPanel)
 			center.setCSS('margin-left', panelWidth);
 		if (rightPanel)
