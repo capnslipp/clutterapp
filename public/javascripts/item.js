@@ -1226,6 +1226,8 @@ $(function() {
 
 
 $(function() {
+	ClutterApp.defaultPanelWidth = $('#scope-panel').width();
+	
 	var centerAreaMinWidth = parseInt( $('#item-area > .cont').getCSS('min-width').match('[0-9]+')[0] );
 	var centerAreaPadding = parseInt( $('#page').getCSS('padding-left').match('[0-9]+')[0] ) + parseInt( $('#page').getCSS('padding-right').match('[0-9]+')[0] );
 	ClutterApp.centerAreaMinWidth = centerAreaMinWidth + centerAreaPadding;
@@ -1271,6 +1273,32 @@ jQuery.fn.setupPanelResizable = function() {
 		maxWidth: panelMaxWidth(this),
 		ghost: 'true',
 	});
+	
+	this.children('a.toggle').click(function() {
+		if (panel.width() <= defaultPanelSize(panel)) {
+			panel.animate(
+				{ width: panelMaxWidth(panel) },
+				{
+					duration: kSlowTransitionDuration * 2,
+					easing: 'easeInOutBack',
+					step: resizeCenter,
+					complete: function() { savePanelSize(panel); },
+				}
+			);
+		} else {
+			panel.animate(
+				{ width: panelMinWidth(panel) },
+				{
+					duration: kSlowTransitionDuration * 2,
+					easing: 'easeInOutBack',
+					step: resizeCenter,
+					complete: function() { savePanelSize(panel); },
+				}
+			);
+		}
+		return false;
+	});
+	
 	return this;
 	
 	
@@ -1309,7 +1337,7 @@ jQuery.fn.setupPanelResizable = function() {
 		if (ClutterApp.panelToggleMode())
 			return 10;
 		else
-			return $('#scope-panel').width();
+			return ClutterApp.defaultPanelWidth;
 	}
 	
 	function panelMinWidth(panel) {
