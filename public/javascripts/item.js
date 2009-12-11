@@ -1316,7 +1316,7 @@ jQuery.fn.setupPanelResizable = function() {
 	var handle = this.children('.back');
 	
 	this.resizable({
-		handles: leftPanel ? {e: '.toggle.ui-resizable-handle.ui-resizable-e'} : {w: '.toggle.ui-resizable-handle.ui-resizable-w'},
+		handles: leftPanel ? {'e': '.ui-resizable-e'} : {'w': '.ui-resizable-w'},
 		resize: function(event, ui) {
 			panel.panelResize(ui.size.width);
 		},
