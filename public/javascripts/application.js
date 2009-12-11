@@ -9,6 +9,12 @@ jQuery.ajaxSetup({beforeSend: function(xhr) {
 } });
 
 
+// a zoomable mobile device like the iPhone
+ClutterApp.hasZoomSupport = (window.orientation != undefined);
+ClutterApp.hasTouchSupport = (window.orientation != undefined); // find a more accurate way to check for multi-touch
+ClutterApp.hasMouseSupport = (window.orientation == undefined); // find a more accurate way to check for multi-touch
+
+
 ClutterApp.fsm = {
 	// "action" is a string corresponding to the current Rails action or null if not currently in an action.
 	_action: null,
@@ -306,12 +312,12 @@ function hideProgressOverlay() {
 
 
 // a zoomable mobile device like the iPhone
-if (window.orientation != undefined) {
+if (ClutterApp.hasZoomSupport) {
 	kIPhoneScreenHeight = 480;
 	kIPhoneStatusBarHeight = 20;
 	kIPhoneToolBarHeight = 44;
 	
-	$(window).load(function() {
+	$(function() {
 		$('body').setCSS('min-height', kIPhoneScreenHeight - kIPhoneStatusBarHeight - kIPhoneToolBarHeight);
 		
 		setTimeout(function() {
