@@ -312,6 +312,8 @@ li { list-style-type: none; }
 #scope-panel {
 	position: absolute; z-index: 50;
 	width: 360px;
+	/* !important declarations to keep jQuery.resizable from using it's own dumb values */
+	height: auto !important;
 	
 	background: #e5e5e5;
 }
