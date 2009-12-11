@@ -1225,6 +1225,19 @@ $(function() {
 
 
 
+$(function() {
+	var centerAreaMinWidth = parseInt( $('#item-area > .cont').getCSS('min-width').match('[0-9]+')[0] );
+	var centerAreaPadding = parseInt( $('#page').getCSS('padding-left').match('[0-9]+')[0] ) + parseInt( $('#page').getCSS('padding-right').match('[0-9]+')[0] );
+	ClutterApp.centerAreaMinWidth = centerAreaMinWidth + centerAreaPadding;
+	
+	
+	var panelMinWidth = $('#scope-panel > .cont').getCSS('min-width');
+	ClutterApp.panelMinWidth = parseInt( panelMinWidth.match('[0-9]+')[0] );
+});
+ClutterApp.panelToggleMode = function() {
+	return ClutterApp.centerAreaMinWidth + ClutterApp.panelMinWidth > window.innerWidth;
+}
+
 jQuery.fn.setupPanelResizable = function() {
 	var leftPanel = false, rightPanel = false;
 	if (this.hasClass('left'))
@@ -1243,10 +1256,7 @@ jQuery.fn.setupPanelResizable = function() {
 	var center = $('#item-area');
 	var handle = this.children('.back');
 	
-	var savedPanelWidth = $.cookie(panel.setAttr('id') + '.width');
-	console.log(savedPanelWidth);
-	if (savedPanelWidth)
-		resizeCenter(savedPanelWidth);
+	loadPanelSize(panel);
 	
 	this.resizable({
 		handles: leftPanel ? 'e' : 'w',
@@ -1255,8 +1265,10 @@ jQuery.fn.setupPanelResizable = function() {
 		},
 		stop: function(event, ui) {
 			resizeCenter(ui.size.width);
-			panelResize(this);
+			savePanelSize(this);
 		},
+		minWidth: panelMinWidth(this),
+		maxWidth: panelMaxWidth(this),
 		ghost: 'true',
 	});
 	return this;
@@ -1271,20 +1283,50 @@ jQuery.fn.setupPanelResizable = function() {
 		if (rightPanel)
 			center.setCSS('margin-right', panelWidth + 'px');
 	}
+	
+	
+	// saves the panel size as a cookie (and possibly sends it to the server in the future)
+	function savePanelSize(panel) {
+		panel = $(panel);
+		
+		$.cookie(
+			panel.setAttr('id') + '.width',
+			panel.width(),
+			{ expires: 365, path: '/' }
+		);
+	}
+	
+	function loadPanelSize(panel) {
+		var savedPanelWidth = $.cookie(panel.setAttr('id') + '.width');
+		
+		if (savedPanelWidth)
+			resizeCenter(savedPanelWidth);
+		else
+			resizeCenter(defaultPanelSize(panel));
+	}
+	
+	function defaultPanelSize(panel) {
+		if (ClutterApp.panelToggleMode())
+			return 10;
+		else
+			return $('#scope-panel').width();
+	}
+	
+	function panelMinWidth(panel) {
+		if (ClutterApp.panelToggleMode())
+			return 10;
+		else
+			return ClutterApp.panelMinWidth;
+	}
+	
+	function panelMaxWidth(panel) {
+		if (ClutterApp.panelToggleMode())
+			return window.innerWidth - 10;
+		else
+			return window.innerWidth - ClutterApp.centerAreaMinWidth;
+	}
 }
 
 $(function() {
 	$('#scope-panel').setupPanelResizable();
 });
-
-
-// saves the panel size as a cookie (and possibly sends it to the server in the future)
-function panelResize(panel) {
-	panel = $(panel);
-	
-	$.cookie(
-		panel.setAttr('id') + '.width',
-		panel.width(),
-		{ expires: 365, path: '/' }
-	);
-}

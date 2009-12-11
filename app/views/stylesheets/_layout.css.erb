@@ -357,6 +357,8 @@ li { list-style-type: none; }
 }
 #scope-panel > .cont {
 	padding: 16px;
+	
+	min-width: 230px;
 }
 #scope-panel > .ui-resizable-handle {
 	position: absolute;
@@ -367,6 +369,8 @@ li { list-style-type: none; }
 
 .ui-resizable-helper { display: none; }
 
+#item-area {
+}
 #item-area.left,
 #item-area.middle {
     margin-right: 360px;
@@ -376,6 +380,7 @@ li { list-style-type: none; }
     margin-left: 360px;
 }
 #item-area > .cont {
+	min-width: <%= 320 - 10 - (16 * 2) %>px;
 }
 /* root-level scope-list */
 #scope-list > ul.scope-list {
