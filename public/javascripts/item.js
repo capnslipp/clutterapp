@@ -1239,14 +1239,24 @@ jQuery.fn.setupPanelResizable = function() {
 			window.console.assert('panel cannot be both left and right');
 	}
 	
-	var panel = $(this);
+	var panel = $(this); // for later use
 	var center = $('#item-area');
 	var handle = this.children('.back');
 	
+	var savedPanelWidth = $.cookie(panel.setAttr('id') + '.width');
+	console.log(savedPanelWidth);
+	if (savedPanelWidth)
+		resizeCenter(savedPanelWidth);
+	
 	this.resizable({
 		handles: leftPanel ? 'e' : 'w',
-		resize: function(event, ui) { resizeCenter(ui.size.width) },
-		stop: function(event, ui) { resizeCenter(ui.size.width) },
+		resize: function(event, ui) {
+			resizeCenter(ui.size.width);
+		},
+		stop: function(event, ui) {
+			resizeCenter(ui.size.width);
+			panelResize(this);
+		},
 		ghost: 'true',
 	});
 	return this;
@@ -1254,12 +1264,12 @@ jQuery.fn.setupPanelResizable = function() {
 	
 	function resizeCenter(panelWidth) {
 		// set manually here to keep them from lagging relative to each other
-		panel.setCSS('width', panelWidth);
+		panel.setCSS('width', panelWidth + 'px'); // setWidth() doesn't seem to work here initially, nor does setCSS('width', …) w/o the "+ 'px'"
 		
 		if (leftPanel)
-			center.setCSS('margin-left', panelWidth);
+			center.setCSS('margin-left', panelWidth + 'px');
 		if (rightPanel)
-			center.setCSS('margin-right', panelWidth);
+			center.setCSS('margin-right', panelWidth + 'px');
 	}
 }
 
@@ -1267,3 +1277,14 @@ $(function() {
 	$('#scope-panel').setupPanelResizable();
 });
 
+
+// saves the panel size as a cookie (and possibly sends it to the server in the future)
+function panelResize(panel) {
+	panel = $(panel);
+	
+	$.cookie(
+		panel.setAttr('id') + '.width',
+		panel.width(),
+		{ expires: 365, path: '/' }
+	);
+}
