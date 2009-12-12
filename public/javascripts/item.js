@@ -643,7 +643,7 @@ $(function() {
 //});
 
 //jQuery.fn.applyReorderability = function() {
-//	var nodeLists = $(this).detect('ul.node.list');
+//	var nodeLists = $(this).search('ul.node.list');
 //	
 //	nodeLists.activateReorderSortable();
 //	
@@ -842,7 +842,7 @@ $(function() {
 });
 
 jQuery.fn.applyReparentDroppability = function() {
-	$(this).detect('li.item_for_node > .show.body, section.pile.item_for_node > .body').activateReparentDroppable();
+	$(this).search('li.item_for_node > .show.body, section.pile.item_for_node > .body').activateReparentDroppable();
 	return this;
 }
 
