@@ -27,7 +27,7 @@ ClutterApp.fsm = {
 	// "context" is an optional jQuery object pointing to the element(s) currently being manipulated.
 	// Possible future use: allowing multiple calls to the server at a time, as long as they don't overlap.
 	_context: null,
-	context: function() { return this._content; },
+	context: function() { return this._context; },
 	
 	
 	// checks to see if a state is active
@@ -84,6 +84,7 @@ ClutterApp.fsm = {
 		
 		this._action = null; // action is back to none
 		this._state = null; // state is back to idling
+		this._context = null;
 		
 		return true;
 	},
@@ -100,14 +101,13 @@ ClutterApp.fsm = {
 		if (!(newState.constructor == String))
 			return null;
 		
-		if (newContext == undefined)
-			newContext = null;
-		if (!(newContext == null || newContext instanceof jQuery))
+		if (!(newContext == undefined || newContext instanceof jQuery))
 			return null;
 		
 		
 		this._state = newState;
-		this._context = newContext;
+		if (newContext)
+			this._context = newContext;
 		
 		return true;
 	},
@@ -121,6 +121,22 @@ ClutterApp.fsm = {
 		
 		
 		this._state = null; // state is back to idling (in this action)
+		
+		return true;
+	},
+	
+	
+	// adds context data, given the correct action and state
+	addContext: function(checkAction, checkState, newContext) {
+		if (this._action != checkAction)
+			return false; // a different action than expected is active; sorry, no change
+		if (this._state != checkState)
+			return false; // a different state than expected is active; sorry, no change
+		
+		if (!(newContext instanceof jQuery))
+			return null;
+		
+		this._context = newContext;
 		
 		return true;
 	},
