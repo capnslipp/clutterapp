@@ -1281,8 +1281,21 @@ jQuery.fn.panelResize = function(panelWidth) {
 }
 
 
+jQuery.fn.panelFitToResizable = function() {
+	var min = this.panelMinWidth();
+	var max = this.panelMaxWidth();
+	
+	if (this.width() > max)
+		this.panelResize(max);
+	else if (this.width() < min)
+		this.panelResize(min);
+}
+
+
 // saves the panel size as a cookie (and possibly sends it to the server in the future)
 jQuery.fn.savePanelSize = function() {
+	console.log('savePanelSize');
+	
 	var panel = $(this).filter('.panel').required();
 	
 	$.cookie(
@@ -1358,6 +1371,14 @@ jQuery.fn.setupPanelResizable = function() {
 }
 
 
+jQuery.fn.refreshPanelResizable = function() {
+	this.resizable('option', 'minWidth', this.panelMinWidth());
+	this.resizable('option', 'maxWidth', this.panelMaxWidth());
+	
+	return this;
+}
+
+
 jQuery.fn.setupPanelToggle = function(eventType) {
 	if (eventType == undefined)
 		eventType = 'click';
@@ -1395,9 +1416,24 @@ $(function() {
 	var panel = $('#scope-panel');
 	
 	panel.loadPanelSize();
+	panel.panelFitToResizable();
+	// no real need to save; if we resized to fit, we can do it again
 	
 	if (ClutterApp.hasMouseSupport)
 		panel.setupPanelResizable();
 	
 	panel.setupPanelToggle(ClutterApp.hasMouseSupport ? 'dblclick' : 'click');
 });
+
+var resizeTimer = null;
+window.onresize = function() {
+	var panel = $('#scope-panel');
+	
+	panel.refreshPanelResizable();
+	panel.panelFitToResizable();
+	
+	
+	// to prevent constantly rapid-fire saving
+	if (resizeTimer) clearTimeout(resizeTimer);
+		resizeTimer = setTimeout("$('#scope-panel').savePanelSize();", 500);
+}
