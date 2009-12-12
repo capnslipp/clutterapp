@@ -698,7 +698,7 @@ jQuery.fn.setupReorderSortable = function() {
 	this.sortable({
 		axis: 'y',
 		containment: '#active-sorting-container',
-		tolerance: 'intersect',
+		tolerance: 'pointer',
 		handle: '> .show.body > #action-bar .move.reorder',
 		helper: helper,
 		opacity: 0.5,
@@ -892,7 +892,7 @@ jQuery.fn.setupReparentDroppable = function() {
 		accept: 'li.item_for_node',
 		hoverClass: 'active',
 		scope: 'item-reparent',
-		tolerance: 'intersect',
+		tolerance: 'pointer',
 		over: function(event, ui) { makeHyper($(this)); },
 		out: function(event, ui) { removeHyper($(this)); },
 		drop: drop,
