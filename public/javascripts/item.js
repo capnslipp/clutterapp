@@ -143,8 +143,9 @@ function itemNew(button, type) {
 		var list = parentNode.children('.list').required();
 		
 		list.append(responseData);
+		var newNode = list.children('li.item_for_node:last').filter('.new.item_for_node').required();
 		
-		var newBody = list.children('li.item_for_node:last').find('.new.body').required();
+		var newBody = newNode.find('.new.body').required();
 		
 		var startScaleX = 0.95; var endScaleX = 1.0;
 		var startScaleY = 0.0; var endScaleY = 1.0;
@@ -179,6 +180,7 @@ function itemNew(button, type) {
 		
 		
 		ClutterApp.fsm.finishState('itemNew', 'load');
+		ClutterApp.fsm.addContext('itemNew', null, newNode);
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
@@ -200,16 +202,16 @@ $(function() {
 
 
 
-function itemNewCancel(button) {
+function itemNewCancel(buttonOrNode) {
 	if (!ClutterApp.fsm.changeState('itemNew', 'cancel'))
 		return;
 	
 	
-	var form = button.closest('form.new_node').required();
+	var node = buttonOrNode.closest('.item_for_node').required();
+	var newBody = node.children('.new.body').required();
+	var form = newBody.children('form.new_node').required();
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
-	
-	var newBody = form.closest('.new.body').required();
 	
 	hideFill();
 		
@@ -246,6 +248,16 @@ function itemNewCancel(button) {
 $(function() {
 	$('form.new_node input.cancel').live('click', function() {
 		itemNewCancel($(this)); return false;
+	});
+	
+	$().keyup(function(e) {
+		if (e.which != kEscapeKeyCode)
+			return;
+		
+		if (ClutterApp.fsm.action() != 'itemNew' || ClutterApp.fsm.isStateBusy())
+			return;
+		
+		itemNewCancel( ClutterApp.fsm.context().required() );
 	});
 });
 
@@ -368,6 +380,7 @@ function itemEdit(link) {
 		
 		showBody.before(responseData);
 		
+		var editNode = showBody.closest('li.item_for_node').required();
 		var editBody = showBody.siblings('.edit.body').required();
 		
 		var startScaleX = 0.95; var endScaleX = 1.0;
@@ -401,6 +414,7 @@ function itemEdit(link) {
 		
 		
 		ClutterApp.fsm.finishState('itemEdit', 'load');
+		ClutterApp.fsm.addContext('itemEdit', null, editNode);
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
@@ -426,16 +440,15 @@ $(function() {
 
 
 
-function itemEditCancel(button) {
+function itemEditCancel(buttonOrNode) {
 	if (!ClutterApp.fsm.changeState('itemEdit', 'cancel'))
 		return;
 	
-	
-	var form = button.closest('form.edit_node').required();
+	var node = buttonOrNode.closest('.item_for_node').required();
+	var editBody = node.children('.edit.body').required();
+	var form = editBody.children('form.edit_node').required();
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
-	
-	var editBody = form.closest('.edit.body').required();
 	
 	hideFill();
 	
@@ -470,6 +483,16 @@ function itemEditCancel(button) {
 $(function() {
 	$('form.edit_node input.cancel').live('click', function() {
 		itemEditCancel($(this)); return false;
+	});
+	
+	$().keyup(function(e) {
+		if (e.which != kEscapeKeyCode)
+			return;
+		
+		if (ClutterApp.fsm.action() != 'itemEdit' || ClutterApp.fsm.isStateBusy())
+			return;
+		
+		itemEditCancel( ClutterApp.fsm.context().required() );
 	});
 });
 

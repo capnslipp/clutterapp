@@ -9,6 +9,9 @@ jQuery.ajaxSetup({beforeSend: function(xhr) {
 } });
 
 
+var kEscapeKeyCode = 27;
+
+
 // a zoomable mobile device like the iPhone
 ClutterApp.hasZoomSupport = (window.orientation != undefined);
 ClutterApp.hasTouchSupport = (window.orientation != undefined); // find a more accurate way to check for multi-touch
