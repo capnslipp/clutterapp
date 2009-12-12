@@ -762,7 +762,7 @@ jQuery.fn.setupReorderSortable = function() {
 		$('#active-sorting-container').required().replaceWith(
 			$('#active-sorting-container > ul.node.list').required()
 		);
-		list.setCSS({margin: ''});
+		list.removeAttr('style'); // clear out unnecessary styles
 		
 		// @todo: optimize so this isn't being done twice
 		var prevSibling = ui.item.prev('li.item_for_node');
@@ -775,6 +775,8 @@ jQuery.fn.setupReorderSortable = function() {
 			hideFill(list);
 			list.removeClass('active');
 		}
+		
+		$(this).removeAttr('style'); // clear out unnecessary styles
 	}
 }
 
@@ -855,6 +857,7 @@ jQuery.fn.setupReparentDraggable = function() {
 		scope: 'item-reparent',
 		scroll: true,
 		zIndex: 500,
+		stop: function(event, ui) { $(this).removeAttr('style'); }, // clear out unnecessary styles
 	});
 	return this;
 }
