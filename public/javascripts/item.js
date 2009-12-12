@@ -1370,7 +1370,7 @@ jQuery.fn.setupPanelToggle = function(eventType) {
 				{ width: panel.panelMaxWidth() },
 				{
 					duration: kSlowTransitionDuration * 2,
-					easing: 'easeInOutBack',
+					easing: 'easeInOutExpo',
 					step: function(width) { panel.panelResize(width); },
 					complete: function() { panel.savePanelSize(); },
 				}
@@ -1380,7 +1380,7 @@ jQuery.fn.setupPanelToggle = function(eventType) {
 				{ width: panel.panelMinWidth() },
 				{
 					duration: kSlowTransitionDuration * 2,
-					easing: 'easeInOutBack',
+					easing: 'easeInOutExpo',
 					step: function(width) { panel.panelResize(width); },
 					complete: function() { panel.savePanelSize(); },
 				}
