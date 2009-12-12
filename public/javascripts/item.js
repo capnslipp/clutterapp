@@ -1294,8 +1294,6 @@ jQuery.fn.panelFitToResizable = function() {
 
 // saves the panel size as a cookie (and possibly sends it to the server in the future)
 jQuery.fn.savePanelSize = function() {
-	console.log('savePanelSize');
-	
 	var panel = $(this).filter('.panel').required();
 	
 	$.cookie(
