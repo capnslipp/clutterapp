@@ -523,6 +523,11 @@ function itemUpdate(form) {
 	
 	
 	function handleSuccess(responseData) {
+		showBody.replaceWith(responseData);
+		// showBody ref no longer valid from this point on
+		editBody.closest('li.item_for_node').required().applyReparentDroppability();
+		
+		
 		var startScaleX = 0.95; var endScaleX = 1.0;
 		var startScaleY = 0.75; var endScaleY = 1.0;
 		editBody.setCSS({
@@ -549,14 +554,10 @@ function itemUpdate(form) {
 					
 					editBody.remove();
 					
-					
 					ClutterApp.fsm.finishAction('itemEdit', 'done');
 				}
 			}
 		);
-		
-		
-		showBody.replaceWith(responseData);
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
