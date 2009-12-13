@@ -314,9 +314,10 @@ function hideProgressOverlay() {
 		// if already visible, fade out
 		var overlayBGPosX = overlay.getCSS('backgroundPosition').asBGPosToArray()[0];
 		
-		overlay.setCSS(
-			{backgroundImage: 'url("/images/anim.progress.out.bk-tr-aliased-white.16x32.gif")'}
-		).animate(
+		overlay.setCSS({
+			backgroundImage: 'url("/images/anim.progress.out.bk-tr-aliased-white.16x32.gif")',
+			backgroundPosition: overlayBGPosX + 'px 0px',
+		}).animate(
 			{opacity: 0.1, backgroundPosition: (overlayBGPosX + 16) + 'px 0px'},
 			500,
 			'easeOutQuad',
