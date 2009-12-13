@@ -4,9 +4,9 @@
 var JOIN = '_';
 var NEW = 'new';
 
-var kSlowTransitionDuration = 375;
-var kDefaultTransitionDuration = 250;
-var kQuickTransitionDuration = 125;
+var kSlowTransitionDuration =		375;
+var kDefaultTransitionDuration =	250;
+var kQuickTransitionDuration =		125;
 
 
 function classForNodeModels(prefix) {
@@ -857,7 +857,6 @@ jQuery.fn.setupReparentDraggable = function() {
 		scope: 'item-reparent',
 		scroll: true,
 		zIndex: 500,
-		stop: function(event, ui) { $(this).removeAttr('style'); }, // clear out unnecessary styles
 	});
 	return this;
 }
@@ -930,7 +929,9 @@ function itemReparent(node, parentNode) {
 	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
 	node.children('.body').addClass('active');
 	node.setCSS('opacity', 0.5); // doesn't seem to be working (perhaps being overridden via jQueryUI code?)
-	node.showProgressOverlay();
+	
+	nodeOutStart();
+	parentNode.children('.body').required().showProgressOverlay();
 	
 	$.ajax({
 		type: 'post',
@@ -941,8 +942,66 @@ function itemReparent(node, parentNode) {
 		error: handleError
 	});
 	
+	return;
+	
+	
+	var nodeOutAnimDone = false;
+	var nodeAJAXDone = false;
+	
+	function removeNodeWhenDone() {
+		if (nodeOutAnimDone && nodeAJAXDone) {
+			node.draggable('destroy');
+			node.remove();
+		}
+	}
+	
+	function nodeOutStart() {
+		node.show();
+		
+		var origNodeHeight = node.height();
+		var origNodeOpacity = node.getCSS('opacity');
+		
+		var endScaleX = 0.95;
+		var endScaleY = 0.25;
+		node.setCSS({
+			overflow: 'visible',
+			        'transform-origin': '',
+			   '-moz-transform-origin': '',
+			'-webkit-transform-origin': '', // essentially, '50% 50%'
+		}).animate(
+			{opacity: 0.0},
+			{
+				duration: kQuickTransitionDuration,
+				easing: 'easeInQuad',
+				step: function(opacity) {
+					var ratio = opacity / origNodeOpacity;
+					
+					$(this).setCSS({
+						'height': origNodeHeight * ratio,
+					});
+					
+					var scaleValX = (1.0 - endScaleX) * ratio + endScaleX;
+					var scaleValY = (1.0 - endScaleY) * ratio + endScaleY;
+					$(this).setCSS({
+						        'transform': 'scale('+scaleValX+', '+scaleValY+')',
+						   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
+						'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')',
+					});
+					
+				},
+				complete: function() {
+					nodeOutAnimDone = true;
+					removeNodeWhenDone();
+				},
+			}
+		);
+	}
+	
 	
 	function handleSuccess(responseData) {
+		hideProgressOverlay();
+		
+		
 		parentNode.children('.body').removeClass('active');
 		
 		var list = parentNode.children('ul.node.list').required();
@@ -950,7 +1009,10 @@ function itemReparent(node, parentNode) {
 		$('li.item_for_node', list).draggable('destroy');
 		$('.show.body', list).droppable('destroy');
 		
-		nodeOutStart();
+		listCrossStart();
+		
+		nodeAJAXDone = true;
+		removeNodeWhenDone();
 		
 		
 		var oldListHeight;
@@ -958,47 +1020,6 @@ function itemReparent(node, parentNode) {
 		var listPlaceholder;
 		
 		var newList;
-		
-		function nodeOutStart() {
-			node.show();
-			
-			var actualNodeHeight = node.height();
-			
-			var startScaleX = 0.95; var endScaleX = 1.0;
-			var startScaleY = 0.25; var endScaleY = 1.0;
-			node.setCSS({
-				overflow: 'visible',
-				        'transform-origin': '50% 50%',
-				   '-moz-transform-origin': '50% 50%',
-				'-webkit-transform-origin': '50% 50%',
-			}).animate(
-				{opacity: 0.0},
-				{
-					duration: kQuickTransitionDuration,
-					easing: 'easeInQuad',
-					step: function(ratio) {
-						$(this).setCSS({
-							'height': actualNodeHeight * ratio,
-						});
-						var scaleValX = (endScaleX - startScaleX) * ratio + startScaleX;
-						var scaleValY = (endScaleY - startScaleY) * ratio + startScaleY;
-						$(this).setCSS({
-							        'transform': 'scale('+scaleValX+', '+scaleValY+')',
-							   '-moz-transform': 'scale('+scaleValX+', '+scaleValY+')',
-							'-webkit-transform': 'scale('+scaleValX+', '+scaleValY+')',
-						});
-					},
-					complete: nodeOutFinish,
-				}
-			);
-		}
-		
-		function nodeOutFinish() {
-			node.draggable('destroy');
-			node.remove();
-			
-			listCrossStart();
-		}
 		
 		function listCrossStart() {
 			// get old height
@@ -1057,6 +1078,10 @@ function itemReparent(node, parentNode) {
 	
 	function handleError(xhrObj, errStr, expObj) {
 		parentNode.removeClass('active');
+		
+		function nodeOutRevert() {
+			$(this).removeAttr('style'); // clear out unnecessary styles
+		}
 		
 		node.find('.body:first .cont').required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
