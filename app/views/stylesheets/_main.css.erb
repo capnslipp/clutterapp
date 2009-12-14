@@ -30,6 +30,9 @@ body, input, textarea {
 #fill {
 	position: absolute; z-index: 500;
 	background: <%= fill_color.to_s(:css_rgba) %>;
+	        user-select: none;
+	   -moz-user-select: none;
+	-webkit-user-select: none;
 }
 
 .over-fill {
