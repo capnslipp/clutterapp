@@ -856,7 +856,9 @@ jQuery.fn.setupReparentDraggable = function() {
 		revert: 'invalid',
 		scope: 'item-reparent',
 		scroll: true,
-		zIndex: 500,
+		//zIndex: 500,
+		start: function() { $(this).setCSS('z-index', 500); },
+		stop: function() { $(this).setCSS('z-index', ''); },
 	});
 	return this;
 }
