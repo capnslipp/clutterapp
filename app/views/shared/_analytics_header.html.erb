@@ -21,6 +21,6 @@ var clicky_custom = {session: { <%- if current_user: -%>user: '<%=current_user.n
 	clickyScript.src = 'http://static.getclicky.com/js';
 	clickyScript.setAttribute('async', 'true');
 	document.documentElement.firstChild.appendChild(clickyScript);
-	setTimeout('if (window.clicky || document.clicky) clicky.init(_fill_in_);', 1000);
+	setTimeout('if (window.clicky) clicky.init(_fill_in_);', 1000);
 })();
 </script>
