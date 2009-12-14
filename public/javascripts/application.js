@@ -289,7 +289,7 @@ function animateProgressOverlay() {
 	
 	overlay.setCSS({
 		backgroundPosition: '0px 0px',
-		/*backgroundImage: 'url("/images/anim.progress.full.bk-tr.16x32.png")'*/ // setting the backgroundImage to the last frame may cause a jump in animation
+		backgroundImage: 'url("/images/anim.progress.full.bk-tr.16x32.png")',
 	}).animate(
 		{backgroundPosition: '1600px 0px'}, 50000, 'linear',
 		function() {
