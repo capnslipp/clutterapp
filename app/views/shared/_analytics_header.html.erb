@@ -11,3 +11,16 @@ _gaq.push(['_trackPageview']);
 	document.documentElement.firstChild.appendChild(ga);
 })();
 </script>
+
+<!-- Clicky Tracking Code -->
+<script type="text/javascript">
+var clicky_custom = {session: { <%- if current_user: -%>user: '<%=current_user.name%>',<%- end -%> },};
+
+(function() {
+	var clickyScript = document.createElement('script');
+	clickyScript.src = 'http://static.getclicky.com/js';
+	clickyScript.setAttribute('async', 'true');
+	document.documentElement.firstChild.appendChild(clickyScript);
+	clicky.init(_fill_in_);
+})();
+</script>
