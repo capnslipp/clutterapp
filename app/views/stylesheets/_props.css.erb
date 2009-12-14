@@ -58,15 +58,20 @@
 }
 
 .priority.prop {
-	width: 12px; /* same as height and line-height */
+	width: 13px; /* same as height and line-height */
 	
 	display: inline-block;
+	
+	font-size: 11px;
+	height: 13px;
+	line-height: 13px;
+	vertical-align: baseline;
 	
 	text-align: center;
 	background: <%= wash_color %>;
 	color: <%= wash_text_color %>;
 	
-	<%= border_radius_decl('6px') %>
+	<%= border_radius_decl('8px') %>
 }
 .priority.prop, .priority.prop input { font-family: 'Arial Black', sans-serif; font-weight: bold; }
 .priority.prop input { }
@@ -79,7 +84,12 @@
 .tag.prop {
 	display: inline-block;
 	
-	background-color: <%= wash_color %>;
+	font-size: 11px;
+	height: 11px;
+	line-height: 11px;
+	vertical-align: middle;
+	
+	background-color: <%= wash_color + 0.25 %>;
 	color: <%= wash_text_color %>;
 	
 	padding: 0 2px;
@@ -106,7 +116,7 @@
 	padding: 0 2px;
 	/*background: <%= bright_bg_color %>;*/
 	
-	font-size: 15px;
+	font-size: 14px;
 	font-weight: bold;
 }
 .time.prop.badge { /*float: left;*/ }
