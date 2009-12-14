@@ -1115,7 +1115,7 @@ function badgeAdd(link, addType) {
 	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('li.item_for_node').required();
+	var parentNode = node.parent().closest('.item_for_node').required();
 	
 	$.ajax({
 		type: 'get',
