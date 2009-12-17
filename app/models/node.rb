@@ -1,13 +1,6 @@
 class Node < ActiveRecord::Base
   acts_as_nested_set :scope => :pile, :dependent => :destroy
   
-  attr_delta :version
-  
-  # must be specified first (at least before any associations)
-  #before_update :increment_version
-  #before_move :increment_parent_version
-  #after_move :increment_version # necessary?
-  
   belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true
   
   belongs_to :pile
