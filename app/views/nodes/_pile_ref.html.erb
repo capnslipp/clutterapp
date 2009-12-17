@@ -3,7 +3,7 @@
 		
 		<%= render :partial => node_body_partial(@cell_state), :locals => {:node => item} %>
 		
-		<%- cache ['node-list', item.prop.ref_pile.root_node.id].join('_') do -%>
+		<%- cache ({:node_list => item.prop.ref_pile.root_node.id}.to_json) do -%>
 			<ul class="node list">
 				<%= render :partial => 'nodes/list_items', :locals => {:item => item.prop.ref_pile.root_node} %>
 			</ul>

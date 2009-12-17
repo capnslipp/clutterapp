@@ -225,7 +225,7 @@ private
     
     logger.prefixed 'NodesController#expire_cache_for', :light_yellow, "cache invalidated for Node ##{record.id}"
     
-    expire_fragment(['node-list', record.id].join('_'))
+    expire_fragment ({:node_list => record.id}.to_json)
     
     expire_cache_for(record.parent) if record.parent # recursively invalidate all ancestors
   end

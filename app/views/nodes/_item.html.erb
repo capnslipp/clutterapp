@@ -2,7 +2,7 @@
 	
 	<%= render :partial => node_body_partial(@cell_state), :locals => {:node => item} %>
 	
-	<%- cache ['node-list', item.id].join('_') do -%>
+	<%- cache ({:node_list => item.id}.to_json) do -%>
 		<ul class="node list">
 			<%= render :partial => 'list_items', :locals => {:item => item} %>
 		</ul>
