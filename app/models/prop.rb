@@ -2,9 +2,6 @@ require 'string_rand_extension'
 
 
 class Prop < ActiveRecord::Base
-  # must be specified first (at least before any associations)
-  after_save :increment_node_version
-  
   self.abstract_class = true
   
   
@@ -65,10 +62,6 @@ class Prop < ActiveRecord::Base
   
   def self::filler_new
     raise NotImplementedError
-  end
-  
-  def increment_node_version
-    node.before_prop_save unless node.nil?
   end
   
   

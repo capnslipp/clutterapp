@@ -68,15 +68,6 @@ class Node < ActiveRecord::Base
   end
   
   
-  def before_prop_save
-    increment_version
-  end
-  
-  def after_child_destroy
-    increment_version!
-  end
-  
-  
   def self_and_non_badgeable_siblings
     nested_set_scope.scoped :conditions => { parent_column_name => parent_id, :prop_type => Prop.non_badgeable_types.collect(&:to_s) }
   end
@@ -131,24 +122,6 @@ protected
     #errors.add(:node, "either be root and have pile; or it must be neither root ") if root? ^ (pile.root_node != self) # causes stack overflow
     errors.add(:node, "must have a prop or be root, not both") if root? && prop
     errors.add(:node, "must have either a prop or be root") if !root? && !prop
-  end
-  
-  def increment_version
-    #version_delta = 1
-    #expire_fragment ['node_item_list', self.id].join(':')
-    
-    logger.prefixed 'Node#increment_version', :light_green, "trying to invalidate cache for Node ##{self.id}"
-    
-    increment_parent_version
-  end
-  
-  def increment_version!
-    increment_version
-    #save!
-  end
-  
-  def increment_parent_version
-    parent.increment_version unless parent.nil?
   end
   
 end

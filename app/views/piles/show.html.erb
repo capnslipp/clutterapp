@@ -35,9 +35,11 @@
 				</h1>
 			</div>
 			
-			<ul class="node list">
-				<%= render :partial => 'nodes/list_items', :locals => {:item => @pile.root_node} -%>
-			</ul>
+			<%- cache ['node-list', @pile.root_node.id].join('_') do -%>
+				<ul class="node list">
+					<%= render :partial => 'nodes/list_items', :locals => {:item => @pile.root_node} -%>
+				</ul>
+			<%- end -%>
 			
 			<%= render :partial => 'nodes/action_bar' %>
 		</section>

@@ -1,11 +1,11 @@
-require "#{RAILS_ROOT}/app/sweepers/node_sweeper.rb"
+#require "#{RAILS_ROOT}/app/sweepers/node_sweeper.rb"
 
 class NodesController < ApplicationController
   include ERB::Util
   include ApplicationHelper
   layout nil
   
-  cache_sweeper :node_sweeper, :only => [:update_check_prop_checked, :create, :update, :reorder, :reparent, :destroy] # every action but :new and :edit
+  #cache_sweeper :node_sweeper, :only => [:update_check_prop_checked, :create, :update, :reorder, :reparent, :destroy] # every action but :new and :edit
   
   before_filter :be_xhr_request
   before_filter :authorize
@@ -20,6 +20,8 @@ class NodesController < ApplicationController
     @prop = @node.prop
     @prop.checked = params[:checked]
     @prop.save!
+    expire_cache_for(@prop)
+    
     render :update do |page|
       page.call 'updateCheckPropField', "check_prop_#{@prop.id}", @prop.checked?
     end
@@ -75,6 +77,7 @@ class NodesController < ApplicationController
     end
     
     @node.save!
+    expire_cache_for(@node)
     
     
     @cell_state = :show
@@ -155,6 +158,7 @@ class NodesController < ApplicationController
     
     
     if @node.save
+      expire_cache_for(@node)
       render :partial => node_body_partial(:show), :locals => {:node => @node}
     else
       render :nothing => true, :status => :bad_request
@@ -176,6 +180,8 @@ class NodesController < ApplicationController
       @node.move_to_left_of(@node.siblings.first)
     end
     
+    expire_cache_for(@node.parent)
+    
     render :nothing => true, :status => :accepted
   end
   
@@ -184,9 +190,13 @@ class NodesController < ApplicationController
   def reparent
     @node = active_pile.nodes.find(params[:id])
     
+    expire_cache_for(@node.parent) # old parent
+    
     # put it as the last child of the parent
     @parent = active_pile.nodes.find(params[:parent_id])
     @node.move_to_child_of(@parent)
+    
+    expire_cache_for(@parent) # new parent
     
     @cell_state = :show
     render :partial => 'list_items', :locals => {:item => @parent}
@@ -199,9 +209,25 @@ class NodesController < ApplicationController
     @node = active_pile.nodes.find(params[:id])
     orig_parent_node = @node.parent
     @node.destroy
+    
+    expire_cache_for(@node)
+    
     orig_parent_node.after_child_destroy
     
     render :nothing => true, :status => :accepted
+  end
+  
+  
+private
+  
+  def expire_cache_for(record)
+    record = record.node if record.is_a? Prop
+    
+    logger.prefixed 'NodesController#expire_cache_for', :light_yellow, "cache invalidated for Node ##{record.id}"
+    
+    expire_fragment(['node-list', record.id].join('_'))
+    
+    expire_cache_for(record.parent) if record.parent # recursively invalidate all ancestors
   end
   
 end

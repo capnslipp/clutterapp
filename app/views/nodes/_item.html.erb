@@ -2,8 +2,10 @@
 	
 	<%= render :partial => node_body_partial(@cell_state), :locals => {:node => item} %>
 	
-	<ul class="node list">
-		<%= render :partial => 'list_items', :locals => {:item => item} %>
-	</ul>
+	<%- cache ['node-list', item.id].join('_') do -%>
+		<ul class="node list">
+			<%= render :partial => 'list_items', :locals => {:item => item} %>
+		</ul>
+	<%- end -%>
 	
 <% end %>

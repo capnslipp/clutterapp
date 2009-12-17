@@ -3,9 +3,11 @@
 		
 		<%= render :partial => node_body_partial(@cell_state), :locals => {:node => item} %>
 		
-		<ul class="node list">
-			<%= render :partial => 'nodes/list_items', :locals => {:item => item.prop.ref_pile.root_node} %>
-		</ul>
+		<%- cache ['node-list', item.prop.ref_pile.root_node.id].join('_') do -%>
+			<ul class="node list">
+				<%= render :partial => 'nodes/list_items', :locals => {:item => item.prop.ref_pile.root_node} %>
+			</ul>
+		<%- end -%>
 		
 	</section>
 <% end -%>
