@@ -36,7 +36,7 @@ task :stag do
   
   set :deploy_to, '/var/www/clutterapp-stag'
   
-  set :branch, 'master'
+  set :branch, 'caching-conversion'
 end
 
 set :user, 'rails' # SSH username, optional if the same as the dev computer username
