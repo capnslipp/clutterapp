@@ -9,9 +9,12 @@ task :prod do
   set :rails_env, 'production'
   
   set :domain, 'prod.clutterapp.com'
-  role :web, domain                          # Your HTTP server, Apache/etc
-  role :app, domain                          # This may be the same as your `Web` server
-  role :db,  domain, :primary => true # This is where Rails migrations will run
+  # Your HTTP server, Apache/etc
+  role :web, domain
+  # This may be the same as your `Web` server
+  role :app, domain
+  # This is where Rails migrations will run
+  role :db,  domain, :primary => true
   #role :db,  'your slave db-server here'
   
   set :deploy_to, '/var/www/clutterapp'
@@ -23,9 +26,12 @@ task :stag do
   set :rails_env, 'staging'
   
   set :domain, 'stag.clutterapp.com'
-  role :web, domain # Your HTTP server, Apache/etc
-  role :app, domain # This may be the same as your `Web` server
-  role :db,  domain, :primary => true#'174.143.208.40', :primary => true # This is where Rails migrations will run
+  # Your HTTP server, Apache/etc
+  role :web, domain
+  # This may be the same as your `Web` server
+  role :app, domain
+  # This is where Rails migrations will run
+  role :db,  domain, :primary => true
   #role :db,  "your slave db-server here"
   
   set :deploy_to, '/var/www/clutterapp-stag'
