@@ -134,13 +134,17 @@ protected
   end
   
   def increment_version
-    version_delta = 1
+    #version_delta = 1
+    #expire_fragment ['node_item_list', self.id].join(':')
+    
+    logger.prefixed 'Node#increment_version', :light_green, "trying to invalidate cache for Node ##{self.id}"
+    
     increment_parent_version
   end
   
   def increment_version!
     increment_version
-    save!
+    #save!
   end
   
   def increment_parent_version

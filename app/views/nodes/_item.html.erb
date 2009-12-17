@@ -1,4 +1,4 @@
-<% content_tag_for :li, item, 'item_for', :class => "#{@cell_state} #{dom_class(item, 'item_for')}", :'oc:url' => path_for([item.pile.owner, item.pile, item]) do -%>
+<% content_tag_for :li, item, 'item_for', :class => "#{@cell_state} #{dom_class(item, 'item_for')}", :'oc:url' => path_for([item.pile.owner, item.pile, item]) do %>
 	
 	<%= render :partial => node_body_partial(@cell_state), :locals => {:node => item} %>
 	
@@ -6,4 +6,4 @@
 		<%= render :partial => 'list_items', :locals => {:item => item} %>
 	</ul>
 	
-<% end -%>
+<% end %>

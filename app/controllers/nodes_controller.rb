@@ -1,7 +1,11 @@
+require "#{RAILS_ROOT}/app/sweepers/node_sweeper.rb"
+
 class NodesController < ApplicationController
   include ERB::Util
   include ApplicationHelper
   layout nil
+  
+  cache_sweeper :node_sweeper, :only => [:update_check_prop_checked, :create, :update, :reorder, :reparent, :destroy] # every action but :new and :edit
   
   before_filter :be_xhr_request
   before_filter :authorize
