@@ -1,43 +1,64 @@
 set :application, 'clutterapp'
 
 
-# If you aren't deploying to /u/apps/#{application} on the target servers (which is the default), you can specify the actual location via the :deploy_to variable:
-#set :deploy_to, "/var/www/#{application}"
 
-
+# prod
+#   is for stable production server deployment
+#   pulls from the "stable" branch, which follows the "master" branch
+#   uses the production DB
 task :prod do
   set :rails_env, 'production'
   
   set :domain, 'prod.clutterapp.com'
-  # Your HTTP server, Apache/etc
   role :web, domain
-  # This may be the same as your `Web` server
   role :app, domain
-  # This is where Rails migrations will run
   role :db,  domain, :primary => true
   #role :db,  'your slave db-server here'
   
   set :deploy_to, '/var/www/clutterapp'
   
-  set :branch, 'master'
+  set :branch, 'stable' # don't change
 end
 
+
+# "edge"
+#   is for near-stable production server deployment
+#   pulls from the latest on the "master" branch
+#   uses the production DB
+task :edge do
+  set :rails_env, 'production'
+  
+  set :domain, 'edge.clutterapp.com'
+  role :web, domain
+  role :app, domain
+  role :db,  domain, :primary => true
+  #role :db,  'your slave db-server here'
+  
+  set :deploy_to, '/var/www/clutterapp-edge'
+  
+  set :branch, 'master' # don't change
+end
+
+
+# "stag"
+#   is for experimental production or production-like server deployment
+#   can be changed to pull from any branch, depending on the need
+#   uses its own DB, which can be cloned from the production DB when needed
 task :stag do
-  set :rails_env, 'staging'
+  set :rails_env, 'staging' # a copy of the production environment, but using a different DB
   
   set :domain, 'stag.clutterapp.com'
-  # Your HTTP server, Apache/etc
   role :web, domain
-  # This may be the same as your `Web` server
   role :app, domain
-  # This is where Rails migrations will run
   role :db,  domain, :primary => true
-  #role :db,  "your slave db-server here"
+  #role :db,  'your slave db-server here'
   
   set :deploy_to, '/var/www/clutterapp-stag'
   
-  set :branch, 'master'
+  set :branch, 'caching-conversion' # feel free to change this per-branch
 end
+
+
 
 set :user, 'rails' # SSH username, optional if the same as the dev computer username
 set :use_sudo, false
