@@ -226,6 +226,7 @@ private
     expire_fragment ({:node_list => record.id}.to_json)
     
     expire_cache_for(record.parent) if record.parent # recursively invalidate all ancestors
+    # @todo: also invalidate the cache for any pile-ref nodes point at this pile's root node
   end
   
 end
