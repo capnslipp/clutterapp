@@ -212,8 +212,6 @@ class NodesController < ApplicationController
     
     expire_cache_for(@node)
     
-    orig_parent_node.after_child_destroy
-    
     render :nothing => true, :status => :accepted
   end
   
