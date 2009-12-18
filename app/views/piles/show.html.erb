@@ -24,25 +24,25 @@
 <div id="item-area" class="left">
 	<div class="cont">
 		
-		<section id="<%=dom_id(@pile.root_node, 'item_for')%>" class="<%=dom_class(@pile.root_node, 'item_for')%> pile" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
-			<div class="body">
-				<div class="back"></div>
+		<%- cache ({:node_section => @pile.root_node.id}.to_json) do -%>
+			<section id="<%=dom_id(@pile.root_node, 'item_for')%>" class="<%=dom_class(@pile.root_node, 'item_for')%> pile" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
+				<div class="body">
+					<div class="back"></div>
+					
+					<%= render :partial => 'nodes/action_stub' %>
+					
+					<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
+						<span class="owner"><%= @owner.name %> »</span> <span class="name"><%= @pile.name %></span>
+					</h1>
+				</div>
 				
-				<%= render :partial => 'nodes/action_stub' %>
-				
-				<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
-					<span class="owner"><%= @owner.name %> »</span> <span class="name"><%= @pile.name %></span>
-				</h1>
-			</div>
-			
-			<%- cache ({:node_list => @pile.root_node.id}.to_json) do -%>
 				<ul class="node list">
 					<%= render :partial => 'nodes/list_items', :locals => {:item => @pile.root_node} -%>
 				</ul>
-			<%- end -%>
-			
-			<%= render :partial => 'nodes/action_bar' %>
-		</section>
+				
+				<%= render :partial => 'nodes/action_bar' %>
+			</section>
+		<%- end -%>
 		
 	</div>
 </div>
