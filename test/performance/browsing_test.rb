@@ -31,8 +31,10 @@ class BrowsingTest < ActionController::PerformanceTest
   def test_piles
     bypass_authentication
     
-    get "/#{@user.to_param}/piles/#{@pile.to_param}"
-    assert_response :success
+    7.times do
+      get "/#{@user.to_param}/piles/#{@pile.to_param}"
+      assert_response :success
+    end
   end
   
   
