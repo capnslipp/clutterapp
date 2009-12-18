@@ -3,13 +3,11 @@
 		<%- cache ({:node_section => child_node.id}.to_json) do -%>
 			<section id="<%= dom_id(item.prop.ref_pile.root_node, 'item_for') %>" class="<%= dom_class(item.prop.ref_pile.root_node, 'item_for') %> pile" oc:nodes-url="<%=path_for([item.prop.ref_pile.owner, item.prop.ref_pile, :nodes])%>">
 				
-				<%= render :partial => node_body_partial(@cell_state), :locals => {:node => item} %>
+				<%= render :partial => 'show_body', :locals => {:node => item} %>
 				
-				<%- cache ({:node_list => item.prop.ref_pile.root_node.id}.to_json) do -%>
-					<ul class="node list">
-						<%= render :partial => 'nodes/list_items', :locals => {:item => item.prop.ref_pile.root_node} %>
-					</ul>
-				<%- end -%>
+				<ul class="node list">
+					<%= render :partial => 'nodes/list_items', :locals => {:item => item.prop.ref_pile.root_node} %>
+				</ul>
 				
 			</section>
 		<%- end -%>

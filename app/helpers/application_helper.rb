@@ -21,11 +21,6 @@ module ApplicationHelper
   end
   
   
-  def node_body_partial(state)
-    "nodes/#{state}_body"
-  end
-  
-  
   def prop_partial(node, state)
     "props/#{node.prop.class.short_name.underscore}/#{state}"
   end
