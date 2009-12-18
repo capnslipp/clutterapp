@@ -1,13 +1,3 @@
 <%- item.children.non_badgeable.each do |child_node| -%>
-	<%- cache ({:node_item => child_node.id}.to_json) do -%>
-		<% content_tag_for :li, child_node, 'item_for', :class => dom_class(child_node, 'item_for'), :'oc:url' => path_for([child_node.pile.owner, child_node.pile, child_node]) do %>
-			
-			<%= render :partial => node_body_partial(:show), :locals => {:node => child_node} %>
-			
-			<ul class="node list">
-				<%= render :partial => 'nodes/list_items', :locals => {:item => child_node} %>
-			</ul>
-			
-		<% end %>
-	<%- end -%>
+	<%= render :partial => 'nodes/show_item', :locals => {:item => child_node} %>
 <%- end -%>

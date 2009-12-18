@@ -53,8 +53,7 @@ class NodesController < ApplicationController
     end
     
     
-    @cell_state = :new
-    render :partial => 'item', :locals => {:item => @node}
+    render :partial => 'new_item', :locals => {:item => @node}
   end
   
   
@@ -80,8 +79,7 @@ class NodesController < ApplicationController
     expire_cache_for(@node)
     
     
-    @cell_state = :show
-    render :partial => 'item', :locals => {:item => @node}
+    render :partial => 'show_item', :locals => {:item => @node}
   end
   
   
@@ -127,7 +125,7 @@ class NodesController < ApplicationController
     end
     
     
-    render :partial => node_body_partial(:edit), :locals => {:node => @node}
+    render :partial => 'edit_body', :locals => {:node => @node}
   end
   
   
@@ -159,7 +157,7 @@ class NodesController < ApplicationController
     
     if @node.save
       expire_cache_for(@node)
-      render :partial => node_body_partial(:show), :locals => {:node => @node}
+      render :partial => 'show_body', :locals => {:node => @node}
     else
       render :nothing => true, :status => :bad_request
     end
@@ -198,7 +196,6 @@ class NodesController < ApplicationController
     
     expire_cache_for(@parent) # new parent
     
-    @cell_state = :show
     render :partial => 'list_items', :locals => {:item => @parent}
   end
   
