@@ -5,6 +5,7 @@ class TagProp < Prop
   
   validates_presence_of :tag
   validates_length_of :tag, :within => 1..26
+  before_save :normalize_tag
   
   
   is_badgeable
@@ -17,6 +18,14 @@ class TagProp < Prop
   
   def self::filler_new
     new :tag => ''
+  end
+  
+  
+private
+  
+  def normalize_tag
+    tag.strip!
+    tag.downcase!
   end
   
 end
