@@ -75,11 +75,13 @@ class NodesController < ApplicationController
       child.pile = @node.pile
     end
     
-    @node.save!
-    expire_cache_for(@node)
     
-    
-    render :partial => 'show_item', :locals => {:item => @node}
+    if @node.save!
+      expire_cache_for(@node)
+      render :partial => 'show_item', :locals => {:item => @node}
+    else
+      render :nothing => true, :status => :bad_request
+    end
   end
   
   
@@ -87,31 +89,7 @@ class NodesController < ApplicationController
   def edit
     @node = active_pile.nodes.find(params[:id])
     
-    
-    params[:node][:children_attributes].each do |i, child_attrs| # since Rails won't do it for some dumb reason
-      child_id = child_attrs[:id]
-      delete_child = child_attrs.delete(:_destroy) # otherwise Rails complains
-      
-      if child_id
-        child = @node.children.find(child_id)
-        
-        if child && delete_child.present?
-          #child.destroy()
-          @node.children.destroy(child)
-        end
-      else
-        if delete_child.present?
-          params[:node][:children_attributes].delete(i)
-        else
-          #@node.children.create(child_attrs.merge(
-          #  :parent => @node,
-          #  :pile => @node.pile
-          #))
-        end
-      end
-    end if params[:node] && params[:node][:children_attributes]
-    
-    @node.attributes = params.delete(:node)
+    @node.attributes = params[:node]
     
     
     if params[:add]
@@ -133,26 +111,7 @@ class NodesController < ApplicationController
   def update
     @node = active_pile.nodes.find(params[:id])
     
-    @node.update_attributes!(params[:node])
-    @node.prop.update_attributes!(params[:node][:prop_attributes]) # since Rails won't do it through a polymorphic relation
-    
-    
-    params[:node][:children_attributes].each_value do |child_attrs| # since Rails won't do it for some dumb reason
-      child_id = child_attrs.delete(:id)
-      delete_child = child_attrs.delete(:_destroy) # otherwise Rails complains
-      
-      if child_id
-        child = @node.children.find(child_id)
-        
-        child.update_attributes!(child_attrs)
-        child.prop.update_attributes!(child_attrs[:prop_attributes]) # since Rails won't do it through a polymorphic relation
-      else
-        @node.children.create(child_attrs.merge(
-          :parent => @node,
-          :pile => @node.pile
-        ))
-      end
-    end if params[:node] && params[:node][:children_attributes]
+    @node.update_attributes(params[:node])
     
     
     if @node.save
