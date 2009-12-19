@@ -12,6 +12,15 @@ class TagProp < Prop
   is_stackable
   
   
+  def <=>(other)
+    if other.instance_of?(TagProp)
+      self.tag.to_s <=> other.tag.to_s
+    else
+      super(other)
+    end
+  end
+  
+  
   def self::rand_new
     new :tag => String.rand_alphanum(4)
   end

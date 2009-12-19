@@ -33,6 +33,9 @@ class Node < ActiveRecord::Base
       prop_type = read_attribute(:prop_type)
       prop_type.classify.short_name unless prop_type.nil?
   end
+  
+  def <=>(other)
+    self.prop <=> other.prop
   end
   
   

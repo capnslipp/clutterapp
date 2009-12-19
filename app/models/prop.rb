@@ -22,9 +22,14 @@ class Prop < ActiveRecord::Base
     name.underscore.dasherize
   end
   
+  def <=>(other)
+    # sort in the same order as the Prop::types() array
+    Prop.types.index(self.class) <=> Prop.types.index(other.class)
+  end
+  
   
   def self::types
-    [TextProp, CheckProp, NoteProp, PriorityProp, TagProp, TimeProp, PileRefProp]
+    [TextProp, CheckProp, PriorityProp, TagProp, TimeProp, NoteProp, PileRefProp]
   end
   
   def self::badgeable_types
