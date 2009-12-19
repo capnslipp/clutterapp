@@ -4,6 +4,7 @@ class Node < ActiveRecord::Base
   belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true
   
   belongs_to :pile
+  before_validation_on_create :assign_pile
   
   
   #attr_accessible :node, :node_attributes, :prop, :prop_attributes, :children, :children_attributes
@@ -115,6 +116,11 @@ protected
     #errors.add(:node, "either be root and have pile; or it must be neither root ") if root? ^ (pile.root_node != self) # causes stack overflow
     errors.add(:node, "must have a prop or be root, not both") if root? && prop
     errors.add(:node, "must have either a prop or be root") if !root? && !prop
+  end
+  
+  def assign_pile
+    return if self.pile
+    self.pile = parent.pile if parent
   end
   
 end
