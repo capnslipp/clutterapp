@@ -19,7 +19,7 @@
 		<%= render :partial => prop_partial(node, :show), :locals => {:node => node} %>
 		
 		<% if node.tag_badges? %>
-			<%- node.tag_badges.each do |tag_badge| -%>
+			<%- node.tag_badges.sort.each do |tag_badge| -%>
 				<%= render :partial => prop_partial(tag_badge, :show), :locals => {:node => tag_badge} %>
 			<%- end -%>
 		<% end %>
