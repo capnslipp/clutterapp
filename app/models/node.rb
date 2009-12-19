@@ -29,13 +29,10 @@ class Node < ActiveRecord::Base
   named_scope :non_deepable,  :conditions => {:prop_type => Prop.non_deepable_types.collect(&:to_s)}
   
   
-  def to_s(format = :default, &block)
-    if format == :short
+  def short_name
       prop_type = read_attribute(:prop_type)
       prop_type.classify.short_name unless prop_type.nil?
-    else
-      super(&block)
-    end
+  end
   end
   
   
