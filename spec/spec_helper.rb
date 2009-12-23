@@ -7,7 +7,6 @@ require 'spec/autorun'
 require 'spec/rails'
 require File.dirname(__FILE__) + "/factories"
 require 'authlogic/test_case'
-require 'spec/cells'
 
 # Uncomment the next line to use webrat's matchers
 #require 'webrat/integrations/rspec-rails'
