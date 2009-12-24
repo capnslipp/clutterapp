@@ -59,7 +59,7 @@ function expandActionBar(node) {
 	safeShow($('#action-bar'));
 	
 	if (!node.is('.base.pile')) {
-		node.activateReparentDraggable();
+		node.closest('li.item_for_node').required().activateReparentDraggable();
 		node.closest('ul.node.list').required().activateReorderSortable();
 	}
 }
