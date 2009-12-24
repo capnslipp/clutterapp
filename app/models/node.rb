@@ -1,7 +1,7 @@
 class Node < ActiveRecord::Base
   acts_as_nested_set :scope => :pile, :dependent => :destroy
   
-  belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true
+  belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true, :dependent => :destroy
   
   belongs_to :pile
   before_validation_on_create :assign_pile
