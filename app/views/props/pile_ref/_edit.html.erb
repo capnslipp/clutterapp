@@ -2,6 +2,6 @@
 	<%- form.fields_for :prop do |prop_form| -%>
 		<%- prop_form.fields_for :ref_pile do |ref_pile_form| -%>
 			<%= ref_pile_form.text_field :name, :class => 'field', :autocomplete => 'off' %>
-			<%- end -%>
+		<%- end -%>
 	<%- end -%>
 </div>
