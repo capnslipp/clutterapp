@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20091202012313) do
+ActiveRecord::Schema.define(:version => 20091224214713) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -39,10 +39,10 @@ ActiveRecord::Schema.define(:version => 20091202012313) do
     t.integer  "rgt"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "prop_id"
-    t.string   "prop_type"
-    t.integer  "version",    :default => 0
+    t.integer  "prop_id",                   :null => false
+    t.integer  "prop_type",                 :null => false
     t.integer  "pile_id",                   :null => false
+    t.integer  "version",    :default => 0
   end
 
   create_table "note_props", :force => true do |t|
