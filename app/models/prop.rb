@@ -74,37 +74,44 @@ class Prop < ActiveRecord::Base
     [:badgeable, :stackable, :nodeable, :deepable]
   end
   
-  def self::badgeable?; false; end
+  
   # allows badge-style placement
+  def self::badgeable?; false; end
+  
   def self::is_badgeable
     class_eval(<<-EOS, __FILE__, __LINE__)
       def self::badgeable?; true; end
     EOS
   end
   
-  def self::stackable?; false; end
+  def badged?
+    self.class.badgeable? ? true : false # if badgeable, then always badged, for now; will be position-dependent eventually
+  end
+  
+  
   # allows more than one of each on a parent node
+  def self::stackable?; false; end
+  
   def self::is_stackable
     class_eval(<<-EOS, __FILE__, __LINE__)
       def self::stackable?; true; end
     EOS
   end
   
-  def self::nodeable?; false; end
+  
   # allow child nodes
+  def self::nodeable?; false; end
+  
   def self::is_nodeable
     class_eval(<<-EOS, __FILE__, __LINE__)
       def self::nodeable?; true; end
     EOS
   end
   
-  # if badgeable, then always badged, for now; will be position-dependent eventually
-  def badged?
-    self.class.badgeable? ? true : false
-  end
   
+  # allows "deep" placement (any deeper than a child of the root node)
   def self::deepable?; true; end
-  # disallow "deep" placement (any deeper than a child of the root node)
+  
   def self::isnt_deepable
     class_eval(<<-EOS, __FILE__, __LINE__)
       def self::deepable?; false; end
