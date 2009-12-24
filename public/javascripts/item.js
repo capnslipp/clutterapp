@@ -205,8 +205,12 @@ function itemNew(button, type) {
 }
 	
 $(function() {
-	var actionButtons = $('#action-bar > .buttons > a.new').required()
+	var actionButtons = $('#action-bar > .buttons').required();
+	
+	actionButtons.children('a.new.item').required()
 		.click(function() { itemNew(this, 'text'); return false; });
+	actionButtons.children('a.new.pile').required()
+		.click(function() { itemNew(this, 'pile-ref'); return false; });
 });
 
 
