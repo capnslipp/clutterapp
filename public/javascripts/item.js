@@ -48,7 +48,7 @@ function expandActionBar(node) {
 	if (!nodeBody.find('#action-bar')[0])
 		$('#action-bar').prependTo(nodeBody);
 	
-	if (node.hasClass('pile'))
+	if (node.hasClass('base') && node.hasClass('pile'))
 		$('#action-bar > .buttons > a:not(.new)').hide();
 	
 	// since it may be initially-hidden
@@ -86,7 +86,7 @@ $(function() {
 	$('li.item_for_node > .show.body > .cont').live('click', function() {
 		expandActionBar($(this).closest('li.item_for_node')); return false;
 	});
-	$('section.pile.item_for_node > .body > .header').live('click', function() {
+	$('section.base.pile.item_for_node > .body > .header, section.pile.item_for_node > .body > .cont').live('click', function() {
 		expandActionBar($(this).closest('section.pile.item_for_node')); return false;
 	});
 });
