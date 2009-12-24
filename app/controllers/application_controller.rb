@@ -86,7 +86,7 @@ protected
       flash[:error] = "No pile_id specified."
       redirect_to polymorphic_path([active_owner, :piles])
     else
-      @active_pile = active_owner.piles.find pile_id
+      @active_pile = active_owner.piles.find(pile_id)
       
       if @active_pile.nil?
         flash[:warning] = "No such pile exists."

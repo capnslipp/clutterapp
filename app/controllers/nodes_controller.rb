@@ -150,8 +150,21 @@ class NodesController < ApplicationController
     expire_cache_for(@node.parent) # old parent
     
     # put it as the last child of the parent
-    @parent = active_pile.nodes.find(params[:parent_id])
-    @node.move_to_child_of(@parent)
+    if params[:parent_pile_id].to_i == active_pile.id
+      @parent = active_pile.nodes.find(params[:parent_id])
+      @node.move_to_child_of(@parent)
+    else
+      logger.prefixed 'NodesController#reparent', :light_red, "params[:parent_pile_id] (#{params[:parent_pile_id]}) and active_pile.id (#{active_pile.id}) differ"
+      
+      parent_pile = active_owner.piles.find(params[:parent_pile_id])
+      @parent = parent_pile.nodes.find(params[:parent_id])
+      
+      # deep-duplicate the node into the new tree
+      @new_node = deep_clone_node_to_pile!(@node, @parent.pile, @parent)
+      
+      # delete it from the old tree
+      @node.destroy
+    end
     
     expire_cache_for(@parent) # new parent
     
@@ -184,6 +197,18 @@ private
     
     expire_cache_for(record.parent) if record.parent # recursively invalidate all ancestors
     # @todo: also invalidate the cache for any pile-ref nodes point at this pile's root node
+  end
+  
+  def deep_clone_node_to_pile!(orig_node, dest_pile, dest_parent)
+    cloned_node = orig_node.clone
+    cloned_node.pile = dest_pile
+    dest_parent.children << cloned_node # saves as a side-effect
+    
+    orig_node.children.each do |onc|
+      deep_clone_node_to_pile!(onc, dest_pile, cloned_node)
+    end
+    
+    cloned_node
   end
   
 end

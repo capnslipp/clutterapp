@@ -29,6 +29,10 @@ function nodeIDOfItem(itemForNode) {
 	return itemForNode.getAttr('id').substring('item_for_node_'.length);
 }
 
+function pileIDOfItem(itemForNode) {
+	return itemForNode.closest('.pile.item_for_node').getAttr('oc:nodes-url').match(/\/piles\/([0-9]+)\/nodes/)[1];
+}
+
 
 
 function expandActionBar(node) {
@@ -938,7 +942,7 @@ function itemReparent(node, parentNode) {
 	$.ajax({
 		type: 'post',
 		url: node.getAttr('oc\:url') + '/reparent',
-		data: {_method: 'put', parent_id: nodeIDOfItem(parentNode)},
+		data: {_method: 'put', parent_id: nodeIDOfItem(parentNode), parent_pile_id: pileIDOfItem(parentNode)},
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError
