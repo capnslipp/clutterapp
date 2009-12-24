@@ -434,7 +434,7 @@ function itemEdit(link) {
 }
 
 $(function() {
-	$('li.item_for_node > .show.body > .cont').live('dblclick', function() {
+	$('li.item_for_node > .show.body > .cont, li.item_for_node > .pile.item_for_node > .show.body > .cont').live('dblclick', function() {
 		itemEdit(this); return false;
 	});
 	$('#action-bar > .buttons > a.edit').click(function() {
