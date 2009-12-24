@@ -41,6 +41,9 @@ class NodesController < ApplicationController
     
     @node = @parent.children.build(node_attrs)
     
+    # build a sub-pile if the type is a RefPile
+    @node.prop.ref_pile = active_owner.piles.build if node_attrs[:prop_attributes][:type] == PileRefProp.short_name
+    
     
     if params[:add]
       add_attrs = params.delete(:add)
