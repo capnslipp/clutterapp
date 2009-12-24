@@ -2,6 +2,8 @@ class TextProp < Prop
   has_one :node, :as => :prop
   
   validates_presence_of :node, :on => :update # less stringent when the Prop is new in order to prevent circular dependencies
+  
+  validates_presence_of :text
   validates_length_of :text, :within => 1..255
   
   

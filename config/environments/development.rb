@@ -11,14 +11,14 @@ config.whiny_nils = true
 # Show full error reports and disable caching
 config.action_controller.consider_all_requests_local = true
 config.action_view.debug_rjs                         = true
-config.action_controller.perform_caching             = false
-#config.action_controller.perform_caching             = true
+#config.action_controller.perform_caching             = false
+config.action_controller.perform_caching             = true
 
 # Use cache in dev in order to test that it actually works!
-config.cache_store = :memory_store
+#config.cache_store = :memory_store
 
 # Don't care if the mailer can't send
-config.action_mailer.raise_delivery_errors = false
+config.action_mailer.raise_delivery_errors = true
 
 
 require 'pp'
@@ -36,3 +36,5 @@ if File.exists?(File.join(RAILS_ROOT,'tmp', 'debug.txt'))
   Debugger.start_remote
   File.delete(File.join(RAILS_ROOT,'tmp', 'debug.txt'))
 end
+
+HOST = "localhost:3000"

@@ -2,6 +2,6 @@
 	<%- if child_node.prop.is_a? PileRefProp -%>
 		<%= render :partial => 'nodes/pile_ref_item', :object => child_node %>
 	<%- else -%>
-		<%= render :partial => 'nodes/item', :object => child_node %>
+		<%= render :partial => 'nodes/show_item', :locals => {:item => child_node} %>
 	<%- end -%>
 <%- end -%>

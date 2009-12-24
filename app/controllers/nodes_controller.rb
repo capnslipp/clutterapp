@@ -1,7 +1,11 @@
+#require "#{RAILS_ROOT}/app/sweepers/node_sweeper.rb"
+
 class NodesController < ApplicationController
-  include CellHelper
   include ERB::Util
+  include ApplicationHelper
   layout nil
+  
+  #cache_sweeper :node_sweeper, :only => [:update_check_prop_checked, :create, :update, :reorder, :reparent, :destroy] # every action but :new and :edit
   
   before_filter :be_xhr_request
   before_filter :authorize
@@ -16,6 +20,8 @@ class NodesController < ApplicationController
     @prop = @node.prop
     @prop.checked = params[:checked]
     @prop.save!
+    expire_cache_for(@prop)
+    
     render :update do |page|
       page.call 'updateCheckPropField', "check_prop_#{@prop.id}", @prop.checked?
     end
@@ -47,8 +53,7 @@ class NodesController < ApplicationController
     end
     
     
-    @cell_state = :new
-    render :partial => 'item', :locals => {:item => @node}
+    render :partial => 'new_item', :locals => {:item => @node}
   end
   
   
@@ -63,11 +68,20 @@ class NodesController < ApplicationController
     node_attrs[:prop_attributes] ||= {}
     node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
     
-    @node = @parent.children.create(node_attrs)
+    @node = @parent.children.build(node_attrs)
+    
+    @node.children.each do |child|
+      child.parent = @node
+      child.pile = @node.pile
+    end
     
     
-    @cell_state = :show
-    render :partial => 'item', :locals => {:item => @node}
+    if @node.save!
+      expire_cache_for(@node)
+      render :partial => 'show_item', :locals => {:item => @node}
+    else
+      render :nothing => true, :status => :bad_request
+    end
   end
   
   
@@ -75,31 +89,7 @@ class NodesController < ApplicationController
   def edit
     @node = active_pile.nodes.find(params[:id])
     
-    
-    params[:node][:children_attributes].each do |i, child_attrs| # since Rails won't do it for some dumb reason
-      child_id = child_attrs[:id]
-      delete_child = child_attrs.delete(:_destroy) # otherwise Rails complains
-      
-      if child_id
-        child = @node.children.find(child_id)
-        
-        if child && delete_child.present?
-          #child.destroy()
-          @node.children.destroy(child)
-        end
-      else
-        if delete_child.present?
-          params[:node][:children_attributes].delete(i)
-        else
-          @node.children.create(child_attrs.merge(
-            :parent => @node,
-            :pile => @node.pile
-          ))
-        end
-      end
-    end if params[:node] && params[:node][:children_attributes]
-    
-    @node.attributes = params.delete(:node)
+    @node.attributes = params[:node]
     
     
     if params[:add]
@@ -113,7 +103,7 @@ class NodesController < ApplicationController
     end
     
     
-    render :inline => render_cell('node_body', :edit, :node => @node)
+    render :partial => 'edit_body', :locals => {:node => @node}
   end
   
   
@@ -121,94 +111,51 @@ class NodesController < ApplicationController
   def update
     @node = active_pile.nodes.find(params[:id])
     
-    @node.update_attributes!(params[:node])
-    @node.prop.update_attributes!(params[:node][:prop_attributes]) # since Rails won't do it through a polymorphic relation
-    
-    
-    params[:node][:children_attributes].each_value do |child_attrs| # since Rails won't do it for some dumb reason
-      child_id = child_attrs.delete(:id)
-      delete_child = child_attrs.delete(:_destroy) # otherwise Rails complains
-      
-      if child_id
-        child = @node.children.find(child_id)
-        
-        child.update_attributes!(child_attrs)
-        child.prop.update_attributes!(child_attrs[:prop_attributes]) # since Rails won't do it through a polymorphic relation
-      else
-        @node.children.create(child_attrs.merge(
-          :parent => @node,
-          :pile => @node.pile
-        ))
-      end
-    end if params[:node] && params[:node][:children_attributes]
+    @node.update_attributes(params[:node])
     
     
     if @node.save
-      render :inline => render_cell('node_body', :show, :node => @node)
+      expire_cache_for(@node)
+      render :partial => 'show_body', :locals => {:node => @node}
     else
       render :nothing => true, :status => :bad_request
     end
   end
   
   
-  # PUT /nodes/1/move/:dir
-  def move
-    dir = params[:dir].to_sym
-    
+  # PUT /nodes/1/reorder?prev_sibling_id=2
+  def reorder
     @node = active_pile.nodes.find(params[:id])
-    orig_ref_node = case dir
-      when :up:   @node.left_non_badgeable_sibling
-      when :down: @node.right_non_badgeable_sibling
-      when :in:   @node.left_non_badgeable_sibling
-      when :out:  @node.parent
+    
+    # put it after the given sibling
+    if params[:prev_sibling_id].present?
+      @prev_sibling = @node.siblings.find(params[:prev_sibling_id])
+      @node.move_to_right_of(@prev_sibling)
+      
+    # put it first
+    else
+      @node.move_to_left_of(@node.siblings.first)
     end
     
-    cant_move = case dir
-      when :up:   orig_ref_node.nil?
-      when :down: orig_ref_node.nil?
-      when :in:   orig_ref_node.nil?
-      when :out:  orig_ref_node.nil? || orig_ref_node.root?
-      else        true
-    end
-    return render :nothing => true , :status => :bad_request if cant_move
+    expire_cache_for(@node.parent)
     
-    case dir
-      when :up:   @node.move_to_left_of orig_ref_node
-      when :down: @node.move_to_right_of orig_ref_node
-      when :in:   @node.move_to_child_of orig_ref_node
-      when :out:  @node.move_to_right_of orig_ref_node
-    end
+    render :nothing => true, :status => :accepted
+  end
+  
+  
+  # PUT /nodes/1/reparent?parent_id=2
+  def reparent
+    @node = active_pile.nodes.find(params[:id])
     
-    orig_ref_node.reload #:select => :version # doesn't work some times, possibly due to being a named_scope?
-    @node.reload #:select => :version # doesn't work some times, possibly due to being a named_scope?
+    expire_cache_for(@node.parent) # old parent
     
-    node_sel = dom_id(@node, 'item_for')
+    # put it as the last child of the parent
+    @parent = active_pile.nodes.find(params[:parent_id])
+    @node.move_to_child_of(@parent)
     
-    orig_ref_sel = case dir
-      when :up:   "##{dom_id(orig_ref_node, 'item_for')}"
-      when :down: "##{dom_id(orig_ref_node, 'item_for')}"
-      when :in:   "##{dom_id(orig_ref_node, 'item_for')} > .node.list"
-      when :out:  "##{dom_id(orig_ref_node, 'item_for')} > .node.list"
-    end
-    insert_pos = case dir
-      when :up:   :before
-      when :down: :after
-      when :in:   :bottom
-      when :out:  :bottom
-    end
+    expire_cache_for(@parent) # new parent
     
-    respond_to do |format|
-      format.js do
-        # keeping this as RJS for now, since it will soon be replaced with a drag-and-drop move system
-        render :update do |page|
-          page.call 'collapseActionBar'
-          page.remove node_sel
-          @cell_state = :show
-          page.insert_html insert_pos, orig_ref_sel, :partial => 'item', :locals => {:item => @node}
-          page.visual_effect :highlight, node_sel
-        end
-      end # format.js
-    end # respond_to
+    render :partial => 'list_items', :locals => {:item => @parent}
   end
   
   
@@ -218,9 +165,25 @@ class NodesController < ApplicationController
     @node = active_pile.nodes.find(params[:id])
     orig_parent_node = @node.parent
     @node.destroy
-    orig_parent_node.after_child_destroy
+    
+    expire_cache_for(@node)
     
     render :nothing => true, :status => :accepted
+  end
+  
+  
+private
+  
+  def expire_cache_for(record)
+    record = record.node if record.is_a? Prop
+    
+    logger.prefixed 'NodesController#expire_cache_for', :light_yellow, "cache invalidated for Node ##{record.id}"
+    
+    expire_fragment ({:node_item => record.id}.to_json)
+    expire_fragment ({:node_section => record.id}.to_json) if record.root?
+    
+    expire_cache_for(record.parent) if record.parent # recursively invalidate all ancestors
+    # @todo: also invalidate the cache for any pile-ref nodes point at this pile's root node
   end
   
 end

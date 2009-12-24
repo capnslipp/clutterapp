@@ -1,0 +1,156 @@
+/* props */
+
+.prop {
+	display: block;
+	line-height: 15px;
+	
+	border: <%= border_width %>px solid transparent;
+	<%= border_radius_decl %>
+	<% if debug? %>
+		background: rgba(0, 127, 255, 0.125);
+		border-width: 2px;
+		border-color: rgba(0, 127, 255, 0.5);
+		margin: 1px;
+	<% end %>
+}
+
+.prop.badge {
+	line-height: 12px;
+	
+	margin-left: 2px; margin-right: 2px;
+	
+	border-color: <%= generic_border_color(0.5).to_s(:css_rgba) %>;
+	border-width: 1px;
+}
+.prop.badge input[type='text'], .prop.badge textarea {
+	font-size: 12px;
+	line-height: 12px;
+	height: 12px;
+}
+
+.check.prop {
+	border: none; box-shadow: none; -moz-box-shadow: none; -webkit-box-shadow: none;
+	
+	display: inline-block;
+}
+.check.prop.badge { /*float: left; margin-right: 6px;*/ }
+
+.note.prop {
+	display: block;
+	padding: 4px;
+	vertical-align: top;
+	
+	margin-bottom: 6px;
+	
+	border-color: <%= (generic_border_color + 0.2).to_s(:css_rgba) %>;
+	
+	color: <%= text_color.with(:a => 0.8).to_s(:css_rgba) %>;
+	background: <%= ((bright_bg_color - bg_color) / 2.0 + bg_color).to_s %>;
+}
+.note.prop, .note.prop textarea {
+	font: oblique 14px/18px Times, 'Times New Roman', serif;
+}
+.note.prop textarea { height: 1px; }
+.note.prop.badge { height: auto; }
+.show.note.prop.badge {
+	margin-right: 10px;
+	<%= shallow_shadow_decl(0.25) %>
+}
+
+.priority.prop {
+	width: 13px; /* same as height and line-height */
+	
+	display: inline-block;
+	
+	font-size: 11px;
+	height: 13px;
+	line-height: 13px;
+	vertical-align: baseline;
+	
+	text-align: center;
+	background: <%= wash_color %>;
+	color: <%= wash_text_color %>;
+	
+	<%= border_radius_decl('8px') %>
+}
+.priority.prop, .priority.prop input { font-family: 'Arial Black', sans-serif; font-weight: bold; }
+.priority.prop input { }
+.priority.prop.badge { /*float: left; margin-right: 6px;*/ }
+.edit.priority.prop, .new.priority.prop { width: auto; color: <%= text_color %>; }
+.show.priority.prop {
+	<%= shallow_shadow_decl(0.5) %>
+}
+
+.tag.prop {
+	display: inline-block;
+	
+	font-size: 11px;
+	height: 11px;
+	line-height: 11px;
+	vertical-align: middle;
+	
+	background-color: <%= wash_color + 0.25 %>;
+	color: <%= wash_text_color %>;
+	
+	padding: 0 2px;
+}
+.tag.prop, .tag.prop input { font-weight: bold; text-transform: uppercase; }
+.tag.prop input { }
+.tag.prop.badge { /*float: left;*/ }
+.show.tag.prop {
+	<%= shallow_shadow_decl(0.5) %>
+}
+
+.text.prop {
+	display: inline-block; /* to prevent font magnification in horizontal mode on iPhone */
+}
+.edit.text.prop, .new.text.prop {
+	display: block;
+}
+
+.time.prop {
+	color: <%= text_color.with(:a => 0.5).to_s(:css_rgba) %>;
+	
+	display: inline-block;
+	
+	padding: 0 2px;
+	/*background: <%= bright_bg_color %>;*/
+	
+	font-size: 14px;
+	font-weight: bold;
+}
+.time.prop.badge { /*float: left;*/ }
+.show.time.prop {
+	border: none;
+	text-shadow: 0 0 2px <%= bright_bg_color %>;
+}
+
+
+.new.prop, .edit.prop {
+	margin: -1px;
+	
+	background: <%= focus_back %>;
+	border-width: 2px;
+	border-color: <%= focus_color %>;
+}
+/*.new.prop.badge, .edit.prop.badge { margin: 0 2px; }*/
+
+.new.prop input[type='submit'],
+.edit.prop input[type='submit'] { display: none; }
+.new.note.prop input[type='submit'],
+.edit.note.prop input[type='submit'] { display: inherit; }
+
+.new.prop input[type='text'], .new.prop textarea,
+.edit.prop input[type='text'], .edit.prop textarea {
+	background: transparent;
+	color: <%= text_color %>;
+	border: none;
+	margin: 0;
+	padding: 1px;
+	display: block;
+	width: 100%;
+}
+.new.prop input[type='button'], .new.prop input[type='submit'],
+.edit.prop input[type='button'], .edit.prop input[type='submit'] { position: absolute; }
+
+.prop input[type='checkbox'] { border: none; margin: 0; background: none; }

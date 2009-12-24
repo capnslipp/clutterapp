@@ -1,16 +1,2 @@
-<script type="text/javascript">
-try {
-var pageTracker = _gat._getTracker("UA-_fill_in_-1");
-pageTracker._initData();
-pageTracker._trackPageview();
-pageTracker._setVar('<%= DateTime.now.strftime('%Y-%m-%d %H:%M:%S %Z') %>: IP/hostname: <%=request.remote_ip%><%=( ' (' + request.port_string + ')' if request.port != request.standard_port ).to_s%>; <%=( 'user: ' + current_user.name if current_user ).to_s%>');
-} catch(err) {}</script>
-
-<script type="text/javascript">
-var clicky_custom = {
-	session: { <%- if current_user: -%>user: '<%=current_user.name%>',<%- end -%> },
-};
-</script>
-<script src="http://static.getclicky.com/js" type="text/javascript"></script>
-<script type="text/javascript">clicky.init(_fill_in_);</script>
-<noscript><p><img alt="Clicky" width="1" height="1" src="http://static.getclicky.com/_fill_in_ns.gif" /></p></noscript>
+<!-- Google Analytics Tracking Code -->
+<noscript><p><img alt="Clicky" width="1" height="1" src="http://static.getclicky.com/_fill_in_ns.gif" style="position: absolute; z-index: -1000; width: 0; height: 0;"/></p></noscript>

@@ -26,8 +26,6 @@ li { list-style-type: none; }
 	<% end %>
 }
 .item_for_node > .body {
-	position: relative;
-	
 	<% if debug? %>
 		<%= border_radius_decl %>
 		margin: 1px;
@@ -67,11 +65,6 @@ li { list-style-type: none; }
 	background: <%= bright_bg_color %>;
 	padding: 8px;
 }
-/* contain-float-after */
-.item_for_node > .new.body > .cont:after,  .item_for_node > .new.body > form > .cont:after,
-.item_for_node > .edit.body > .cont:after, .item_for_node > .edit.body > form > .cont:after {
-	content: ""; display: block; height: 0; clear: both; visibility: hidden; /* (FF, S2, O9) */
-}
 .item_for_node > .edit.body {
 	position: absolute;
 	/*width: 100%;*/ left: 0; right: 0;
@@ -98,14 +91,11 @@ li { list-style-type: none; }
 	margin-top: 2px;
 	margin-bottom: 4px;
 }
-.item_for_node > .new.body .finish.line,
-.item_for_node > .edit.body .finish.line {
-	float: right;
-}
 .item_for_node > .body > .bullet {
-	position: absolute;
-	left: 4px;
+	float: left;
+	margin-left: -20px;
 	width: 16px;
+	margin-right: 4px;
 	text-align: center;
 	vertical-align: middle;
 }
@@ -212,11 +202,36 @@ li { list-style-type: none; }
 /* scope sidebar and list */
 
 /* scope sidebar */
-#scope-box {
-	float: left; clear: left;
-	width: 15em;
-	margin: 1em;
+#scope-panel {
+	position: absolute;
+	top: 24px; bottom: 0; left: 0;
+	width: 240px;
+	
+	background: #e5e5e5;
 }
+#scope-panel > .back {
+	position: absolute;
+	right: 0;
+	height: 100%;
+	width: 8px;
+	overflow: hidden;
+}
+#scope-panel > .back > .shadow {
+	position: relative;
+	right: -8px;
+	height: 100%;
+	
+	<%= shallow_shadow_decl %>
+}
+#scope-panel > .cont {
+	padding: 16px;
+}
+#item-area {
+	margin-left: 240px;
+}
+#item-area > .cont {
+}
+
 /* root-level scope-list */
 #scope-list > ul.scope-list {
 	margin-left: 0;

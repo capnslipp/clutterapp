@@ -1,0 +1,26 @@
+<!-- Google Analytics Tracking Code -->
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-_fill_in_-1']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+	var ga = document.createElement('script');
+	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	ga.setAttribute('async', 'true');
+	document.documentElement.firstChild.appendChild(ga);
+})();
+</script>
+
+<!-- Clicky Tracking Code -->
+<script type="text/javascript">
+var clicky_custom = {session: { <%- if current_user: -%>user: '<%=current_user.name%>',<%- end -%> },};
+
+(function() {
+	var clickyScript = document.createElement('script');
+	clickyScript.src = 'http://static.getclicky.com/js';
+	clickyScript.setAttribute('async', 'true');
+	document.documentElement.firstChild.appendChild(clickyScript);
+	setTimeout('if (window.clicky) clicky.init(_fill_in_);', 1000);
+})();
+</script>

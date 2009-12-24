@@ -104,8 +104,6 @@ Rails::Initializer.run do |config|
   
   
   config.after_initialize do
-    Cell::Base.add_view_path 'app/views'
-    
     require 'logger_prefix_extension' # extends ActiveSupport::BufferedLogger with prefix(), prefixed()
     require 'active_record_nice_id_extension' # extends ActiveRecord::Base with nice_id()
     require 'hash_nice_to_s_extension' # extends Hash with to_s(:nice)

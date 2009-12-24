@@ -2,9 +2,6 @@ require 'string_rand_extension'
 
 
 class Prop < ActiveRecord::Base
-  # must be specified first (at least before any associations)
-  after_save :increment_node_version
-  
   self.abstract_class = true
   
   
@@ -25,9 +22,14 @@ class Prop < ActiveRecord::Base
     name.underscore.dasherize
   end
   
+  def <=>(other)
+    # sort in the same order as the Prop::types() array
+    Prop.types.index(self.class) <=> Prop.types.index(other.class)
+  end
+  
   
   def self::types
-    [TextProp, CheckProp, NoteProp, PriorityProp, TagProp, TimeProp, PileRefProp]
+    [TextProp, CheckProp, PriorityProp, TagProp, TimeProp, NoteProp, PileRefProp]
   end
   
   def self::badgeable_types
@@ -65,10 +67,6 @@ class Prop < ActiveRecord::Base
   
   def self::filler_new
     raise NotImplementedError
-  end
-  
-  def increment_node_version
-    node.before_prop_save unless node.nil?
   end
   
   

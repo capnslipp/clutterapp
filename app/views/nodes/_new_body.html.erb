@@ -1,0 +1,23 @@
+<div class="new body">
+	<%- form_for node, :url => polymorphic_path([node.pile.owner, node.pile, node], :'node[parent_id]' => node.parent_id, :'node[prop_type]' => node.prop.class.short_name), :html => {:method => 'post'} do |node_form| -%>
+		<div class="cont">
+			
+			<div class="line"><%= render :partial => prop_partial(node, :new), :locals => { :node => node, :form => node_form } %></div>
+			
+			<%- node.children.sort.each do |badge_node| -%><%# can't use children.badgeable here, since some of them may be unsaved %>
+				<%- next unless badge_node.prop.badged? -%>
+				<% node_form.fields_for 'children', badge_node do |badge_fields| %>
+					<%= render :partial => 'nodes/line_for_form', :locals => { :state => :new, :node => badge_node, :form => badge_fields } %>
+				<%- end -%>
+			<%- end -%>
+			
+			<%= render :partial => 'nodes/add_bar' %>
+			
+			<div class="finish line">
+				<%= button_tag '&#10006; cancel', :class => 'cancel' %>
+				<%# ✓ %><%= node_form.submit '&#10003; done', :class => 'done' %>
+			</div>
+			
+		</div>
+	<%- end -%>
+</div>

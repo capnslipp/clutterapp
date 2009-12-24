@@ -1,0 +1,11 @@
+<%- cache ({:node_item => item.id}.to_json) do -%>
+	<% content_tag_for :li, item, 'item_for', :class => "show #{dom_class(item, 'item_for')}", :'oc:url' => path_for([item.pile.owner, item.pile, item]) do %>
+		
+		<%= render :partial => 'nodes/show_body', :locals => {:node => item} %>
+		
+		<ul class="node list">
+			<%= render :partial => 'nodes/list_items', :locals => {:item => item} %>
+		</ul>
+		
+	<% end %>
+<%- end -%>
