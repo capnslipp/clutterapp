@@ -48,13 +48,13 @@ function expandActionBar(node) {
 	if (!nodeBody.find('#action-bar')[0])
 		$('#action-bar').prependTo(nodeBody);
 	
-	if (node.hasClass('base') && node.hasClass('pile'))
+	if (node.is('.base.pile'))
 		$('#action-bar > .buttons > a:not(.new)').hide();
 	
 	// since it may be initially-hidden
 	safeShow($('#action-bar'));
 	
-	if (!node.hasClass('pile')) {
+	if (!node.is('.base.pile')) {
 		node.activateReparentDraggable();
 		node.closest('ul.node.list').required().activateReorderSortable();
 	}
