@@ -1084,14 +1084,11 @@ function itemReparent(node, parentNode) {
 	
 	function handleError(xhrObj, errStr, expObj) {
 		parentNode.removeClass('active');
+		hideProgressOverlay();
 		
-		function nodeOutRevert() {
-			$(this).removeAttr('style'); // clear out unnecessary styles
-		}
-		
-		node.find('.body:first .cont').required()
+		node.required().show().removeAttr('style'); // clear out transitional styles
+		node.required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
-		
 		
 		ClutterApp.fsm.finishAction('itemReparent', 'load');
 	}
