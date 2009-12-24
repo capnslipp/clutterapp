@@ -159,8 +159,6 @@ class NodesController < ApplicationController
       
       @node.move_to_child_of(@parent)
     else
-      logger.prefixed 'NodesController#reparent', :light_red, "params[:parent_pile_id] (#{params[:parent_pile_id]}) and active_pile.id (#{active_pile.id}) differ"
-      
       parent_pile = active_owner.piles.find(params[:parent_pile_id])
       @parent = parent_pile.nodes.find(params[:parent_id])
       
@@ -168,11 +166,13 @@ class NodesController < ApplicationController
         return render :nothing => true, :status => :bad_request unless @parent.root? || (@parent.prop.is_a? PileRefProp)
       end
       
-      # deep-duplicate the node into the new tree
-      @new_node = deep_clone_node_to_pile!(@node, @parent.pile, @parent)
-      
-      # delete it from the old tree
-      @node.destroy
+      Node.transaction do
+        # deep-duplicate the node into the new tree
+        @new_node = deep_clone_node_to_pile!(@node, @parent.pile, @parent)
+        
+        # delete it from the old tree
+        @node.destroy
+      end
     end
     
     expire_cache_for(@parent) # new parent
