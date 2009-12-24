@@ -4,7 +4,9 @@ class PileRefProp < Prop
   belongs_to :ref_pile, :class_name => Pile.name
   
   validates_presence_of :node, :on => :update # less stringent when the Prop is new in order to prevent circular dependencies
+  
   validates_presence_of :ref_pile
+  accepts_nested_attributes_for :ref_pile
   
   
   after_create :ensure_ref_pile
