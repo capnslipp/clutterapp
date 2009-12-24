@@ -84,7 +84,12 @@ class NodesController < ApplicationController
     
     if @node.save!
       expire_cache_for(@node)
-      render :partial => 'show_item', :locals => {:item => @node}
+      
+      if @node.prop.is_a? PileRefProp
+        render :partial => 'sub_pile_item', :object => @node
+      else
+        render :partial => 'show_item', :locals => {:item => @node}
+      end
     else
       render :nothing => true, :status => :bad_request
     end
