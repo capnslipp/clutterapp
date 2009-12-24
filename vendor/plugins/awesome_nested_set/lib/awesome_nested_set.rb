@@ -331,7 +331,7 @@ module CollectiveIdea #:nodoc:
         # Returns the level of this object in the tree
         # root level is 0
         def level
-          parent.nil? ? 0 : ancestors.count
+          parent_id.nil? ? 0 : ancestors.count
         end
 
         # Returns a set of itself and all of its nested children
