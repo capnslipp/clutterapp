@@ -86,8 +86,7 @@ class Node < ActiveRecord::Base
     if !type.stackable? # singular versions
       class_eval(<<-EOS, __FILE__, __LINE__)
         def #{type_name}_badge?
-          # @todo: optimize
-          !!self.children.typed(:#{type_name}).first
+          self.children.typed(:#{type_name}).count > 0
         end
         
         def #{type_name}_badge
@@ -98,8 +97,7 @@ class Node < ActiveRecord::Base
     else # plural versions
       class_eval(<<-EOS, __FILE__, __LINE__)
         def #{type_name}_badges?
-          # @todo: optimize
-          !self.children.typed(:#{type_name}).empty?
+          self.children.typed(:#{type_name}).count > 0
         end
         
         def #{type_name}_badges
