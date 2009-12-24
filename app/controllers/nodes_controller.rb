@@ -154,7 +154,7 @@ class NodesController < ApplicationController
       @parent = active_pile.nodes.find(params[:parent_id])
       
       unless @node.prop.class.deepable?
-        return render :nothing => true, :status => :bad_request unless @parent.root? || @parent.prop.is_a? PileRefProp
+        return render :nothing => true, :status => :bad_request unless @parent.root? || (@parent.prop.is_a? PileRefProp)
       end
       
       @node.move_to_child_of(@parent)
@@ -165,7 +165,7 @@ class NodesController < ApplicationController
       @parent = parent_pile.nodes.find(params[:parent_id])
       
       unless @node.prop.class.deepable?
-        return render :nothing => true, :status => :bad_request unless @parent.root? || @parent.prop.is_a? PileRefProp
+        return render :nothing => true, :status => :bad_request unless @parent.root? || (@parent.prop.is_a? PileRefProp)
       end
       
       # deep-duplicate the node into the new tree
