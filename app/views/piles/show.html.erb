@@ -25,7 +25,7 @@
 	<div class="cont">
 		
 		<%- cache ({:node_section => @pile.root_node.id}.to_json) do -%>
-			<section id="<%=dom_id(@pile.root_node, 'item_for')%>" class="<%=dom_class(@pile.root_node, 'item_for')%> pile" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
+			<section id="<%=dom_id(@pile.root_node, 'item_for')%>" class="base <%=dom_class(@pile.root_node, 'item_for')%> pile" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
 				<div class="body">
 					<div class="back"></div>
 					

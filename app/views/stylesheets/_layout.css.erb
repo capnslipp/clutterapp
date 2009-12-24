@@ -51,14 +51,13 @@ ul.node.list.active {
 
 li { list-style-type: none; }
 
-.pile.item_for_node > .body {
-	display: block;
+.pile.item_for_node > .body { display: block; border: none; }
+.base.pile.item_for_node > .body {
 	margin: -16px; margin-bottom: 0;
 	padding: 16px; padding-bottom: 18px;
-	border: none;
 }
-.pile.item_for_node > .body > .header {
-	position: relative;
+.pile.item_for_node > .body > .header { position: relative; }
+.base.pile.item_for_node > .body > .header {
 	margin: -16px; margin-bottom: -18px;
 	padding: 16px; padding-bottom: 18px;
 }
@@ -212,8 +211,8 @@ li { list-style-type: none; }
 	position: absolute; z-index: 5;
 	right: 4px;
 }
-.pile.item_for_node > .body > .action.stub,
-.pile.item_for_node > .body > #action-bar {
+.base.pile.item_for_node > .body > .action.stub,
+.base.pile.item_for_node > .body > #action-bar {
 	right: 20px;
 }
 
