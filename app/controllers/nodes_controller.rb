@@ -77,6 +77,8 @@ class NodesController < ApplicationController
     
     
     if @node.save!
+      @node.move_to_left_of(@parent.children.first)
+      
       expire_cache_for(@node)
       render :partial => 'show_item', :locals => {:item => @node}
     else
@@ -151,7 +153,12 @@ class NodesController < ApplicationController
     
     # put it as the last child of the parent
     @parent = active_pile.nodes.find(params[:parent_id])
-    @node.move_to_left_of(@parent.children.first)
+    
+    if @parent.children.count > 0
+      @node.move_to_left_of @parent.children.first
+    else
+      @node.move_to_child_of @parent
+    end
     
     expire_cache_for(@parent) # new parent
     
