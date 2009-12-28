@@ -116,7 +116,7 @@ function formFocus(form) {
 
 
 
-function itemNew(parentNode, type) {
+function itemNew(parentNode, type, afterNode) {
 	if (!ClutterApp.fsm.changeAction('itemNew', 'load'))
 		return;
 	
@@ -142,8 +142,14 @@ function itemNew(parentNode, type) {
 		
 		var list = parentNode.children('.list').required();
 		
-		list.prepend(responseData);
-		var newNode = list.children('li.item_for_node:first').filter('.new.item_for_node').required();
+		if (!afterNode) {
+			list.prepend(responseData);
+			var newNode = list.children('li.item_for_node:first').require('.new');
+		} else {
+			afterNode.filter('.item_for_node').required();
+			afterNode.after(responseData);
+			var newNode = afterNode.next('li.item_for_node').require('.new');
+		}
 		
 		var newBody = newNode.find('.new.body').required();
 		
@@ -324,8 +330,10 @@ function itemCreate(newNode, another) {
 					ClutterApp.fsm.finishAction('itemNew', 'done');
 					
 					
-					if (another)
-						itemNew(createdItem.parent().closest('.item_for_node'), 'text');
+					if (another) {
+						var parentItem = createdItem.parent().closest('.item_for_node');
+						itemNew(parentItem, 'text', createdItem);
+					}
 				}
 			}
 		);
@@ -565,8 +573,11 @@ function itemUpdate(form, another) {
 					ClutterApp.fsm.finishAction('itemEdit', 'done');
 					
 					
-					if (another)
-						itemNew(showBody.closest('.item_for_node').parent().closest('.item_for_node'), 'text');
+					if (another) {
+						var updatedNode = showBody.closest('.item_for_node');
+						var parentNode = updatedNode.parent().closest('.item_for_node');
+						itemNew(parentNode, 'text', updatedNode);
+					}
 				}
 			}
 		);
