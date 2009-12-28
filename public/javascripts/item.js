@@ -116,12 +116,12 @@ function formFocus(form) {
 
 
 
-function itemNew(button, type) {
+function itemNew(parentNode, type) {
 	if (!ClutterApp.fsm.changeAction('itemNew', 'load'))
 		return;
 	
 	
-	var parentNode = $(button).closest('.item_for_node').required();
+	parentNode.filter('.item_for_node').required();
 	
 	collapseActionBar();
 	parentNode.showProgressOverlay();
@@ -197,7 +197,7 @@ function itemNew(button, type) {
 	
 $(function() {
 	var actionButtons = $('#action-bar > .buttons > a.new').required()
-		.click(function() { itemNew(this, 'text'); return false; });
+		.click(function() { itemNew($(this).closest('.item_for_node'), 'text'); return false; });
 });
 
 
@@ -263,12 +263,12 @@ $(function() {
 
 
 
-function itemCreate(form) {
+function itemCreate(newNode, another) {
 	if (!ClutterApp.fsm.changeState('itemNew', 'done'))
 		return;
 	
 	
-	form.required();
+	var form = newNode.find('form').required();
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
@@ -321,8 +321,11 @@ function itemCreate(form) {
 					newItem.remove();
 					createdItem.fadeIn(kDefaultTransitionDuration);
 					
-					
 					ClutterApp.fsm.finishAction('itemNew', 'done');
+					
+					
+					if (another)
+						itemNew(createdItem.parent().closest('.item_for_node'), 'text');
 				}
 			}
 		);
@@ -349,7 +352,11 @@ function itemCreate(form) {
 
 $(function() {
 	$('form.new_node').live('submit', function() {
-		itemCreate($(this)); return false;
+		itemCreate($(this).closest('.item_for_node')); return false;
+	});
+	
+	$('form.new_node input.another').live('click', function() {
+		itemCreate($(this).closest('.item_for_node'), true); return false;
 	});
 });
 
@@ -498,7 +505,7 @@ $(function() {
 
 
 
-function itemUpdate(form) {
+function itemUpdate(form, another) {
 	if (!ClutterApp.fsm.changeState('itemEdit', 'done'))
 		return;
 	
@@ -552,9 +559,14 @@ function itemUpdate(form) {
 				complete: function() {
 					hideFill();
 					
+					showBody = editBody.siblings('.show.body').required();
 					editBody.remove();
 					
 					ClutterApp.fsm.finishAction('itemEdit', 'done');
+					
+					
+					if (another)
+						itemNew(showBody.closest('.item_for_node').parent().closest('.item_for_node'), 'text');
 				}
 			}
 		);
@@ -582,6 +594,10 @@ function itemUpdate(form) {
 $(function() {
 	$('form.edit_node').live('submit', function() {
 		itemUpdate($(this)); return false;
+	});
+	
+	$('form.edit_node input.another').live('click', function() {
+		itemUpdate($(this).closest('form'), true); return false;
 	});
 });
 
