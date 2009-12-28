@@ -54,8 +54,6 @@ class Node < ActiveRecord::Base
   
   
   def build_prop(params)
-    logger.prefixed 'Node#build_prop', :light_red, "params: #{params.inspect}"
-    
     self.prop = Prop.class_from_type(
       params.delete(:type) || params.delete('type')
     ).new(params)
