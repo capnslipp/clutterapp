@@ -258,7 +258,7 @@ $(function() {
 		itemNewCancel($(this)); return false;
 	});
 	
-	$().keyup(function(e) {
+	$().keydown(function(e) {
 		if (e.which != kEscapeKeyCode)
 			return;
 		
@@ -367,6 +367,17 @@ $(function() {
 	
 	$('form.new_node input.another').live('click', function() {
 		itemCreate($(this).closest('.item_for_node'), true); return false;
+	});
+	
+	$().keydown(function(e) {
+		if (String.fromCharCode(e.which) != '\r')
+			return;
+		
+		if (ClutterApp.fsm.action() != 'itemNew' || ClutterApp.fsm.isStateBusy())
+			return;
+		
+		if (e.shiftKey || e.ctrlKey || e.altKey || e.metaKey)
+			itemCreate( ClutterApp.fsm.context().required(), true );
 	});
 });
 
@@ -502,7 +513,7 @@ $(function() {
 		itemEditCancel($(this)); return false;
 	});
 	
-	$().keyup(function(e) {
+	$().keydown(function(e) {
 		if (e.which != kEscapeKeyCode)
 			return;
 		
@@ -611,6 +622,17 @@ $(function() {
 	
 	$('form.edit_node input.another').live('click', function() {
 		itemUpdate($(this).closest('form'), true); return false;
+	});
+	
+	$().keydown(function(e) {
+		if (String.fromCharCode(e.which) != '\r')
+			return;
+		
+		if (ClutterApp.fsm.action() != 'itemEdit' || ClutterApp.fsm.isStateBusy())
+			return;
+		
+		if (e.shiftKey || e.ctrlKey || e.altKey || e.metaKey)
+			itemUpdate( ClutterApp.fsm.context().required().find('form'), true );
 	});
 });
 
