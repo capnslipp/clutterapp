@@ -48,7 +48,7 @@ class NodesController < ApplicationController
     
     add_attrs = []
     
-    if params[:dup_prev]
+    if params[:dup_prev].present?
       @prev_sibling.children.badgeable.each do |badge_node|
         add_attrs << {:prop_type => badge_node.prop.type.short_name}
       end
