@@ -116,7 +116,7 @@ function formFocus(form) {
 
 
 
-function itemNew(parentNode, type, afterNode) {
+function itemNew(parentNode, type, prevSiblingNode) {
 	if (!ClutterApp.fsm.changeAction('itemNew', 'load'))
 		return;
 	
@@ -127,10 +127,12 @@ function itemNew(parentNode, type, afterNode) {
 	parentNode.showProgressOverlay();
 	showFill();
 	
+	var prevSiblingNodeID = prevSiblingNode ? nodeIDOfItem(prevSiblingNode) : '';
+	
 	$.ajax({
 		type: 'get',
 		url: parentNode.closest('.pile').getAttr('oc\:nodes-url') + '/new',
-		data: {'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode)},
+		data: { 'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode), prev_sibling_id: prevSiblingNodeID },
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError
@@ -142,13 +144,13 @@ function itemNew(parentNode, type, afterNode) {
 		
 		var list = parentNode.children('.list').required();
 		
-		if (!afterNode) {
+		if (!prevSiblingNode) {
 			list.prepend(responseData);
 			var newNode = list.children('li.item_for_node:first').require('.new');
 		} else {
-			afterNode.filter('.item_for_node').required();
-			afterNode.after(responseData);
-			var newNode = afterNode.next('li.item_for_node').require('.new');
+			prevSiblingNode.filter('.item_for_node').required();
+			prevSiblingNode.after(responseData);
+			var newNode = prevSiblingNode.next('li.item_for_node').require('.new');
 		}
 		
 		var newBody = newNode.find('.new.body').required();

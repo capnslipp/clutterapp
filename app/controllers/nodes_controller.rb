@@ -29,6 +29,7 @@ class NodesController < ApplicationController
   
   
   # GET /nodes/new
+  # GET /nodes/new?prev_sibling_id=2
   def new
     node_attrs = params.delete(:node) || {}
     
@@ -53,11 +54,15 @@ class NodesController < ApplicationController
     end
     
     
+    @prev_sibling = @parent.children.find params[:prev_sibling_id] if params[:prev_sibling_id].present?
+    
+    
     render :partial => 'new_item', :locals => {:item => @node}
   end
   
   
   # POST /nodes
+  # POST /nodes?prev_sibling_id=2
   def create
     node_attrs = params.delete(:node) || {}
     
@@ -77,13 +82,20 @@ class NodesController < ApplicationController
     
     
     if @node.save!
-      first_child = @parent.children.first
-      first_child = first_child.right_sibling if first_child == @node
-      if first_child
-        @node.move_to_left_of first_child
-      else
-        @node.move_to_child_of @parent
+      if params[:prev_sibling_id].present? # put it after the given sibling
+        @prev_sibling = @node.siblings.find params[:prev_sibling_id]
+        @node.move_to_right_of @prev_sibling
+      else # put it first
+        first_child = @parent.children.first
+        first_child = first_child.right_sibling if first_child == @node
+        
+        if first_child # put it before the existing first child
+          @node.move_to_left_of first_child
+        else # put it under the parent node
+          @node.move_to_child_of @parent
+        end
       end
+      
       
       expire_cache_for(@node)
       render :partial => 'show_item', :locals => {:item => @node}
