@@ -77,7 +77,13 @@ class NodesController < ApplicationController
     
     
     if @node.save!
-      @node.move_to_left_of(@parent.children.first)
+      first_child = @parent.children.first
+      first_child = first_child.right_sibling if first_child == @node
+      if first_child
+        @node.move_to_left_of first_child
+      else
+        @node.move_to_child_of @parent
+      end
       
       expire_cache_for(@node)
       render :partial => 'show_item', :locals => {:item => @node}
