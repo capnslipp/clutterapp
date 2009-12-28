@@ -43,18 +43,32 @@ class NodesController < ApplicationController
     @node = @parent.children.build(node_attrs)
     
     
-    if params[:add]
-      add_attrs = params.delete(:add)
-      
-      raise 'add[prop_type] param is required' if add_attrs[:prop_type].nil?
-      add_attrs[:prop_attributes] ||= {}
-      add_attrs[:prop_attributes][:type] = add_attrs.delete(:prop_type)
-      
-      @node.children.build(add_attrs)
+    @prev_sibling = @parent.children.find params[:prev_sibling_id] if params[:prev_sibling_id].present?
+    
+    
+    add_attrs = []
+    
+    if params[:dup_prev]
+      @prev_sibling.children.badgeable.each do |badge_node|
+        add_attrs << {:prop_type => badge_node.prop.type.short_name}
+      end
     end
     
+    add_attrs << params.delete(:add) if params[:add]
     
-    @prev_sibling = @parent.children.find params[:prev_sibling_id] if params[:prev_sibling_id].present?
+    unless add_attrs.empty?
+      logger.prefixed 'add_attrs', :light_red, add_attrs.inspect
+      
+      add_attrs.each do |add_attr|
+        raise 'add[prop_type] param is required' if add_attr[:prop_type].nil?
+        add_attr[:prop_attributes] ||= {}
+        add_attr[:prop_attributes][:type] = add_attr.delete(:prop_type)
+        
+        logger.prefixed 'add_attr', :light_red, add_attr.inspect
+        
+        @node.children.build add_attr
+      end
+    end
     
     
     render :partial => 'new_item', :locals => {:item => @node}

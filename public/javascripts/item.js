@@ -116,7 +116,7 @@ function formFocus(form) {
 
 
 
-function itemNew(parentNode, type, prevSiblingNode) {
+function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 	if (!ClutterApp.fsm.changeAction('itemNew', 'load'))
 		return;
 	
@@ -132,7 +132,7 @@ function itemNew(parentNode, type, prevSiblingNode) {
 	$.ajax({
 		type: 'get',
 		url: parentNode.closest('.pile').getAttr('oc\:nodes-url') + '/new',
-		data: { 'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode), prev_sibling_id: prevSiblingNodeID },
+		data: { 'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode), prev_sibling_id: prevSiblingNodeID, dup_prev: (dupPrev || '') },
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError
@@ -334,7 +334,7 @@ function itemCreate(newNode, another) {
 					
 					if (another) {
 						var parentItem = createdItem.parent().closest('.item_for_node');
-						itemNew(parentItem, 'text', createdItem);
+						itemNew(parentItem, 'text', createdItem, true);
 					}
 				}
 			}
@@ -578,7 +578,7 @@ function itemUpdate(form, another) {
 					if (another) {
 						var updatedNode = showBody.closest('.item_for_node');
 						var parentNode = updatedNode.parent().closest('.item_for_node');
-						itemNew(parentNode, 'text', updatedNode);
+						itemNew(parentNode, 'text', updatedNode, true);
 					}
 				}
 			}
