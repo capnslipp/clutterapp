@@ -1166,7 +1166,7 @@ function badgeAdd(link, addType) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('li.item_for_node:last').find('.new.body').required();
+			var newBody = list.children('li.new.item_for_node').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
@@ -1262,7 +1262,7 @@ function badgeRemove(link) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('li.item_for_node:last').find('.new.body').required();
+			var newBody = list.children('li.new.item_for_node').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
