@@ -56,18 +56,12 @@ class NodesController < ApplicationController
     
     add_attrs << params.delete(:add) if params[:add]
     
-    unless add_attrs.empty?
-      logger.prefixed 'add_attrs', :light_red, add_attrs.inspect
+    add_attrs.each do |add_attr|
+      raise 'add[prop_type] param is required' if add_attr[:prop_type].nil?
+      add_attr[:prop_attributes] ||= {}
+      add_attr[:prop_attributes][:type] = add_attr.delete(:prop_type)
       
-      add_attrs.each do |add_attr|
-        raise 'add[prop_type] param is required' if add_attr[:prop_type].nil?
-        add_attr[:prop_attributes] ||= {}
-        add_attr[:prop_attributes][:type] = add_attr.delete(:prop_type)
-        
-        logger.prefixed 'add_attr', :light_red, add_attr.inspect
-        
-        @node.children.build add_attr
-      end
+      @node.children.build add_attr
     end
     
     
