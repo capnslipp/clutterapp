@@ -142,8 +142,8 @@ function itemNew(button, type) {
 		
 		var list = parentNode.children('.list').required();
 		
-		list.append(responseData);
-		var newNode = list.children('li.item_for_node:last').filter('.new.item_for_node').required();
+		list.prepend(responseData);
+		var newNode = list.children('li.item_for_node:first').filter('.new.item_for_node').required();
 		
 		var newBody = newNode.find('.new.body').required();
 		
