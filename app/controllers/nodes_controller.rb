@@ -151,7 +151,7 @@ class NodesController < ApplicationController
     
     # put it as the last child of the parent
     @parent = active_pile.nodes.find(params[:parent_id])
-    @node.move_to_child_of(@parent)
+    @node.move_to_left_of(@parent.children.first)
     
     expire_cache_for(@parent) # new parent
     
