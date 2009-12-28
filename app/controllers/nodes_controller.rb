@@ -154,8 +154,10 @@ class NodesController < ApplicationController
     # put it as the last child of the parent
     @parent = active_pile.nodes.find(params[:parent_id])
     
-    if @parent.children.count > 0
-      @node.move_to_left_of @parent.children.first
+    first_child = @parent.children.first
+    first_child = first_child.right_sibling if first_child == @node
+    if first_child
+      @node.move_to_left_of first_child
     else
       @node.move_to_child_of @parent
     end
