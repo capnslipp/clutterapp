@@ -125,7 +125,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 	
 	collapseActionBar();
 	parentNode.showProgressOverlay();
-	showFill();
+	ClutterApp.fill.show();
 	
 	var prevSiblingNodeID = prevSiblingNode ? nodeIDOfItem(prevSiblingNode) : '';
 	
@@ -181,7 +181,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 		
 		newBody.find('.note.prop').find('textarea').elastic();
 		
-		showFill(newBody);
+		ClutterApp.fill.show(newBody);
 		
 		var newBodyForm = newBody.find('form').required();
 		formFocus(newBodyForm.required());
@@ -193,7 +193,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 	
 	function handleError(xhrObj, errStr, expObj) {
 		hideProgressOverlay();
-		hideFill();
+		ClutterApp.fill.hide();
 		
 		parentNode.children('.show.body')
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000); // @todo: fix
@@ -221,7 +221,7 @@ function itemNewCancel(buttonOrNode) {
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
-	hideFill();
+	ClutterApp.fill.hide();
 		
 	var startScaleX = 1.25; var endScaleX = 1.0;
 	var startScaleY = 1.25; var endScaleY = 1.0;
@@ -324,7 +324,7 @@ function itemCreate(newNode, another) {
 					});
 				},
 				complete: function() {
-					hideFill();
+					ClutterApp.fill.hide();
 					
 					newItem.remove();
 					createdItem.fadeIn(kDefaultTransitionDuration);
@@ -392,7 +392,7 @@ function itemEdit(link) {
 	
 	collapseActionBar();
 	showBody.showProgressOverlay();
-	showFill();
+	ClutterApp.fill.show();
 	
 	$.ajax({
 		type: 'get',
@@ -437,7 +437,7 @@ function itemEdit(link) {
 		
 		editBody.find('.note.prop').find('textarea').elastic();
 		
-		showFill(editBody);
+		ClutterApp.fill.show(editBody);
 		formFocus(editBody.find('form').required());
 		
 		
@@ -447,7 +447,7 @@ function itemEdit(link) {
 	
 	function handleError(xhrObj, errStr, expObj) {
 		hideProgressOverlay();
-		hideFill();
+		ClutterApp.fill.hide();
 		
 		showBody
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
@@ -478,7 +478,7 @@ function itemEditCancel(buttonOrNode) {
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
-	hideFill();
+	ClutterApp.fill.hide();
 	
 	var startScale = 1.25; var endScale = 1.0;
 	editBody.setCSS({
@@ -578,7 +578,7 @@ function itemUpdate(form, another) {
 					})
 				},
 				complete: function() {
-					hideFill();
+					ClutterApp.fill.hide();
 					
 					showBody = editBody.siblings('.show.body').required();
 					editBody.remove();
@@ -797,7 +797,7 @@ jQuery.fn.setupReorderSortable = function() {
 	
 	function start(event, ui) {
 		var list = ui.item.parent('ul.node.list').required();
-		showFill(list);
+		ClutterApp.fill.show(list);
 		list.addClass('active');
 		
 		var origPrevSibling = ui.item.prev('li.item_for_node');
@@ -823,7 +823,7 @@ jQuery.fn.setupReorderSortable = function() {
 		if (prevSiblingID != origPrevSiblingID) {
 			itemReorder(ui.item);
 		} else {
-			hideFill(list);
+			ClutterApp.fill.hide(list);
 			list.removeClass('active');
 		}
 		
@@ -860,7 +860,7 @@ function itemReorder(node) {
 	function handleSuccess(responseData) {
 		hideProgressOverlay();
 		
-		hideFill(list);
+		ClutterApp.fill.hide(list);
 		list.removeClass('active');
 		
 		
@@ -1192,7 +1192,7 @@ function badgeAdd(link, addType) {
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
-			showFill(newBody);
+			ClutterApp.fill.show(newBody);
 			
 			formFocus(newBody.find('form').required());
 			
@@ -1211,7 +1211,7 @@ function badgeAdd(link, addType) {
 			
 			editBody.find('.note.prop').find('textarea').elastic();
 			
-			showFill(editBody);
+			ClutterApp.fill.show(editBody);
 			formFocus(editBody.find('form').required());
 			
 			
@@ -1288,7 +1288,7 @@ function badgeRemove(link) {
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
-			showFill(newBody);
+			ClutterApp.fill.show(newBody);
 			
 			formFocus(newBody.find('form').required());
 			
@@ -1307,7 +1307,7 @@ function badgeRemove(link) {
 			
 			editBody.find('.note.prop').find('textarea').elastic();
 			
-			showFill(editBody);
+			ClutterApp.fill.show(editBody);
 			formFocus(editBody.find('form').required());
 			
 			
