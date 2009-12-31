@@ -21,7 +21,7 @@ describe NodesController do
   end
   
   describe "GET edit" do
-    it "renders the edit form" do
+    it "works" do
       # mock and stub necessary input
       active_pile_nodes = mock(Object)
       active_pile_nodes.stub(:find).with('26').and_return(
@@ -48,7 +48,7 @@ describe NodesController do
       end
     end
     
-    it "renders the edit form with added Prop" do
+    it "works with added Prop" do
       # mock and stub necessary input
       active_pile_nodes = mock(Object)
       active_pile_nodes.stub(:find).with('26').and_return(
