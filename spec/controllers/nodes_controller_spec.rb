@@ -29,6 +29,12 @@ describe NodesController do
       )
       controller.active_pile.stub(:nodes).and_return active_pile_nodes
       
+      model_counts = {
+        Pile => Pile.count,
+        Node => Node.count,
+        TextProp => TextProp.count
+      }
+      
       # make the request
       xhr :get, :edit, :id => '26', :pile_id => '1', :user_id => 'test-user'
       
@@ -37,6 +43,9 @@ describe NodesController do
       response.body.should be_present
       response.body.should have_tag('.edit.body')
       response.body.should have_tag('form')
+      model_counts.each do |t, oc|
+        t.count.should == oc
+      end
     end
     
     it "renders the edit form with added Prop" do
@@ -47,6 +56,13 @@ describe NodesController do
       )
       controller.active_pile.stub(:nodes).and_return active_pile_nodes
       
+      model_counts = {
+        Pile => Pile.count,
+        Node => Node.count,
+        TextProp => TextProp.count,
+        CheckProp => CheckProp.count
+      }
+      
       # make the request
       xhr :get, :edit, :id => '26', :pile_id => '1', :user_id => 'test-user', :add => {:prop_type => 'check'}
       
@@ -56,6 +72,9 @@ describe NodesController do
       response.body.should have_tag('.edit.body')
       response.body.should have_tag('form')
       response.body.should have_tag('input[type=checkbox]')
+      model_counts.each do
+        |t, oc| t.count.should == oc
+      end
     end
   end
   
