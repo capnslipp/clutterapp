@@ -10,25 +10,25 @@ Factory.sequence :password do |n|
 end
 
 Factory.define :followship do |f|
-  f.followee {|a| a.association(:user)}
-  f.user {|a| a.association(:user)}
+  f.add_attribute(:followee) {|a| a.association(:user) }
+  f.add_attribute(:user) {|a| a.association(:user) }
 end
 
 Factory.define :share do |f|
-  f.user {|a| a.association(:user)}
-  f.shared_pile {|a| a.association(:pile)}
+  f.add_attribute(:user) {|a| a.association(:user) }
+  f.add_attribute(:shared_pile) {|a| a.association(:pile) }
 end
 
 Factory.define :user do |f|
-  f.sequence(:login) { |u_n| "user_#{u_n}" }
+  f.sequence(:login) {|u_n| "user_#{u_n}" }
   f.sequence(:email) {|u_n| "user_#{u_n}@example.com" }
-  f.password {Factory.next(:password)}
-  f.password_confirmation {|u| u.password}
-  f.password_salt {Authlogic::Random.hex_token}
-  f.crypted_password { |u| Authlogic::CryptoProviders::Sha512.encrypt(u.password + u.password_salt) }
-  f.persistence_token { Authlogic::Random.hex_token}
-  f.single_access_token {Authlogic::Random.friendly_token}
-  f.association :invite
+  f.add_attribute(:password) { Factory.next(:password) }
+  f.add_attribute(:password_confirmation) {|u| u.password}
+  f.add_attribute(:password_salt) { Authlogic::Random.hex_token }
+  f.add_attribute(:crypted_password) {|u| Authlogic::CryptoProviders::Sha512.encrypt(u.password + u.password_salt) }
+  f.add_attribute(:persistence_token) { Authlogic::Random.hex_token }
+  f.add_attribute(:single_access_token) { Authlogic::Random.friendly_token }
+  f.association(:invite)
 end
 
 
@@ -44,11 +44,34 @@ end
 
 Factory.define :node do |f|
   f.association :pile
-  f.prop {|a| a.association(:prop) }
+  f.association :prop, :factory => :text_prop
+  f.association :prop, :factory => :check_prop
+  f.association :prop, :factory => :note_prop
+  f.association :prop, :factory => :tag_prop
+  f.association :prop, :factory => :time_prop
+  f.association :prop, :factory => :priority_prop
 end
 
 
 Factory.define :text_prop do |f|
   f.text 'test text'
-  f.association :node
+end
+
+Factory.define :check_prop do |f|
+end
+
+Factory.define :note_prop do |f|
+  f.note 'test note'
+end
+
+Factory.define :tag_prop do |f|
+  f.tag 'test tag'
+end
+
+Factory.define :time_prop do |f|
+  f.time Time.now
+end
+
+Factory.define :priority_prop do |f|
+  f.priority 3
 end
