@@ -38,7 +38,7 @@ class NodesController < ApplicationController
     
     raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
     node_attrs[:prop_attributes] ||= {}
-    node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
+    node_attrs[:prop_attributes][:prop_type] = node_attrs.delete(:prop_type)
     
     @node = @parent.children.build(node_attrs)
     
@@ -59,7 +59,7 @@ class NodesController < ApplicationController
     add_attrs.each do |add_attr|
       raise 'add[prop_type] param is required' if add_attr[:prop_type].nil?
       add_attr[:prop_attributes] ||= {}
-      add_attr[:prop_attributes][:type] = add_attr.delete(:prop_type)
+      add_attr[:prop_attributes][:prop_type] = add_attr.delete(:prop_type)
       
       @node.children.build add_attr
     end
@@ -79,7 +79,7 @@ class NodesController < ApplicationController
     
     raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
     node_attrs[:prop_attributes] ||= {}
-    node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
+    node_attrs[:prop_attributes][:prop_type] = node_attrs.delete(:prop_type)
     
     @node = @parent.children.build(node_attrs)
     
@@ -125,7 +125,7 @@ class NodesController < ApplicationController
       
       raise 'add[prop_type] param is required' if add_attrs[:prop_type].nil?
       add_attrs[:prop_attributes] ||= {}
-      add_attrs[:prop_attributes][:type] = add_attrs.delete(:prop_type)
+      add_attrs[:prop_attributes][:prop_type] = add_attrs.delete(:prop_type)
       
       @node.children.build(add_attrs)
     end

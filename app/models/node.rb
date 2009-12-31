@@ -55,7 +55,7 @@ class Node < ActiveRecord::Base
   
   def build_prop(params)
     self.prop = Prop.class_from_type(
-      params.delete(:type) || params.delete('type')
+      params.delete('prop_type')
     ).new(params)
   end
   
