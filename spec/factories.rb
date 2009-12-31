@@ -1,8 +1,5 @@
-require 'factory_girl/syntax/blueprint' # definition syntax similar to Machinist
-require 'factory_girl/syntax/generate' # usage syntax similar to Object Daddy
-require 'factory_girl/syntax/make' # usage syntax similar to Machinist
-require 'factory_girl/syntax/sham' # sequence syntax similar to Machinist
 require 'authlogic'
+
 
 Factory.define :invite do |f|
   f.sequence(:recipient_email) { |i_n| "invite_#{i_n}@example.com" }
@@ -47,10 +44,11 @@ end
 
 Factory.define :node do |f|
   f.association :pile
-  f.association :prop, :factory => :text_prop
+  f.prop {|a| a.association(:prop) }
 end
 
 
 Factory.define :text_prop do |f|
   f.text 'test text'
+  f.association :node
 end
