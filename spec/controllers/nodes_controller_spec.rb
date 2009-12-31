@@ -36,7 +36,10 @@ describe NodesController do
       }
       
       # make the request
-      xhr :get, :edit, :id => '26', :pile_id => '1', :user_id => 'test-user'
+      xhr :get, :edit,
+        :id => '26',
+        :pile_id => '1',
+        :user_id => 'test-user'
       
       # check the response
       response.should be_success
@@ -64,7 +67,11 @@ describe NodesController do
       }
       
       # make the request
-      xhr :get, :edit, :id => '26', :pile_id => '1', :user_id => 'test-user', :add => {:prop_type => 'check'}
+      xhr :get, :edit,
+        :id => '26',
+        :pile_id => '1',
+        :user_id => 'test-user',
+        :add => {:prop_type => 'check'}
       
       # check the response
       response.should be_success
