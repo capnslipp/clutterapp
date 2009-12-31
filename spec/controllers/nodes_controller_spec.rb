@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe NodesController do
-  #integrate_views
+  integrate_views
   
   before(:each) do
     activate_authlogic
@@ -21,20 +21,22 @@ describe NodesController do
   end
   
   describe "GET edit" do
-    it "renders the new form" do
-      controller.active_pile.stub(:nodes).and_return(
-        active_pile_nodes = mock(Object)
-      )
+    it "renders the edit form" do
+      # mock and stub necessary input
+      active_pile_nodes = mock(Object)
       active_pile_nodes.stub(:find).with('26').and_return(
-        node = active_pile.root_node.children.create(Factory.attributes_for(:node))
+        node = active_pile.root_node.children.create!(Factory.attributes_for :node, :prop => (Factory.build :text_prop))
       )
+      controller.active_pile.stub(:nodes).and_return active_pile_nodes
       
+      # make the request
       xhr :get, :edit, :id => '26', :pile_id => '1', :user_id => 'test-user'
-      puts "#{response.body}"
-      response.should_not be_blank
+      
+      # check the response
       response.should be_success
-      response.should have_tag('.edit.body')
-      response.should have_tag('form')
+      response.body.should be_present
+      response.body.should have_tag('.edit.body')
+      response.body.should have_tag('form')
     end
   end
   
