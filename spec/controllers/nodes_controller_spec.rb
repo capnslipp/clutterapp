@@ -38,6 +38,25 @@ describe NodesController do
       response.body.should have_tag('.edit.body')
       response.body.should have_tag('form')
     end
+    
+    it "renders the edit form with added Prop" do
+      # mock and stub necessary input
+      active_pile_nodes = mock(Object)
+      active_pile_nodes.stub(:find).with('26').and_return(
+        node = active_pile.root_node.children.create!(Factory.attributes_for :node, :prop => (Factory.build :text_prop))
+      )
+      controller.active_pile.stub(:nodes).and_return active_pile_nodes
+      
+      # make the request
+      xhr :get, :edit, :id => '26', :pile_id => '1', :user_id => 'test-user', :add => {:prop_type => 'check'}
+      
+      # check the response
+      response.should be_success
+      response.body.should be_present
+      response.body.should have_tag('.edit.body')
+      response.body.should have_tag('form')
+      response.body.should have_tag('input[type=checkbox]')
+    end
   end
   
   describe "POST create" do
