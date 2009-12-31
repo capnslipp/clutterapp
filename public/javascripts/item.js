@@ -660,7 +660,7 @@ function itemDelete(node) {
 		var endScaleX = 0.95;
 		var endScaleY = 0.25;
 		var startHeight = node.height();
-		node.find('.show.body').setCSS({
+		node.setCSS({
 			opacity: 1.0,
 			overflow: 'visible',
 			        'transform-origin': '50% 0%',
@@ -670,7 +670,7 @@ function itemDelete(node) {
 			{ opacity: 0.0 },
 			{
 				duration: kSlowTransitionDuration,
-				easing: 'easeInQuad',
+				easing: 'easeOutQuad',
 				step: function(opacity) {
 					var ratio = opacity;
 					
