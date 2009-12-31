@@ -13,6 +13,69 @@ describe NodesController do
   
   
   describe "GET new" do
+    it "works" do
+      # mock and stub necessary input
+      active_pile_nodes = mock(Object)
+      active_pile_nodes.stub(:find).with('26').and_return(
+        node = active_pile.root_node.children.create!(Factory.attributes_for :node, :prop => (Factory.build :text_prop))
+      )
+      controller.active_pile.stub(:nodes).and_return active_pile_nodes
+      
+      model_counts = {
+        Pile => Pile.count,
+        Node => Node.count,
+        TextProp => TextProp.count
+      }
+      
+      # make the request
+      xhr :get, :new,
+        :pile_id => '1',
+        :user_id => 'test-user',
+        :node => {:prop_type => 'text', :parent_id => '26'}
+      
+      # check the response
+      response.should be_success
+      response.body.should be_present
+      response.body.should have_tag('.new.body')
+      response.body.should have_tag('form')
+      model_counts.each do |t, oc|
+        t.count.should == oc
+      end
+    end
+    
+    it "works with added Prop" do
+      # mock and stub necessary input
+      active_pile_nodes = mock(Object)
+      active_pile_nodes.stub(:find).with('26').and_return(
+        node = active_pile.root_node.children.create!(Factory.attributes_for :node, :prop => (Factory.build :text_prop))
+      )
+      controller.active_pile.stub(:nodes).and_return active_pile_nodes
+      
+      model_counts = {
+        Pile => Pile.count,
+        Node => Node.count,
+        TextProp => TextProp.count,
+        CheckProp => CheckProp.count
+      }
+      
+      # make the request
+      xhr :get, :new,
+        :pile_id => '1',
+        :user_id => 'test-user',
+        :node => {:prop_type => 'text', :parent_id => '26'},
+        :add => {:prop_type => 'check'}
+      
+      # check the response
+      response.should be_success
+      response.body.should be_present
+      response.body.should have_tag('.new.body')
+      response.body.should have_tag('form')
+      response.body.should have_tag('input[type=checkbox]')
+      model_counts.each do
+        |t, oc| t.count.should == oc
+      end
+    end
+    
     it "assigns a new node as @node" #do
     #  Node.stub!(:new).and_return(mock_node)
     #  
