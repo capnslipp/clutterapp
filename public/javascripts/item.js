@@ -9,24 +9,32 @@ var kDefaultTransitionDuration =	250;
 var kQuickTransitionDuration =		125;
 
 
-function classForNodeModels(prefix) {
-	if (prefix == undefined)
-		return 'node'
+// unused
+//function classForNodeModels(prefix) {
+//	if (prefix == undefined)
+//		return 'node'
+//	else
+//		return prefix + JOIN + 'node'
+//}
+//
+//
+//function idForNodeModel(recordID, prefix) {
+//	if (recordID != '')
+//		return classForNodeModels(prefix) + JOIN + recordID
+//	else
+//		return (prefix == undefined) ? classForNodeModels(NEW) : classForNodeModels(prefix)
+//}
+
+
+function nodeIDOfItem(node) {
+	var nodeID = node.getAttr('id');
+	
+	if (nodeID.match(/base_node_/))
+		return nodeID.substring('base_node_'.length);
+	else if (nodeID.match(/node_/))
+		return nodeID.substring('node_'.length);
 	else
-		return prefix + JOIN + 'node'
-}
-
-
-function idForNodeModel(recordID, prefix) {
-	if (recordID != '')
-		return classForNodeModels(prefix) + JOIN + recordID
-	else
-		return (prefix == undefined) ? classForNodeModels(NEW) : classForNodeModels(prefix)
-}
-
-
-function nodeIDOfItem(itemForNode) {
-	return itemForNode.getAttr('id').substring('node_'.length);
+		return null;
 }
 
 
@@ -56,17 +64,17 @@ function expandActionBar(node) {
 	
 	if (!node.hasClass('pile')) {
 		node.activateReparentDraggable();
-		node.closest('ul.node.list').required().activateReorderSortable();
+		node.closest('ul.item-list').required().activateReorderSortable();
 	}
 }
 
 function collapseActionBar() {
-	var node = $('#action-bar').closest('.node').required();;
+	var node = $('#action-bar').closest('.item').required();
 	var nodeBody = node.children('.body').required();
 	
 	
 	node.deactivateReparentDraggable();
-	node.closest('ul.node.list').deactivateReorderSortable();
+	node.closest('ul.item-list').deactivateReorderSortable();
 	
 	
 	$('#action-bar').hide();
@@ -83,20 +91,20 @@ function collapseActionBar() {
 }
 
 $(function() {
-	$('li.node > .show.body > .cont').live('click', function() {
-		expandActionBar($(this).closest('li.node')); return false;
+	$('li.item > .show.body > .cont').live('click', function() {
+		expandActionBar($(this).closest('li.item')); return false;
 	});
-	$('section.pile.node > .body > .header').live('click', function() {
-		expandActionBar($(this).closest('section.pile.node')); return false;
+	$('section.pile.item > .body > .header').live('click', function() {
+		expandActionBar($(this).closest('section.pile.item')); return false;
 	});
 });
 
 $(function() {
-	$('li.node > .show.body > .action.stub .widget.collapsed a').live('click', function() {
-		expandActionBar($(this).closest('li.node')); return false;
+	$('li.item > .show.body > .action.stub .widget.collapsed a').live('click', function() {
+		expandActionBar($(this).closest('li.item')); return false;
 	});
-	$('section.pile.node > .body > .action.stub .widget.collapsed a').live('click', function() {
-		expandActionBar($(this).closest('section.pile.node')); return false;
+	$('section.pile.item > .body > .action.stub .widget.collapsed a').live('click', function() {
+		expandActionBar($(this).closest('section.pile.item')); return false;
 	});
 	
 	$('#action-bar .widget.expanded a').click(function() {
@@ -121,7 +129,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 		return;
 	
 	
-	parentNode.filter('.node').required();
+	parentNode.filter('.item').required();
 	
 	collapseActionBar();
 	parentNode.showProgressOverlay();
@@ -142,15 +150,15 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 	function handleSuccess(responseData) {
 		hideProgressOverlay();
 		
-		var list = parentNode.children('.list').required();
+		var list = parentNode.children('.item-list').required();
 		
 		if (!prevSiblingNode) {
 			list.prepend(responseData);
-			var newNode = list.children('li.node:first').require('.new');
+			var newNode = list.children('li.item:first').require('.new');
 		} else {
-			prevSiblingNode.filter('.node').required();
+			prevSiblingNode.filter('.item').required();
 			prevSiblingNode.after(responseData);
-			var newNode = prevSiblingNode.next('li.node').require('.new');
+			var newNode = prevSiblingNode.next('li.item').require('.new');
 		}
 		
 		var newBody = newNode.find('.new.body').required();
@@ -205,7 +213,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 	
 $(function() {
 	var actionButtons = $('#action-bar > .buttons > a.new').required()
-		.click(function() { itemNew($(this).closest('.node'), 'text'); return false; });
+		.click(function() { itemNew($(this).closest('.item'), 'text'); return false; });
 });
 
 
@@ -215,7 +223,7 @@ function itemNewCancel(buttonOrNode) {
 		return;
 	
 	
-	var node = buttonOrNode.closest('.node').required();
+	var node = buttonOrNode.closest('.item').required();
 	var newBody = node.children('.new.body').required();
 	var form = newBody.children('form.new_node').required();
 	
@@ -245,7 +253,7 @@ function itemNewCancel(buttonOrNode) {
 				})
 			},
 			complete: function() {
-				newBody.closest('li.node').required().remove();
+				newBody.closest('li.item').required().remove();
 				
 				ClutterApp.fsm.finishAction('itemNew', 'cancel');
 			}
@@ -281,7 +289,7 @@ function itemCreate(newNode, another) {
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
 	var newBody = form.closest('.new.body').required();
-	var newItem = newBody.closest('li.node').required();
+	var newItem = newBody.closest('li.item').required();
 	
 	newBody.showProgressOverlay();
 	
@@ -298,7 +306,7 @@ function itemCreate(newNode, another) {
 	function handleSuccess(responseData) {
 		newItem.after(responseData);
 		
-		var createdItem = newItem.next('li.node').required();
+		var createdItem = newItem.next('li.item').required();
 		createdItem.hide();
 		createdItem.applyReparentDroppability();
 		
@@ -333,7 +341,7 @@ function itemCreate(newNode, another) {
 					
 					
 					if (another) {
-						var parentItem = createdItem.parent().closest('.node');
+						var parentItem = createdItem.parent().closest('.item');
 						itemNew(parentItem, 'text', createdItem, true);
 					}
 				}
@@ -362,11 +370,11 @@ function itemCreate(newNode, another) {
 
 $(function() {
 	$('form.new_node').live('submit', function() {
-		itemCreate($(this).closest('.node')); return false;
+		itemCreate($(this).closest('.item')); return false;
 	});
 	
 	$('form.new_node input.another').live('click', function() {
-		itemCreate($(this).closest('.node'), true); return false;
+		itemCreate($(this).closest('.item'), true); return false;
 	});
 	
 	$().keydown(function(e) {
@@ -396,7 +404,7 @@ function itemEdit(link) {
 	
 	$.ajax({
 		type: 'get',
-		url: showBody.closest('.node').getAttr('oc\:url') + '/edit',
+		url: showBody.closest('.item').getAttr('oc\:url') + '/edit',
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError
@@ -408,7 +416,7 @@ function itemEdit(link) {
 		
 		showBody.before(responseData);
 		
-		var editNode = showBody.closest('li.node').required();
+		var editNode = showBody.closest('li.item').required();
 		var editBody = showBody.siblings('.edit.body').required();
 		
 		var startScaleX = 0.95; var endScaleX = 1.0;
@@ -458,7 +466,7 @@ function itemEdit(link) {
 }
 
 $(function() {
-	$('li.node > .show.body > .cont').live('dblclick', function() {
+	$('li.item > .show.body > .cont').live('dblclick', function() {
 		itemEdit(this); return false;
 	});
 	$('#action-bar > .buttons > a.edit').click(function() {
@@ -472,7 +480,7 @@ function itemEditCancel(buttonOrNode) {
 	if (!ClutterApp.fsm.changeState('itemEdit', 'cancel'))
 		return;
 	
-	var node = buttonOrNode.closest('.node').required();
+	var node = buttonOrNode.closest('.item').required();
 	var editBody = node.children('.edit.body').required();
 	var form = editBody.children('form.edit_node').required();
 	
@@ -553,7 +561,7 @@ function itemUpdate(form, another) {
 	function handleSuccess(responseData) {
 		showBody.replaceWith(responseData);
 		// showBody ref no longer valid from this point on
-		editBody.closest('li.node').required().applyReparentDroppability();
+		editBody.closest('li.item').required().applyReparentDroppability();
 		
 		
 		var startScaleX = 0.95; var endScaleX = 1.0;
@@ -587,8 +595,8 @@ function itemUpdate(form, another) {
 					
 					
 					if (another) {
-						var updatedNode = showBody.closest('.node');
-						var parentNode = updatedNode.parent().closest('.node');
+						var updatedNode = showBody.closest('.item');
+						var parentNode = updatedNode.parent().closest('.item');
 						itemNew(parentNode, 'text', updatedNode, true);
 					}
 				}
@@ -705,7 +713,7 @@ $(function() {
 	
 	actionButtons.find('a.delete').click(function() {
 		if (confirm("Are you sure?\n\nThis will delete this item and all of its sub-items."))
-			itemDelete($(this).closest('li.node'));
+			itemDelete($(this).closest('li.item'));
 		
 		return false;
 	});
@@ -718,7 +726,7 @@ $(function() {
 //});
 
 //jQuery.fn.applyReorderability = function() {
-//	var nodeLists = $(this).search('ul.node.list');
+//	var nodeLists = $(this).search('ul.item-list');
 //	
 //	nodeLists.activateReorderSortable();
 //	
@@ -777,7 +785,7 @@ jQuery.fn.setupReorderSortable = function() {
 	
 	function earlyStart(event, element) {
 		element = $(element);
-		var list = element.parent('ul.node.list').required();
+		var list = element.parent('ul.item-list').required();
 		
 		var bounds = {
 			top: list.position().top,
@@ -796,11 +804,11 @@ jQuery.fn.setupReorderSortable = function() {
 	}
 	
 	function start(event, ui) {
-		var list = ui.item.parent('ul.node.list').required();
+		var list = ui.item.parent('ul.item-list').required();
 		ClutterApp.fill.show(list);
 		list.addClass('active');
 		
-		var origPrevSibling = ui.item.prev('li.node');
+		var origPrevSibling = ui.item.prev('li.item');
 		origPrevSiblingID = origPrevSibling[0] ? nodeIDOfItem(origPrevSibling) : '';
 		
 		var placeholder = ui.placeholder.required();
@@ -808,15 +816,15 @@ jQuery.fn.setupReorderSortable = function() {
 	}
 	
 	function stop(event, ui) {
-		var list = ui.item.parent('ul.node.list').required();
+		var list = ui.item.parent('ul.item-list').required();
 		
 		$('#active-sorting-container').required().replaceWith(
-			$('#active-sorting-container > ul.node.list').required()
+			$('#active-sorting-container > ul.item-list').required()
 		);
 		list.removeAttr('style'); // clear out unnecessary styles
 		
 		// @todo: optimize so this isn't being done twice
-		var prevSibling = ui.item.prev('li.node');
+		var prevSibling = ui.item.prev('li.item');
 		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
 		
 		// only if the prevSibling has changed
@@ -840,11 +848,11 @@ function itemReorder(node) {
 	
 	node.required();
 	
-	var list = node.parent('ul.node.list').required();
+	var list = node.parent('ul.item-list').required();
 	
 	list.showProgressOverlay();
 	
-	var prevSibling = node.prev('li.node');
+	var prevSibling = node.prev('li.item');
 	var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
 	
 	$.ajax({
@@ -921,7 +929,7 @@ $(function() {
 });
 
 jQuery.fn.applyReparentDroppability = function() {
-	$(this).search('li.node > .show.body, section.pile.node > .body').activateReparentDroppable();
+	$(this).search('li.item > .show.body, section.pile.item > .body').activateReparentDroppable();
 	return this;
 }
 
@@ -944,7 +952,7 @@ jQuery.fn.deactivateReparentDroppable = function() {
 
 jQuery.fn.setupReparentDroppable = function() {
 	this.droppable({
-		accept: 'li.node',
+		accept: 'li.item',
 		hoverClass: 'active',
 		scope: 'item-reparent',
 		tolerance: 'pointer',
@@ -977,7 +985,7 @@ function itemReparent(node, parentNode) {
 	}
 	
 	node.required();
-	parentNode = $(parentNode).closest('.node').required();
+	parentNode = $(parentNode).closest('.item').required();
 	
 	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
 	node.children('.body').addClass('active');
@@ -1057,9 +1065,9 @@ function itemReparent(node, parentNode) {
 		
 		parentNode.children('.body').removeClass('active');
 		
-		var list = parentNode.children('ul.node.list').required();
+		var list = parentNode.children('ul.item-list').required();
 		
-		$('li.node', list).draggable('destroy');
+		$('li.item', list).draggable('destroy');
 		$('.show.body', list).droppable('destroy');
 		
 		listCrossStart();
@@ -1089,7 +1097,7 @@ function itemReparent(node, parentNode) {
 			
 			
 			list.clone().insertAfter(list).html(responseData);
-			newList = list.next('ul.node.list').required();
+			newList = list.next('ul.item-list').required();
 			// seems the sortable gets destroyed anyway, but the classes aren't removed; destroy again to be safe
 			newList.sortable('destroy').removeClass('ui-sortable ui-sortable-disabled ui-state-disabled');
 			
@@ -1147,7 +1155,7 @@ function itemReparent(node, parentNode) {
 
 
 function badgeAdd(link, addType) {
-	var node = $(link).closest('li.node').required();
+	var node = $(link).closest('li.item').required();
 	
 	var state;
 	if (node.children('.new')[0]) {
@@ -1168,7 +1176,7 @@ function badgeAdd(link, addType) {
 	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('.node').required();
+	var parentNode = node.parent().closest('.item').required();
 	
 	$.ajax({
 		type: 'get',
@@ -1183,12 +1191,12 @@ function badgeAdd(link, addType) {
 	function handleSuccess(responseData) {
 		if (state == 'new')
 		{
-			var list = node.parent('.list').required();
+			var list = node.parent('.item-list').required();
 			
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('li.new.node').find('.new.body').required();
+			var newBody = list.children('li.new.item').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
@@ -1243,7 +1251,7 @@ function badgeRemove(link) {
 	var deleteField = $(link).siblings('input[type=hidden]').required();
 	deleteField.val(1);
 	
-	var node = $(link).closest('li.node').required();
+	var node = $(link).closest('li.item').required();
 	
 	var state;
 	if (node.children('.new')[0]) {
@@ -1264,7 +1272,7 @@ function badgeRemove(link) {
 	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('li.node').required();
+	var parentNode = node.parent().closest('li.item').required();
 	
 	$.ajax({
 		type: 'get',
@@ -1279,12 +1287,12 @@ function badgeRemove(link) {
 	function handleSuccess(responseData) {
 		if (state == 'new')
 		{
-			var list = node.parent('.list').required();
+			var list = node.parent('.item-list').required();
 			
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('li.new.node').find('.new.body').required();
+			var newBody = list.children('li.new.item').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
