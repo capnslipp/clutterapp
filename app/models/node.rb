@@ -12,8 +12,8 @@ class Node < ActiveRecord::Base
   accepts_nested_attributes_for :children, :allow_destroy => true
   
   
-  named_scope :typed, lambda {|type|
-    { :conditions => {:prop_type => Prop.class_from_type(type).to_s} }
+  named_scope :varianted, lambda {|variant_or_name|
+    { :conditions => {:prop_type => Prop.derive_variant(variant_or_name).to_s} }
   }
   
   named_scope :badgeable,     :conditions => {:prop_type => Prop.badgeable_variants.collect(&:to_s)}
@@ -54,7 +54,7 @@ class Node < ActiveRecord::Base
   
   
   def build_prop(params)
-    self.prop = Prop.class_from_type(
+    self.prop = Prop.derive_variant(
       params.delete('variant_name')
     ).new(params)
   end
@@ -78,28 +78,28 @@ class Node < ActiveRecord::Base
   end
   
   
-  Prop.badgeable_variants.each do |type|
-    type_name = type.short_name.underscore
+  Prop.badgeable_variants.each do |variant|
+    variant_name = variant.short_name
     
-    if !type.stackable? # singular versions
+    if !variant.stackable? # singular versions
       class_eval(<<-EOS, __FILE__, __LINE__)
-        def #{type_name}_badge?
-          self.children.typed(:#{type_name}).count > 0
+        def #{variant_name}_badge?
+          self.children.varianted(#{variant}).count > 0
         end
         
-        def #{type_name}_badge
-          self.children.typed(:#{type_name}).first
+        def #{variant_name}_badge
+          self.children.varianted(#{variant}).first
         end
       EOS
       
     else # plural versions
       class_eval(<<-EOS, __FILE__, __LINE__)
-        def #{type_name}_badges?
-          self.children.typed(:#{type_name}).count > 0
+        def #{variant_name}_badges?
+          self.children.varianted(#{variant}).count > 0
         end
         
-        def #{type_name}_badges
-          self.children.typed(:#{type_name})
+        def #{variant_name}_badges
+          self.children.varianted(#{variant})
         end
       EOS
     end

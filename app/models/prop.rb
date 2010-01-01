@@ -5,25 +5,28 @@ class Prop < ActiveRecord::Base
   self.abstract_class = true
   
   
-  def self::class_from_type(type)
-    unless type.instance_of?(Class)
-      type = type.to_s.underscore.classify
-      type << 'Prop' unless type =~ /Prop$/
-      type = type.constantize
+  def self::derive_variant(variant)
+    unless variant.instance_of?(Class)
+      variant = variant.to_s.underscore.classify
+      variant << 'Prop' unless variant =~ /Prop$/
+      variant = variant.constantize
     end
-    raise %{type "#{type}" must be a subclass of Prop (not "Prop" itself; empty string passed in?)} unless type.superclass == Prop
-    type
+    raise %{variant "#{variant}" must be a subclass of Prop (not "Prop" itself; empty string passed in?)} unless variant.superclass == Prop
+    variant
   end
   
   def self::short_name
     name = self.to_s
     raise NameError.new('all prop sub-classes must end in the word "Prop"', name) unless name =~ /Prop$/
     name = name[0...-('Prop'.length)]
-    name.underscore.dasherize
+    name.underscore
   end
   
+  def variant
+    self.class
+  end
   def variant_name
-    self.class.short_name
+    self.variant.short_name
   end
   
   def <=>(other)
