@@ -29,9 +29,11 @@ class Node < ActiveRecord::Base
   named_scope :non_deepable,  :conditions => {:prop_type => Prop.non_deepable_variants.collect(&:to_s)}
   
   
-  def short_name
-      prop_type = read_attribute(:prop_type)
-      prop_type.classify.short_name unless prop_type.nil?
+  def variant
+    self.prop.variant
+  end
+  def variant_name
+    self.prop.variant_name
   end
   
   def <=>(other)
