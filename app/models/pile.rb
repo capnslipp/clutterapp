@@ -1,5 +1,5 @@
 class Pile < ActiveRecord::Base
-  belongs_to :owner, :class_name => 'User'
+  belongs_to :owner, :class_name => User.name
   validates_presence_of :owner_id, :message => 'is required'
   
   validates_length_of :name, :within => 1..255
@@ -26,7 +26,7 @@ class Pile < ActiveRecord::Base
 protected
   
   def create_root_node
-    @root_node = Node.create(:pile => self) unless nodes.count > 0
+    @root_node = BaseNode.create(:pile => self) unless nodes.count > 0
   end
   
   def create_root_node!

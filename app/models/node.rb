@@ -7,7 +7,6 @@ class Node < ActiveRecord::Base
   before_validation_on_create :assign_pile
   
   
-  #attr_accessible :node, :node_attributes, :prop, :prop_attributes, :children, :children_attributes
   accepts_nested_attributes_for :prop, :allow_destroy => true
   accepts_nested_attributes_for :children, :allow_destroy => true
   
@@ -111,9 +110,8 @@ class Node < ActiveRecord::Base
 protected
   
   def validate
-    #errors.add(:node, "either be root and have pile; or it must be neither root ") if root? ^ (pile.root_node != self) # causes stack overflow
-    errors.add(:node, "must have a prop or be root, not both") if root? && prop
-    errors.add(:node, "must have either a prop or be root") if !root? && !prop
+    errors.add(:node, "must not be root") if root?
+    errors.add(:node, "must have a prop") unless prop
   end
   
   def assign_pile
