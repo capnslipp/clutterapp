@@ -6,6 +6,9 @@ class ChangeNodeStiTypesToItemNode < ActiveRecord::Migration
   end
 
   def self.down
+    # first, load up the Node model/table so that ItemNode.all works (not sure why Rails doesn't auto-load this)
+    Node.all
+    
     ItemNode.all.each do |n|
       n.update_attribute(:type, Node.name)
     end
