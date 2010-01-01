@@ -25,7 +25,7 @@ module ApplicationHelper
     raise ArgumentError, "“#{node.inspect}” was passed in for node; a Node was expected" unless node.is_a? Node
     raise ArgumentError, "“#{node.prop.inspect}” was found as the prop for node “#{node.inspect}”; a variant of a Prop was expected" unless node.prop.is_a? Prop
     
-    "props/#{node.prop.class.short_name.underscore}/#{state}"
+    "props/#{node.variant_name}/#{state}"
   end
   
   
