@@ -22,6 +22,10 @@ class Prop < ActiveRecord::Base
     name.underscore.dasherize
   end
   
+  def variant_name
+    self.class.short_name
+  end
+  
   def <=>(other)
     # sort in the same order as the Prop::types() array
     Prop.types.index(self.class) <=> Prop.types.index(other.class)
