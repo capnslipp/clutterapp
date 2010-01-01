@@ -8,9 +8,6 @@ class AddStiTypeToNodes < ActiveRecord::Migration
       Node.all.each do |n|
         n.update_attribute(:type, n.root? ? BaseNode.name : Node.name)
       end
-      
-      # change the new column to disallow a null name
-      change_column :nodes, :type, :string, :null => false
     end
   end
 

@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(:version => 20100101014434) do
     t.string   "prop_type"
     t.integer  "version",    :default => 0
     t.integer  "pile_id",                   :null => false
-    t.string   "type",                      :null => false
+    t.string   "type"
   end
 
   create_table "note_props", :force => true do |t|
