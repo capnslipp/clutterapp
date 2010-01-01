@@ -8,21 +8,21 @@ ul.node.list {
 	position: relative;
 }
 
-ul.node.list > li.item_for_node {
+ul.node.list > li.node {
 	position: relative;
 }
 
-ul.node.list ul.node.list > li.item_for_node {
+ul.node.list ul.node.list > li.node {
 	margin-left: 28px;
 }
 
-ul.node.list > li.item_for_node.ui-sortable-placeholder {
+ul.node.list > li.node.ui-sortable-placeholder {
 	visibility: visible !important;
 	
 	position: relative;
 }
 
-ul.node.list > li.item_for_node.ui-sortable-placeholder > .back {
+ul.node.list > li.node.ui-sortable-placeholder > .back {
 	position: absolute; z-index: 0;
 	top: 0; bottom: 0; left: -2px; right: -2px;
 	
@@ -32,7 +32,7 @@ ul.node.list > li.item_for_node.ui-sortable-placeholder > .back {
 	margin: -4px;
 }
 
-ul.node.list > li.item_for_node.ui-sortable-placeholder > .cont {
+ul.node.list > li.node.ui-sortable-placeholder > .cont {
 	position: absolute; z-index: 1;
 	top: 0; bottom: 0; left: -2px; right: -2px;
 	
@@ -41,7 +41,7 @@ ul.node.list > li.item_for_node.ui-sortable-placeholder > .cont {
 	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
 }
 
-ul.node.list > li.item_for_node.ui-sortable-helper {
+ul.node.list > li.node.ui-sortable-helper {
 	/*height: 0 !important;*/
 }
 ul.node.list.active {
@@ -51,34 +51,34 @@ ul.node.list.active {
 
 li { list-style-type: none; }
 
-.pile.item_for_node > .body {
+.pile.node > .body {
 	display: block;
 	margin: -16px; margin-bottom: 0;
 	padding: 16px; padding-bottom: 18px;
 	border: none;
 }
-.pile.item_for_node > .body > .header {
+.pile.node > .body > .header {
 	position: relative;
 	margin: -16px; margin-bottom: -18px;
 	padding: 16px; padding-bottom: 18px;
 }
-.pile.item_for_node > .body > .header > .owner { opacity: 0.25; }
-.pile.item_for_node > .body > .header > .owner,
-.pile.item_for_node > .body > .header > .name { white-space: nowrap; }
-.pile.item_for_node > .body > .action.stub { float: right; width: auto; border: none; }
-.pile.item_for_node > .body.active {
+.pile.node > .body > .header > .owner { opacity: 0.25; }
+.pile.node > .body > .header > .owner,
+.pile.node > .body > .header > .name { white-space: nowrap; }
+.pile.node > .body > .action.stub { float: right; width: auto; border: none; }
+.pile.node > .body.active {
 }
-.pile.item_for_node > .body.active > * {
+.pile.node > .body.active > * {
 	z-index: 2;
 }
-.pile.item_for_node > .body.active > .back {
+.pile.node > .body.active > .back {
 	position: absolute; z-index: 1;
 	top: 0; bottom: 0; left: 0; right: 0;
 	
 	background: <%= bright_bg_color %>;
 	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
 }
-.item_for_node > .body.active > .hyper { /* used to super-highlight items */
+.node > .body.active > .hyper { /* used to super-highlight items */
 	position: absolute; z-index: 0;
 	top: 0; bottom: 0; left: -2px; right: -2px;
 	
@@ -88,7 +88,7 @@ li { list-style-type: none; }
 	margin: -4px;
 }
 
-.item_for_node {
+.node {
 	position: relative;
 	
 	<% if debug? %>
@@ -98,7 +98,7 @@ li { list-style-type: none; }
 		margin: 1px;
 	<% end %>
 }
-.item_for_node > .body {
+.node > .body {
 	position: relative;
 	
 	<% if debug? %>
@@ -108,7 +108,7 @@ li { list-style-type: none; }
 	
 	/*min-height: 1.5em;*/
 }
-.item_for_node > .show.body {
+.node > .show.body {
 	<% if debug? %>
 		background: rgba(127, 191, 0, 0.125);
 		border: 2px solid rgba(127, 191, 0, 0.5);
@@ -119,16 +119,16 @@ li { list-style-type: none; }
 	padding-left: 24px; /* for "> .bullet" */
 	padding-right: 14px; /* for "> .action.stub" */
 }
-.item_for_node > .show.body.active {
+.node > .show.body.active {
 }
-.item_for_node > .show.body.active > .cont {
+.node > .show.body.active > .cont {
 	position: relative;
 }
-.item_for_node > .show.body.active > .cont,
-.item_for_node > .show.body.active > .bullet {
+.node > .show.body.active > .cont,
+.node > .show.body.active > .bullet {
 	z-index: 2;
 }
-.item_for_node > .show.body.active > .back {
+.node > .show.body.active > .back {
 	position: absolute; z-index: 1;
 	top: 0; bottom: 0; left: -2px; right: -2px;
 	
@@ -136,7 +136,7 @@ li { list-style-type: none; }
 	<%= border_radius_decl('4px') %>
 	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
 }
-.item_for_node > .show.body.active > .hyper { /* used to super-highlight items */
+.node > .show.body.active > .hyper { /* used to super-highlight items */
 	position: absolute; z-index: 0;
 	top: 0; bottom: 0; left: -2px; right: -2px;
 	
@@ -146,16 +146,16 @@ li { list-style-type: none; }
 	margin: -4px;
 }
 
-.item_for_node > .new.body,
-.item_for_node > .edit.body {
+.node > .new.body,
+.node > .edit.body {
 	margin: -12px 8px;
 	
 	background: <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
 	<%= border_radius_decl('16px') %>
 	border: 8px solid transparent;
 }
-.item_for_node > .new.body > .cont,  .item_for_node > .new.body > form > .cont,
-.item_for_node > .edit.body > .cont, .item_for_node > .edit.body > form > .cont {
+.node > .new.body > .cont,  .node > .new.body > form > .cont,
+.node > .edit.body > .cont, .node > .edit.body > form > .cont {
 	<%= border_radius_decl('8px') %>
 	<%= deep_shadow_decl(0.5) %>
 	
@@ -163,11 +163,11 @@ li { list-style-type: none; }
 	padding: 8px;
 }
 /* contain-float-after */
-.item_for_node > .new.body > .cont:after,  .item_for_node > .new.body > form > .cont:after,
-.item_for_node > .edit.body > .cont:after, .item_for_node > .edit.body > form > .cont:after {
+.node > .new.body > .cont:after,  .node > .new.body > form > .cont:after,
+.node > .edit.body > .cont:after, .node > .edit.body > form > .cont:after {
 	content: ""; display: block; height: 0; clear: both; visibility: hidden; /* (FF, S2, O9) */
 }
-.item_for_node > .edit.body {
+.node > .edit.body {
 	position: absolute;
 	/*width: 100%;*/ left: 0; right: 0;
 	
@@ -176,7 +176,7 @@ li { list-style-type: none; }
 		border: 2px solid rgba(191, 0, 127, 0.5);
 	<% end %>
 }
-.item_for_node > .new.body {
+.node > .new.body {
 	position: relative;
 	
 	<% if debug? %>
@@ -184,20 +184,20 @@ li { list-style-type: none; }
 		border: 2px solid rgba(0, 255, 191, 0.5);
 	<% end %>
 }
-.new.item_for_node {
+.new.node {
 	position: absolute;
 	/*width: 100%;*/ left: 0; right: 0;
 }
-.item_for_node > .body .line {
+.node > .body .line {
 	/*overflow: auto; width: 100%; /* to contain floating elements */
 	margin-top: 2px;
 	margin-bottom: 4px;
 }
-.item_for_node > .new.body .finish.line,
-.item_for_node > .edit.body .finish.line {
+.node > .new.body .finish.line,
+.node > .edit.body .finish.line {
 	float: right;
 }
-.item_for_node > .body > .bullet {
+.node > .body > .bullet {
 	position: absolute;
 	left: 4px;
 	width: 16px;
@@ -205,15 +205,15 @@ li { list-style-type: none; }
 	/*vertical-align: middle;*/
 	/*line-height: 15px;*/
 }
-.item_for_node > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-top: 1px; }
+.node > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-top: 1px; }
 
-.item_for_node > .body > .action.stub,
-.item_for_node > .body > #action-bar {
+.node > .body > .action.stub,
+.node > .body > #action-bar {
 	position: absolute; z-index: 5;
 	right: 4px;
 }
-.pile.item_for_node > .body > .action.stub,
-.pile.item_for_node > .body > #action-bar {
+.pile.node > .body > .action.stub,
+.pile.node > .body > #action-bar {
 	right: 20px;
 }
 

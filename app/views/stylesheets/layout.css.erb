@@ -8,14 +8,14 @@ ul.list ul.list {
 
 li { list-style-type: none; }
 
-.pile.item_for_node > .body { display: block; margin-bottom: 18px; margin-left: 0; border: none; }
-.pile.item_for_node > .body > .header {}
-.pile.item_for_node > .body > .header > .owner { opacity: 0.25; }
-.pile.item_for_node > .body > .header > .owner,
-.pile.item_for_node > .body > .header > .name { white-space: nowrap; }
-.pile.item_for_node > .body > .action.stub { float: right; width: auto; border: none; }
+.pile.node > .body { display: block; margin-bottom: 18px; margin-left: 0; border: none; }
+.pile.node > .body > .header {}
+.pile.node > .body > .header > .owner { opacity: 0.25; }
+.pile.node > .body > .header > .owner,
+.pile.node > .body > .header > .name { white-space: nowrap; }
+.pile.node > .body > .action.stub { float: right; width: auto; border: none; }
 
-.item_for_node {
+.node {
 	position: relative;
 	
 	<% if debug? %>
@@ -25,7 +25,7 @@ li { list-style-type: none; }
 		margin: 1px;
 	<% end %>
 }
-.item_for_node > .body {
+.node > .body {
 	<% if debug? %>
 		<%= border_radius_decl %>
 		margin: 1px;
@@ -33,7 +33,7 @@ li { list-style-type: none; }
 	
 	/*min-height: 1.5em;*/
 }
-.item_for_node > .show.body {
+.node > .show.body {
 	<% if debug? %>
 		background: rgba(127, 191, 0, 0.125);
 		border: 2px solid rgba(127, 191, 0, 0.5);
@@ -43,29 +43,29 @@ li { list-style-type: none; }
 	padding: 2px 0;
 	padding-left: 24px; /* for "> .bullet" */
 }
-.item_for_node > .show.body.active {
+.node > .show.body.active {
 	background: <%= bright_bg_color %>;
 	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
 }
-.item_for_node > .show.body > .cont {
+.node > .show.body > .cont {
 }
-.item_for_node > .new.body,
-.item_for_node > .edit.body {
+.node > .new.body,
+.node > .edit.body {
 	margin: -12px 8px;
 	
 	background: <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
 	<%= border_radius_decl('16px') %>
 	border: 8px solid transparent;
 }
-.item_for_node > .new.body > .cont,  .item_for_node > .new.body > form > .cont,
-.item_for_node > .edit.body > .cont, .item_for_node > .edit.body > form > .cont {
+.node > .new.body > .cont,  .node > .new.body > form > .cont,
+.node > .edit.body > .cont, .node > .edit.body > form > .cont {
 	<%= border_radius_decl('8px') %>
 	<%= shallow_shadow_decl %>
 	
 	background: <%= bright_bg_color %>;
 	padding: 8px;
 }
-.item_for_node > .edit.body {
+.node > .edit.body {
 	position: absolute;
 	/*width: 100%;*/ left: 0; right: 0;
 	
@@ -74,7 +74,7 @@ li { list-style-type: none; }
 		border: 2px solid rgba(191, 0, 127, 0.5);
 	<% end %>
 }
-.item_for_node > .new.body {
+.node > .new.body {
 	position: relative;
 	
 	<% if debug? %>
@@ -82,16 +82,16 @@ li { list-style-type: none; }
 		border: 2px solid rgba(0, 255, 191, 0.5);
 	<% end %>
 }
-.new.item_for_node {
+.new.node {
 	position: absolute;
 	/*width: 100%;*/ left: 0; right: 0;
 }
-.item_for_node > .body .line {
+.node > .body .line {
 	/*overflow: auto; width: 100%; /* to contain floating elements */
 	margin-top: 2px;
 	margin-bottom: 4px;
 }
-.item_for_node > .body > .bullet {
+.node > .body > .bullet {
 	float: left;
 	margin-left: -20px;
 	width: 16px;
@@ -99,10 +99,10 @@ li { list-style-type: none; }
 	text-align: center;
 	vertical-align: middle;
 }
-.item_for_node > .body > .bullet .sym { font-size: 2em; line-height: 1em; }
+.node > .body > .bullet .sym { font-size: 2em; line-height: 1em; }
 
-.item_for_node > .body > .action.stub,
-.item_for_node > .body > #action-bar {
+.node > .body > .action.stub,
+.node > .body > #action-bar {
 	float: right;
 	margin-right: 4px;
 }

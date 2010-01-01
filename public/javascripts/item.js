@@ -26,7 +26,7 @@ function idForNodeModel(recordID, prefix) {
 
 
 function nodeIDOfItem(itemForNode) {
-	return itemForNode.getAttr('id').substring('item_for_node_'.length);
+	return itemForNode.getAttr('id').substring('node_'.length);
 }
 
 
@@ -61,7 +61,7 @@ function expandActionBar(node) {
 }
 
 function collapseActionBar() {
-	var node = $('#action-bar').closest('.item_for_node').required();;
+	var node = $('#action-bar').closest('.node').required();;
 	var nodeBody = node.children('.body').required();
 	
 	
@@ -83,20 +83,20 @@ function collapseActionBar() {
 }
 
 $(function() {
-	$('li.item_for_node > .show.body > .cont').live('click', function() {
-		expandActionBar($(this).closest('li.item_for_node')); return false;
+	$('li.node > .show.body > .cont').live('click', function() {
+		expandActionBar($(this).closest('li.node')); return false;
 	});
-	$('section.pile.item_for_node > .body > .header').live('click', function() {
-		expandActionBar($(this).closest('section.pile.item_for_node')); return false;
+	$('section.pile.node > .body > .header').live('click', function() {
+		expandActionBar($(this).closest('section.pile.node')); return false;
 	});
 });
 
 $(function() {
-	$('li.item_for_node > .show.body > .action.stub .widget.collapsed a').live('click', function() {
-		expandActionBar($(this).closest('li.item_for_node')); return false;
+	$('li.node > .show.body > .action.stub .widget.collapsed a').live('click', function() {
+		expandActionBar($(this).closest('li.node')); return false;
 	});
-	$('section.pile.item_for_node > .body > .action.stub .widget.collapsed a').live('click', function() {
-		expandActionBar($(this).closest('section.pile.item_for_node')); return false;
+	$('section.pile.node > .body > .action.stub .widget.collapsed a').live('click', function() {
+		expandActionBar($(this).closest('section.pile.node')); return false;
 	});
 	
 	$('#action-bar .widget.expanded a').click(function() {
@@ -121,7 +121,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 		return;
 	
 	
-	parentNode.filter('.item_for_node').required();
+	parentNode.filter('.node').required();
 	
 	collapseActionBar();
 	parentNode.showProgressOverlay();
@@ -146,11 +146,11 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 		
 		if (!prevSiblingNode) {
 			list.prepend(responseData);
-			var newNode = list.children('li.item_for_node:first').require('.new');
+			var newNode = list.children('li.node:first').require('.new');
 		} else {
-			prevSiblingNode.filter('.item_for_node').required();
+			prevSiblingNode.filter('.node').required();
 			prevSiblingNode.after(responseData);
-			var newNode = prevSiblingNode.next('li.item_for_node').require('.new');
+			var newNode = prevSiblingNode.next('li.node').require('.new');
 		}
 		
 		var newBody = newNode.find('.new.body').required();
@@ -205,7 +205,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 	
 $(function() {
 	var actionButtons = $('#action-bar > .buttons > a.new').required()
-		.click(function() { itemNew($(this).closest('.item_for_node'), 'text'); return false; });
+		.click(function() { itemNew($(this).closest('.node'), 'text'); return false; });
 });
 
 
@@ -215,7 +215,7 @@ function itemNewCancel(buttonOrNode) {
 		return;
 	
 	
-	var node = buttonOrNode.closest('.item_for_node').required();
+	var node = buttonOrNode.closest('.node').required();
 	var newBody = node.children('.new.body').required();
 	var form = newBody.children('form.new_node').required();
 	
@@ -245,7 +245,7 @@ function itemNewCancel(buttonOrNode) {
 				})
 			},
 			complete: function() {
-				newBody.closest('li.item_for_node').required().remove();
+				newBody.closest('li.node').required().remove();
 				
 				ClutterApp.fsm.finishAction('itemNew', 'cancel');
 			}
@@ -281,7 +281,7 @@ function itemCreate(newNode, another) {
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
 	var newBody = form.closest('.new.body').required();
-	var newItem = newBody.closest('li.item_for_node').required();
+	var newItem = newBody.closest('li.node').required();
 	
 	newBody.showProgressOverlay();
 	
@@ -298,7 +298,7 @@ function itemCreate(newNode, another) {
 	function handleSuccess(responseData) {
 		newItem.after(responseData);
 		
-		var createdItem = newItem.next('li.item_for_node').required();
+		var createdItem = newItem.next('li.node').required();
 		createdItem.hide();
 		createdItem.applyReparentDroppability();
 		
@@ -333,7 +333,7 @@ function itemCreate(newNode, another) {
 					
 					
 					if (another) {
-						var parentItem = createdItem.parent().closest('.item_for_node');
+						var parentItem = createdItem.parent().closest('.node');
 						itemNew(parentItem, 'text', createdItem, true);
 					}
 				}
@@ -362,11 +362,11 @@ function itemCreate(newNode, another) {
 
 $(function() {
 	$('form.new_node').live('submit', function() {
-		itemCreate($(this).closest('.item_for_node')); return false;
+		itemCreate($(this).closest('.node')); return false;
 	});
 	
 	$('form.new_node input.another').live('click', function() {
-		itemCreate($(this).closest('.item_for_node'), true); return false;
+		itemCreate($(this).closest('.node'), true); return false;
 	});
 	
 	$().keydown(function(e) {
@@ -408,7 +408,7 @@ function itemEdit(link) {
 		
 		showBody.before(responseData);
 		
-		var editNode = showBody.closest('li.item_for_node').required();
+		var editNode = showBody.closest('li.node').required();
 		var editBody = showBody.siblings('.edit.body').required();
 		
 		var startScaleX = 0.95; var endScaleX = 1.0;
@@ -458,7 +458,7 @@ function itemEdit(link) {
 }
 
 $(function() {
-	$('li.item_for_node > .show.body > .cont').live('dblclick', function() {
+	$('li.node > .show.body > .cont').live('dblclick', function() {
 		itemEdit(this); return false;
 	});
 	$('#action-bar > .buttons > a.edit').click(function() {
@@ -472,7 +472,7 @@ function itemEditCancel(buttonOrNode) {
 	if (!ClutterApp.fsm.changeState('itemEdit', 'cancel'))
 		return;
 	
-	var node = buttonOrNode.closest('.item_for_node').required();
+	var node = buttonOrNode.closest('.node').required();
 	var editBody = node.children('.edit.body').required();
 	var form = editBody.children('form.edit_node').required();
 	
@@ -553,7 +553,7 @@ function itemUpdate(form, another) {
 	function handleSuccess(responseData) {
 		showBody.replaceWith(responseData);
 		// showBody ref no longer valid from this point on
-		editBody.closest('li.item_for_node').required().applyReparentDroppability();
+		editBody.closest('li.node').required().applyReparentDroppability();
 		
 		
 		var startScaleX = 0.95; var endScaleX = 1.0;
@@ -587,8 +587,8 @@ function itemUpdate(form, another) {
 					
 					
 					if (another) {
-						var updatedNode = showBody.closest('.item_for_node');
-						var parentNode = updatedNode.parent().closest('.item_for_node');
+						var updatedNode = showBody.closest('.node');
+						var parentNode = updatedNode.parent().closest('.node');
 						itemNew(parentNode, 'text', updatedNode, true);
 					}
 				}
@@ -705,7 +705,7 @@ $(function() {
 	
 	actionButtons.find('a.delete').click(function() {
 		if (confirm("Are you sure?\n\nThis will delete this item and all of its sub-items."))
-			itemDelete($(this).closest('li.item_for_node'));
+			itemDelete($(this).closest('li.node'));
 		
 		return false;
 	});
@@ -800,7 +800,7 @@ jQuery.fn.setupReorderSortable = function() {
 		ClutterApp.fill.show(list);
 		list.addClass('active');
 		
-		var origPrevSibling = ui.item.prev('li.item_for_node');
+		var origPrevSibling = ui.item.prev('li.node');
 		origPrevSiblingID = origPrevSibling[0] ? nodeIDOfItem(origPrevSibling) : '';
 		
 		var placeholder = ui.placeholder.required();
@@ -816,7 +816,7 @@ jQuery.fn.setupReorderSortable = function() {
 		list.removeAttr('style'); // clear out unnecessary styles
 		
 		// @todo: optimize so this isn't being done twice
-		var prevSibling = ui.item.prev('li.item_for_node');
+		var prevSibling = ui.item.prev('li.node');
 		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
 		
 		// only if the prevSibling has changed
@@ -844,7 +844,7 @@ function itemReorder(node) {
 	
 	list.showProgressOverlay();
 	
-	var prevSibling = node.prev('li.item_for_node');
+	var prevSibling = node.prev('li.node');
 	var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
 	
 	$.ajax({
@@ -921,7 +921,7 @@ $(function() {
 });
 
 jQuery.fn.applyReparentDroppability = function() {
-	$(this).search('li.item_for_node > .show.body, section.pile.item_for_node > .body').activateReparentDroppable();
+	$(this).search('li.node > .show.body, section.pile.node > .body').activateReparentDroppable();
 	return this;
 }
 
@@ -944,7 +944,7 @@ jQuery.fn.deactivateReparentDroppable = function() {
 
 jQuery.fn.setupReparentDroppable = function() {
 	this.droppable({
-		accept: 'li.item_for_node',
+		accept: 'li.node',
 		hoverClass: 'active',
 		scope: 'item-reparent',
 		tolerance: 'pointer',
@@ -977,7 +977,7 @@ function itemReparent(node, parentNode) {
 	}
 	
 	node.required();
-	parentNode = $(parentNode).closest('.item_for_node').required();
+	parentNode = $(parentNode).closest('.node').required();
 	
 	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
 	node.children('.body').addClass('active');
@@ -1059,7 +1059,7 @@ function itemReparent(node, parentNode) {
 		
 		var list = parentNode.children('ul.node.list').required();
 		
-		$('li.item_for_node', list).draggable('destroy');
+		$('li.node', list).draggable('destroy');
 		$('.show.body', list).droppable('destroy');
 		
 		listCrossStart();
@@ -1147,7 +1147,7 @@ function itemReparent(node, parentNode) {
 
 
 function badgeAdd(link, addType) {
-	var node = $(link).closest('li.item_for_node').required();
+	var node = $(link).closest('li.node').required();
 	
 	var state;
 	if (node.children('.new')[0]) {
@@ -1168,7 +1168,7 @@ function badgeAdd(link, addType) {
 	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('.item_for_node').required();
+	var parentNode = node.parent().closest('.node').required();
 	
 	$.ajax({
 		type: 'get',
@@ -1188,7 +1188,7 @@ function badgeAdd(link, addType) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('li.new.item_for_node').find('.new.body').required();
+			var newBody = list.children('li.new.node').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
@@ -1243,7 +1243,7 @@ function badgeRemove(link) {
 	var deleteField = $(link).siblings('input[type=hidden]').required();
 	deleteField.val(1);
 	
-	var node = $(link).closest('li.item_for_node').required();
+	var node = $(link).closest('li.node').required();
 	
 	var state;
 	if (node.children('.new')[0]) {
@@ -1264,7 +1264,7 @@ function badgeRemove(link) {
 	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('li.item_for_node').required();
+	var parentNode = node.parent().closest('li.node').required();
 	
 	$.ajax({
 		type: 'get',
@@ -1284,7 +1284,7 @@ function badgeRemove(link) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('li.new.item_for_node').find('.new.body').required();
+			var newBody = list.children('li.new.node').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
