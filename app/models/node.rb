@@ -1,5 +1,5 @@
 class Node < ActiveRecord::Base
-  abstract_class = true
+  self.abstract_class = true
   
   acts_as_nested_set :scope => :pile, :dependent => :destroy
   
