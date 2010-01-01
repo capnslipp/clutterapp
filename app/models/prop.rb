@@ -5,11 +5,13 @@ class Prop < ActiveRecord::Base
   self.abstract_class = true
   
   
-  def self::derive_variant(variant)
-    unless variant.instance_of?(Class)
-      variant = variant.to_s.underscore.classify
-      variant << 'Prop' unless variant =~ /Prop$/
-      variant = variant.constantize
+  def self::derive_variant(type_or_name)
+    if type_or_name.instance_of? Class
+      variant = type_or_name
+    else
+      type_or_name = type_or_name.to_s.underscore.classify
+      type_or_name << 'Prop' unless type_or_name =~ /Prop$/
+      variant = type_or_name.constantize
     end
     raise %{variant "#{variant}" must be a subclass of Prop (not "Prop" itself; empty string passed in?)} unless variant.superclass == Prop
     variant
