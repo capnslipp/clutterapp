@@ -1024,7 +1024,7 @@ function itemReparent(node, parentNode) {
 		}).animate(
 			{opacity: 0.0},
 			{
-				duration: kQuickTransitionDuration,
+				duration: kDefaultTransitionDuration,
 				easing: 'easeInQuad',
 				step: function(opacity) {
 					var ratio = opacity / origNodeOpacity;
@@ -1085,6 +1085,7 @@ function itemReparent(node, parentNode) {
 			list.setCSS({
 				position: 'absolute',
 				width: '100%',
+				bottom: 0,
 			});
 			
 			
@@ -1122,6 +1123,7 @@ function itemReparent(node, parentNode) {
 				position: '',
 				width: '',
 				opacity: '',
+				bottom: '',
 			});
 			
 			
