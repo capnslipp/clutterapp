@@ -10,16 +10,21 @@ describe NodesController do
     controller.stub!(:have_pile).and_return(true)
   end
   
+  # for some reason, this works when called as a method, but not in the before(:each)
+  def mock_node
+    @mock_node ||= active_pile.root_node.children.create!(Factory.attributes_for :node, :prop => (Factory.build :text_prop))
+  end
+  
   
   
   describe "GET new" do
     it "works" do
       # mock and stub necessary input
       active_pile_nodes = mock(Object)
-      active_pile_nodes.stub(:find).with('26').and_return(
-        node = active_pile.root_node.children.create!(Factory.attributes_for :node, :prop => (Factory.build :text_prop))
-      )
-      controller.active_pile.stub(:nodes).and_return active_pile_nodes
+      active_pile_nodes.stub(:find).with('26').and_return(mock_node)
+      
+      controller.should_receive(:active_pile).and_return(active_pile)
+      active_pile.should_receive(:nodes).and_return(active_pile_nodes)
       
       model_counts = {
         Pile => Pile.count,
@@ -46,10 +51,10 @@ describe NodesController do
     it "works with added Prop" do
       # mock and stub necessary input
       active_pile_nodes = mock(Object)
-      active_pile_nodes.stub(:find).with('26').and_return(
-        node = active_pile.root_node.children.create!(Factory.attributes_for :node, :prop => (Factory.build :text_prop))
-      )
-      controller.active_pile.stub(:nodes).and_return active_pile_nodes
+      active_pile_nodes.stub(:find).with('26').and_return(mock_node)
+      
+      controller.should_receive(:active_pile).and_return(active_pile)
+      active_pile.should_receive(:nodes).and_return(active_pile_nodes)
       
       model_counts = {
         Pile => Pile.count,
@@ -87,10 +92,10 @@ describe NodesController do
     it "works" do
       # mock and stub necessary input
       active_pile_nodes = mock(Object)
-      active_pile_nodes.stub(:find).with('26').and_return(
-        node = active_pile.root_node.children.create!(Factory.attributes_for :node, :prop => (Factory.build :text_prop))
-      )
-      controller.active_pile.stub(:nodes).and_return active_pile_nodes
+      active_pile_nodes.should_receive(:find).with('26').and_return(mock_node)
+      
+      controller.should_receive(:active_pile).and_return(active_pile)
+      active_pile.should_receive(:nodes).and_return(active_pile_nodes)
       
       model_counts = {
         Pile => Pile.count,
@@ -117,10 +122,10 @@ describe NodesController do
     it "works with added Prop" do
       # mock and stub necessary input
       active_pile_nodes = mock(Object)
-      active_pile_nodes.stub(:find).with('26').and_return(
-        node = active_pile.root_node.children.create!(Factory.attributes_for :node, :prop => (Factory.build :text_prop))
-      )
-      controller.active_pile.stub(:nodes).and_return active_pile_nodes
+      active_pile_nodes.should_receive(:find).with('26').and_return(mock_node)
+      
+      controller.should_receive(:active_pile).and_return(active_pile)
+      active_pile.should_receive(:nodes).and_return(active_pile_nodes)
       
       model_counts = {
         Pile => Pile.count,
@@ -221,17 +226,42 @@ describe NodesController do
   end
   
   describe "DELETE destroy" do
-    it "destroys the requested node" #do
-    #  Node.should_receive(:find).with("26").and_return(mock_node)
-    #  mock_node.should_receive(:destroy)
-    #  delete :destroy, :id => "26"
-    #end
-    
-    it "redirects to the nodes list" #do
-    #  Node.stub!(:find).and_return(mock_node(:destroy => true))
-    #  delete :destroy, :id => "1"
-    #  response.should redirect_to(nodes_url)
-    #end
+    it "works" do
+      model_counts = {
+        Pile => Pile.count,
+        Node => Node.count,
+        TextProp => TextProp.count
+      }
+      puts model_counts.to_s
+      
+      # mock and stub necessary input
+      active_pile_nodes = mock(Object)
+      active_pile_nodes.should_receive(:find).with('26').and_return(mock_node)
+      
+      controller.should_receive(:active_pile).and_return(active_pile)
+      active_pile.should_receive(:nodes).and_return(active_pile_nodes)
+      mock_node.should_receive(:destroy)
+      
+      model_counts = {
+        Pile => Pile.count,
+        Node => Node.count,
+        TextProp => TextProp.count
+      }
+      puts model_counts.to_s
+      
+      # make the request
+      xhr :delete, :destroy,
+        :id => '26',
+        :pile_id => '1',
+        :user_id => 'test-user'
+      
+      # check the response
+      puts model_counts.to_s
+      response.should be_success
+      Pile.count.should == model_counts[Pile]
+      Node.count.should == model_counts[Node] - 1
+      TextProp.count.should == model_counts[TextProp] - 1
+    end
   end
   
 end
