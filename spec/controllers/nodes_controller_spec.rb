@@ -232,9 +232,10 @@ describe NodesController do
         Node => Node.count,
         TextProp => TextProp.count
       }
-      puts model_counts.to_s
+      print_counts_hash model_counts
       
       # mock and stub necessary input
+      mock_node() # do first to generate the nodes necessary to get an accurate count
       active_pile_nodes = mock(Object)
       active_pile_nodes.should_receive(:find).with('26').and_return(mock_node)
       
@@ -247,7 +248,9 @@ describe NodesController do
         Node => Node.count,
         TextProp => TextProp.count
       }
-      puts model_counts.to_s
+      print_counts_hash model_counts
+      print_user_tree(1)
+      puts Node.all.inspect.to_yaml
       
       # make the request
       xhr :delete, :destroy,
@@ -256,11 +259,67 @@ describe NodesController do
         :user_id => 'test-user'
       
       # check the response
-      puts model_counts.to_s
       response.should be_success
       Pile.count.should == model_counts[Pile]
       Node.count.should == model_counts[Node] - 1
       TextProp.count.should == model_counts[TextProp] - 1
+      
+      model_counts = {
+        Pile => Pile.count,
+        Node => Node.count,
+        TextProp => TextProp.count
+      }
+      print_counts_hash model_counts
+    end
+  end
+  
+  
+protected
+  
+  def print_counts_hash(h)
+    out = []
+    h.each do |t, c|
+      out << "#{t.name} => #{c}"
+    end
+    out = out.join(', ')
+    puts "{#{out}}"
+  end
+  
+  def print_user_tree(indent_depth = 0)
+    indent = '  ' * indent_depth
+    
+    User.all.each do |u|
+      puts indent + "/ #{u.name} <#{u.id}>"
+      print_pile_tree(u, indent_depth + 1)
+    end
+  end
+  
+  def print_pile_tree(for_user, indent_depth = 0)
+    indent = '  ' * indent_depth
+    
+    for_user.piles.each do |p|
+      puts indent + "# #{p.name} <#{p.id}>"
+      print_node_tree(p, indent_depth + 1)
+    end
+  end
+  
+  def print_node_tree(for_pile_or_node, indent_depth = 0)
+    indent = '  ' * indent_depth
+    
+    if for_pile_or_node.kind_of? Pile
+      children = [ for_pile_or_node.root_node ]
+    else
+      children = for_pile_or_node.children
+    end
+    
+    children.each do |n|
+      if n.instance_of? BaseNode
+        puts indent + "* BaseNode <#{n.id}> (#{n.children.count} children)"
+      else
+        puts indent + "* Node #{n.variant_name} <#{n.id}> (#{n.children.count} children)"
+      end
+      
+      print_node_tree(n, indent_depth + 1)
     end
   end
   

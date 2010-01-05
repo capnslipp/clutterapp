@@ -42,6 +42,10 @@ Factory.define :pile do |f|
 end
 
 
+Factory.define :base_node do |f|
+  f.association :pile
+end
+
 Factory.define :node do |f|
   f.association :pile
   f.association :prop, :factory => :text_prop
