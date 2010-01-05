@@ -5,7 +5,6 @@ require File.expand_path(File.join(File.dirname(__FILE__),'..','config','environ
 
 require 'spec/autorun'
 require 'spec/rails'
-require File.dirname(__FILE__) + "/factories"
 require 'authlogic/test_case'
 
 # Uncomment the next line to use webrat's matchers
@@ -62,7 +61,7 @@ Spec::Runner.configure do |config|
   # AuthLogic Mocks/Stubs
   
   def current_user(overrides = {})
-    @current_user ||= Factory.build(:user, overrides)
+    @current_user ||= User.find(:first) || User.create!(overrides)
   end
   
   def current_user_session(stubs = {}, user_overrides = {})
@@ -95,7 +94,7 @@ Spec::Runner.configure do |config|
   end
   
   def active_pile(overrides = {})
-    @active_pile ||= Factory.build(:pile, overrides)
+    @active_pile ||= current_user.piles.first || current_user.piles.create!(overrides)
   end
   
   def have_pile

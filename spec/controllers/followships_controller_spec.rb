@@ -3,7 +3,7 @@ require 'spec_helper'
 describe FollowshipsController do
   before(:each) do
     activate_authlogic
-    @followship = Factory.create(:followship)
+    #@followship = Factory.create(:followship)
   end
   #Delete these examples and add some real ones
   # it "should use FollowshipsController" do
