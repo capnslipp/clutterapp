@@ -33,7 +33,7 @@ module StylesheetsHelper
     inverted? ? ACCENT_COLOR.invert : ACCENT_COLOR
   end
   
-  WASH_COLOR = Color.new(0x4444444)
+  WASH_COLOR = Color.new(0x444444)
   def wash_color
     inverted? ? WASH_COLOR.invert : WASH_COLOR
   end
