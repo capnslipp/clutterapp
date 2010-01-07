@@ -5,8 +5,6 @@ require 'users_controller'
 class UsersController; def rescue_action(e) raise e end; end
 
 class UsersControllerTest < ActionController::TestCase
-  #fixtures :users # using factory_girl now
-  
   def test_should_allow_signup
     assert_difference 'User.count' do
       create_user

@@ -1,9 +1,6 @@
 require 'test_helper'
 
 class PilesControllerTest < ActionController::TestCase
-  #fixtures :users # using factory_girl now
-  
-  
   #test "should get index" do
   #  bypass_authentication
   #  
