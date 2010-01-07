@@ -4,7 +4,9 @@ require 'users_controller'
 # Re-raise errors caught by the controller.
 class UsersController; def rescue_action(e) raise e end; end
 
+
 class UsersControllerTest < ActionController::TestCase
+  
   def test_should_allow_signup
     assert_difference 'User.count' do
       create_user
@@ -43,7 +45,6 @@ class UsersControllerTest < ActionController::TestCase
       assert_response :success
     end
   end
-  
   
   
 protected
