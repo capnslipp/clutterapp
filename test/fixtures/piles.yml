@@ -1,9 +1,0 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-todo_pile:
-  owner: joe_user
-  name: To Do
-
-todone_pile:
-  owner: sue_user
-  name: To DONE
