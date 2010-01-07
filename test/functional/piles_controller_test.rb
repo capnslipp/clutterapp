@@ -4,7 +4,7 @@ class PilesControllerTest < ActionController::TestCase
   #test "should get index" do
   #  bypass_authentication
   #  
-  #  get :index, :user_id => users(:one)
+  #  get :index, :user_id => @joe_user
   #  assert_response :success
   #  assert_not_nil assigns(:piles)
   #end
@@ -13,7 +13,7 @@ class PilesControllerTest < ActionController::TestCase
   test "should get new" do
     bypass_authentication
     
-    get :new, :user_id => users(:one)
+    get :new, :user_id => @joe_user
     assert_response :success
   end
   
@@ -22,7 +22,7 @@ class PilesControllerTest < ActionController::TestCase
     bypass_authentication
     
     assert_difference 'Pile.count', +1 do
-      post :create, :pile => {:name => 'Test Pile PCT 1'}, :user_id => users(:one)
+      post :create, :pile => {:name => 'Test Pile PCT 1'}, :user_id => @joe_user
     end
     
     #assert_redirected_to user_piles_path(assigns(:pile)) # I don't know and don't care where this redirects at this point.
@@ -32,7 +32,7 @@ class PilesControllerTest < ActionController::TestCase
   test "should show pile" do
     bypass_authentication
     
-    get :show, :id => piles(:one).to_param, :user_id => users(:one)
+    get :show, :id => @joe_user.piles.first.to_param, :user_id => @joe_user
     #assert_redirected_to user_piles_path(assigns(:pile)) # I don't know and don't care where this redirects at this point.
   end
   
@@ -40,7 +40,7 @@ class PilesControllerTest < ActionController::TestCase
   test "should get edit" do
     bypass_authentication
     
-    get :edit, :id => piles(:one).to_param, :user_id => users(:one)
+    get :edit, :id => @joe_user.piles.first.to_param, :user_id => @joe_user
     assert_response :success
   end
   
@@ -48,7 +48,7 @@ class PilesControllerTest < ActionController::TestCase
   test "should update pile" do
     bypass_authentication
     
-    put :update, :id => piles(:one).to_param, :pile => { }, :user_id => users(:one)
+    put :update, :id => @joe_user.piles.first.to_param, :pile => { }, :user_id => @joe_user
     #assert_redirected_to user_piles_path(assigns(:pile)) # I don't know and don't care where this redirects at this point.
   end
   
@@ -57,7 +57,7 @@ class PilesControllerTest < ActionController::TestCase
     bypass_authentication
     
     assert_difference('Pile.count', -1) do
-      delete :destroy, :id => piles(:one).to_param, :user_id => users(:one)
+      delete :destroy, :id => @joe_user.piles.first.to_param, :user_id => @joe_user
     end
     
     assert_redirected_to user_piles_path
@@ -67,7 +67,7 @@ class PilesControllerTest < ActionController::TestCase
 protected
   
   def bypass_authentication
-    PilesController.any_instance.stub(:logged_in? => true, :current_user => users(:one))
+    PilesController.any_instance.stubs(:logged_in? => true, :current_user => @joe_user)
   end
   
 end

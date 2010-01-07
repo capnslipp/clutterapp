@@ -6,7 +6,7 @@ class NodesControllerTest < ActionController::TestCase
   #test "should get index" do
   #  bypass_authentication
   #  
-  #  get :index, :user_id => users(:one).to_param
+  #  get :index, :user_id => @joe_user.to_param
   #  assert_response :success
   #  assert_not_nil assigns(:root_node)
   #end
@@ -21,11 +21,11 @@ class NodesControllerTest < ActionController::TestCase
     bypass_authentication
     
     # make sure our fixture user has a defpile and a root_node
-    test_pile = users(:one).default_pile
+    test_pile = @joe_user.default_pile
     test_root_node = test_pile.root_node
     
     assert_difference 'Node.count', +1 do
-      post :create, :user_id => users(:one), :pile_id => test_pile.to_param, :parent_id => test_root_node.to_param, :type => 'text'
+      post :create, :user_id => @joe_user, :pile_id => test_pile.to_param, :parent_id => test_root_node.to_param, :type => 'text'
     end
   end
   
@@ -51,11 +51,11 @@ class NodesControllerTest < ActionController::TestCase
     bypass_authentication
     
     test_should_create_node()
-    test_pile = users(:one).default_pile
+    test_pile = @joe_user.default_pile
     test_root_node = test_pile.root_node
     
     assert_difference 'Node.count', -1 do
-      delete :destroy, :user_id => users(:one), :pile_id => test_pile.to_param, :id => test_root_node.children.last.to_param
+      delete :destroy, :user_id => @joe_user, :pile_id => test_pile.to_param, :id => test_root_node.children.last.to_param
     end
   end
   
@@ -63,7 +63,7 @@ class NodesControllerTest < ActionController::TestCase
 protected
   
   def bypass_authentication
-    NodesController.any_instance.stub(:logged_in? => true, :current_user => User.first)
+    NodesController.any_instance.stubs(:logged_in? => true, :current_user => User.first)
   end
   
 end
