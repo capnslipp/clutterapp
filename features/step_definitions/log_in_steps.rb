@@ -8,6 +8,14 @@ Given /^I am "([^\"]*)"$/ do |name|
   assert_not_nil @user
 end
 
+Given /^I am (?:logged out|not logged in)$/ do
+  assert_nil controller.send(:current_user?)
+end
+
+Given /^I am logged in$/ do
+  When %<I log in>
+  assert controller.send(:current_user?)
+end
 
 
 
@@ -22,6 +30,12 @@ When /^I log in$/ do
   submit_form 'new_user_session'
 end
 
+When /^I log out$/ do
+  visit login_url
+  fill_in 'user_session[login]', :with => @user.attributes['login'] # @user.login, if it worked
+  fill_in 'user_session[password]', :with => 'secret' # @user.password, if it were possible
+  submit_form 'new_user_session'
+end
 
 
 
@@ -33,11 +47,9 @@ Then /^I should(?: still)? be logged in$/ do
   assert controller.send(:current_user?)
 end
 
-
 Then /^I should not be logged in$/ do
   assert !controller.send(:current_user?)
 end
-
 
 Then /^I should see "([^\"]*)" with "([^\"]*)"$/ do |thing, with|
   regexp = seeing_regexp(thing, with)
