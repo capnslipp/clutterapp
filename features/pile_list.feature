@@ -7,6 +7,10 @@ Feature: Pile List
 		Given I am "a_user"
 		Given I am logged in
 		When I go to my dashboard page
-			Then I should see "my piles"
+			Then I should see the following Piles
+				| name          | path |
+				| a_user's Pile |      |
+				| A Pile        |      |
+				| A Better Pile |      |
 		When I click each of "my piles"
 			Then I should go to "that pile"
