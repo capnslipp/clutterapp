@@ -1,14 +1,18 @@
 class PilesDataset < Dataset::Base
-  dataset :user
+  uses :users
   
   def load
     name_model users(:a_user).default_pile,       :a_user_default_pile
     name_model users(:another_user).default_pile, :another_user_default_pile
     
     create_pile :a_pile, {
+      :name => 'A Pile',
+      :owner => users(:a_user)
     }
     
     create_pile :another_pile, {
+      :name => 'Another Pile',
+      :owner => users(:another_user)
     }
   end
   
