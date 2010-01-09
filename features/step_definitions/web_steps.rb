@@ -148,7 +148,8 @@ Then /^(?:|I )should see "([^\"]*)"$/ do |text|
 end
 
 Then /^(?:|I )should see "([^\"]*)" within "([^\"]*)"$/ do |text, selector|
-  within(selector) do |content|
+  within(selector) do
+    content = current_dom.to_xhtml
     if defined?(Spec::Rails::Matchers)
       content.should contain(text)
     else
@@ -167,7 +168,8 @@ Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
 end
 
 Then /^(?:|I )should see \/([^\/]*)\/ within "([^\"]*)"$/ do |regexp, selector|
-  within(selector) do |content|
+  within(selector) do
+    content = current_dom.to_xhtml
     regexp = Regexp.new(regexp)
     if defined?(Spec::Rails::Matchers)
       content.should contain(regexp)
@@ -186,7 +188,8 @@ Then /^(?:|I )should not see "([^\"]*)"$/ do |text|
 end
 
 Then /^(?:|I )should not see "([^\"]*)" within "([^\"]*)"$/ do |text, selector|
-  within(selector) do |content|
+  within(selector) do
+    content = current_dom.to_xhtml
     if defined?(Spec::Rails::Matchers)
         content.should_not contain(text)
     else
@@ -205,7 +208,8 @@ Then /^(?:|I )should not see \/([^\/]*)\/$/ do |regexp|
 end
 
 Then /^(?:|I )should not see \/([^\/]*)\/ within "([^\"]*)"$/ do |regexp, selector|
-  within(selector) do |content|
+  within(selector) do
+    content = current_dom.to_xhtml
     regexp = Regexp.new(regexp)
     if defined?(Spec::Rails::Matchers)
       content.should_not contain(regexp)
