@@ -9,6 +9,10 @@ class PilesDataset < Dataset::Base
       :name => 'A Pile',
       :owner => users(:a_user)
     }
+    create_pile :a_better_pile, {
+      :name => 'A Better Pile',
+      :owner => users(:a_user)
+    }
     
     create_pile :another_pile, {
       :name => 'Another Pile',
