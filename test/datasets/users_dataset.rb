@@ -1,32 +1,28 @@
 class UsersDataset < Dataset::Base
   
   def load
-    create_user :bob, {
-      :login => 'bobbob',
-      :email => 'bob@example.com',
-      :password => '4W3S0M3',
-      :password_confirmation => '4W3S0M3'
+    create_user :a_user, {
+      :login => 'a_user',
+      :email => 'a_user@example.com',
+      :password => 'secret',
+      :password_confirmation => 'secret'
     }
     
-    create_user :sal, {
-      :login => 'salsal',
-      :email => 'sal@example.com',
-      :password => '4W3S0M3r',
-      :password_confirmation => '4W3S0M3r'
+    create_user :another_user, {
+      :login => 'another_user',
+      :email => 'another_user@example.com',
+      :password => 'secret',
+      :password_confirmation => 'secret'
     }
   end
   
   helpers do
+    
     def create_user(dataset_name, attributes)
-      dataset_name = dataset_name.to_sym
-      
       u = User.create! attributes
       name_model u, dataset_name
     end
     
-    def login_as(user)
-      @request.session[:user_id] = user.id
-    end
   end
   
 end
