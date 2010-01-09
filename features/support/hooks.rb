@@ -8,3 +8,6 @@ Cucumber::Rails::World.class_eval do
   
   dataset :users, :piles
 end
+
+
+include ApplicationHelper

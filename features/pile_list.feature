@@ -3,14 +3,17 @@ Feature: Pile List
 	As a user
 	I want to be able to see and click Piles (that I'm authorized for)
 	
-	Scenario: User accesses dashboard
+	Scenario Outline: User accesses dashboard
 		Given I am "a_user"
 		Given I am logged in
 		When I go to my dashboard page
-			Then I should see the following Piles
-				| name          | path |
-				| a_user's Pile |      |
-				| A Pile        |      |
-				| A Better Pile |      |
-		When I click each of "my piles"
-			Then I should go to "that pile"
+			Then I should see "<pile_name>"
+		When I follow "<pile_name>"
+			Then I should be on the Pile "<pile_name>" page
+			Then I should be see the "<pile_name>" header
+		
+		Examples:
+			| pile_name     |
+			| a_user's Pile |
+			| A Pile        |
+			| A Better Pile |

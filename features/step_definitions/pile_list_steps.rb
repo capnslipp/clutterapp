@@ -16,7 +16,10 @@
 
 Then /^I should see the following Piles$/ do |table|
   table.hashes do |hash|
-    Then %<I should see "#{hash[:name]}">
-    Then %<I should see "#{hash[:path]}">
+    Then %<I should see "#{hash[:pile_name]}">
   end
+end
+
+Then /^I should be see the "([^"]*)" header$/ do |arg1|
+  Then %<I should see "#{hash[:pile_name]}" within "#item-area">
 end
