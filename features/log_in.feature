@@ -6,7 +6,5 @@ Feature: Log In
 	Scenario: User logs in successfully
 		Given I am "a_user"
 		When I log in
-		Then I should be signed in
-			And I should see "the signed-in status" with "my username"
-		When I return next time
-			Then I should still be signed in
+			Then I should see "my signed-in status" with "my username"
+			And I should be logged in
