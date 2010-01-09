@@ -26,5 +26,8 @@ config.action_controller.allow_forgery_protection    = false
 config.action_mailer.delivery_method = :test
 
 
+ENV['AUTOFEATURE'] = 'true'
+
+
 config.gem 'rspec',           :lib => false, :version => '>= 1.2.9'
 config.gem 'rspec-rails',     :lib => false, :version => '>= 1.2.9'
