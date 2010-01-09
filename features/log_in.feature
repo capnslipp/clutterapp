@@ -7,4 +7,4 @@ Feature: Log In
 		Given I am "a_user"
 		When I log in
 			Then I should see "my signed-in status" with "my username"
-			And I should be logged in
+			Then I should be logged in

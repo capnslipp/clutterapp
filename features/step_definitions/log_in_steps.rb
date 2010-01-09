@@ -1,8 +1,19 @@
 
+=begin
+“Given” defs
+=end
+
 Given /^I am "([^\"]*)"$/ do |name|
-  assert_not_nil @user = User.find_by_login(name) || User.find_by_name(name)
+  @user = User.find_by_login(name) || User.find_by_name(name)
+  assert_not_nil @user
 end
 
+
+
+
+=begin
+“When” defs
+=end
 
 When /^I log in$/ do
   visit login_url
@@ -11,6 +22,12 @@ When /^I log in$/ do
   submit_form 'new_user_session'
 end
 
+
+
+
+=begin
+“Then” defs
+=end
 
 Then /^I should(?: still)? be logged in$/ do
   assert controller.send(:current_user?)
@@ -29,14 +46,4 @@ Then /^I should see "([^\"]*)" with "([^\"]*)"$/ do |thing, with|
   else
     assert_contain regexp
   end
-end
-
-
-When /^I return next time$/ do
-  pending # express the regexp above with the code you wish you had
-end
-
-
-Then /^I should still be signed in$/ do
-  pending # express the regexp above with the code you wish you had
 end
