@@ -4,7 +4,7 @@ class PriorityProp < Prop
   validates_presence_of :node, :on => :update # less stringent when the Prop is new in order to prevent circular dependencies
   
   validates_presence_of :priority
-  validate :in_range
+  validate :priority_in_range
   prop_value_field :priority
   
   
@@ -22,7 +22,7 @@ class PriorityProp < Prop
   
 protected
   
-  def in_range
+  def priority_in_range
     errors.add(:priority, "was {{value}}; must be in the range of 1 to 5") unless (1..5).include? priority
   end
   
