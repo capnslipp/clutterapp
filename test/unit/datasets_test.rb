@@ -11,6 +11,7 @@ class DatasetsTest < ActiveSupport::TestCase
       assert_proper_pile piles(:a_users_default_pile)
       assert_proper_pile piles(:a_pile) do
         assert_proper_node nodes(:a_piles_root_node) do
+          assert_proper_node nodes(:a_plain_text_node)
           assert_proper_node nodes(:a_todo_node) do
             assert_proper_node nodes(:a_sub_todo_node) do
               assert_proper_node nodes(:a_sub_sub_todo_node)
@@ -24,7 +25,9 @@ class DatasetsTest < ActiveSupport::TestCase
           assert_proper_node nodes(:a_prioritzed_tagged_dated_noted_todo_node)
         end # a_piles_root_node
       end # a_pile
-      assert_proper_pile piles(:a_better_pile)
+      assert_proper_pile piles(:a_better_pile) do
+        assert_proper_node nodes(:a_better_piles_root_node)
+      end
     end # a_user
     
     assert_proper_user users(:another_user) do

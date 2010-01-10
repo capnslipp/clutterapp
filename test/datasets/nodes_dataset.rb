@@ -5,6 +5,11 @@ class NodesDataset < Dataset::Base
     name_node :a_piles_root_node,
       :for => piles(:a_pile).root_node
     
+    create_node :a_plain_text_node, :with => {
+      :parent => nodes(:a_piles_root_node),
+      :prop => TextProp.new(:value => 'something to say…')
+    }
+    
     create_node :a_todo_node, :with => {
       :parent => nodes(:a_piles_root_node),
       :prop => TextProp.new(:value => 'make pie'),
@@ -106,6 +111,10 @@ EOS
         Node.new(:prop => NoteProp.new(:value => "This is really important; this means something."))
       ]
     }
+    
+    
+    name_node :a_better_piles_root_node,
+      :for => piles(:a_better_pile).root_node
     
     
     name_node :another_piles_root_node,
