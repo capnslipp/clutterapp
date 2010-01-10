@@ -7,13 +7,13 @@ Feature: Pile List
 		Given I am "a_user"
 		Given I am logged in
 		When I go to my dashboard page
-			Then I should see "<pile_name>"
-		When I follow "<pile_name>"
-			Then I should be on the Pile "<pile_name>" page
-			Then I should be see the "<pile_name>" header
+			Then I should see a [Pile:<pile>:name] link
+		When I follow the [Pile:<pile>:name] link
+			Then I should be at [Pile:<pile>:path]
+			Then I should be see the [Pile:<pile>:name] header
 		
 		Examples:
-			| pile_name     |
-			| a_user's Pile |
-			| A Pile        |
-			| A Better Pile |
+			| pile                 |
+			| a_users_default_pile |
+			| a_pile               |
+			| a_better_pile        |
