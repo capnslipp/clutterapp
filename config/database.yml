@@ -41,6 +41,3 @@ development:
 test: &TEST
   database: clutter_test
   <<: *silver-delicious-built-in
-
-cucumber:
-  <<: *TEST
