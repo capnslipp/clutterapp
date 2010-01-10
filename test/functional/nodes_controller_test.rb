@@ -2,7 +2,7 @@ require 'test_helper'
 
 class NodesControllerTest < ActionController::TestCase
   include NodesHelper
-  dataset :users
+  dataset :nodes
   
   #test "should get index" do
   #  bypass_authentication
@@ -21,13 +21,17 @@ class NodesControllerTest < ActionController::TestCase
   test "should create node" do
     bypass_authentication
     
-    # make sure our fixture user has a defpile and a root_node
-    @test_user = users(:bob)
-    @test_pile = @test_user.default_pile
-    @test_root_node = @test_pile.root_node
-    
     assert_difference 'Node.count', +1 do
-      post :create, :user_id => @test_user.to_param, :pile_id => @test_pile.to_param, :parent_id => @test_root_node.to_param, :type => 'text'
+      xhr :post, :create,
+        :user_id => users(:a_user).to_param,
+        :pile_id => piles(:a_pile).to_param,
+        :node => {
+          :parent_id => nodes(:a_piles_root_node).to_param,
+          :prop_type => 'text',
+          :prop_attributes => {:value => "a test node's text"}
+        }
+      
+      assert_response :success
     end
   end
   
@@ -52,12 +56,13 @@ class NodesControllerTest < ActionController::TestCase
   test "should destroy node" do
     bypass_authentication
     
-    @test_user = users(:bob)
-    @test_pile = @test_user.default_pile
-    @test_root_node = @test_pile.root_node
-    
     assert_difference 'Node.count', -1 do
-      delete :destroy, :user_id => @test_user.to_param, :pile_id => @test_pile.to_param, :id => @test_node.to_param
+      xhr :delete, :destroy,
+        :user_id => users(:a_user).to_param,
+        :pile_id => piles(:a_pile).to_param,
+        :id => nodes(:a_plain_text_node).to_param
+      
+      assert_response :success
     end
   end
   
@@ -65,7 +70,7 @@ class NodesControllerTest < ActionController::TestCase
 protected
   
   def bypass_authentication
-    NodesController.any_instance.stubs(:logged_in? => true, :current_user => User.first)
+    NodesController.any_instance.stubs :logged_in? => true, :current_user => users(:a_user)
   end
   
 end
