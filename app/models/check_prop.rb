@@ -3,6 +3,8 @@ class CheckProp < Prop
   
   validates_presence_of :node, :on => :update # less stringent when the Prop is new in order to prevent circular dependencies
   
+  prop_value_field :checked
+  
   
   is_badgeable
   

@@ -5,6 +5,25 @@ class Prop < ActiveRecord::Base
   self.abstract_class = true
   
   
+  def value
+    raise NotImplementedError, "must be implemented by the derived class, most easily accomplished via “prop_value_field :…”"
+  end
+  def value=(val)
+    raise NotImplementedError, "must be implemented by the derived class, most easily accomplished via “prop_value_field :…”"
+  end
+  
+  def self::prop_value_field(field_name)
+    class_eval(<<-EOS, __FILE__, __LINE__)
+      def value
+        self.#{field_name}
+      end
+      def value=(val)
+        self.#{field_name} = val
+      end
+    EOS
+  end
+  
+  
   def self::derive_variant(type_or_name)
     if type_or_name.instance_of? Class
       variant = type_or_name

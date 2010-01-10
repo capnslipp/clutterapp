@@ -5,6 +5,7 @@ class PriorityProp < Prop
   
   validates_presence_of :priority
   validate :in_range
+  prop_value_field :priority
   
   
   is_badgeable

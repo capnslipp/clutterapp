@@ -5,6 +5,7 @@ class TextProp < Prop
   
   validates_presence_of :text
   validates_length_of :text, :within => 1..255
+  prop_value_field :text
   
   
   is_stackable
