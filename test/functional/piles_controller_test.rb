@@ -34,7 +34,9 @@ class PilesControllerTest < ActionController::TestCase
           :name => 'Test Pile PCT 1'
         }
       
-      assert_success_or_redirect
+      #assert assigns(:pile).valid?
+      assert_response :redirect
+      assert_redirected_to :action => 'new'
     end
   end
   
@@ -94,6 +96,10 @@ protected
   
   def assert_success_or_redirect
     assert @response.send(:success?) || @response.send(:redirect?)
+  end
+  
+  def current_path
+    URI.parse(current_url).select(:path, :query).compact.join('?')
   end
   
 end
