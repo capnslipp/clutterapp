@@ -8,15 +8,9 @@ require 'test_helper'
 class UsersControllerTest < ActionController::TestCase
   
   def test_should_allow_signup
-    begin
-      assert_difference 'User.count', +1 do
-        create_user
-        assert_success_or_redirect
-      end
-    rescue Exception => e
-      puts e.inspect
-      puts assigns(:user).errors.full_messages.inspect
-      raise e
+    assert_difference 'User.count', +1 do
+      create_user
+      assert_success_or_redirect
     end
   end
   
