@@ -10,6 +10,9 @@ class Test::Unit::TestCase
 end
 
 
+require 'webrat'
+
+
 class ActiveSupport::TestCase
   # Transactional fixtures accelerate your tests by wrapping each test method
   # in a transaction that's rolled back on completion.  This ensures that the
@@ -43,4 +46,9 @@ class ActiveSupport::TestCase
   #fixtures :all
   
   # Add more helper methods to be used by all tests here...
+end
+
+
+Webrat.configure do |c|
+  c.mode = :rails
 end
