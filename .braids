@@ -1,22 +1,15 @@
 --- 
-vendor/plugins/awesome_nested_set: 
-  squashed: true
-  url: git://github.com/slippyd/awesome_nested_set.git
-  branch: master
-  type: git
-  revision: c7fae7938dd2677e7df7c7ed325f0975067b5ea3
-  remote: braid/vendor/plugins/awesome-nested-set
 vendor/plugins/yaml_db: 
   squashed: true
-  url: git://github.com/ludicast/yaml_db.git
   branch: master
+  url: git://github.com/ludicast/yaml_db.git
   type: git
   revision: 2b3e3546da41e88c2a339c676232480d6383ac5c
   remote: braid/vendor/plugins/yaml-db
 vendor/plugins/default_routing: 
   squashed: true
-  branch: master
   url: git://github.com/slippyd/default_routing.git
+  branch: master
   type: git
   revision: baf836a68d7bf77138b029a872d4eda8c6309c03
   remote: braid/vendor/plugins/default-routing
