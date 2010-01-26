@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe PilesController do
+  include PilesHelper
   dataset :piles
   
   
