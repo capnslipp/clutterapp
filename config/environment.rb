@@ -112,6 +112,7 @@ Rails::Initializer.run do |config|
     require 'scoped_block' # a crafty little extension to execute blocks with an object's scope
     require 'cell_dispatch_logging_extension' # adds nice colored logging to Cell::Base when a state is rendered
     require 'actioncontroller_request_parameters_hacks' # fixes ActionController::Request::parameters (AKA params) to deeply merge GET query params and POST params
+    require 'actioncontroller_integration_session_process_hacks' # ActionController::Integration::Session#process ThreadError
   end
   
 end

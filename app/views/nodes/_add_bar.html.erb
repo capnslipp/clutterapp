@@ -1,10 +1,10 @@
 <div id="add-bar" class="add bar">
 	
 	<%- # @hack: to get +note to be last
-sorted_badgeable_types = Prop.badgeable_types
-sorted_badgeable_types << sorted_badgeable_types.delete(NoteProp)
+sorted_badgeable_variants = Prop.badgeable_variants
+sorted_badgeable_variants << sorted_badgeable_variants.delete(NoteProp)
 	-%>
-	<%- Prop.badgeable_types.each do |t| -%>
+	<%- Prop.badgeable_variants.each do |t| -%>
 		<%#div class="buttons"%>
 			<%- ability_classes = Prop.abilities.select{|a| t.send("#{a}?") }.collect{|a| a.to_s }.join(' ') -%>
 			<a href="#" class="add <%= t.short_name %> <%= ability_classes %> button">

@@ -65,7 +65,7 @@ form {
 }
 
 input[type='text'], input[type='password'], textarea {
-	background: <%= (wash_color * 0.5).with(:a => 0.9).to_s(:css_rgba) %>;
+	background: <%= (wash_color * 0.5 + 0.1).to_s(:css_rgba) %>;
 	border: <%= border_width %>px solid <%= wash_color * 0.5 %>;
 	color: <%= wash_text_color %>;
 	margin: -<%= border_width %>px;
@@ -73,29 +73,47 @@ input[type='text'], input[type='password'], textarea {
 	<%= border_radius_decl %>
 }
 input[type='text']:focus, input[type='password']:focus, textarea:focus {
-	background: <%= (wash_color * 0.5).with(:a => 0.99).to_s(:css_rgba) %>;
+	background: <%= (wash_color * 0.5).to_s(:css_rgba) %>;
 	border-color: <%= focus_color %>;
 }
 
 input[type='button'], input[type='submit'] {
-	background: <%= (wash_color * 0.5).with(:a => 0.9).to_s(:css_rgba) %>;
+	background: <%= (wash_color * 0.5 + 0.1).to_s(:css_rgba) %>;
 	border: <%= border_width %>px solid <%= wash_color * 0.5 %>;
 	color: <%= wash_text_color %>;
 	<%= border_radius_decl %>
 }
 input[type='button']:active, input[type='submit']:active {
-	background: <%= (wash_color * 0.5).with(:a => 0.99).to_s(:css_rgba) %>;
+	background: <%= (wash_color * 0.5).to_s(:css_rgba) %>;
 	border-color: <%= accent_color %>;
 }
 
 
-input[type='button'].cancel {
-	background-color: <%= bg_color.with(:a => 0.9).to_s(:css_rgba) %>;
+input[type='button'].cancel, input[type='submit'].cancel {
+	background-color: <%= (bg_color + 0.1).to_s(:css_rgba) %>;
 	border-color: <%= (bg_color * 0.75) %>;
 	color: <%= text_color %>;
 }
-input[type='button'].cancel:active {
-	background: <%= bg_color.with(:a => 0.99).to_s(:css_rgba) %>;
+input[type='button'].cancel:active, input[type='submit'].cancel:active {
+	background: <%= bg_color.to_s(:css_rgba) %>;
+	border-color: <%= accent_color %>;
+}
+
+input[type='button'].done, input[type='submit'].done {
+	position: relative; z-index: 2;
+}
+
+
+input[type='button'].another, input[type='submit'].another {
+	position: relative; z-index: 1;
+	margin-left: -8px; padding-left: 8px;
+	
+	background: <%= (wash_color + 0.1).to_s(:css_rgba) %>;
+	border: <%= border_width %>px solid <%= wash_color %>;
+	color: <%= wash_text_color %>;
+}
+input[type='button'].another:active, input[type='submit'].another:active {
+	background: <%= wash_color.to_s(:css_rgba) %>;
 	border-color: <%= accent_color %>;
 }
 
@@ -131,12 +149,12 @@ a.sym, a .sym, .sym a {
 	background: repeat 0 0;
 }
 
-.item_for_node > .show.body > .overlay {
+.item > .show.body > .overlay {
 	left: -4px; right: -4px;
 	<%= border_radius_decl %>
 }
 
-.item_for_node > .overlay {
+.item > .overlay {
 	left: -4px; right: -4px;
 	<%= border_radius_decl %>
 }

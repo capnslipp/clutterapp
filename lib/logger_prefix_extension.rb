@@ -1,10 +1,10 @@
 module ActiveSupport
   class BufferedLogger
     
-    ESCAPE_CHR = 0x1b.chr
-    PREFIX_SPACE = '  '
-    SUFFIX_SPACE = '   '
-    PREFIXED_SEVERITY = DEBUG
+    ESCAPE_CHR = 0x1b.chr unless defined? ESCAPE_CHR
+    PREFIX_SPACE = '  ' unless defined? PREFIX_SPACE
+    SUFFIX_SPACE = '   ' unless defined? SUFFIX_SPACE
+    PREFIXED_SEVERITY = DEBUG unless defined? PREFIXED_SEVERITY
     
     
     def prefix(text, color = nil)

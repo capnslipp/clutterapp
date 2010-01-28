@@ -2,11 +2,12 @@ require 'spec_helper'
 
 describe "/piles/show.html.erb" do
   include PilesHelper
+  dataset :users
   
   
   before(:each) do
-    @user = Factory.create(:user)
-    assigns[:pile] = @pile = Factory.create(:pile, :owner => @user)
+    @user = users(:a_user)
+    assigns[:pile] = @pile = @user.default_pile
     assigns[:base_node] = @pile.root_node
   end
   

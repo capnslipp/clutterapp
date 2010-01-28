@@ -5,64 +5,92 @@ class Prop < ActiveRecord::Base
   self.abstract_class = true
   
   
-  def self::class_from_type(type)
-    unless type.instance_of?(Class)
-      type = type.to_s.underscore.classify
-      type << 'Prop' unless type =~ /Prop$/
-      type = type.constantize
+  def value
+    raise NotImplementedError, "must be implemented by the derived class, most easily accomplished via “prop_value_field :…”"
+  end
+  def value=(val)
+    raise NotImplementedError, "must be implemented by the derived class, most easily accomplished via “prop_value_field :…”"
+  end
+  
+  def self::prop_value_field(field_name)
+    class_eval(<<-EOS, __FILE__, __LINE__)
+      def value
+        self.#{field_name}
+      end
+      def value=(val)
+        self.#{field_name} = val
+      end
+    EOS
+  end
+  
+  
+  def self::derive_variant(type_or_name)
+    if type_or_name.instance_of? Class
+      variant = type_or_name
+    else
+      type_or_name = type_or_name.to_s.underscore.classify
+      type_or_name << 'Prop' unless type_or_name =~ /Prop$/
+      variant = type_or_name.constantize
     end
-    raise %{type "#{type}" must be a subclass of Prop (not "Prop" itself; empty string passed in?)} unless type.superclass == Prop
-    type
+    raise %{variant "#{variant}" must be a subclass of Prop (not "Prop" itself; empty string passed in?)} unless variant.superclass == Prop
+    variant
   end
   
   def self::short_name
     name = self.to_s
     raise NameError.new('all prop sub-classes must end in the word "Prop"', name) unless name =~ /Prop$/
     name = name[0...-('Prop'.length)]
-    name.underscore.dasherize
+    name.underscore
+  end
+  
+  def variant
+    self.class
+  end
+  def variant_name
+    self.variant.short_name
   end
   
   def <=>(other)
-    # sort in the same order as the Prop::types() array
-    Prop.types.index(self.class) <=> Prop.types.index(other.class)
+    # sort in the same order as the Prop::variants() array
+    Prop.variants.index(self.class) <=> Prop.variants.index(other.class)
   end
   
   
-  def self::types
+  def self::variants
     [TextProp, CheckProp, PriorityProp, TagProp, TimeProp, NoteProp, PileRefProp]
   end
   
-  def self::badgeable_types
-    @badgeable_types ||= types.select {|t| t.badgeable? }
+  def self::badgeable_variants
+    @badgeable_variants ||= variants.select {|t| t.badgeable? }
   end
-  def self::non_badgeable_types
-    @non_badgeable_types ||= types - badgeable_types
-  end
-  
-  def self::stackable_types
-    @stackable_types ||= types.select {|t| t.stackable? }
-  end
-  def self::non_stackable_types
-    @non_stackable_types ||= types - stackable_types
+  def self::non_badgeable_variants
+    @non_badgeable_variants ||= variants - badgeable_variants
   end
   
-  def self::nodeable_types
-    @nodeable_types ||= types.select {|t| t.nodeable? }
+  def self::stackable_variants
+    @stackable_variants ||= variants.select {|t| t.stackable? }
   end
-  def self::non_nodeable_types
-    @non_nodeable_types ||= types - nodeable_types
+  def self::non_stackable_variants
+    @non_stackable_variants ||= variants - stackable_variants
   end
   
-  def self::deepable_types
-    @deepable_types ||= types.select {|t| t.deepable? }
+  def self::nodeable_variants
+    @nodeable_variants ||= variants.select {|t| t.nodeable? }
   end
-  def self::non_deepable_types
-    @non_deepable_types ||= types - deepable_types
+  def self::non_nodeable_variants
+    @non_nodeable_variants ||= variants - nodeable_variants
+  end
+  
+  def self::deepable_variants
+    @deepable_variants ||= variants.select {|t| t.deepable? }
+  end
+  def self::non_deepable_variants
+    @non_deepable_variants ||= variants - deepable_variants
   end
   
   
   def self::rand_new
-    types.rand.rand_new
+    variants.rand.rand_new
   end
   
   def self::filler_new

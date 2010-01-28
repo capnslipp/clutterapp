@@ -3,7 +3,10 @@ require 'spec_helper'
 describe "/invites/new.html.erb" do
   include InvitesHelper
   
-  before(:each) { activate_authlogic; login }
+  before(:each) do
+    activate_authlogic
+    #login
+  end
   
   before(:each) do
     assigns[:invite] = stub_model(Invite, :new_record? => true)

@@ -26,6 +26,9 @@ config.action_controller.allow_forgery_protection    = false
 config.action_mailer.delivery_method = :test
 
 
-config.gem 'rspec', :lib => false, :version => '>= 1.2.9'
-config.gem 'rspec-rails', :lib => false, :version => '>= 1.2.9'
-config.gem 'thoughtbot-factory_girl', :lib => 'factory_girl', :source => 'http://gemcutter.org'
+config.gem 'rspec', :lib => false, :version => '>= 1.2.0' 
+config.gem 'rspec-rails', :lib => false, :version => '>= 1.2.0' 
+config.gem 'webrat', :lib => false, :version => '>= 0.4.3'
+
+
+ENV['RSPEC'] = 'true'

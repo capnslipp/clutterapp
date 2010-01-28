@@ -1,9 +1,12 @@
 require 'spec_helper'
 
 describe Share do
+  dataset :users
+  
+  
   before(:each) do
-    @user1 = Factory.create(:user)
-    @user2 = Factory.create(:user)
+    @user1 = users(:a_user)
+    @user2 = users(:a_user)
     @pile1 = @user1.default_pile
     @pile2 = @user2.default_pile
   end

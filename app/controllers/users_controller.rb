@@ -10,23 +10,19 @@ class UsersController < ApplicationController
   
   
   def create
-    @user = User.new(params[:user])
+    @user = User.new params[:user]
     
-    unless params[:signup_code] == current_signup_code
-      flash[:error]  = "Na na na! Na na na! That's not the correct sign-up code! Na na na…"
-      return render :action => 'new'
-    end
+    signup_code_correct = params[:signup_code] == self.class.current_signup_code
     
-    success = @user && @user.save
-    if success && @user.errors.empty?
+    if signup_code_correct && @user.save
       # Protects against session fixation attacks, causes request forgery protection if visitor resubmits an earlier form using back button. Uncomment if you understand the tradeoffs.
       # reset session
       current_user = @user # !! now logged in
-      redirect_back_or_default('/')
+      redirect_back_or_default '/'
       flash[:notice] = "Thanks for signing up! Enjoy organizing your clutter!"
       logger.prefixed 'USER', :light_yellow, "New user '#{@user.login}' created from #{request.remote_ip} at #{Time.now.utc}"
     else
-      flash[:error]  = "We couldn't set up that account, sorry. Please try again, or contact an admin."
+      flash[:error]  = "We couldn't set up that account, sorry. Please try again."
       render :action => 'new'
     end
   end
@@ -49,7 +45,7 @@ class UsersController < ApplicationController
   
 protected
   
-  def current_signup_code
+  def self::current_signup_code
     today = Date.today
     
     first_letter_of_day_of_week = today.strftime('%A')[0,1]

@@ -21,6 +21,10 @@ jQuery.fn.required = function() {
 	return this;
 }
 
+jQuery.fn.require = function(selector) {
+	return this.filter(selector).required();
+}
+
 $.extend(String.prototype, {
 	// function derived from jQuery.backgroundPosition
 	asBGPosToArray: function() {

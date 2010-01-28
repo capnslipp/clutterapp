@@ -1,15 +1,13 @@
 class PileRefProp < Prop
   has_one :node, :as => :prop
   
-  belongs_to :ref_pile, :class_name => Pile.name, :autosave => true, :validate => true, :dependent => :destroy
-  
   validates_presence_of :node, :on => :update # less stringent when the Prop is new in order to prevent circular dependencies
   
+  belongs_to :ref_pile, :class_name => Pile.name, :autosave => true, :validate => true, :dependent => :destroy
   validates_presence_of :ref_pile
   accepts_nested_attributes_for :ref_pile
-  
-  
   after_create :ensure_ref_pile
+  prop_value_field :ref_pile
   
   
   is_stackable

@@ -1,5 +1,6 @@
 <div class="new body">
-	<%- form_for node, :url => polymorphic_path([node.pile.owner, node.pile, node], :'node[parent_id]' => node.parent_id, :'node[prop_type]' => node.prop.class.short_name), :html => {:method => 'post'} do |node_form| -%>
+	<%- prev_sibling_id = @prev_sibling.id if @prev_sibling -%>
+	<%- form_for node, :url => polymorphic_path([node.pile.owner, node.pile, node], :'node[parent_id]' => node.parent_id, :'node[prop_type]' => node.variant, :prev_sibling_id => prev_sibling_id), :html => {:method => 'post'} do |node_form| -%>
 		<div class="cont">
 			
 			<div class="line"><%= render :partial => prop_partial(node, :new), :locals => { :node => node, :form => node_form } %></div>
@@ -18,6 +19,7 @@
 			<div class="finish line">
 				<%= button_tag '&#10006; cancel', :class => 'cancel' %>
 				<%# ✓ %><%= node_form.submit '&#10003; done', :class => 'done' %>
+				<%# ✚ %><%= button_tag '&#10010; another', :class => 'another' %>
 			</div>
 			
 		</div>

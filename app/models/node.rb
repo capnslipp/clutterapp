@@ -4,34 +4,36 @@ class Node < ActiveRecord::Base
   belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true, :dependent => :destroy
   
   belongs_to :pile
+  before_validation_on_create :assign_children_parent
   before_validation_on_create :assign_pile
   
   
-  #attr_accessible :node, :node_attributes, :prop, :prop_attributes, :children, :children_attributes
   accepts_nested_attributes_for :prop, :allow_destroy => true
   accepts_nested_attributes_for :children, :allow_destroy => true
   
   
-  named_scope :typed, lambda {|type|
-    { :conditions => {:prop_type => Prop.class_from_type(type).to_s} }
+  named_scope :varianted, lambda {|variant_or_name|
+    { :conditions => {:prop_type => Prop.derive_variant(variant_or_name).to_s} }
   }
   
-  named_scope :badgeable,     :conditions => {:prop_type => Prop.badgeable_types.collect(&:to_s)}
-  named_scope :non_badgeable, :conditions => {:prop_type => Prop.non_badgeable_types.collect(&:to_s)}
+  named_scope :badgeable,     :conditions => {:prop_type => Prop.badgeable_variants.collect(&:to_s)}
+  named_scope :non_badgeable, :conditions => {:prop_type => Prop.non_badgeable_variants.collect(&:to_s)}
   
-  named_scope :stackable,     :conditions => {:prop_type => Prop.stackable_types.collect(&:to_s)}
-  named_scope :non_stackable, :conditions => {:prop_type => Prop.non_stackable_types.collect(&:to_s)}
+  named_scope :stackable,     :conditions => {:prop_type => Prop.stackable_variants.collect(&:to_s)}
+  named_scope :non_stackable, :conditions => {:prop_type => Prop.non_stackable_variants.collect(&:to_s)}
   
-  named_scope :nodeable,      :conditions => {:prop_type => Prop.nodeable_types.collect(&:to_s)}
-  named_scope :non_nodeable,  :conditions => {:prop_type => Prop.non_nodeable_types.collect(&:to_s)}
+  named_scope :nodeable,      :conditions => {:prop_type => Prop.nodeable_variants.collect(&:to_s)}
+  named_scope :non_nodeable,  :conditions => {:prop_type => Prop.non_nodeable_variants.collect(&:to_s)}
   
-  named_scope :deepable,      :conditions => {:prop_type => Prop.deepable_types.collect(&:to_s)}
-  named_scope :non_deepable,  :conditions => {:prop_type => Prop.non_deepable_types.collect(&:to_s)}
+  named_scope :deepable,      :conditions => {:prop_type => Prop.deepable_variants.collect(&:to_s)}
+  named_scope :non_deepable,  :conditions => {:prop_type => Prop.non_deepable_variants.collect(&:to_s)}
   
   
-  def short_name
-      prop_type = read_attribute(:prop_type)
-      prop_type.classify.short_name unless prop_type.nil?
+  def variant
+    self.prop.variant
+  end
+  def variant_name
+    self.prop.variant_name
   end
   
   def <=>(other)
@@ -54,16 +56,14 @@ class Node < ActiveRecord::Base
   
   
   def build_prop(params)
-    logger.prefixed 'Node#build_prop', :light_red, "params: #{params.inspect}"
-    
-    self.prop = Prop.class_from_type(
-      params.delete(:type) || params.delete('type')
+    self.prop = Prop.derive_variant(
+      params.delete('variant_name')
     ).new(params)
   end
   
   
   def self_and_non_badgeable_siblings
-    nested_set_scope.scoped :conditions => { parent_column_name => parent_id, :prop_type => Prop.non_badgeable_types.collect(&:to_s) }
+    nested_set_scope.scoped :conditions => { parent_column_name => parent_id, :prop_type => Prop.non_badgeable_variants.collect(&:to_s) }
   end
   
   def non_badgeable_siblings
@@ -80,30 +80,28 @@ class Node < ActiveRecord::Base
   end
   
   
-  Prop.badgeable_types.each do |type|
-    type_name = type.short_name.underscore
+  Prop.badgeable_variants.each do |variant|
+    variant_name = variant.short_name
     
-    if !type.stackable? # singular versions
+    if !variant.stackable? # singular versions
       class_eval(<<-EOS, __FILE__, __LINE__)
-        def #{type_name}_badge?
-          # @todo: optimize
-          !!self.children.typed(:#{type_name}).first
+        def #{variant_name}_badge?
+          self.children.varianted(#{variant}).count > 0
         end
         
-        def #{type_name}_badge
-          self.children.typed(:#{type_name}).first
+        def #{variant_name}_badge
+          self.children.varianted(#{variant}).first
         end
       EOS
       
     else # plural versions
       class_eval(<<-EOS, __FILE__, __LINE__)
-        def #{type_name}_badges?
-          # @todo: optimize
-          !self.children.typed(:#{type_name}).empty?
+        def #{variant_name}_badges?
+          self.children.varianted(#{variant}).count > 0
         end
         
-        def #{type_name}_badges
-          self.children.typed(:#{type_name})
+        def #{variant_name}_badges
+          self.children.varianted(#{variant})
         end
       EOS
     end
@@ -113,9 +111,17 @@ class Node < ActiveRecord::Base
 protected
   
   def validate
-    #errors.add(:node, "either be root and have pile; or it must be neither root ") if root? ^ (pile.root_node != self) # causes stack overflow
-    errors.add(:node, "must have a prop or be root, not both") if root? && prop
-    errors.add(:node, "must have either a prop or be root") if !root? && !prop
+    errors.add(:node, "must not be root") if root?
+    errors.add(:node, "must have a prop") unless prop
+  end
+  
+  def assign_children_parent
+    children.each do |child|
+      next unless child.new_record?
+      next if child.parent
+      
+      child.parent = self
+    end
   end
   
   def assign_pile

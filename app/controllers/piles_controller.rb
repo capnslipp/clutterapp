@@ -44,7 +44,6 @@ class PilesController < ApplicationController
   def create
     @owner = active_owner
     pile_params = params[:pile] || {}
-    #pile_params.update(:owner => active_owner) # necessary?
     @pile = active_owner.piles.build(pile_params)
     
     if @pile.save

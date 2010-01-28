@@ -29,6 +29,7 @@ class NodesController < ApplicationController
   
   
   # GET /nodes/new
+  # GET /nodes/new?prev_sibling_id=2
   def new
     node_attrs = params.delete(:node) || {}
     
@@ -37,7 +38,7 @@ class NodesController < ApplicationController
     
     raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
     node_attrs[:prop_attributes] ||= {}
-    node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
+    node_attrs[:prop_attributes][:variant_name] = node_attrs.delete(:prop_type)
     
     @node = @parent.children.build(node_attrs)
     
@@ -45,14 +46,25 @@ class NodesController < ApplicationController
     @node.prop.ref_pile = (active_owner.piles.build node_attrs[:prop_attributes][:ref_pile_attributes]) if node_attrs[:prop_attributes][:type] == PileRefProp.short_name
     
     
-    if params[:add]
-      add_attrs = params.delete(:add)
+    @prev_sibling = @parent.children.find params[:prev_sibling_id] if params[:prev_sibling_id].present?
+    
+    
+    add_attrs = []
+    
+    if params[:dup_prev].present?
+      @prev_sibling.children.badgeable.each do |badge_node|
+        add_attrs << {:prop_type => badge_node.variant}
+      end
+    end
+    
+    add_attrs << params.delete(:add) if params[:add]
+    
+    add_attrs.each do |add_attr|
+      raise 'add[prop_type] param is required' if add_attr[:prop_type].nil?
+      add_attr[:prop_attributes] ||= {}
+      add_attr[:prop_attributes][:variant_name] = add_attr.delete(:prop_type)
       
-      raise 'add[prop_type] param is required' if add_attrs[:prop_type].nil?
-      add_attrs[:prop_attributes] ||= {}
-      add_attrs[:prop_attributes][:type] = add_attrs.delete(:prop_type)
-      
-      @node.children.build(add_attrs)
+      @node.children.build add_attr
     end
     
     
@@ -61,6 +73,7 @@ class NodesController < ApplicationController
   
   
   # POST /nodes
+  # POST /nodes?prev_sibling_id=2
   def create
     node_attrs = params.delete(:node) || {}
     
@@ -69,7 +82,7 @@ class NodesController < ApplicationController
     
     raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
     node_attrs[:prop_attributes] ||= {}
-    node_attrs[:prop_attributes][:type] = node_attrs.delete(:prop_type)
+    node_attrs[:prop_attributes][:variant_name] = node_attrs.delete(:prop_type)
     
     @node = @parent.children.build(node_attrs)
     
@@ -83,6 +96,21 @@ class NodesController < ApplicationController
     
     
     if @node.save!
+      if params[:prev_sibling_id].present? # put it after the given sibling
+        @prev_sibling = @node.siblings.find params[:prev_sibling_id]
+        @node.move_to_right_of @prev_sibling
+      else # put it first
+        first_child = @parent.children.first
+        first_child = first_child.right_sibling if first_child == @node
+        
+        if first_child # put it before the existing first child
+          @node.move_to_left_of first_child
+        else # put it under the parent node
+          @node.move_to_child_of @parent
+        end
+      end
+      
+      
       expire_cache_for(@node)
       
       if @node.prop.is_a? PileRefProp
@@ -108,7 +136,7 @@ class NodesController < ApplicationController
       
       raise 'add[prop_type] param is required' if add_attrs[:prop_type].nil?
       add_attrs[:prop_attributes] ||= {}
-      add_attrs[:prop_attributes][:type] = add_attrs.delete(:prop_type)
+      add_attrs[:prop_attributes][:variant_name] = add_attrs.delete(:prop_type)
       
       @node.children.build(add_attrs)
     end
@@ -160,7 +188,7 @@ class NodesController < ApplicationController
     
     expire_cache_for(@node.parent) # old parent
     
-    # put it as the last child of the parent
+    # put it as the first child of the parent
     if params[:parent_pile_id].to_i == active_pile.id
       @parent = active_pile.nodes.find(params[:parent_id])
       
@@ -168,7 +196,13 @@ class NodesController < ApplicationController
         return render :nothing => true, :status => :bad_request unless @parent.root? || (@parent.prop.is_a? PileRefProp)
       end
       
-      @node.move_to_child_of(@parent)
+      first_child = @parent.children.first
+      first_child = first_child.right_sibling if first_child == @node
+      if first_child
+        @node.move_to_left_of first_child
+      else
+        @node.move_to_child_of @parent
+      end
     else
       parent_pile = active_owner.piles.find(params[:parent_pile_id])
       @parent = parent_pile.nodes.find(params[:parent_id])
@@ -223,6 +257,10 @@ private
     cloned_node = orig_node.clone
     cloned_node.pile = dest_pile
     dest_parent.children << cloned_node # saves as a side-effect
+    
+    first_child = dest_parent.children.first
+    first_child = first_child.right_sibling if first_child == cloned_node
+    cloned_node.move_to_left_of first_child if first_child
     
     orig_node.children.each do |onc|
       deep_clone_node_to_pile!(onc, dest_pile, cloned_node)

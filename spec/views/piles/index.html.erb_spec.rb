@@ -2,14 +2,15 @@ require 'spec_helper'
 
 describe "/piles/index.html.erb" do
   include PilesHelper
+  dataset :users
   
   
   before(:each) do
-    assigns[:pile_owner] = @user = Factory.create(:user)
+    assigns[:pile_owner] = @user = users(:a_user)
     
     assigns[:piles] = [
-      Factory.create(:pile, :owner => @user),
-      Factory.create(:pile, :owner => @user)
+      @user.default_pile,
+      @user.default_pile
     ]
   end
 

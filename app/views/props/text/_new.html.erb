@@ -1,6 +1,6 @@
 <div class="new text prop <%= 'badge' if node.prop.badged? -%>">
 	<%- form.fields_for :prop do |prop_form| -%>
-		<%= prop_form.hidden_field :type, :class => TextProp.short_name %>
+		<%= prop_form.hidden_field :variant_name, :class => TextProp.short_name %>
 		<%= prop_form.text_field :text, :class => 'field', :autocomplete => 'off' %>
 	<%- end -%>
 </div>

@@ -6,6 +6,7 @@ class TagProp < Prop
   validates_presence_of :tag
   validates_length_of :tag, :within => 1..26
   before_save :normalize_tag
+  prop_value_field :tag
   
   
   is_badgeable

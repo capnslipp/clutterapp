@@ -1,10 +1,12 @@
 require 'spec_helper'
 
 describe UserSession do
+  dataset :users
+  
   
   before(:each) do
     activate_authlogic
-    @user = Factory.create(:user)
+    @user = users(:a_user)
   end
   
   

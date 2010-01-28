@@ -1,4 +1,4 @@
-<% content_tag_for :li, item, 'item_for', :class => "new #{dom_class(item, 'item_for')}", :'oc:url' => path_for([item.pile.owner, item.pile, item]) do %>
+<% content_tag_for :li, item, :class => "new #{dom_class(item)} item", :'oc:url' => path_for([item.pile.owner, item.pile, item]) do %>
 	
 	<%= render :partial => 'new_body', :locals => {:node => item} %>
 	

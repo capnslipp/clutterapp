@@ -206,7 +206,18 @@ function showGoogleChromeFrame() {
 }
 
 
-function showFill(modalElement) {
+ClutterApp.fill = {};
+
+ClutterApp.fill._active = false;
+ClutterApp.fill.active = function() { return this._active; }
+
+$(function() {
+	ClutterApp.fill._elem = $('#fill');
+});
+ClutterApp.fill.visible = function() { return this._elem.is(':visible'); }
+
+
+ClutterApp.fill.show = function(modalElement) {
 	if (modalElement != undefined) {
 		//alert(modalElement.cssPosition);
 		//if (modalElement.cssPosition != 'absolute') {
@@ -216,16 +227,16 @@ function showFill(modalElement) {
 		modalElement.addClass('over-fill');
 	}
 	
-	if (!$('#fill').is(':visible'))
-		$('#fill').fadeIn(kDefaultTransitionDuration);
+	if (!this._active) {
+		this._active = true;
+		this._elem.stop(true).fadeIn(kDefaultTransitionDuration);
+	}
 }
 
-function hideFill(modalElement) {
-	if ($('#fill').is(':visible')) {
-		$('#fill').fadeOut(
-			kDefaultTransitionDuration,
-			showModalElement
-		);
+ClutterApp.fill.hide = function(modalElement) {
+	if (this._active) {
+		this._active = false;
+		this._elem.stop(true).fadeOut(kDefaultTransitionDuration, showModalElement);
 	} else {
 		showModalElement();
 	}

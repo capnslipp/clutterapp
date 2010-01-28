@@ -19,13 +19,14 @@
 		</ul>
 		
 	</div>
-</div
+</div>
 
 <div id="item-area" class="left">
 	<div class="cont">
 		
 		<%- cache ({:node_section => @pile.root_node.id}.to_json) do -%>
-			<section id="<%=dom_id(@pile.root_node, 'item_for')%>" class="base <%=dom_class(@pile.root_node, 'item_for')%> pile" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
+			<section id="<%=dom_id(@pile.root_node)%>" class="base <%=dom_class(@pile.root_node)%> pile" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
+			<%#section id="<%=dom_id(@pile.root_node)% >" class="<%=dom_class(@pile.root_node)% > pile item" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])% >"%>
 				<div class="body">
 					<div class="back"></div>
 					
@@ -36,7 +37,7 @@
 					</h1>
 				</div>
 				
-				<ul class="node list">
+				<ul class="item-list">
 					<%= render :partial => 'nodes/list_items', :locals => {:item => @pile.root_node} -%>
 				</ul>
 				

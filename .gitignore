@@ -4,3 +4,5 @@ tmp/*
 public/javascripts/all.js
 public/stylesheets/all.css
 mkmf.log
+rerun.txt
+doc/*
