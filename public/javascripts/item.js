@@ -66,7 +66,7 @@ function expandActionBar(node) {
 	
 	// only show new sub-pile button on pile-ref nodes
 	if (!node.is('.pile'))
-		$('#action-bar > .buttons > a.new.pile').hide();
+		$('#action-bar > .buttons > a.new.child-pile').hide();
 	
 	// since it may be initially-hidden
 	safeShow($('#action-bar'));
@@ -223,9 +223,9 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 $(function() {
 	var actionButtons = $('#action-bar > .buttons').required();
 	
-	actionButtons.children('a.new.item').required()
+	actionButtons.children('a.new.child-item').required()
 		.click(function() { itemNew($(this).closest('.item'), 'text'); return false; });
-	actionButtons.children('a.new.pile').required()
+	actionButtons.children('a.new.child-pile').required()
 		.click(function() { itemNew($(this).closest('.item'), 'pile-ref'); return false; });
 });
 
@@ -1208,7 +1208,7 @@ function badgeAdd(link, addType) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('li.new.item').find('.new.body').required();
+			var newBody = list.children('li.new.child-item').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
@@ -1304,7 +1304,7 @@ function badgeRemove(link) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('li.new.item').find('.new.body').required();
+			var newBody = list.children('li.new.child-item').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
