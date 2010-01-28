@@ -3,6 +3,7 @@ require 'spec_helper'
 describe NodesController do
   include NodesHelper
   dataset :nodes
+  integrate_views
   
   
   def bypass_authentication
@@ -41,6 +42,37 @@ describe NodesController do
         :user_id => users(:a_user).to_param,
         :pile_id => piles(:a_pile).to_param,
         :id => nodes(:a_plain_text_node).to_param
+    end
+  end
+  
+  
+  describe "new" do
+    describe "should render properly" do
+      
+      it "given a request for a new sub-item" do
+        xhr :get, :new,
+          :user_id => users(:a_user).to_param,
+          :pile_id => piles(:a_pile).to_param,
+          :node => {
+            :parent_id => nodes(:a_plain_text_node).to_param,
+            :prop_type => 'text'
+          }
+        
+        response.should have_tag("input[type='text']")
+      end
+      
+      it "given a request for a new sub-pile" do
+        xhr :get, :new,
+          :user_id => users(:a_user).to_param,
+          :pile_id => piles(:a_pile).to_param,
+          :node => {
+            :parent_id => nodes(:a_plain_text_node).to_param,
+            :prop_type => 'pile-ref'
+          }
+        
+        response.should have_tag("input[type='text']")
+      end
+      
     end
   end
   
