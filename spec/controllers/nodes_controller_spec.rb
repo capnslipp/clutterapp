@@ -67,7 +67,7 @@ describe NodesController do
           :pile_id => piles(:a_pile).to_param,
           :node => {
             :parent_id => nodes(:a_plain_text_node).to_param,
-            :prop_type => 'pile-ref'
+            :prop_type => 'pile_ref'
           }
         
         response.should have_tag("input[type='text']")

@@ -43,7 +43,7 @@ class NodesController < ApplicationController
     @node = @parent.children.build(node_attrs)
     
     # build a sub-pile if the type is a RefPile
-    @node.prop.ref_pile = (active_owner.piles.build node_attrs[:prop_attributes][:ref_pile_attributes]) if node_attrs[:prop_attributes][:type] == PileRefProp.short_name
+    @node.prop.ref_pile = active_owner.piles.build(node_attrs[:prop_attributes][:ref_pile_attributes]) if @node.variant == PileRefProp
     
     
     @prev_sibling = @parent.children.find params[:prev_sibling_id] if params[:prev_sibling_id].present?
@@ -92,7 +92,7 @@ class NodesController < ApplicationController
     end
     
     # build a sub-pile if the type is a RefPile
-    @node.prop.ref_pile = (active_owner.piles.build node_attrs[:prop_attributes][:ref_pile_attributes]) if node_attrs[:prop_attributes][:type] == PileRefProp.short_name
+    @node.prop.ref_pile = (active_owner.piles.build node_attrs[:prop_attributes][:ref_pile_attributes]) if @node.variant == PileRefProp
     
     
     if @node.save!
@@ -250,7 +250,7 @@ private
     expire_fragment ({:node_section => record.id}.to_json) if record.root?
     
     expire_cache_for(record.parent) if record.parent # recursively invalidate all ancestors
-    # @todo: also invalidate the cache for any pile-ref nodes point at this pile's root node
+    # @todo: also invalidate the cache for any pile ref nodes point at this pile's root node
   end
   
   def deep_clone_node_to_pile!(orig_node, dest_pile, dest_parent)

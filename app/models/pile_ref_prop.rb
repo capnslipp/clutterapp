@@ -5,9 +5,9 @@ class PileRefProp < Prop
   
   belongs_to :ref_pile, :class_name => Pile.name, :autosave => true, :validate => true, :dependent => :destroy
   validates_presence_of :ref_pile
-  accepts_nested_attributes_for :ref_pile
-  after_create :ensure_ref_pile
+  accepts_nested_attributes_for :ref_pile, :allow_destroy => true
   prop_value_field :ref_pile
+  # @note: be sure to set the ref_pile to point to a Pile!
   
   
   is_stackable
@@ -18,14 +18,7 @@ class PileRefProp < Prop
   #end
   
   def self::filler_new
-    new :ref_pile => Pile.new()
-  end
-  
-  
-protected
-  
-  def ensure_ref_pile
-    self.ref_pile ||= node.pile.owner.piles.new
+    new :ref_pile => Pile.new
   end
   
 end

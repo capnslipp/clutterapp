@@ -1,6 +1,6 @@
-<div class="new pile-ref prop <%= 'badge' if node.prop.badged? -%>">
+<div class="new pile_ref prop <%= 'badge' if node.prop.badged? -%>">
 	<%- form.fields_for :prop do |prop_form| -%>
-		<%= prop_form.hidden_field :type, :class => PileRefProp.short_name %>
+		<%= prop_form.hidden_field :variant_name, :class => PileRefProp.short_name %>
 		<%- prop_form.fields_for :ref_pile do |ref_pile_form| -%>
 			<%= ref_pile_form.text_field :name, :class => 'field', :autocomplete => 'off' %>
 		<%- end -%>

@@ -64,7 +64,7 @@ function expandActionBar(node) {
 	if (node.is('.base.pile'))
 		$('#action-bar > .buttons > a:not(.new)').hide();
 	
-	// only show new sub-pile button on pile-ref nodes
+	// only show new sub-pile button on pile_ref nodes
 	if (!node.is('.pile'))
 		$('#action-bar > .buttons > a.new.child-pile').hide();
 	
@@ -226,7 +226,7 @@ $(function() {
 	actionButtons.children('a.new.child-item').required()
 		.click(function() { itemNew($(this).closest('.item'), 'text'); return false; });
 	actionButtons.children('a.new.child-pile').required()
-		.click(function() { itemNew($(this).closest('.item'), 'pile-ref'); return false; });
+		.click(function() { itemNew($(this).closest('.item'), 'pile_ref'); return false; });
 });
 
 
@@ -1255,7 +1255,7 @@ $(function() {
 	$('#add-bar a.add.priority'	).live('click', function() { badgeAdd(this, 'priority'	); return false; });
 	$('#add-bar a.add.tag'		).live('click', function() { badgeAdd(this, 'tag'		); return false; });
 	$('#add-bar a.add.time'		).live('click', function() { badgeAdd(this, 'time'		); return false; });
-	$('#add-bar a.add.pile-ref'	).live('click', function() { badgeAdd(this, 'pile-ref'	); return false; });
+	$('#add-bar a.add.pile_ref'	).live('click', function() { badgeAdd(this, 'pile_ref'	); return false; });
 });
 
 
