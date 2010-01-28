@@ -6,7 +6,7 @@ require 'test_help'
 require 'dataset'
 class Test::Unit::TestCase
   include Dataset
-  datasets_directory "#{RAILS_ROOT}/test/datasets"
+  datasets_directory "#{RAILS_ROOT}/spec/datasets"
 end
 
 
