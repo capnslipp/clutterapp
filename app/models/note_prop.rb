@@ -4,6 +4,7 @@ class NoteProp < Prop
   validates_presence_of :node, :on => :update # less stringent when the Prop is new in order to prevent circular dependencies
   
   validates_presence_of :note
+  prop_value_field :note
   
   
   is_badgeable

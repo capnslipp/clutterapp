@@ -2,12 +2,17 @@ require 'spec_helper'
 
 describe FollowshipsController do
   include ActionController::PolymorphicRoutes
+  dataset :users
   
   
   before(:each) do
-    @user1 = Factory.create(:user, :login => 'username1')
-    @user2 = Factory.create(:user)
-    @followship = Factory.create(:followship, :user => @user1, :followee => @user2, :id => 256)
+    @user1 = users(:a_user)
+    @user2 = users(:another_user)
+    @followship = Followship.create(
+      :user => @user1,
+      :followee => @user2,
+      :id => 256
+    )
   end
   
   # 

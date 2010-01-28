@@ -4,6 +4,7 @@ class Node < ActiveRecord::Base
   belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true
   
   belongs_to :pile
+  before_validation_on_create :assign_children_parent
   before_validation_on_create :assign_pile
   
   
@@ -112,6 +113,15 @@ protected
   def validate
     errors.add(:node, "must not be root") if root?
     errors.add(:node, "must have a prop") unless prop
+  end
+  
+  def assign_children_parent
+    children.each do |child|
+      next unless child.new_record?
+      next if child.parent
+      
+      child.parent = self
+    end
   end
   
   def assign_pile

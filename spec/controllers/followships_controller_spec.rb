@@ -1,9 +1,12 @@
 require 'spec_helper'
 
 describe FollowshipsController do
+  dataset :users
+  
+  
   before(:each) do
     activate_authlogic
-    @followship = Factory.create(:followship)
+    #@followship = Factory.create(:followship)
   end
   #Delete these examples and add some real ones
   # it "should use FollowshipsController" do
@@ -12,7 +15,7 @@ describe FollowshipsController do
   # 
   # describe "new followship with valid followships" do
   #   it "should create the new followship" # do
-  #   #       @user = Factory.create(:user) 
+  #   #       @user = users(:a_user) 
   #   #       post :toggle_follow, :followship => @followship
   #   #     end
   # end
