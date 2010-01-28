@@ -61,3 +61,19 @@ Spec::Runner.configure do |config|
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
 end
+
+
+
+module ActiveRecord
+  class Base
+    def destroy_to_attributes
+      attributes = self.destroy.attributes
+      attributes.delete 'id'
+      
+      # add custom per-model fixes here
+      attributes.merge!(:password => 'secret', :password_confirmation => 'secret') if is_a?(User)
+      
+      attributes
+    end
+  end
+end

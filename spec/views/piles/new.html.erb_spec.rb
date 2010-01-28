@@ -2,11 +2,12 @@ require 'spec_helper'
 
 describe "/piles/new.html.erb" do
   include PilesHelper
+  dataset :users
   
   
   before(:each) do
-    @user = Factory.create(:user)
-    assigns[:pile] = @pile = Factory.create(:pile, :owner => @user)
+    @user = users(:a_user)
+    assigns[:pile] = @pile = @user.default_pile
   end
   
   it "renders new pile form" do

@@ -2,10 +2,11 @@ require 'spec_helper'
 
 describe UsersController do
   include ActionController::PolymorphicRoutes
+  dataset :users
   
   
   before(:each) do
-    @user = Factory.create(:user, :login => 'test-user')
+    @user = users(:a_user)
   end
   
   
@@ -24,7 +25,7 @@ describe UsersController do
       new_user_path().should == expected_path
       new_polymorphic_path([:user]).should == expected_path
       
-      new_user = Factory.build(:user)
+      new_user = User.new
       new_polymorphic_path([new_user]).should == expected_path
     end
     
@@ -36,18 +37,18 @@ describe UsersController do
     end
     
     it "recognizes and generates #show" do
-      expected_path = '/test-user'
+      expected_path = '/a_user'
       
-      { :get => expected_path }.should route_to(:controller => 'users', :action => 'show', :id => 'test-user')
-      user_path('test-user').should == expected_path
+      { :get => expected_path }.should route_to(:controller => 'users', :action => 'show', :id => 'a_user')
+      user_path('a_user').should == expected_path
       polymorphic_path([@user]).should == expected_path
     end
     
     it "recognizes and generates #edit" do
-      expected_path = '/test-user/edit'
+      expected_path = '/a_user/edit'
       
-      { :get => expected_path }.should route_to(:controller => 'users', :action => 'edit', :id => 'test-user')
-      edit_user_path('test-user').should == expected_path
+      { :get => expected_path }.should route_to(:controller => 'users', :action => 'edit', :id => 'a_user')
+      edit_user_path('a_user').should == expected_path
       edit_polymorphic_path([@user]).should == expected_path
     end
     
@@ -60,18 +61,18 @@ describe UsersController do
     end
     
     it "recognizes and generates #update" do
-      expected_path = '/test-user'
+      expected_path = '/a_user'
       
-      { :put => expected_path }.should route_to(:controller => 'users', :action => 'update', :id => 'test-user')
-      user_path('test-user').should == expected_path
+      { :put => expected_path }.should route_to(:controller => 'users', :action => 'update', :id => 'a_user')
+      user_path('a_user').should == expected_path
       polymorphic_path([@user]).should == expected_path
     end
     
     it "recognizes and generates #destroy" do
-      expected_path = '/test-user'
+      expected_path = '/a_user'
       
-      { :delete => expected_path }.should route_to(:controller => 'users', :action => 'destroy', :id => 'test-user')
-      user_path('test-user').should == expected_path
+      { :delete => expected_path }.should route_to(:controller => 'users', :action => 'destroy', :id => 'a_user')
+      user_path('a_user').should == expected_path
       polymorphic_path([@user]).should == expected_path
     end
     

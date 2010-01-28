@@ -6,11 +6,13 @@ require 'performance_test_help'
 
 # Profiling results for each test method are written to tmp/performance.
 class BrowsingTest < ActionController::PerformanceTest
+  dataset :users
+  
   
   def setup
     bypass_authentication
     
-    @user = Factory.create(:user)
+    @user = users(:a_user)
     @pile = @user.default_pile
     
     26.times do
