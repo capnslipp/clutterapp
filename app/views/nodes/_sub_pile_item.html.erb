@@ -1,9 +1,9 @@
 <%- cache ({:node_item => sub_pile_item.id}.to_json) do -%>
-	<% content_tag_for :li, sub_pile_item, 'item_for',
-		:class => dom_class(sub_pile_item, 'item_for'),
+	<% content_tag_for :li, sub_pile_item,
+		:class => dom_class(sub_pile_item),
 		:'oc:url' => path_for([sub_pile_item.pile.owner, sub_pile_item.pile, sub_pile_item]) do -%>
 		<%- cache ({:node_section => sub_pile_item.prop.ref_pile.root_node.id}.to_json) do -%>
-			<section id="<%= dom_id(sub_pile_item.prop.ref_pile.root_node, 'item_for') %>" class="<%= dom_class(sub_pile_item.prop.ref_pile.root_node, 'item_for') %> pile" oc:nodes-url="<%=path_for([sub_pile_item.prop.ref_pile.owner, sub_pile_item.prop.ref_pile, :nodes])%>">
+			<section id="<%= dom_id(sub_pile_item.prop.ref_pile.root_node) %>" class="<%= dom_class(sub_pile_item.prop.ref_pile.root_node) %> pile item" oc:nodes-url="<%=path_for([sub_pile_item.prop.ref_pile.owner, sub_pile_item.prop.ref_pile, :nodes])%>">
 				
 				<%= render :partial => 'nodes/show_body', :locals => {:node => sub_pile_item} %>
 				

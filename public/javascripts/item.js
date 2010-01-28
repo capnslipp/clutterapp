@@ -38,7 +38,7 @@ function nodeIDOfItem(node) {
 }
 
 function pileIDOfItem(itemForNode) {
-	return itemForNode.closest('.pile.item_for_node').getAttr('oc:nodes-url').match(/\/piles\/([0-9]+)\/nodes/)[1];
+	return itemForNode.closest('.pile.base_node').getAttr('oc:nodes-url').match(/\/piles\/([0-9]+)\/nodes/)[1];
 }
 
 
@@ -771,7 +771,7 @@ jQuery.fn.setupReorderSortable = function() {
 		axis: 'y',
 		containment: '#active-sorting-container',
 		tolerance: 'pointer',
-		handle: '> .show.body > #action-bar .move.reorder, > section.item_for_node > .show.body > #action-bar .move.reorder',
+		handle: '> .show.body > #action-bar .move.reorder, > section.base_node > .show.body > #action-bar .move.reorder',
 		helper: helper,
 		opacity: 0.5,
 		revert: true,
