@@ -6,11 +6,8 @@ require 'test_help'
 require 'dataset'
 class Test::Unit::TestCase
   include Dataset
-  datasets_directory "#{RAILS_ROOT}/test/datasets"
+  datasets_directory "#{RAILS_ROOT}/spec/datasets"
 end
-
-
-require 'webrat'
 
 
 class ActiveSupport::TestCase
@@ -49,6 +46,8 @@ class ActiveSupport::TestCase
 end
 
 
-Webrat.configure do |c|
-  c.mode = :rails
+require 'webrat'
+
+Webrat.configure do |config|
+  config.mode = :rails
 end
