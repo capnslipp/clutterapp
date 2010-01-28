@@ -63,6 +63,13 @@ Spec::Runner.configure do |config|
 end
 
 
+require 'webrat'
+
+Webrat.configure do |config|
+  config.mode = :rails
+end
+
+
 
 module ActiveRecord
   class Base

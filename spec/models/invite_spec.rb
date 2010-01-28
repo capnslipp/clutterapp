@@ -7,6 +7,14 @@ describe Invite do
   before(:each) do
   end
   
+  it "should be valid when new with recipient e-mail" do
+    Invite.new(:recipient_email => 'test@example.com').should be_valid
+  end
+  
+  it "should not be valid when new" do
+    Invite.new.should_not be_valid
+  end
+  
   it "should report invalid, given zero invites_remaining" do
     u = users(:a_user)
     u.stub!(:invites_remaining).and_return(0)
