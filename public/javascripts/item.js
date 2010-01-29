@@ -1010,7 +1010,7 @@ function itemReparent(node, parentNode) {
 	$.ajax({
 		type: 'post',
 		url: node.getAttr('oc\:url') + '/reparent',
-		data: {_method: 'put', parent_id: nodeIDOfItem(parentNode), parent_pile_id: pileIDOfItem(parentNode)},
+		data: {_method: 'put', target_id: nodeIDOfItem(parentNode), target_pile_id: pileIDOfItem(parentNode)},
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError

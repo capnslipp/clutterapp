@@ -189,40 +189,40 @@ class NodesController < ApplicationController
     expire_cache_for(@node.parent) # old parent
     
     # put it as the first child of the parent
-    if params[:parent_pile_id].to_i == active_pile.id
-      @parent = active_pile.nodes.find(params[:parent_id])
+    if params[:target_pile_id].to_i == active_pile.id
+      @target = active_pile.nodes.find(params[:target_id])
       
       unless @node.prop.class.deepable?
-        return render :nothing => true, :status => :bad_request unless @parent.root? || (@parent.prop.is_a? PileRefProp)
+        return render :nothing => true, :status => :bad_request unless @target.root? || (@target.prop.is_a? PileRefProp)
       end
       
-      first_child = @parent.children.first
+      first_child = @target.children.first
       first_child = first_child.right_sibling if first_child == @node
       if first_child
         @node.move_to_left_of first_child
       else
-        @node.move_to_child_of @parent
+        @node.move_to_child_of @target
       end
     else
-      parent_pile = active_owner.piles.find(params[:parent_pile_id])
-      @parent = parent_pile.nodes.find(params[:parent_id])
+      target_pile = active_owner.piles.find(params[:target_pile_id])
+      @target = target_pile.nodes.find(params[:target_id])
       
       unless @node.prop.class.deepable?
-        return render :nothing => true, :status => :bad_request unless @parent.root? || (@parent.prop.is_a? PileRefProp)
+        return render :nothing => true, :status => :bad_request unless @target.root? || (@target.prop.is_a? PileRefProp)
       end
       
       Node.transaction do
         # deep-duplicate the node into the new tree
-        @new_node = deep_clone_node_to_pile!(@node, @parent.pile, @parent)
+        @new_node = deep_clone_node_to_pile!(@node, @target.pile, @target)
         
         # delete it from the old tree
         @node.destroy
       end
     end
     
-    expire_cache_for(@parent) # new parent
+    expire_cache_for(@target) # new parent
     
-    render :partial => 'list_items', :locals => {:item => @parent}
+    render :partial => 'list_items', :locals => {:item => @target}
   end
   
   

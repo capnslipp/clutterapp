@@ -89,8 +89,8 @@ describe NodesController do
             :user_id => users(:a_user).to_param,
             :pile_id => piles(:a_pile).to_param,
             :id => nodes(:a_plain_text_node).to_param,
-            :parent_id => nodes(:a_sub_sub_todo_node).to_param,
-            :parent_pile_id => piles(:a_pile).to_param
+            :target_id => nodes(:a_sub_sub_todo_node).to_param,
+            :target_pile_id => piles(:a_pile).to_param
         end
         
         it "moving to a descendent item to the 1st level" do
@@ -98,8 +98,8 @@ describe NodesController do
             :user_id => users(:a_user).to_param,
             :pile_id => piles(:a_pile).to_param,
             :id => nodes(:a_sub_sub_todo_node).to_param,
-            :parent_id => piles(:a_pile).root_node.to_param,
-            :parent_pile_id => piles(:a_pile).to_param
+            :target_id => piles(:a_pile).root_node.to_param,
+            :target_pile_id => piles(:a_pile).to_param
         end
         
       end
@@ -111,8 +111,8 @@ describe NodesController do
               :user_id => users(:a_user).to_param,
               :pile_id => piles(:a_pile).to_param,
               :id => nodes(:a_todo_node).to_param,
-              :parent_id => nodes(:a_sub_sub_todo_node).to_param,
-              :parent_pile_id => piles(:a_pile).to_param
+              :target_id => nodes(:a_sub_sub_todo_node).to_param,
+              :target_pile_id => piles(:a_pile).to_param
           }.should raise_error(ActiveRecord::ActiveRecordError)
         end
         
