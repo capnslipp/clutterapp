@@ -90,7 +90,7 @@ describe NodesController do
             :pile_id => piles(:a_pile).to_param,
             :id => nodes(:a_plain_text_node).to_param,
             :target_id => nodes(:a_sub_sub_todo_node).to_param,
-            :target_pile_id => piles(:a_pile).to_param
+            :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
         end
         
         it "moving to a descendent item to the 1st level" do
@@ -112,13 +112,74 @@ describe NodesController do
               :pile_id => piles(:a_pile).to_param,
               :id => nodes(:a_todo_node).to_param,
               :target_id => nodes(:a_sub_sub_todo_node).to_param,
-              :target_pile_id => piles(:a_pile).to_param
+              :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
           }.should raise_error(ActiveRecord::ActiveRecordError)
         end
         
       end
       
     end # within the same pile
+    
+    describe "from one pile to another" do
+      
+      describe "should work" do
+        after(:each) { response.should be_success }
+        
+        it "moving a 1st-level item to the 1st level of a sub-Pile" do
+          xhr :put, :reparent,
+            :user_id => users(:a_user).to_param,
+            :pile_id => piles(:a_pile).to_param,
+            :id => nodes(:a_plain_text_node).to_param,
+            :target_id => piles(:a_better_pile).root_node.to_param,
+            :target_pile_id => piles(:a_better_pile).to_param
+        end
+        
+        it "moving a descendent item to the 1st level of a sub-Pile" do
+          xhr :put, :reparent,
+            :user_id => users(:a_user).to_param,
+            :pile_id => piles(:a_pile).to_param,
+            :id => nodes(:a_sub_sub_todo_node).to_param,
+            :target_id => piles(:a_better_pile).root_node.to_param,
+            :target_pile_id => piles(:a_better_pile).to_param
+        end
+        
+        it "moving a 1st-level item to the 1st level of a parent Pile" do
+          xhr :put, :reparent,
+            :user_id => users(:a_user).to_param,
+            :pile_id => piles(:a_better_pile).to_param,
+            :id => nodes(:a_better_plain_text_node).to_param,
+            :target_id => piles(:a_pile).root_node.to_param,
+            :target_pile_id => piles(:a_pile).to_param
+        end
+        
+        it "moving a 1st-level item to descendent item of a parent Pile" do
+          xhr :put, :reparent,
+            :user_id => users(:a_user).to_param,
+            :pile_id => piles(:a_better_pile).to_param,
+            :id => nodes(:a_better_plain_text_node).to_param,
+            :target_id => nodes(:a_sub_sub_todo_node).to_param,
+            :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
+        end
+        
+      end
+      
+      describe "should not work" do
+        it "moving a 1st-level item to a descendent of itself" do
+          pending
+          
+          proc {
+            xhr :put, :reparent,
+              :user_id => users(:a_user).to_param,
+              :pile_id => piles(:a_pile).to_param,
+              :id => nodes(:a_todo_node).to_param,
+              :target_id => nodes(:a_sub_sub_todo_node).to_param,
+              :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
+          }.should raise_error(ActiveRecord::ActiveRecordError)
+        end
+        
+      end
+      
+    end # from one pile to another
     
   end # reparent
   
