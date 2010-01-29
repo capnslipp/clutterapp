@@ -28,7 +28,7 @@ describe NodesController do
         :user_id => users(:a_user).to_param,
         :pile_id => piles(:a_pile).to_param,
         :node => {
-          :parent_id => nodes(:a_piles_root_node).to_param,
+          :parent_id => piles(:a_pile).root_node.to_param,
           :prop_type => 'text',
           :prop_attributes => {:value => "a test node's text"}
         }

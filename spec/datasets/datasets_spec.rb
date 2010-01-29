@@ -7,9 +7,8 @@ describe "datasets" do
   it "should be working" do
     
     proper! users(:a_user) do
-      proper! piles(:a_users_default_pile)
       proper! piles(:a_pile) do
-        proper! nodes(:a_piles_root_node) do
+        proper! piles(:a_pile).root_node do
           proper! nodes(:a_plain_text_node)
           proper! nodes(:a_todo_node) do
             proper! nodes(:a_sub_todo_node) do
@@ -25,14 +24,13 @@ describe "datasets" do
         end # a_piles_root_node
       end # a_pile
       proper! piles(:a_better_pile) do
-        proper! nodes(:a_better_piles_root_node)
+        proper! piles(:a_better_pile).root_node
       end
     end # a_user
     
     proper! users(:another_user) do
-      proper! piles(:another_users_default_pile)
       proper! piles(:another_pile) do
-        proper! nodes(:another_piles_root_node)
+        proper! piles(:another_pile).root_node
       end # another_pile
     end # another_user
     

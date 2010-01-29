@@ -2,16 +2,20 @@ class NodesDataset < Dataset::Base
   uses :piles
   
   def load
-    name_node :a_piles_root_node,
-      :for => piles(:a_pile).root_node
-    
+    set_up_a_pile
+    set_up_a_better_pile
+    set_up_another_pile
+  end
+  
+  
+  def set_up_a_pile
     create_node :a_plain_text_node, :with => {
-      :parent => nodes(:a_piles_root_node),
+      :parent => piles(:a_pile).root_node,
       :prop => TextProp.new(:value => 'something to say…')
     }
     
     create_node :a_todo_node, :with => {
-      :parent => nodes(:a_piles_root_node),
+      :parent => piles(:a_pile).root_node,
       :prop => TextProp.new(:value => 'make pie'),
       :children => [
         Node.new(:prop => CheckProp.new)
@@ -35,7 +39,7 @@ class NodesDataset < Dataset::Base
     }
     
     create_node :a_prioritized_todo_node, :with => {
-      :parent => nodes(:a_piles_root_node),
+      :parent => piles(:a_pile).root_node,
       :prop => TextProp.new(:value => 'eat fud'),
       :children => [
         Node.new(:prop => CheckProp.new),
@@ -44,7 +48,7 @@ class NodesDataset < Dataset::Base
     }
     
     create_node :a_tagged_todo_node, :with => {
-      :parent => nodes(:a_piles_root_node),
+      :parent => piles(:a_pile).root_node,
       :prop => TextProp.new(:value => 'rule teh world'),
       :children => [
         Node.new(:prop => CheckProp.new),
@@ -53,7 +57,7 @@ class NodesDataset < Dataset::Base
     }
     
     create_node :a_multitagged_todo_node, :with => {
-      :parent => nodes(:a_piles_root_node),
+      :parent => piles(:a_pile).root_node,
       :prop => TextProp.new(:value => 'be happy for ever'),
       :children => [
         Node.new(:prop => CheckProp.new),
@@ -64,7 +68,7 @@ class NodesDataset < Dataset::Base
     }
     
     create_node :a_dated_todo_node, :with => {
-      :parent => nodes(:a_piles_root_node),
+      :parent => piles(:a_pile).root_node,
       :prop => TextProp.new(:value => 'the future is here'),
       :children => [
         Node.new(:prop => CheckProp.new),
@@ -73,7 +77,7 @@ class NodesDataset < Dataset::Base
     }
     
     create_node :a_noted_todo_node, :with => {
-      :parent => nodes(:a_piles_root_node),
+      :parent => piles(:a_pile).root_node,
       :prop => TextProp.new(:value => 'a little story for you'),
       :children => [
         Node.new(:prop => CheckProp.new),
@@ -101,7 +105,7 @@ EOS
     }
     
     create_node :a_prioritzed_tagged_dated_noted_todo_node, :with => {
-      :parent => nodes(:a_piles_root_node),
+      :parent => piles(:a_pile).root_node,
       :prop => TextProp.new(:value => 'finish ClutterApp'),
       :children => [
         Node.new(:prop => CheckProp.new),
@@ -111,16 +115,22 @@ EOS
         Node.new(:prop => NoteProp.new(:value => "This is really important; this means something."))
       ]
     }
-    
-    
-    name_node :a_better_piles_root_node,
-      :for => piles(:a_better_pile).root_node
-    
-    
-    name_node :another_piles_root_node,
-      :for => piles(:another_pile).root_node
-    
   end
+  
+  def set_up_a_better_pile
+    create_node :a_better_plain_text_node, :with => {
+      :parent => piles(:a_better_pile).root_node,
+      :prop => TextProp.new(:value => 'something better to say…')
+    }
+  end
+  
+  def set_up_another_pile
+    create_node :a_better_plain_text_node, :with => {
+      :parent => piles(:another_pile).root_node,
+      :prop => TextProp.new(:value => 'something else to say…')
+    }
+  end
+    
   
   helpers do
     
