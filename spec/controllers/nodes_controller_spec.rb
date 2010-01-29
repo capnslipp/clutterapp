@@ -77,4 +77,50 @@ describe NodesController do
   end
   
   
+  describe "reparent" do
+    
+    describe "within the same pile" do
+      
+      describe "should work" do
+        after(:each) { response.should be_success }
+        
+        it "moving a 1st-level item to a descendent of a sibling item" do
+          xhr :put, :reparent,
+            :user_id => users(:a_user).to_param,
+            :pile_id => piles(:a_pile).to_param,
+            :id => nodes(:a_plain_text_node).to_param,
+            :parent_id => nodes(:a_sub_sub_todo_node).to_param,
+            :parent_pile_id => piles(:a_pile).to_param
+        end
+        
+        it "moving to a descendent item to the 1st level" do
+          xhr :put, :reparent,
+            :user_id => users(:a_user).to_param,
+            :pile_id => piles(:a_pile).to_param,
+            :id => nodes(:a_sub_sub_todo_node).to_param,
+            :parent_id => piles(:a_pile).root_node.to_param,
+            :parent_pile_id => piles(:a_pile).to_param
+        end
+        
+      end
+      
+      describe "should not work" do
+        it "moving a 1st-level item to a descendent of itself" do
+          proc {
+            xhr :put, :reparent,
+              :user_id => users(:a_user).to_param,
+              :pile_id => piles(:a_pile).to_param,
+              :id => nodes(:a_todo_node).to_param,
+              :parent_id => nodes(:a_sub_sub_todo_node).to_param,
+              :parent_pile_id => piles(:a_pile).to_param
+          }.should raise_error(ActiveRecord::ActiveRecordError)
+        end
+        
+      end
+      
+    end # within the same pile
+    
+  end # reparent
+  
+  
 end
