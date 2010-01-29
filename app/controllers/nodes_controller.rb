@@ -255,6 +255,7 @@ private
   
   def deep_clone_node_to_pile!(orig_node, dest_pile, dest_parent)
     cloned_node = orig_node.clone
+    cloned_node.prop = orig_node.prop.clone
     cloned_node.pile = dest_pile
     dest_parent.children << cloned_node # saves as a side-effect
     
