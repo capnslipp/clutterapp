@@ -163,22 +163,6 @@ describe NodesController do
         
       end
       
-      describe "should not work" do
-        it "moving a 1st-level item to a descendent of itself" do
-          pending
-          
-          proc {
-            xhr :put, :reparent,
-              :user_id => users(:a_user).to_param,
-              :pile_id => piles(:a_pile).to_param,
-              :id => nodes(:a_todo_node).to_param,
-              :target_id => nodes(:a_sub_sub_todo_node).to_param,
-              :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
-          }.should raise_error(ActiveRecord::ActiveRecordError)
-        end
-        
-      end
-      
     end # from one pile to another
     
   end # reparent
