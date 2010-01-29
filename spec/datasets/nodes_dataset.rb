@@ -130,7 +130,7 @@ EOS
   end
   
   def set_up_another_pile
-    create_node :a_better_plain_text_node, :with => {
+    create_node :another_plain_text_node, :with => {
       :parent => piles(:another_pile).root_node,
       :prop => TextProp.new(:value => 'something else to say…')
     }
