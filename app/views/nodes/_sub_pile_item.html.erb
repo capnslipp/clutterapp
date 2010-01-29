@@ -7,7 +7,7 @@
 				
 				<%= render :partial => 'nodes/show_body', :locals => {:node => sub_pile_item} %>
 				
-				<ul class="node list">
+				<ul class="item-list">
 					<%= render :partial => 'nodes/list_items', :locals => {:item => sub_pile_item.prop.ref_pile.root_node} %>
 				</ul>
 				
