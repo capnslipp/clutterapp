@@ -10,6 +10,7 @@ describe "datasets" do
       proper! piles(:a_pile) do
         proper! piles(:a_pile).root_node do
           proper! nodes(:a_plain_text_node)
+          proper! nodes(:a_sub_pile_ref_node)
           proper! nodes(:a_todo_node) do
             proper! nodes(:a_sub_todo_node) do
               proper! nodes(:a_sub_sub_todo_node)

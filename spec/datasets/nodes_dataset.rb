@@ -14,6 +14,11 @@ class NodesDataset < Dataset::Base
       :prop => TextProp.new(:value => 'something to say…')
     }
     
+    create_node :a_sub_pile_ref_node, :with => {
+      :parent => piles(:a_pile).root_node,
+      :prop => PileRefProp.new(:value => piles(:a_better_pile))
+    }
+    
     create_node :a_todo_node, :with => {
       :parent => piles(:a_pile).root_node,
       :prop => TextProp.new(:value => 'make pie'),
