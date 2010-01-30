@@ -57,34 +57,19 @@ li { list-style-type: none; }
 	padding: 16px; padding-bottom: 18px;
 }
 .pile.item > .body > .header { position: relative; }
-.base.pile.item > .body > .header {
+.base.pile > .body > .header {
 	margin: -16px; margin-bottom: -18px;
 	padding: 16px; padding-bottom: 18px;
 }
-.pile.item > .body > .header > .owner { opacity: 0.25; }
-.pile.item > .body > .header > .owner,
-.pile.item > .body > .header > .name { white-space: nowrap; }
-.pile.item > .body > .action.stub { float: right; width: auto; border: none; }
-.pile.item > .body.active {
+.base.pile > .body > .header > .owner { opacity: 0.25; }
+.base.pile > .body > .header > .owner,
+.base.pile > .body > .header > .name { white-space: nowrap; }
+
+.base.pile > .body > .action.stub { float: right; width: auto; border: none; }
+.base.pile > .body.active {
 }
-.pile.item > .body.active > * {
+.base.pile > .body.active > .header {
 	z-index: 2;
-}
-.pile.item > .body.active > .back {
-	position: absolute; z-index: 1;
-	top: 0; bottom: 0; left: 0; right: 0;
-	
-	background: <%= bright_bg_color %>;
-	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
-}
-.item > .body.active > .hyper { /* used to super-highlight items */
-	position: absolute; z-index: 0;
-	top: 0; bottom: 0; left: -2px; right: -2px;
-	
-	background: <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
-	<%= border_radius_decl('8px') %>
-	border: 4px solid transparent;
-	margin: -4px;
 }
 
 .item {
@@ -98,7 +83,8 @@ li { list-style-type: none; }
 	<% end %>
 }
 section.item { display: block; }
-.item > .body {
+.item > .body,
+.sub.pile > .body {
 	position: relative;
 	
 	<% if debug? %>
@@ -108,7 +94,8 @@ section.item { display: block; }
 	
 	/*min-height: 1.5em;*/
 }
-.item > .show.body {
+.item > .show.body,
+.sub.pile > .show.body {
 	<% if debug? %>
 		background: rgba(127, 191, 0, 0.125);
 		border: 2px solid rgba(127, 191, 0, 0.5);
@@ -121,16 +108,16 @@ section.item { display: block; }
 }
 .pile.item > .show.body {
 }
-.item > .show.body.active {
+.body.active {
 }
-.item > .show.body.active > .cont {
+.body.active > .cont {
 	position: relative;
 }
-.item > .show.body.active > .cont,
-.item > .show.body.active > .bullet {
+.body.active > .cont,
+.body.active > .bullet {
 	z-index: 2;
 }
-.item > .show.body.active > .back {
+.body.active > .back {
 	position: absolute; z-index: 1;
 	top: 0; bottom: 0; left: -2px; right: -2px;
 	
@@ -138,7 +125,7 @@ section.item { display: block; }
 	<%= border_radius_decl('4px') %>
 	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
 }
-.item > .show.body.active > .hyper { /* used to super-highlight items */
+.body.active > .hyper { /* used to super-highlight items */
 	position: absolute; z-index: 0;
 	top: 0; bottom: 0; left: -2px; right: -2px;
 	
@@ -199,7 +186,7 @@ section.item { display: block; }
 .item > .edit.body .finish.line {
 	float: right;
 }
-.item > .body > .bullet {
+.body > .bullet {
 	position: absolute;
 	left: 4px;
 	width: 16px;
@@ -208,15 +195,17 @@ section.item { display: block; }
 	/*line-height: 15px;*/
 }
 .item > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-top: 1px; }
-.pile.item > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-left: -3px; margin-top: -1px; }
+.sub.pile > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-left: -3px; margin-top: -1px; }
 
 .item > .body > .action.stub,
-.item > .body > #action-bar {
+.item > .body > #action-bar,
+.sub.pile > .body > .action.stub,
+.sub.pile > .body > #action-bar {
 	position: absolute; z-index: 5;
 	right: 4px;
 }
-.base.pile.item > .body > .action.stub,
-.base.pile.item > .body > #action-bar {
+.base.pile > .body > .action.stub,
+.base.pile > .body > #action-bar {
 	right: 20px;
 }
 

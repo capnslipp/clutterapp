@@ -51,7 +51,7 @@ function expandActionBar(node) {
 	
 	collapseActionBar();
 	
-	var nodeBody = node.children('.body').required();
+	var nodeBody = $('> .body, > .pile > .body', node).required();
 	
 	nodeBody.children('.action.stub').hide();
 	
@@ -79,7 +79,7 @@ function expandActionBar(node) {
 
 function collapseActionBar() {
 	var node = $('#action-bar').closest('.item').required();
-	var nodeBody = node.children('.body').required();
+	var nodeBody = $('> .body, > .pile > .body', node).required();
 	
 	
 	node.deactivateReparentDraggable();
@@ -100,21 +100,23 @@ function collapseActionBar() {
 }
 
 $(function() {
-	$('li.item > .show.body > .cont').live('click', function() {
-		expandActionBar($(this).closest('li.item')); return false;
-	});
-	$('section.base.pile.item > .body > .header, section.pile.item > .body > .cont').live('click', function() {
-		expandActionBar($(this).closest('section.pile.item')); return false;
-	});
+	$('.base.pile.item > .body > .header').live('click', expand);
+	$('.item > .sub.pile > .body > .cont').live('click', expand);
+	$('.item > .body > .cont').live('click', expand);
+	
+	function expand() {
+		expandActionBar($(this).closest('.item')); return false;
+	}
 });
 
 $(function() {
-	$('li.item > .show.body > .action.stub .widget.collapsed a').live('click', function() {
-		expandActionBar($(this).closest('li.item')); return false;
-	});
-	$('section.pile.item > .body > .action.stub .widget.collapsed a').live('click', function() {
-		expandActionBar($(this).closest('section.pile.item')); return false;
-	});
+	$('.base.pile.item > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.item > .sub.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.item > .body > .action.stub .widget.collapsed a').live('click', expand);
+	
+	function expand() {
+		expandActionBar($(this).closest('.item')); return false;
+	}
 	
 	$('#action-bar .widget.expanded a').click(function() {
 		if (!ClutterApp.fsm.isBusy())
