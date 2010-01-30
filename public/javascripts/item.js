@@ -57,7 +57,7 @@ function expandActionBar(node) {
 	
 	nodeBody.addClass('active');
 	
-	if (!nodeBody.find('#action-bar')[0])
+	if (!nodeBody.find('#action-bar').exists())
 		$('#action-bar').prependTo(nodeBody);
 	
 	// only show the new buttons on the base pile node
@@ -822,7 +822,7 @@ jQuery.fn.setupReorderSortable = function() {
 		list.addClass('active');
 		
 		var origPrevSibling = ui.item.prev('li.item');
-		origPrevSiblingID = origPrevSibling[0] ? nodeIDOfItem(origPrevSibling) : '';
+		origPrevSiblingID = origPrevSibling.exists() ? nodeIDOfItem(origPrevSibling) : '';
 		
 		var placeholder = ui.placeholder.required();
 		placeholder.prepend('<div class="back"></div> <div class="cont"></div>');
@@ -838,7 +838,7 @@ jQuery.fn.setupReorderSortable = function() {
 		
 		// @todo: optimize so this isn't being done twice
 		var prevSibling = ui.item.prev('li.item');
-		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
+		var prevSiblingID = prevSibling.exists() ? nodeIDOfItem(prevSibling) : '';
 		
 		// only if the prevSibling has changed
 		if (prevSiblingID != origPrevSiblingID) {
@@ -866,7 +866,7 @@ function itemReorder(node) {
 	list.showProgressOverlay();
 	
 	var prevSibling = node.prev('li.item');
-	var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
+	var prevSiblingID = prevSibling.exists() ? nodeIDOfItem(prevSibling) : '';
 	
 	$.ajax({
 		type: 'post',
@@ -1170,12 +1170,12 @@ function badgeAdd(link, addType) {
 	var node = $(link).closest('li.item').required();
 	
 	var state;
-	if (node.children('.new')[0]) {
+	if (node.children('.new').exists()) {
 		state = 'new';
 		
 		if (!ClutterApp.fsm.changeState('itemNew', 'badgeAddLoad'))
 			return;
-	} else if (node.children('.edit')[0]) {
+	} else if (node.children('.edit').exists()) {
 		state = 'edit';
 		
 		if (!ClutterApp.fsm.changeState('itemEdit', 'badgeAddLoad'))
@@ -1266,12 +1266,12 @@ function badgeRemove(link) {
 	var node = $(link).closest('li.item').required();
 	
 	var state;
-	if (node.children('.new')[0]) {
+	if (node.children('.new').exists()) {
 		state = 'new';
 		
 		if (!ClutterApp.fsm.changeState('itemNew', 'badgeRemoveLoad'))
 			return;
-	} else if (node.children('.edit')[0]) {
+	} else if (node.children('.edit').exists()) {
 		state = 'edit';
 		
 		if (!ClutterApp.fsm.changeState('itemEdit', 'badgeRemoveLoad'))
