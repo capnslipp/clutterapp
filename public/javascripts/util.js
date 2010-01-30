@@ -1,13 +1,17 @@
 // ClutterApp JS utils
 
 
+jQuery.fn.exists = function() {
+	return !!this[0];
+}
+
 jQuery.fn.walk = function() {
 	var firstChild = this.children(':first');
-	if (firstChild[0]) {
+	if (firstChild.exists()) {
 		return firstChild;
 	} else {
 		var nextSibling = this.next()
-		if (nextSibling[0])
+		if (nextSibling.exists())
 			return nextSibling;
 		else
 			return this.closest(':not(:last-child)').next();
@@ -16,7 +20,7 @@ jQuery.fn.walk = function() {
 
 jQuery.fn.required = function() {
 	if (window.console && window.console.assert)
-		window.console.assert(this[0]);
+		window.console.assert(this.exists());
 	
 	return this;
 }
