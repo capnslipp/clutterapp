@@ -944,7 +944,7 @@ $(function() {
 });
 
 jQuery.fn.applyReparentDroppability = function() {
-	$(this).search('li.item > .show.body, section.pile.item > .body').activateReparentDroppable();
+	$(this).search('.item > .show.body, .pile > .body').activateReparentDroppable();
 	return this;
 }
 
