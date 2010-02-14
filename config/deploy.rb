@@ -67,7 +67,7 @@ set :use_sudo, false
 set :repository,  'git@snaotn.6bitt.com:orgclut2.git'
 set :scm, :git
 set :deploy_via, :remote_cache
-set :git_enable_submodules, 1
+#set :git_enable_submodules, 1
 
 #ssh_options[:forward_agent] = true # needed?
 
