@@ -1,0 +1,8 @@
+.autotest
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/git_r_backup
+lib/git_r_backup.rb
+test/test_git_r_backup.rb
