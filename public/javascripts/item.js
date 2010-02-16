@@ -38,7 +38,10 @@ function nodeIDOfItem(node) {
 }
 
 function pileIDOfItem(itemForNode) {
-	return itemForNode.closest('.pile.base_node').getAttr('oc:nodes-url').match(/\/piles\/([0-9]+)\/nodes/)[1];
+	if (itemForNode.is('.base_node'))
+		return itemForNode.children('.pile').getAttr('oc:nodes-url').match(/\/piles\/([0-9]+)\/nodes/)[1];
+	else
+		return itemForNode.closest('.pile').getAttr('oc:nodes-url').match(/\/piles\/([0-9]+)\/nodes/)[1];
 }
 
 
@@ -51,7 +54,7 @@ function expandActionBar(node) {
 	
 	collapseActionBar();
 	
-	var nodeBody = $('> .body, > .pile > .body', node).required();
+	var nodeBody = $('> .cont > .body, > .pile > .body', node).required();
 	
 	nodeBody.children('.action.stub').hide();
 	
@@ -71,7 +74,7 @@ function expandActionBar(node) {
 	// since it may be initially-hidden
 	safeShow($('#action-bar'));
 	
-	if (!node.is('.base.pile')) {
+	if (!node.is('.base.item')) {
 		node.activateReparentDraggable();
 		node.closest('ul.item-list').required().activateReorderSortable();
 	}
@@ -79,7 +82,7 @@ function expandActionBar(node) {
 
 function collapseActionBar() {
 	var node = $('#action-bar').closest('.item').required();
-	var nodeBody = $('> .body, > .pile > .body', node).required();
+	var nodeBody = $('> .cont > .body, > .pile > .body', node).required();
 	
 	
 	node.deactivateReparentDraggable();
@@ -100,9 +103,9 @@ function collapseActionBar() {
 }
 
 $(function() {
-	$('.base.pile.item > .body > .header').live('click', expand);
+	$('.item > .base.pile > .body > .header').live('click', expand);
 	$('.item > .sub.pile > .body > .cont').live('click', expand);
-	$('.item > .body > .cont').live('click', expand);
+	$('.item > .cont > .body > .cont').live('click', expand);
 	
 	function expand() {
 		expandActionBar($(this).closest('.item')); return false;
@@ -110,9 +113,9 @@ $(function() {
 });
 
 $(function() {
-	$('.base.pile.item > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.item > .base.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
 	$('.item > .sub.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
-	$('.item > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.item > .cont > .body > .action.stub .widget.collapsed a').live('click', expand);
 	
 	function expand() {
 		expandActionBar($(this).closest('.item')); return false;
@@ -161,7 +164,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 	function handleSuccess(responseData) {
 		hideProgressOverlay();
 		
-		var list = parentNode.children('.item-list').required();
+		var list = $('> .cont > .item-list', parentNode).required();
 		
 		if (!prevSiblingNode) {
 			list.prepend(responseData);
@@ -214,7 +217,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 		hideProgressOverlay();
 		ClutterApp.fill.hide();
 		
-		parentNode.children('.show.body')
+		$('> .cont > .show.body', parentNode)
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000); // @todo: fix
 		
 		
@@ -481,7 +484,7 @@ function itemEdit(link) {
 }
 
 $(function() {
-	$('li.item > .show.body > .cont, li.item > .pile.item > .show.body > .cont').live('dblclick', function() {
+	$('.item > .cont > .show.body > .cont, .item > .pile > .show.body > .cont').live('dblclick', function() {
 		itemEdit(this); return false;
 	});
 	$('#action-bar > .buttons > a.edit').click(function() {
@@ -496,7 +499,7 @@ function itemEditCancel(buttonOrNode) {
 		return;
 	
 	var node = buttonOrNode.closest('.item').required();
-	var editBody = node.children('.edit.body').required();
+	var editBody = $('> .cont > .edit.body', node).required();
 	var form = editBody.children('form.edit_node').required();
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
@@ -773,7 +776,7 @@ jQuery.fn.setupReorderSortable = function() {
 		axis: 'y',
 		containment: '#active-sorting-container',
 		tolerance: 'pointer',
-		handle: '> .show.body > #action-bar .move.reorder, > section.base_node > .show.body > #action-bar .move.reorder',
+		handle: '> .cont > .show.body > #action-bar .move.reorder, > section.base_node > .show.body > #action-bar .move.reorder',
 		helper: helper,
 		opacity: 0.5,
 		revert: true,
@@ -944,7 +947,7 @@ $(function() {
 });
 
 jQuery.fn.applyReparentDroppability = function() {
-	$(this).search('.item > .show.body, .pile > .body').activateReparentDroppable();
+	$(this).search('.item > .cont > .show.body, .item > .pile > .body').activateReparentDroppable();
 	return this;
 }
 
@@ -1003,11 +1006,11 @@ function itemReparent(node, parentNode) {
 	parentNode = $(parentNode).closest('.item').required();
 	
 	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
-	node.children('.body').addClass('active');
+	$('> .cont > .body', node).addClass('active');
 	node.setCSS('opacity', 0.5); // doesn't seem to be working (perhaps being overridden via jQueryUI code?)
 	
 	nodeOutStart();
-	parentNode.children('.body').required().showProgressOverlay();
+	$('> .cont > .body', parentNode).required().showProgressOverlay();
 	
 	$.ajax({
 		type: 'post',
@@ -1078,9 +1081,9 @@ function itemReparent(node, parentNode) {
 		hideProgressOverlay();
 		
 		
-		parentNode.children('.body').removeClass('active');
+		$('> .cont > .body', parentNode).removeClass('active');
 		
-		var list = parentNode.children('ul.item-list').required();
+		var list = $('> .cont > ul.item-list', parentNode).required();
 		
 		$('li.item', list).draggable('destroy');
 		$('.show.body', list).droppable('destroy');
@@ -1223,7 +1226,7 @@ function badgeAdd(link, addType) {
 		}
 		else if (state == 'edit')
 		{
-			var showBody = node.children('.show.body').required();
+			var showBody = $('> .cont > .show.body', node).required();
 			var editBody = showBody.siblings('.edit.body').required();
 			
 			//var editBody = node.replaceWith(responseData); // possible?
@@ -1319,7 +1322,7 @@ function badgeRemove(link) {
 		}
 		else if (state == 'edit')
 		{
-			var showBody = node.children('.show.body').required();
+			var showBody = $('> .cont > .show.body', node).required();
 			var editBody = showBody.siblings('.edit.body').required();
 			
 			//var editBody = node.replaceWith(responseData); // possible?

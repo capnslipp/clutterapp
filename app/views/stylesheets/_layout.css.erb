@@ -51,24 +51,24 @@ ul.item-list.active {
 
 li { list-style-type: none; }
 
-.pile.item > .body { display: block; border: none; }
-.base.pile.item > .body {
+.item > .pile > .body { display: block; border: none; }
+.base.item > .pile > .body {
 	margin: -16px; margin-bottom: 0;
 	padding: 16px; padding-bottom: 18px;
 }
-.pile.item > .body > .header { position: relative; }
-.base.pile > .body > .header {
+.item > .pile > .body > .header { position: relative; }
+.base.item > .pile > .body > .header {
 	margin: -16px; margin-bottom: -18px;
 	padding: 16px; padding-bottom: 18px;
 }
-.base.pile > .body > .header > .owner { opacity: 0.25; }
-.base.pile > .body > .header > .owner,
-.base.pile > .body > .header > .name { white-space: nowrap; }
+.base.item > .pile > .body > .header > .owner { opacity: 0.25; }
+.base.item > .pile > .body > .header > .owner,
+.base.item > .pile > .body > .header > .name { white-space: nowrap; }
 
-.base.pile > .body > .action.stub { float: right; width: auto; border: none; }
-.base.pile > .body.active {
+.base.item > .pile > .body > .action.stub { float: right; width: auto; border: none; }
+.base.item > .pile > .body.active {
 }
-.base.pile > .body.active > .header {
+.base.item > .pile > .body.active > .header {
 	z-index: 2;
 }
 
@@ -82,9 +82,9 @@ li { list-style-type: none; }
 		margin: 1px;
 	<% end %>
 }
-section.item { display: block; }
-.item > .body,
-.sub.pile > .body {
+/*section.item { display: block; }*/
+.item > .cont > .body,
+.item > .pile > .body {
 	position: relative;
 	
 	<% if debug? %>
@@ -94,8 +94,8 @@ section.item { display: block; }
 	
 	/*min-height: 1.5em;*/
 }
-.item > .show.body,
-.sub.pile > .show.body {
+.item > .cont > .show.body,
+.item > .sub.pile > .show.body {
 	<% if debug? %>
 		background: rgba(127, 191, 0, 0.125);
 		border: 2px solid rgba(127, 191, 0, 0.5);
@@ -136,7 +136,7 @@ section.item { display: block; }
 }
 
 .item > .new.body,
-.item > .edit.body {
+.item > .cont > .edit.body {
 	margin: -12px 8px;
 	
 	background: <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
@@ -144,7 +144,7 @@ section.item { display: block; }
 	border: 8px solid transparent;
 }
 .item > .new.body > .cont,  .item > .new.body > form > .cont,
-.item > .edit.body > .cont, .item > .edit.body > form > .cont {
+.item > .cont > .edit.body > .cont, .item > .cont > .edit.body > form > .cont {
 	<%= border_radius_decl('8px') %>
 	<%= deep_shadow_decl(0.5) %>
 	
@@ -153,10 +153,10 @@ section.item { display: block; }
 }
 /* contain-float-after */
 .item > .new.body > .cont:after,  .item > .new.body > form > .cont:after,
-.item > .edit.body > .cont:after, .item > .edit.body > form > .cont:after {
+.item > .cont > .edit.body > .cont:after, .item > .cont > .edit.body > form > .cont:after {
 	content: ""; display: block; height: 0; clear: both; visibility: hidden; /* (FF, S2, O9) */
 }
-.item > .edit.body {
+.item > .cont > .edit.body {
 	position: absolute;
 	/*width: 100%;*/ left: 0; right: 0;
 	
@@ -183,7 +183,7 @@ section.item { display: block; }
 	margin-bottom: 4px;
 }
 .item > .new.body .finish.line,
-.item > .edit.body .finish.line {
+.item > .cont > .edit.body .finish.line {
 	float: right;
 }
 .body > .bullet {
@@ -194,18 +194,18 @@ section.item { display: block; }
 	/*vertical-align: middle;*/
 	/*line-height: 15px;*/
 }
-.item > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-top: 1px; }
-.sub.pile > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-left: -3px; margin-top: -1px; }
+.item > .cont > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-top: 1px; }
+.item > .sub.pile > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-left: -3px; margin-top: -1px; }
 
-.item > .body > .action.stub,
-.item > .body > #action-bar,
-.sub.pile > .body > .action.stub,
-.sub.pile > .body > #action-bar {
+.item > .cont > .body > .action.stub,
+.item > .cont > .body > #action-bar,
+.item > .pile > .body > .action.stub,
+.item > .pile > .body > #action-bar {
 	position: absolute; z-index: 5;
 	right: 4px;
 }
-.base.pile > .body > .action.stub,
-.base.pile > .body > #action-bar {
+.base.item > .pile > .body > .action.stub,
+.base.item > .pile > .body > #action-bar {
 	right: 20px;
 }
 
