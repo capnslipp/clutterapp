@@ -19,8 +19,6 @@ class PilesController < ApplicationController
     @pile = active_pile
     
     @enable_item_view_js = true
-    
-    @cell_state = :show
   end
   
   
