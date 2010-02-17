@@ -68,11 +68,11 @@ function expandActionBar(node) {
 		$('#action-bar').prependTo(nodeBody);
 	
 	// only show the new buttons on the base pile node
-	if (node.is('.base.pile'))
+	if (node.children('.base.pile').exists())
 		$('#action-bar > .buttons > a:not(.new)').hide();
 	
 	// only show new sub-pile button on pile_ref nodes
-	if (!node.is('.pile'))
+	if (!node.children('.pile').exists())
 		$('#action-bar > .buttons > a.new.child-pile').hide();
 	
 	// since it may be initially-hidden
