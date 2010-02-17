@@ -37,11 +37,15 @@ function nodeIDOfItem(node) {
 		return null;
 }
 
-function pileIDOfItem(itemForNode) {
-	if (itemForNode.is('.base_node'))
-		return itemForNode.children('.pile').getAttr('oc:nodes-url').match(/\/piles\/([0-9]+)\/nodes/)[1];
+function pileForItem(node) {
+	if (node.children('.pile').exists())
+		return node.children('.pile');
 	else
-		return itemForNode.closest('.pile').getAttr('oc:nodes-url').match(/\/piles\/([0-9]+)\/nodes/)[1];
+		return node.closest('.pile');
+}
+
+function pileIDOfItem(node) {
+	return pileForItem(node).getAttr('oc:nodes-url').match(/\/piles\/([0-9]+)\/nodes/)[1];
 }
 
 
@@ -153,7 +157,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 	
 	$.ajax({
 		type: 'get',
-		url: parentNode.closest('.pile').getAttr('oc\:nodes-url') + '/new',
+		url: pileForItem(parentNode).getAttr('oc\:nodes-url') + '/new',
 		data: { 'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode), prev_sibling_id: prevSiblingNodeID, dup_prev: (dupPrev || '') },
 		dataType: 'html',
 		success: handleSuccess,
@@ -996,26 +1000,26 @@ jQuery.fn.setupReparentDroppable = function() {
 	}
 }
 
-function itemReparent(node, parentNode) {
+function itemReparent(node, targetNode) {
 	if (!ClutterApp.fsm.changeAction('itemReparent', 'load')) {
 		handleError(); // return the item back for now, since we have no way to prevent the drag from starting
 		return;
 	}
 	
 	node.required();
-	parentNode = $(parentNode).closest('.item').required();
+	targetNode = $(targetNode).closest('.item').required();
 	
 	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
 	$('> .cont > .body', node).addClass('active');
 	node.setCSS('opacity', 0.5); // doesn't seem to be working (perhaps being overridden via jQueryUI code?)
 	
 	nodeOutStart();
-	$('> .cont > .body', parentNode).required().showProgressOverlay();
+	$('> .cont > .body', targetNode).required().showProgressOverlay();
 	
 	$.ajax({
 		type: 'post',
 		url: node.getAttr('oc\:url') + '/reparent',
-		data: {_method: 'put', target_id: nodeIDOfItem(parentNode), target_pile_id: pileIDOfItem(parentNode)},
+		data: {_method: 'put', target_id: nodeIDOfItem(targetNode.children('.base_node').exists() ? targetNode.children('.base_node') : targetNode), target_pile_id: pileIDOfItem(targetNode)},
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError
@@ -1081,9 +1085,9 @@ function itemReparent(node, parentNode) {
 		hideProgressOverlay();
 		
 		
-		$('> .cont > .body', parentNode).removeClass('active');
+		$('> .cont > .body', targetNode).removeClass('active');
 		
-		var list = $('> .cont > ul.item-list', parentNode).required();
+		var list = $('> .cont > ul.item-list', targetNode).required();
 		
 		$('li.item', list).draggable('destroy');
 		$('.show.body', list).droppable('destroy');
@@ -1158,7 +1162,7 @@ function itemReparent(node, parentNode) {
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
-		parentNode.removeClass('active');
+		targetNode.removeClass('active');
 		hideProgressOverlay();
 		
 		node.required().show().removeAttr('style'); // clear out transitional styles
