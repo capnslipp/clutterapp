@@ -6,7 +6,7 @@ describe "/piles/index.html.erb" do
   
   
   before(:each) do
-    assigns[:pile_owner] = @user = users(:a_user)
+    assigns[:pile_owner] = @user = users(:slippy_douglas)
     
     assigns[:piles] = [
       @user.default_pile,

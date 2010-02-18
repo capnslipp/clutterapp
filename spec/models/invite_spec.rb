@@ -16,14 +16,14 @@ describe Invite do
   end
   
   it "should report invalid, given zero invites_remaining" do
-    u = users(:a_user)
+    u = users(:slippy_douglas)
     u.stub!(:invites_remaining).and_return(0)
     
     u.errors.should_not be_nil
   end
   
   it "should increase its invite_sent_count when increment_sender_invite_sent_count is called" do
-    i = Invite.create(:sender => users(:a_user))
+    i = Invite.create(:sender => users(:slippy_douglas))
     
     proc {
       i.send(:increment_sender_invite_sent_count)

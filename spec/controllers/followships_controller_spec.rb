@@ -15,7 +15,7 @@ describe FollowshipsController do
   # 
   # describe "new followship with valid followships" do
   #   it "should create the new followship" # do
-  #   #       @user = users(:a_user) 
+  #   #       @user = users(:slippy_douglas) 
   #   #       post :toggle_follow, :followship => @followship
   #   #     end
   # end

@@ -5,8 +5,8 @@ describe Share do
   
   
   before(:each) do
-    @user1 = users(:a_user)
-    @user2 = users(:a_user)
+    @user1 = users(:slippy_douglas)
+    @user2 = users(:slippy_douglas)
     @pile1 = @user1.default_pile
     @pile2 = @user2.default_pile
   end

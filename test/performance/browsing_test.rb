@@ -12,7 +12,7 @@ class BrowsingTest < ActionController::PerformanceTest
   def setup
     bypass_authentication
     
-    @user = users(:a_user)
+    @user = users(:slippy_douglas)
     @pile = @user.default_pile
     
     26.times do

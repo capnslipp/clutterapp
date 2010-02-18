@@ -6,7 +6,7 @@ describe UserSession do
   
   before(:each) do
     activate_authlogic
-    @user = users(:a_user)
+    @user = users(:slippy_douglas)
   end
   
   

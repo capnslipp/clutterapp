@@ -6,8 +6,8 @@ describe FollowshipsController do
   
   
   before(:each) do
-    @user1 = users(:a_user)
-    @user2 = users(:another_user)
+    @user1 = users(:slippy_douglas)
+    @user2 = users(:josh_vera)
     @followship = Followship.create(
       :user => @user1,
       :followee => @user2,

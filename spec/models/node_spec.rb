@@ -5,7 +5,7 @@ describe Node do
   
   
   before(:each) do
-    @user = users(:a_user)
+    @user = users(:slippy_douglas)
     @pile = @user.default_pile
     @node = @pile.root_node
   end

@@ -7,7 +7,7 @@ describe NodesController do
   
   
   def bypass_authentication
-    NodesController.any_instance.stubs :logged_in? => true, :current_user => users(:a_user)
+    NodesController.any_instance.stubs :logged_in? => true, :current_user => users(:slippy_douglas)
   end
   
   before(:each) do
@@ -25,10 +25,10 @@ describe NodesController do
   it "should create node" do
     assert_difference 'Node.count', +1 do
       xhr :post, :create,
-        :user_id => users(:a_user).to_param,
-        :pile_id => piles(:a_pile).to_param,
+        :user_id => users(:slippy_douglas).to_param,
+        :pile_id => piles(:slippys).to_param,
         :node => {
-          :parent_id => piles(:a_pile).root_node.to_param,
+          :parent_id => piles(:slippys).root_node.to_param,
           :prop_type => 'text',
           :prop_attributes => {:value => "a test node's text"}
         }
@@ -39,8 +39,8 @@ describe NodesController do
   it "should destroy node" do
     assert_difference 'Node.count', -1 do
       xhr :delete, :destroy,
-        :user_id => users(:a_user).to_param,
-        :pile_id => piles(:a_pile).to_param,
+        :user_id => users(:slippy_douglas).to_param,
+        :pile_id => piles(:slippys).to_param,
         :id => nodes(:a_plain_text_node).to_param
     end
   end
@@ -51,8 +51,8 @@ describe NodesController do
       
       it "given a request for a new sub-item" do
         xhr :get, :new,
-          :user_id => users(:a_user).to_param,
-          :pile_id => piles(:a_pile).to_param,
+          :user_id => users(:slippy_douglas).to_param,
+          :pile_id => piles(:slippys).to_param,
           :node => {
             :parent_id => nodes(:a_plain_text_node).to_param,
             :prop_type => 'text'
@@ -63,8 +63,8 @@ describe NodesController do
       
       it "given a request for a new sub-pile" do
         xhr :get, :new,
-          :user_id => users(:a_user).to_param,
-          :pile_id => piles(:a_pile).to_param,
+          :user_id => users(:slippy_douglas).to_param,
+          :pile_id => piles(:slippys).to_param,
           :node => {
             :parent_id => nodes(:a_plain_text_node).to_param,
             :prop_type => 'pile_ref'
@@ -86,8 +86,8 @@ describe NodesController do
         
         it "moving a 1st-level item to a descendent of a sibling item" do
           xhr :put, :reparent,
-            :user_id => users(:a_user).to_param,
-            :pile_id => piles(:a_pile).to_param,
+            :user_id => users(:slippy_douglas).to_param,
+            :pile_id => piles(:slippys).to_param,
             :id => nodes(:a_plain_text_node).to_param,
             :target_id => nodes(:a_sub_sub_todo_node).to_param,
             :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
@@ -95,11 +95,11 @@ describe NodesController do
         
         it "moving to a descendent item to the 1st level" do
           xhr :put, :reparent,
-            :user_id => users(:a_user).to_param,
-            :pile_id => piles(:a_pile).to_param,
+            :user_id => users(:slippy_douglas).to_param,
+            :pile_id => piles(:slippys).to_param,
             :id => nodes(:a_sub_sub_todo_node).to_param,
-            :target_id => piles(:a_pile).root_node.to_param,
-            :target_pile_id => piles(:a_pile).to_param
+            :target_id => piles(:slippys).root_node.to_param,
+            :target_pile_id => piles(:slippys).to_param
         end
         
       end
@@ -108,8 +108,8 @@ describe NodesController do
         it "moving a 1st-level item to a descendent of itself" do
           proc {
             xhr :put, :reparent,
-              :user_id => users(:a_user).to_param,
-              :pile_id => piles(:a_pile).to_param,
+              :user_id => users(:slippy_douglas).to_param,
+              :pile_id => piles(:slippys).to_param,
               :id => nodes(:a_todo_node).to_param,
               :target_id => nodes(:a_sub_sub_todo_node).to_param,
               :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
@@ -127,35 +127,35 @@ describe NodesController do
         
         it "moving a 1st-level item to the 1st level of a sub-Pile" do
           xhr :put, :reparent,
-            :user_id => users(:a_user).to_param,
-            :pile_id => piles(:a_pile).to_param,
+            :user_id => users(:slippy_douglas).to_param,
+            :pile_id => piles(:slippys).to_param,
             :id => nodes(:a_plain_text_node).to_param,
-            :target_id => piles(:a_better_pile).root_node.to_param,
-            :target_pile_id => piles(:a_better_pile).to_param
+            :target_id => piles(:plans_to_rule_the_world).root_node.to_param,
+            :target_pile_id => piles(:plans_to_rule_the_world).to_param
         end
         
         it "moving a descendent item to the 1st level of a sub-Pile" do
           xhr :put, :reparent,
-            :user_id => users(:a_user).to_param,
-            :pile_id => piles(:a_pile).to_param,
+            :user_id => users(:slippy_douglas).to_param,
+            :pile_id => piles(:slippys).to_param,
             :id => nodes(:a_sub_sub_todo_node).to_param,
-            :target_id => piles(:a_better_pile).root_node.to_param,
-            :target_pile_id => piles(:a_better_pile).to_param
+            :target_id => piles(:plans_to_rule_the_world).root_node.to_param,
+            :target_pile_id => piles(:plans_to_rule_the_world).to_param
         end
         
         it "moving a 1st-level item to the 1st level of a parent Pile" do
           xhr :put, :reparent,
-            :user_id => users(:a_user).to_param,
-            :pile_id => piles(:a_better_pile).to_param,
+            :user_id => users(:slippy_douglas).to_param,
+            :pile_id => piles(:plans_to_rule_the_world).to_param,
             :id => nodes(:a_better_plain_text_node).to_param,
-            :target_id => piles(:a_pile).root_node.to_param,
-            :target_pile_id => piles(:a_pile).to_param
+            :target_id => piles(:slippys).root_node.to_param,
+            :target_pile_id => piles(:slippys).to_param
         end
         
         it "moving a 1st-level item to descendent item of a parent Pile" do
           xhr :put, :reparent,
-            :user_id => users(:a_user).to_param,
-            :pile_id => piles(:a_better_pile).to_param,
+            :user_id => users(:slippy_douglas).to_param,
+            :pile_id => piles(:plans_to_rule_the_world).to_param,
             :id => nodes(:a_better_plain_text_node).to_param,
             :target_id => nodes(:a_sub_sub_todo_node).to_param,
             :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
