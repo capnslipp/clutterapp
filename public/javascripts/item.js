@@ -1530,3 +1530,95 @@ window.onresize = function() {
 	if (resizeTimer) clearTimeout(resizeTimer);
 		resizeTimer = setTimeout("$('#scope-panel').savePanelSize();", 500);
 }
+
+
+$(function() {
+	ClutterApp.touchInfo = {
+		kMinMoveToScroll: 5,
+		kDecelFrictionFactor: 0.95,
+		first: null,
+		prev: null,
+		isScrolling: false,
+		origTarget: null,
+	};
+	
+	var panel = $('#scope-panel').required();
+	var center = $('#item-area').required();
+	
+	
+	panel[0].ontouchstart = function(e) { touchStarted(e, panel); };
+	center[0].ontouchstart = function(e) { touchStarted(e, center); };
+	panel[0].ontouchmove = function(e) { touchMoved(e, panel); };
+	center[0].ontouchmove = function(e) { touchMoved(e, center); };
+	panel[0].ontouchend = function(e) { touchEnded(e, panel); };
+	center[0].ontouchend = function(e) { touchEnded(e, center); };
+	
+	function touchStarted(e, areaElement) {
+		var touch = e.changedTouches[0];
+		ClutterApp.touchInfo.first = {
+			y: touch.screenY,
+			id: touch.identifier,
+		};
+		ClutterApp.touchInfo.prev = ClutterApp.touchInfo.first;
+		
+		ClutterApp.touchInfo.origTarget = touch.target;
+		
+		e.preventDefault();
+		e.stopPropagation();
+	}
+	
+	function touchMoved(e, areaElement) {
+		var touch = e.changedTouches[0];
+		var currTouchInfo = {
+			y: touch.screenY,
+			id: touch.identifier,
+		}
+		
+		// early exit if this is a different finger than the one that started the drag
+		if (currTouchInfo.id != ClutterApp.touchInfo.prev.id)
+			return;
+		
+		if (!ClutterApp.touchInfo.isScrolling && Math.abs(ClutterApp.touchInfo.first.y - currTouchInfo.y) >= ClutterApp.touchInfo.kMinMoveToScroll)
+			ClutterApp.touchInfo.isScrolling = true;
+		
+		// early exit if we're not scrolling (yet)
+		if (!ClutterApp.touchInfo.isScrolling)
+			return;
+		
+		var deltaY = ClutterApp.touchInfo.prev.y - currTouchInfo.y;
+		areaElement.scrollTop(areaElement.scrollTop() + deltaY);
+		
+		ClutterApp.touchInfo.prev = currTouchInfo;
+		
+		e.preventDefault();
+		e.stopPropagation();
+		
+		//for (var property in e)
+		//	window.console.log(touch.identifier + ": " + property);
+	};
+	
+	function touchEnded(e, areaElement) {
+		var touch = e.changedTouches[0];
+		var lastTouchInfo = {
+			y: touch.screenY,
+			id: touch.identifier,
+		}
+		
+		if (!ClutterApp.touchInfo.isScrolling) {
+			var clickEvent = document.createEvent("MouseEvent");
+			clickEvent.initMouseEvent("click", true, true, document.defaultView, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
+			
+			var ot = ClutterApp.touchInfo.origTarget;
+			ot.dispatchEvent(clickEvent);
+			ClutterApp.touchInfo.origTarget = null;
+		} else {
+			ClutterApp.touchInfo.isScrolling = false;
+		}
+		
+		ClutterApp.touchInfo.first = null;
+		ClutterApp.touchInfo.prev = null;
+		
+		e.preventDefault();
+		e.stopPropagation();
+	}
+});
