@@ -1540,6 +1540,9 @@ $(function() {
 		prev: null,
 		isScrolling: false,
 		origTarget: null,
+		momentumY: 0,
+		momentumFPS: 1000 / 60,
+		momentumIntervalID: null,
 	};
 	
 	var panel = $('#scope-panel').required();
@@ -1563,6 +1566,10 @@ $(function() {
 		
 		ClutterApp.touchInfo.origTarget = touch.target;
 		
+		if (ClutterApp.touchInfo.momentumIntervalID)
+			clearInterval(ClutterApp.touchInfo.momentumIntervalID);
+		ClutterApp.touchInfo.momentumY = 0;
+		
 		e.preventDefault();
 		e.stopPropagation();
 	}
@@ -1585,12 +1592,13 @@ $(function() {
 		if (!ClutterApp.touchInfo.isScrolling)
 			return;
 		
-		var deltaY = ClutterApp.touchInfo.prev.y - currTouchInfo.y;
-		areaElement.scrollTop(areaElement.scrollTop() + deltaY);
+		ClutterApp.touchInfo.momentumY = ClutterApp.touchInfo.prev.y - currTouchInfo.y;
+		
+		var currScrollY = areaElement.scrollTop();
+		areaElement.scrollTop(currScrollY + ClutterApp.touchInfo.momentumY);
 		
 		ClutterApp.touchInfo.prev = currTouchInfo;
 		
-		e.preventDefault();
 		e.stopPropagation();
 		
 		//for (var property in e)
@@ -1612,13 +1620,32 @@ $(function() {
 			ot.dispatchEvent(clickEvent);
 			ClutterApp.touchInfo.origTarget = null;
 		} else {
+			if (ClutterApp.touchInfo.momentumIntervalID)
+				clearInterval(ClutterApp.touchInfo.momentumIntervalID);
+			
+			ClutterApp.touchInfo.momentumIntervalID = setInterval(function() {
+				animateMomentum(areaElement)
+			}, ClutterApp.touchInfo.momentumFPS);
+			
 			ClutterApp.touchInfo.isScrolling = false;
 		}
 		
 		ClutterApp.touchInfo.first = null;
 		ClutterApp.touchInfo.prev = null;
 		
-		e.preventDefault();
 		e.stopPropagation();
+	}
+	
+	function animateMomentum(areaElement) {
+		ClutterApp.touchInfo.momentumY *= ClutterApp.touchInfo.kDecelFrictionFactor;
+		
+		if (Math.abs(ClutterApp.touchInfo.momentumY) >= 0.25) {
+			var currScrollY = areaElement.scrollTop();
+			areaElement.scrollTop(currScrollY + ClutterApp.touchInfo.momentumY);
+		} else {
+			ClutterApp.touchInfo.momentumY = 0;
+			clearInterval(ClutterApp.touchInfo.momentumIntervalID);
+			ClutterApp.touchInfo.momentumIntervalID = null;
+		}
 	}
 });
