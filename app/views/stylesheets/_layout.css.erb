@@ -219,7 +219,10 @@ li { list-style-type: none; }
 
 /* page */
 #page {
-	padding: 16px;
+	/*padding: 16px;*/
+	position: absolute;
+	width: 100%; top: 24px; bottom: 0;
+	/*overflow-y: scroll;*/
 }
 
 
@@ -323,23 +326,27 @@ li { list-style-type: none; }
 
 #scope-panel {
 	position: absolute; z-index: 50;
+	/*overflow-x: hidden; /* ??? */
 	width: 360px;
 	/* !important declarations to keep jQuery.resizable from using it's own dumb values */
+	overflow-y: auto !important;
 	height: auto !important;
+	top: 0 !important;
+	bottom: 0 !important;
 	
 	background: #e5e5e5;
 }
 #scope-panel.left {
 	/* !important declarations to keep jQuery.resizable from using it's own dumb values */
-	top: 24px !important;
-	bottom: 0 !important;
+	/*top: 24px !important;
+	bottom: 0 !important;*/
 	left: 0 !important;
-	left: auto !important;
+	right: auto !important;
 }
 #scope-panel.right {
 	/* !important declarations to keep jQuery.resizable from using it's own dumb values */
-	top: 24px !important;
-	bottom: 0 !important;
+	/*top: 24px !important;
+	bottom: 0 !important;*/
 	right: 0 !important;
 	left: auto !important;
 }
@@ -388,6 +395,11 @@ li { list-style-type: none; }
 .ui-resizable-helper { display: none; }
 
 #item-area {
+	position: absolute;
+	overflow-y: auto;
+	/*overflow-x: hidden; /* ??? */
+	top: 0; bottom: 0; /*height: 100%;*/
+	left: 0; right: 0; /*width: 100%;*/
 }
 #item-area.left,
 #item-area.middle {
@@ -398,6 +410,8 @@ li { list-style-type: none; }
     margin-left: 360px;
 }
 #item-area > .cont {
+	padding: 16px;
+	
 	min-width: <%= 320 - 10 - (16 * 2) %>px;
 }
 /* root-level scope-list */

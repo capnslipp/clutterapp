@@ -1343,16 +1343,19 @@ $(function() {
 $(function() {
 	ClutterApp.defaultPanelWidth = $('#scope-panel').width();
 	
-	var centerAreaMinWidth = parseInt( $('#item-area > .cont').getCSS('min-width').match('[0-9]+')[0] );
-	var centerAreaPadding = parseInt( $('#page').getCSS('padding-left').match('[0-9]+')[0] ) + parseInt( $('#page').getCSS('padding-right').match('[0-9]+')[0] );
-	ClutterApp.centerAreaMinWidth = centerAreaMinWidth + centerAreaPadding;
+	var itemAreaCont = $('#item-area > .cont');
+	var itemAreaMinWidth = parseInt( itemAreaCont.getCSS('min-width').match('[0-9]+')[0] );
+	var itemAreaPadding = parseInt( itemAreaCont.getCSS('padding-left').match('[0-9]+')[0] ) + parseInt( itemAreaCont.getCSS('padding-right').match('[0-9]+')[0] );
+	ClutterApp.itemAreaMinWidth = itemAreaMinWidth + itemAreaPadding + 16; // 16 extra for scrollbar
 	
 	
-	var panelMinWidth = $('#scope-panel > .cont').getCSS('min-width');
-	ClutterApp.panelMinWidth = parseInt( panelMinWidth.match('[0-9]+')[0] );
+	var scopePanelCont = $('#scope-panel > .cont');
+	var panelMinWidth = parseInt( scopePanelCont.getCSS('min-width').match('[0-9]+')[0] );
+	var panelPadding = parseInt( scopePanelCont.getCSS('padding-left').match('[0-9]+')[0] ) + parseInt( scopePanelCont.getCSS('padding-right').match('[0-9]+')[0] );
+	ClutterApp.panelMinWidth = panelMinWidth + panelPadding + 16; // 16 extra for scrollbar
 });
 ClutterApp.panelToggleMode = function() {
-	return ClutterApp.centerAreaMinWidth + ClutterApp.panelMinWidth > window.innerWidth;
+	return ClutterApp.itemAreaMinWidth + ClutterApp.panelMinWidth > window.innerWidth;
 }
 
 
@@ -1430,7 +1433,7 @@ jQuery.fn.panelMaxWidth = function() {
 	if (ClutterApp.panelToggleMode())
 		return window.innerWidth - 10;
 	else
-		return window.innerWidth - ClutterApp.centerAreaMinWidth;
+		return window.innerWidth - ClutterApp.itemAreaMinWidth;
 }
 
 
