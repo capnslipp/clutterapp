@@ -1343,16 +1343,19 @@ $(function() {
 $(function() {
 	ClutterApp.defaultPanelWidth = $('#scope-panel').width();
 	
-	var centerAreaMinWidth = parseInt( $('#item-area > .cont').getCSS('min-width').match('[0-9]+')[0] );
-	var centerAreaPadding = parseInt( $('#page').getCSS('padding-left').match('[0-9]+')[0] ) + parseInt( $('#page').getCSS('padding-right').match('[0-9]+')[0] );
-	ClutterApp.centerAreaMinWidth = centerAreaMinWidth + centerAreaPadding;
+	var itemAreaCont = $('#item-area > .cont');
+	var itemAreaMinWidth = parseInt( itemAreaCont.getCSS('min-width').match('[0-9]+')[0] );
+	var itemAreaPadding = parseInt( itemAreaCont.getCSS('padding-left').match('[0-9]+')[0] ) + parseInt( itemAreaCont.getCSS('padding-right').match('[0-9]+')[0] );
+	ClutterApp.itemAreaMinWidth = itemAreaMinWidth + itemAreaPadding + 16; // 16 extra for scrollbar
 	
 	
-	var panelMinWidth = $('#scope-panel > .cont').getCSS('min-width');
-	ClutterApp.panelMinWidth = parseInt( panelMinWidth.match('[0-9]+')[0] );
+	var scopePanelCont = $('#scope-panel > .cont');
+	var panelMinWidth = parseInt( scopePanelCont.getCSS('min-width').match('[0-9]+')[0] );
+	var panelPadding = parseInt( scopePanelCont.getCSS('padding-left').match('[0-9]+')[0] ) + parseInt( scopePanelCont.getCSS('padding-right').match('[0-9]+')[0] );
+	ClutterApp.panelMinWidth = panelMinWidth + panelPadding + 16; // 16 extra for scrollbar
 });
 ClutterApp.panelToggleMode = function() {
-	return ClutterApp.centerAreaMinWidth + ClutterApp.panelMinWidth > window.innerWidth;
+	return ClutterApp.itemAreaMinWidth + ClutterApp.panelMinWidth > window.innerWidth;
 }
 
 
@@ -1430,7 +1433,7 @@ jQuery.fn.panelMaxWidth = function() {
 	if (ClutterApp.panelToggleMode())
 		return window.innerWidth - 10;
 	else
-		return window.innerWidth - ClutterApp.centerAreaMinWidth;
+		return window.innerWidth - ClutterApp.itemAreaMinWidth;
 }
 
 
@@ -1527,3 +1530,122 @@ window.onresize = function() {
 	if (resizeTimer) clearTimeout(resizeTimer);
 		resizeTimer = setTimeout("$('#scope-panel').savePanelSize();", 500);
 }
+
+
+$(function() {
+	ClutterApp.touchInfo = {
+		kMinMoveToScroll: 5,
+		kDecelFrictionFactor: 0.95,
+		first: null,
+		prev: null,
+		isScrolling: false,
+		origTarget: null,
+		momentumY: 0,
+		momentumFPS: 1000 / 60,
+		momentumIntervalID: null,
+	};
+	
+	var panel = $('#scope-panel').required();
+	var center = $('#item-area').required();
+	
+	
+	panel[0].ontouchstart = function(e) { touchStarted(e, panel); };
+	center[0].ontouchstart = function(e) { touchStarted(e, center); };
+	panel[0].ontouchmove = function(e) { touchMoved(e, panel); };
+	center[0].ontouchmove = function(e) { touchMoved(e, center); };
+	panel[0].ontouchend = function(e) { touchEnded(e, panel); };
+	center[0].ontouchend = function(e) { touchEnded(e, center); };
+	
+	function touchStarted(e, areaElement) {
+		var touch = e.changedTouches[0];
+		ClutterApp.touchInfo.first = {
+			y: touch.screenY,
+			id: touch.identifier,
+		};
+		ClutterApp.touchInfo.prev = ClutterApp.touchInfo.first;
+		
+		ClutterApp.touchInfo.origTarget = touch.target;
+		
+		if (ClutterApp.touchInfo.momentumIntervalID)
+			clearInterval(ClutterApp.touchInfo.momentumIntervalID);
+		ClutterApp.touchInfo.momentumY = 0;
+		
+		e.preventDefault();
+		e.stopPropagation();
+	}
+	
+	function touchMoved(e, areaElement) {
+		var touch = e.changedTouches[0];
+		var currTouchInfo = {
+			y: touch.screenY,
+			id: touch.identifier,
+		}
+		
+		// early exit if this is a different finger than the one that started the drag
+		if (currTouchInfo.id != ClutterApp.touchInfo.prev.id)
+			return;
+		
+		if (!ClutterApp.touchInfo.isScrolling && Math.abs(ClutterApp.touchInfo.first.y - currTouchInfo.y) >= ClutterApp.touchInfo.kMinMoveToScroll)
+			ClutterApp.touchInfo.isScrolling = true;
+		
+		// early exit if we're not scrolling (yet)
+		if (!ClutterApp.touchInfo.isScrolling)
+			return;
+		
+		ClutterApp.touchInfo.momentumY = ClutterApp.touchInfo.prev.y - currTouchInfo.y;
+		
+		var currScrollY = areaElement.scrollTop();
+		areaElement.scrollTop(currScrollY + ClutterApp.touchInfo.momentumY);
+		
+		ClutterApp.touchInfo.prev = currTouchInfo;
+		
+		e.stopPropagation();
+		
+		//for (var property in e)
+		//	window.console.log(touch.identifier + ": " + property);
+	};
+	
+	function touchEnded(e, areaElement) {
+		var touch = e.changedTouches[0];
+		var lastTouchInfo = {
+			y: touch.screenY,
+			id: touch.identifier,
+		}
+		
+		if (!ClutterApp.touchInfo.isScrolling) {
+			var clickEvent = document.createEvent("MouseEvent");
+			clickEvent.initMouseEvent("click", true, true, document.defaultView, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
+			
+			var ot = ClutterApp.touchInfo.origTarget;
+			ot.dispatchEvent(clickEvent);
+			ClutterApp.touchInfo.origTarget = null;
+		} else {
+			if (ClutterApp.touchInfo.momentumIntervalID)
+				clearInterval(ClutterApp.touchInfo.momentumIntervalID);
+			
+			ClutterApp.touchInfo.momentumIntervalID = setInterval(function() {
+				animateMomentum(areaElement)
+			}, ClutterApp.touchInfo.momentumFPS);
+			
+			ClutterApp.touchInfo.isScrolling = false;
+		}
+		
+		ClutterApp.touchInfo.first = null;
+		ClutterApp.touchInfo.prev = null;
+		
+		e.stopPropagation();
+	}
+	
+	function animateMomentum(areaElement) {
+		ClutterApp.touchInfo.momentumY *= ClutterApp.touchInfo.kDecelFrictionFactor;
+		
+		if (Math.abs(ClutterApp.touchInfo.momentumY) >= 0.25) {
+			var currScrollY = areaElement.scrollTop();
+			areaElement.scrollTop(currScrollY + ClutterApp.touchInfo.momentumY);
+		} else {
+			ClutterApp.touchInfo.momentumY = 0;
+			clearInterval(ClutterApp.touchInfo.momentumIntervalID);
+			ClutterApp.touchInfo.momentumIntervalID = null;
+		}
+	}
+});
