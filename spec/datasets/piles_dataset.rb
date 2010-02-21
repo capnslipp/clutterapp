@@ -10,6 +10,11 @@ class PilesDataset < Dataset::Base
       :owner => users(:slippy_douglas)
     }
     
+    create_pile :step_1_the_girl, :with => {
+      :name => 'Step 1: The Girl',
+      :owner => users(:slippy_douglas)
+    }
+    
     create_pile :every_day_responsibilities, :with => {
       :name => 'Every Day Responsibilities',
       :owner => users(:slippy_douglas)
