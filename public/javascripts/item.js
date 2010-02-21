@@ -48,6 +48,10 @@ function pileIDOfItem(node) {
 	return pileForItem(node).getAttr('oc:nodes-url').match(/\/piles\/([0-9]+)\/nodes/)[1];
 }
 
+jQuery.fn.findItem = function() {
+	return this.closest('.item');
+}
+
 
 
 function expandActionBar(node) {
@@ -85,7 +89,7 @@ function expandActionBar(node) {
 }
 
 function collapseActionBar() {
-	var node = $('#action-bar').closest('.item').required();
+	var node = $('#action-bar').findItem().required();
 	var nodeBody = $('> .cont > .body, > .pile > .body', node).required();
 	
 	
@@ -112,7 +116,7 @@ $(function() {
 	$('.item > .cont > .body > .cont').live('click', expand);
 	
 	function expand() {
-		expandActionBar($(this).closest('.item')); return false;
+		expandActionBar($(this).findItem()); return false;
 	}
 });
 
@@ -122,7 +126,7 @@ $(function() {
 	$('.item > .cont > .body > .action.stub .widget.collapsed a').live('click', expand);
 	
 	function expand() {
-		expandActionBar($(this).closest('.item')); return false;
+		expandActionBar($(this).findItem()); return false;
 	}
 	
 	$('#action-bar .widget.expanded a').click(function() {
@@ -233,9 +237,9 @@ $(function() {
 	var actionButtons = $('#action-bar > .buttons').required();
 	
 	actionButtons.children('a.new.child-item').required()
-		.click(function() { itemNew($(this).closest('.item'), 'text'); return false; });
+		.click(function() { itemNew($(this).findItem(), 'text'); return false; });
 	actionButtons.children('a.new.child-pile').required()
-		.click(function() { itemNew($(this).closest('.item'), 'pile_ref'); return false; });
+		.click(function() { itemNew($(this).findItem(), 'pile_ref'); return false; });
 });
 
 
@@ -245,7 +249,7 @@ function itemNewCancel(buttonOrNode) {
 		return;
 	
 	
-	var node = buttonOrNode.closest('.item').required();
+	var node = buttonOrNode.findItem().required();
 	var newBody = node.children('.new.body').required();
 	var form = newBody.children('form.new_node').required();
 	
@@ -363,7 +367,7 @@ function itemCreate(newNode, another) {
 					
 					
 					if (another) {
-						var parentItem = createdItem.parent().closest('.item');
+						var parentItem = createdItem.parent().findItem();
 						itemNew(parentItem, 'text', createdItem, true);
 					}
 				}
@@ -392,11 +396,11 @@ function itemCreate(newNode, another) {
 
 $(function() {
 	$('form.new_node').live('submit', function() {
-		itemCreate($(this).closest('.item')); return false;
+		itemCreate($(this).findItem()); return false;
 	});
 	
 	$('form.new_node input.another').live('click', function() {
-		itemCreate($(this).closest('.item'), true); return false;
+		itemCreate($(this).findItem(), true); return false;
 	});
 	
 	$().keydown(function(e) {
@@ -426,7 +430,7 @@ function itemEdit(link) {
 	
 	$.ajax({
 		type: 'get',
-		url: showBody.closest('.item').getAttr('oc\:url') + '/edit',
+		url: showBody.findItem().getAttr('oc\:url') + '/edit',
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError
@@ -502,7 +506,7 @@ function itemEditCancel(buttonOrNode) {
 	if (!ClutterApp.fsm.changeState('itemEdit', 'cancel'))
 		return;
 	
-	var node = buttonOrNode.closest('.item').required();
+	var node = buttonOrNode.findItem().required();
 	var editBody = $('> .cont > .edit.body', node).required();
 	var form = editBody.children('form.edit_node').required();
 	
@@ -617,8 +621,8 @@ function itemUpdate(form, another) {
 					
 					
 					if (another) {
-						var updatedNode = showBody.closest('.item');
-						var parentNode = updatedNode.parent().closest('.item');
+						var updatedNode = showBody.findItem();
+						var parentNode = updatedNode.parent().findItem();
 						itemNew(parentNode, 'text', updatedNode, true);
 					}
 				}
@@ -1007,7 +1011,7 @@ function itemReparent(node, targetNode) {
 	}
 	
 	node.required();
-	targetNode = $(targetNode).closest('.item').required();
+	targetNode = $(targetNode).findItem().required();
 	
 	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
 	$('> .cont > .body', node).addClass('active');
@@ -1197,7 +1201,7 @@ function badgeAdd(link, addType) {
 	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('.item').required();
+	var parentNode = node.parent().findItem().required();
 	
 	$.ajax({
 		type: 'get',
