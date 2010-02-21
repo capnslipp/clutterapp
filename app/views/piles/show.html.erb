@@ -1,4 +1,4 @@
-<div id="scope-panel" class="right panel">
+<div id="scope-panel" class="right panel" <% if cookies['scope-panel.width'] %>style="width: <%=cookies['scope-panel.width']%>px"<% end %>>
 	<div class="back">
 		<div class="shadow"></div>
 	</div>
@@ -21,7 +21,7 @@
 	</div>
 </div>
 
-<div id="main-area" class="left"><% @skip_main_area_wrap = true %>
+<div id="main-area" class="left" <% if cookies['scope-panel.width'] %>style="margin-right: <%=cookies['scope-panel.width']%>px"<% end %>><% @skip_main_area_wrap = true %>
 	<div class="cont">
 		
 		<%- cache ({:node_section => @pile.root_node.id}.to_json) do -%>
