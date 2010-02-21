@@ -394,22 +394,22 @@ li { list-style-type: none; }
 
 .ui-resizable-helper { display: none; }
 
-#item-area {
+#main-area {
 	position: absolute;
 	overflow-y: auto;
 	/*overflow-x: hidden; /* ??? */
 	top: 0; bottom: 0; /*height: 100%;*/
 	left: 0; right: 0; /*width: 100%;*/
 }
-#item-area.left,
-#item-area.middle {
+#main-area.left,
+#main-area.middle {
     margin-right: 360px;
 }
-#item-area.right,
-#item-area.middle {
+#main-area.right,
+#main-area.middle {
     margin-left: 360px;
 }
-#item-area > .cont {
+#main-area > .cont {
 	padding: 16px;
 	
 	min-width: <%= 320 - 10 - (16 * 2) %>px;
