@@ -7,10 +7,12 @@ describe "datasets" do
   it "should have a tree structure matching the constructed users, piles, and nodes" do
     
     proper! users(:slippy_douglas) do
+      
       proper! piles(:slippys) do
         proper! piles(:slippys).root_node do
           proper! nodes(:a_plain_text_node)
           proper! nodes(:plans_sub_pile_ref_node)
+          proper! nodes(:resposiblities_sub_pile_ref_node)
           proper! nodes(:a_todo_node) do
             proper! nodes(:a_sub_todo_node) do
               proper! nodes(:a_sub_sub_todo_node)
@@ -24,10 +26,28 @@ describe "datasets" do
           proper! nodes(:a_prioritzed_tagged_dated_noted_todo_node)
         end # slippyss_root_node
       end # slippys
+      
       proper! piles(:plans_to_rule_the_world) do
-        proper! piles(:plans_to_rule_the_world).root_node
-      end
+        proper! piles(:plans_to_rule_the_world).root_node do
+          proper! nodes(:plans_to_rule_the_world_desc_node)
+          proper! nodes(:step_1_sub_pile_ref_node)
+        end
+      end # plans_to_rule_the_world
+      
+      proper! piles(:step_1_the_girl) do
+        proper! piles(:step_1_the_girl).root_node do
+          proper! nodes(:step_1_the_girl_desc_node)
+        end
+      end # step_1_the_girl
+      
+      proper! piles(:every_day_responsibilities) do
+        proper! piles(:every_day_responsibilities).root_node do
+          proper! nodes(:every_day_responsibilities_one)
+        end
+      end # every_day_responsibilities
+      
     end # slippy_douglas
+    
     
     proper! users(:josh_vera) do
       proper! piles(:joshs) do
