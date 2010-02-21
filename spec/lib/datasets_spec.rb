@@ -4,7 +4,7 @@ describe "datasets" do
   dataset :users, :piles, :nodes
   
   
-  it "should be working" do
+  it "should have a tree structure matching the constructed users, piles, and nodes" do
     
     proper! users(:slippy_douglas) do
       proper! piles(:slippys) do
