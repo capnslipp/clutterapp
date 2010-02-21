@@ -249,8 +249,17 @@ private
     expire_fragment ({:node_item => record.id}.to_json)
     expire_fragment ({:node_section => record.id}.to_json) if record.root?
     
-    expire_cache_for(record.parent) if record.parent # recursively invalidate all ancestors
-    # @todo: also invalidate the cache for any pile ref nodes point at this pile's root node
+    # recursively invalidate all ancestors
+    expire_cache_for(record.parent) if record.parent
+    
+    # invalidate the cache for any pile ref nodes point at this pile's root node
+    if record.root?
+      pr = record.pile.pile_ref_prop
+      expire_cache_for(pr.node) if pr
+    end
+    # @note: This is a temporary hack; this approach is not even close to fast enough for all items to be parented by one "master Pile".
+    #   Rather, the correct and eventual solution is to track which sub-piles are expanded or collapsed and fetch and render each expanded decendent Pile into a content placeholder in it's parent Pile's fragment cache.
+    #   (probably using something like: http://github.com/tylerkovacs/extended_fragment_cache)
   end
   
   def deep_clone_node_to_pile!(orig_node, dest_pile, dest_parent)
