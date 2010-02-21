@@ -1527,8 +1527,9 @@ window.onresize = function() {
 	
 	
 	// to prevent constantly rapid-fire saving
-	if (resizeTimer) clearTimeout(resizeTimer);
-		resizeTimer = setTimeout("$('#scope-panel').savePanelSize();", 500);
+	if (resizeTimer)
+		clearTimeout(resizeTimer);
+	resizeTimer = setTimeout("$('#scope-panel').savePanelSize();", 500);
 }
 
 
