@@ -397,7 +397,7 @@ li { list-style-type: none; }
 #main-area {
 	position: absolute;
 	overflow-y: auto;
-	/*overflow-x: hidden; /* ??? */
+	overflow-x: hidden; /* to keep 2D transformation effects from flashing the horizontal scrollbar */
 	top: 0; bottom: 0; /*height: 100%;*/
 	left: 0; right: 0; /*width: 100%;*/
 }
