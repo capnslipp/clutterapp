@@ -1556,96 +1556,149 @@ $(function() {
 	panel[0].ontouchend = function(e) { touchEnded(e, panel); };
 	center[0].ontouchend = function(e) { touchEnded(e, center); };
 	
+	//var inspectText = '';
+	//var tl = document.createTouchList();
+	//for (var property in tl)
+	//	inspectText += property + ': ' + eval('tl.' + property) + ';<br/>';
+	//$('#top-bar > .content').html(inspectText);
+	
 	function touchStarted(e, areaElement) {
-		var touch = e.changedTouches[0];
-		ClutterApp.touchInfo.first = {
-			y: touch.screenY,
-			id: touch.identifier,
-		};
-		ClutterApp.touchInfo.prev = ClutterApp.touchInfo.first;
+		window.console.log('touchStarted');
 		
-		ClutterApp.touchInfo.origTarget = touch.target;
+		var inspectText = '';
+		for (var property in e)
+			inspectText += property + ': ' + eval('e.' + property) + ';<br/>';
+		$('#top-bar > .content').html(inspectText);
 		
-		if (ClutterApp.touchInfo.momentumIntervalID)
-			clearInterval(ClutterApp.touchInfo.momentumIntervalID);
-		ClutterApp.touchInfo.momentumY = 0;
+		var touchEvent = document.createEvent('TouchEvent');
+		touchEvent.initTouchEvent(
+			'ontouchstart', // type
+			e.canBubble, // canBubble
+			e.cancelable, // cancelable
+			window, // view
+			e.detail, // detail
+			e.screenX, // screenX
+			e.screenY, // screenY
+			e.clientX, // clientX
+			e.clientY, // clientY
+			false, // ctrlKey
+			false, // altKey
+			false, // shiftKey
+			false, // metaKey
+			e.touches, // touches
+			e.targetTouches, // targetTouches
+			e.changedTouches, // changedTouches
+			1.0, // scale
+			0.0 // rotation
+		);
+		e.changedTouches[0].target.dispatchEvent(touchEvent);
 		
 		e.preventDefault();
 		e.stopPropagation();
+		
+		//var touch = e.changedTouches[0];
+		//ClutterApp.touchInfo.first = {
+		//	y: touch.screenY,
+		//	id: touch.identifier,
+		//};
+		//ClutterApp.touchInfo.prev = ClutterApp.touchInfo.first;
+		//
+		//ClutterApp.touchInfo.origTarget = touch.target;
+		//
+		//if (ClutterApp.touchInfo.momentumIntervalID)
+		//	clearInterval(ClutterApp.touchInfo.momentumIntervalID);
+		//ClutterApp.touchInfo.momentumY = 0;
 	}
 	
 	function touchMoved(e, areaElement) {
-		var touch = e.changedTouches[0];
-		var currTouchInfo = {
-			y: touch.screenY,
-			id: touch.identifier,
-		}
+		//window.console.log('touchMoved');
 		
-		// early exit if this is a different finger than the one that started the drag
-		if (currTouchInfo.id != ClutterApp.touchInfo.prev.id)
-			return;
-		
-		if (!ClutterApp.touchInfo.isScrolling && Math.abs(ClutterApp.touchInfo.first.y - currTouchInfo.y) >= ClutterApp.touchInfo.kMinMoveToScroll)
-			ClutterApp.touchInfo.isScrolling = true;
-		
-		// early exit if we're not scrolling (yet)
-		if (!ClutterApp.touchInfo.isScrolling)
-			return;
-		
-		ClutterApp.touchInfo.momentumY = ClutterApp.touchInfo.prev.y - currTouchInfo.y;
-		
-		var currScrollY = areaElement.scrollTop();
-		areaElement.scrollTop(currScrollY + ClutterApp.touchInfo.momentumY);
-		
-		ClutterApp.touchInfo.prev = currTouchInfo;
-		
-		e.stopPropagation();
-		
-		//for (var property in e)
-		//	window.console.log(touch.identifier + ": " + property);
+		//var touch = e.changedTouches[0];
+		//var currTouchInfo = {
+		//	y: touch.screenY,
+		//	id: touch.identifier,
+		//}
+		//
+		//// early exit if this is a different finger than the one that started the drag
+		//if (currTouchInfo.id != ClutterApp.touchInfo.prev.id)
+		//	return;
+		//
+		//if (!ClutterApp.touchInfo.isScrolling && Math.abs(ClutterApp.touchInfo.first.y - currTouchInfo.y) >= ClutterApp.touchInfo.kMinMoveToScroll)
+		//	ClutterApp.touchInfo.isScrolling = true;
+		//
+		//// early exit if we're not scrolling (yet)
+		//if (!ClutterApp.touchInfo.isScrolling)
+		//	return;
+		//
+		//ClutterApp.touchInfo.momentumY = ClutterApp.touchInfo.prev.y - currTouchInfo.y;
+		//
+		//var currScrollY = areaElement.scrollTop();
+		//areaElement.scrollTop(currScrollY + ClutterApp.touchInfo.momentumY);
+		//
+		//ClutterApp.touchInfo.prev = currTouchInfo;
+		//
+		//e.stopPropagation();
+		//
+		////for (var property in e)
+		////	window.console.log(touch.identifier + ": " + property);
 	};
 	
 	function touchEnded(e, areaElement) {
-		var touch = e.changedTouches[0];
-		var lastTouchInfo = {
-			y: touch.screenY,
-			id: touch.identifier,
-		}
+		window.console.log('touchEnded');
 		
-		if (!ClutterApp.touchInfo.isScrolling) {
-			var clickEvent = document.createEvent("MouseEvent");
-			clickEvent.initMouseEvent("click", true, true, document.defaultView, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
-			
-			var ot = ClutterApp.touchInfo.origTarget;
-			ot.dispatchEvent(clickEvent);
-			ClutterApp.touchInfo.origTarget = null;
-		} else {
-			if (ClutterApp.touchInfo.momentumIntervalID)
-				clearInterval(ClutterApp.touchInfo.momentumIntervalID);
-			
-			ClutterApp.touchInfo.momentumIntervalID = setInterval(function() {
-				animateMomentum(areaElement)
-			}, ClutterApp.touchInfo.momentumFPS);
-			
-			ClutterApp.touchInfo.isScrolling = false;
-		}
+		var touchEvent = document.createEvent('TouchEvent');
+		touchEvent.initTouchEvent(
+			'ontouchend', // type
+			e.canBubble, // canBubble
+			e.cancelable, // cancelable
+			window, // view
+			e.detail, // detail
+			e.screenX, // screenX
+			e.screenY, // screenY
+			e.clientX, // clientX
+			e.clientY, // clientY
+			false, // ctrlKey
+			false, // altKey
+			false, // shiftKey
+			false, // metaKey
+			e.touches, // touches
+			e.targetTouches, // targetTouches
+			e.changedTouches, // changedTouches
+			1.0, // scale
+			0.0 // rotation
+		);
+		e.changedTouches[0].target.dispatchEvent(touchEvent);
 		
-		ClutterApp.touchInfo.first = null;
-		ClutterApp.touchInfo.prev = null;
-		
+		e.preventDefault();
 		e.stopPropagation();
-	}
-	
-	function animateMomentum(areaElement) {
-		ClutterApp.touchInfo.momentumY *= ClutterApp.touchInfo.kDecelFrictionFactor;
 		
-		if (Math.abs(ClutterApp.touchInfo.momentumY) >= 0.25) {
-			var currScrollY = areaElement.scrollTop();
-			areaElement.scrollTop(currScrollY + ClutterApp.touchInfo.momentumY);
-		} else {
-			ClutterApp.touchInfo.momentumY = 0;
-			clearInterval(ClutterApp.touchInfo.momentumIntervalID);
-			ClutterApp.touchInfo.momentumIntervalID = null;
-		}
+		//var touch = e.changedTouches[0];
+		//var lastTouchInfo = {
+		//	y: touch.screenY,
+		//	id: touch.identifier,
+		//}
+		//
+		//if (!ClutterApp.touchInfo.isScrolling) {
+		//	var clickEvent = document.createEvent('MouseEvent');
+		//	clickEvent.initMouseEvent("click", true, true, document.defaultView, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null);
+		//	
+		//	var ot = ClutterApp.touchInfo.origTarget;
+		//	ot.dispatchEvent(clickEvent);
+		//	ClutterApp.touchInfo.origTarget = null;
+		//} else {
+		//	if (ClutterApp.touchInfo.momentumIntervalID)
+		//		clearInterval(ClutterApp.touchInfo.momentumIntervalID);
+		//	
+		//	ClutterApp.touchInfo.momentumIntervalID = setInterval(function() {
+		//		animateMomentum(areaElement)
+		//	}, ClutterApp.touchInfo.momentumFPS);
+		//	
+		//	ClutterApp.touchInfo.isScrolling = false;
+		//}
+		//
+		//ClutterApp.touchInfo.first = null;
+		//ClutterApp.touchInfo.prev = null;
+		//
+		//e.stopPropagation();
 	}
 });
