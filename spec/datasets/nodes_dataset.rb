@@ -130,7 +130,7 @@ EOS
   end
   
   def set_up_plans_to_rule_the_world_pile
-    create_node :a_better_plain_text_node, :with => {
+    create_node :plans_to_rule_the_world_desc_node, :with => {
       :parent => piles(:plans_to_rule_the_world).root_node,
       :prop => TextProp.new(:value => "multi-step process including figuring out people, finding an impossible niche only I can fill, and strapping on tight")
     }
@@ -142,7 +142,7 @@ EOS
   end
   
   def set_up_step_1_the_girl_pile
-    create_node :step_1_the_girl_desc_plain_text_node, :with => {
+    create_node :step_1_the_girl_desc_node, :with => {
       :parent => piles(:step_1_the_girl).root_node,
       :prop => TextProp.new(:value => "first is needed a girl like no other, for support, purpose, drive, motivation, sanity, and other corrective measures and emotional satisfaction")
     }

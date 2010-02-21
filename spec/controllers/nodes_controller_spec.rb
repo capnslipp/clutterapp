@@ -156,7 +156,7 @@ describe NodesController do
           xhr :put, :reparent,
             :user_id => users(:slippy_douglas).to_param,
             :pile_id => piles(:plans_to_rule_the_world).to_param,
-            :id => nodes(:a_better_plain_text_node).to_param,
+            :id => nodes(:plans_to_rule_the_world_desc_node).to_param,
             :target_id => piles(:slippys).root_node.to_param,
             :target_pile_id => piles(:slippys).to_param
         end
@@ -165,7 +165,7 @@ describe NodesController do
           xhr :put, :reparent,
             :user_id => users(:slippy_douglas).to_param,
             :pile_id => piles(:plans_to_rule_the_world).to_param,
-            :id => nodes(:a_better_plain_text_node).to_param,
+            :id => nodes(:plans_to_rule_the_world_desc_node).to_param,
             :target_id => nodes(:a_sub_sub_todo_node).to_param,
             :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
         end
