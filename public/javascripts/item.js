@@ -1392,7 +1392,7 @@ jQuery.fn.savePanelSize = function() {
 	var panel = $(this).filter('.panel').required();
 	
 	$.cookie(
-		panel.setAttr('id') + '.width',
+		panel.attr('id') + '.width',
 		panel.width(),
 		{ expires: 365, path: '/' }
 	);
@@ -1401,7 +1401,7 @@ jQuery.fn.savePanelSize = function() {
 jQuery.fn.loadPanelSize = function() {
 	var panel = $(this).filter('.panel').required();
 	
-	var savedPanelWidth = $.cookie(panel.setAttr('id') + '.width');
+	var savedPanelWidth = $.cookie(panel.attr('id') + '.width');
 	
 	if (savedPanelWidth)
 		panel.panelResize(savedPanelWidth);
