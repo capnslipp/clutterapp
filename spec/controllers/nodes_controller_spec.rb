@@ -82,37 +82,33 @@ describe NodesController do
     describe "within the same pile" do
       
       describe "should work" do
-        after(:each) { response.should be_success }
         
         it "moving a 1st-level item to a descendent of a sibling item" do
-          xhr :put, :reparent,
-            :user_id => users(:slippy_douglas).to_param,
-            :pile_id => piles(:slippys).to_param,
-            :id => nodes(:a_plain_text_node).to_param,
-            :target_id => nodes(:a_sub_sub_todo_node).to_param,
-            :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
+          @n = nodes(:a_plain_text_node)
+          @tn = nodes(:a_sub_sub_todo_node)
         end
         
         it "moving to a descendent item to the 1st level" do
-          xhr :put, :reparent,
-            :user_id => users(:slippy_douglas).to_param,
-            :pile_id => piles(:slippys).to_param,
-            :id => nodes(:a_sub_sub_todo_node).to_param,
-            :target_id => piles(:slippys).root_node.to_param,
-            :target_pile_id => piles(:slippys).to_param
+          @n = nodes(:a_sub_sub_todo_node)
+          @tn = piles(:slippys).root_node
+        end
+        
+        after(:each) do
+          xhr :put, :reparent, :user_id => @n.pile.owner.to_param, :pile_id => @n.pile.to_param, :id => @n.to_param, :target_id => @tn.to_param, :target_pile_id => @tn.pile.to_param
+          response.should be_success
         end
         
       end
       
       describe "should not work" do
         it "moving a 1st-level item to a descendent of itself" do
+          @n = nodes(:a_todo_node)
+          @tn = nodes(:a_sub_sub_todo_node)
+        end
+        
+        after(:each) do
           proc {
-            xhr :put, :reparent,
-              :user_id => users(:slippy_douglas).to_param,
-              :pile_id => piles(:slippys).to_param,
-              :id => nodes(:a_todo_node).to_param,
-              :target_id => nodes(:a_sub_sub_todo_node).to_param,
-              :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
+            xhr :put, :reparent, :user_id => @n.pile.owner.to_param, :pile_id => @n.pile.to_param, :id => @n.to_param, :target_id => @tn.to_param, :target_pile_id => @tn.pile.to_param
           }.should raise_error(ActiveRecord::ActiveRecordError)
         end
         
@@ -123,60 +119,39 @@ describe NodesController do
     describe "from one pile to another" do
       
       describe "should work" do
-        after(:each) { response.should be_success }
-        
         it "moving a 1st-level item to the 1st level of a sub-Pile" do
-          xhr :put, :reparent,
-            :user_id => users(:slippy_douglas).to_param,
-            :pile_id => piles(:slippys).to_param,
-            :id => nodes(:a_plain_text_node).to_param,
-            :target_id => piles(:plans_to_rule_the_world).root_node.to_param,
-            :target_pile_id => piles(:plans_to_rule_the_world).to_param
+          @n = nodes(:a_plain_text_node)
+          @tn = piles(:plans_to_rule_the_world).root_node
         end
         
         it "moving a descendent item to the 1st level of a sub-Pile" do
-          xhr :put, :reparent,
-            :user_id => users(:slippy_douglas).to_param,
-            :pile_id => piles(:slippys).to_param,
-            :id => nodes(:a_sub_sub_todo_node).to_param,
-            :target_id => piles(:plans_to_rule_the_world).root_node.to_param,
-            :target_pile_id => piles(:plans_to_rule_the_world).to_param
+          @n = nodes(:a_sub_sub_todo_node)
+          @tn = piles(:plans_to_rule_the_world).root_node
         end
         
         it "moving a the 1st level sub-Pile to the 1st level of a sub-Pile" do
-          xhr :put, :reparent,
-            :user_id => users(:slippy_douglas).to_param,
-            :pile_id => piles(:slippys).to_param,
-            :id => nodes(:resposiblities_sub_pile_ref_node).to_param,
-            :target_id => piles(:plans_to_rule_the_world).root_node.to_param,
-            :target_pile_id => piles(:plans_to_rule_the_world).to_param
+          @n = nodes(:resposiblities_sub_pile_ref_node)
+          @tn = piles(:plans_to_rule_the_world).root_node
         end
         
         it "moving a 1st-level item to the 1st level of a parent Pile" do
-          xhr :put, :reparent,
-            :user_id => users(:slippy_douglas).to_param,
-            :pile_id => piles(:plans_to_rule_the_world).to_param,
-            :id => nodes(:plans_to_rule_the_world_desc_node).to_param,
-            :target_id => piles(:slippys).root_node.to_param,
-            :target_pile_id => piles(:slippys).to_param
+          @n = nodes(:plans_to_rule_the_world_desc_node)
+          @tn = piles(:slippys).root_node
         end
         
         it "moving a 1st-level item to descendent item of a parent Pile" do
-          xhr :put, :reparent,
-            :user_id => users(:slippy_douglas).to_param,
-            :pile_id => piles(:plans_to_rule_the_world).to_param,
-            :id => nodes(:plans_to_rule_the_world_desc_node).to_param,
-            :target_id => nodes(:a_sub_sub_todo_node).to_param,
-            :target_pile_id => nodes(:a_sub_sub_todo_node).pile.to_param
+          @n = nodes(:plans_to_rule_the_world_desc_node)
+          @tn = nodes(:a_sub_sub_todo_node)
         end
         
         it "moving a 1st-level sub-Pile to the 1st level of a parent Pile" do
-          xhr :put, :reparent,
-            :user_id => users(:slippy_douglas).to_param,
-            :pile_id => piles(:plans_to_rule_the_world).to_param,
-            :id => nodes(:step_1_sub_pile_ref_node).to_param,
-            :target_id => piles(:slippys).root_node.to_param,
-            :target_pile_id => piles(:slippys).to_param
+          @n = nodes(:step_1_sub_pile_ref_node)
+          @tn = piles(:slippys).root_node
+        end
+        
+        after(:each) do
+          xhr :put, :reparent, :user_id => @n.pile.owner.to_param, :pile_id => @n.pile.to_param, :id => @n.to_param, :target_id => @tn.to_param, :target_pile_id => @tn.pile.to_param
+          response.should be_success
         end
         
       end
