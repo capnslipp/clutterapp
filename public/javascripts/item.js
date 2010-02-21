@@ -26,6 +26,15 @@ var kQuickTransitionDuration =		125;
 //}
 
 
+function deepNodeIDOfItem(node) {
+	var childBaseNode = node.children('.base_node');
+	if (childBaseNode.exists())
+		return nodeIDOfItem(childBaseNode);
+	else
+		return nodeIDOfItem(node);
+}
+
+
 function nodeIDOfItem(node) {
 	var nodeID = node.getAttr('id');
 	
@@ -162,7 +171,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 	$.ajax({
 		type: 'get',
 		url: pileForItem(parentNode).getAttr('oc\:nodes-url') + '/new',
-		data: { 'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode), prev_sibling_id: prevSiblingNodeID, dup_prev: (dupPrev || '') },
+		data: { 'node[prop_type]': type, 'node[parent_id]': deepNodeIDOfItem(parentNode), prev_sibling_id: prevSiblingNodeID, dup_prev: (dupPrev || '') },
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError
@@ -1023,7 +1032,7 @@ function itemReparent(node, targetNode) {
 	$.ajax({
 		type: 'post',
 		url: node.getAttr('oc\:url') + '/reparent',
-		data: {_method: 'put', target_id: nodeIDOfItem(targetNode.children('.base_node').exists() ? targetNode.children('.base_node') : targetNode), target_pile_id: pileIDOfItem(targetNode)},
+		data: {_method: 'put', target_id: deepNodeIDOfItem(targetNode), target_pile_id: pileIDOfItem(targetNode)},
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError
