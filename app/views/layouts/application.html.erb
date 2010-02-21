@@ -57,7 +57,9 @@
 	
 	
 	<div id="page">
-		<%= yield %>
+		<% unless @skip_item_area_wrap %><div id="item-area"><div class="cont"><% end %>
+			<%= yield %>
+		<% unless @skip_item_area_wrap %></div></div><% end %>
 	</div>
 	
 </div>

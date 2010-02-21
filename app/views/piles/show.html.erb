@@ -21,7 +21,7 @@
 	</div>
 </div>
 
-<div id="item-area" class="left">
+<div id="item-area" class="left"><% @skip_item_area_wrap = true %>
 	<div class="cont">
 		
 		<%- cache ({:node_section => @pile.root_node.id}.to_json) do -%>
