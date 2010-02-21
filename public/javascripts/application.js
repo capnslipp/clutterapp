@@ -229,6 +229,10 @@ ClutterApp.fill.show = function(modalElement) {
 	
 	if (!this._active) {
 		this._active = true;
+		
+		if (!this._elem.parent('#main-area').exists())
+			$('#main-area').prepend(this._elem);
+		
 		this._elem.stop(true).fadeIn(kDefaultTransitionDuration);
 	}
 }

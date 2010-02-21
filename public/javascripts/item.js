@@ -1343,7 +1343,7 @@ $(function() {
 $(function() {
 	ClutterApp.defaultPanelWidth = $('#scope-panel').width();
 	
-	var itemAreaCont = $('#item-area > .cont');
+	var itemAreaCont = $('#main-area > .cont');
 	var itemAreaMinWidth = parseInt( itemAreaCont.getCSS('min-width').match('[0-9]+')[0] );
 	var itemAreaPadding = parseInt( itemAreaCont.getCSS('padding-left').match('[0-9]+')[0] ) + parseInt( itemAreaCont.getCSS('padding-right').match('[0-9]+')[0] );
 	ClutterApp.itemAreaMinWidth = itemAreaMinWidth + itemAreaPadding + 16; // 16 extra for scrollbar
@@ -1361,7 +1361,7 @@ ClutterApp.panelToggleMode = function() {
 
 jQuery.fn.panelResize = function(panelWidth) {
 	var panel = $(this).filter('.panel').required();
-	var center = $('#item-area').required();
+	var center = $('#main-area').required();
 	
 	var leftPanel = this.hasClass('left');
 	var rightPanel = this.hasClass('right');
@@ -1546,7 +1546,7 @@ $(function() {
 	};
 	
 	var panel = $('#scope-panel').required();
-	var center = $('#item-area').required();
+	var center = $('#main-area').required();
 	
 	
 	panel[0].ontouchstart = function(e) { touchStarted(e, panel); };

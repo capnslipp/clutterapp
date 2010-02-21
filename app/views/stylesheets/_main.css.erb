@@ -26,13 +26,10 @@ body, input, textarea {
 	overflow-x: hidden;
 }
 
-#base > #fill {
-	position: absolute;
-	width: 100%; height: 100%;
-}
-
 #fill {
 	position: absolute; z-index: 500;
+	width: 100%; height: 100%;
+	
 	background: <%= fill_color.to_s(:css_rgba) %>;
 	        user-select: none;
 	   -moz-user-select: none;
