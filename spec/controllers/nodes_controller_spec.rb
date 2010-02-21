@@ -73,6 +73,30 @@ describe NodesController do
         response.should have_tag("input[type='text']")
       end
       
+      it "given a request for a new sub-item of a sub-pile" do
+        xhr :get, :new,
+          :user_id => users(:slippy_douglas).to_param,
+          :pile_id => piles(:slippys).to_param,
+          :node => {
+            :parent_id => piles(:every_day_responsibilities).root_node.to_param,
+            :prop_type => 'text'
+          }
+        
+        response.should have_tag("input[type='text']")
+      end
+      
+      it "given a request for a new sub-pile of a sub-pile" do
+        xhr :get, :new,
+          :user_id => users(:slippy_douglas).to_param,
+          :pile_id => piles(:slippys).to_param,
+          :node => {
+            :parent_id => piles(:every_day_responsibilities).root_node.to_param,
+            :prop_type => 'pile_ref'
+          }
+        
+        response.should have_tag("input[type='text']")
+      end
+      
     end
   end
   
