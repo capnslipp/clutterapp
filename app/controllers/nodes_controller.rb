@@ -193,7 +193,7 @@ class NodesController < ApplicationController
       @target = active_pile.nodes.find(params[:target_id])
       
       unless @node.prop.class.deepable?
-        return render :nothing => true, :status => :bad_request unless @target.root? || (@target.prop.is_a? PileRefProp)
+        return render(:nothing => true, :status => :bad_request) unless @target.root? || (@target.prop.is_a? PileRefProp)
       end
       
       first_child = @target.children.first
@@ -208,7 +208,7 @@ class NodesController < ApplicationController
       @target = target_pile.nodes.find(params[:target_id])
       
       unless @node.prop.class.deepable?
-        return render :nothing => true, :status => :bad_request unless @target.root? || (@target.prop.is_a? PileRefProp)
+        return render(:nothing => true, :status => :bad_request) unless @target.root? || (@target.prop.is_a? PileRefProp)
       end
       
       Node.transaction do
