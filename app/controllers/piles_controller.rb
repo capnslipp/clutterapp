@@ -17,6 +17,7 @@ class PilesController < ApplicationController
   def show
     @owner = active_owner
     @pile = active_pile
+    nodes = @pile.nodes.all(:include => :prop)
     
     @enable_item_view_js = true
   end

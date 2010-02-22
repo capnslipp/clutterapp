@@ -16,7 +16,7 @@ class NodesController < ApplicationController
   # PUT /items/1/update_check_prop_checked
   def update_check_prop_checked
     logger.prefixed 'update_check_prop_checked', :light_green, 'params: ' + params.inspect
-    @node = active_pile.nodes.find(params[:id])
+    @node = active_pile.nodes.find(params[:id], :include => :prop)
     @prop = @node.prop
     @prop.checked = params[:checked]
     @prop.save!
@@ -33,7 +33,7 @@ class NodesController < ApplicationController
   def new
     node_attrs = params.delete(:node) || {}
     
-    @parent = active_pile.nodes.find(node_attrs.delete(:parent_id))
+    @parent = active_pile.nodes.find(node_attrs.delete(:parent_id), :include => :pile)
     node_attrs[:pile] = @parent.pile
     
     raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
@@ -46,7 +46,7 @@ class NodesController < ApplicationController
     @node.prop.ref_pile = active_owner.piles.build(node_attrs[:prop_attributes][:ref_pile_attributes]) if @node.variant == PileRefProp
     
     
-    @prev_sibling = @parent.children.find params[:prev_sibling_id] if params[:prev_sibling_id].present?
+    @prev_sibling = @parent.children.find(params[:prev_sibling_id], :include => :children) if params[:prev_sibling_id].present?
     
     
     add_attrs = []
@@ -126,7 +126,7 @@ class NodesController < ApplicationController
   
   # GET /nodes/1/edit
   def edit
-    @node = active_pile.nodes.find(params[:id])
+    @node = active_pile.nodes.find(params[:id], :include => [:prop, {:children => :prop}])
     
     @node.attributes = params[:node]
     
@@ -148,7 +148,7 @@ class NodesController < ApplicationController
   
   # PUT /nodes/1
   def update
-    @node = active_pile.nodes.find(params[:id])
+    @node = active_pile.nodes.find(params[:id], :include => [:prop, :parent])
     
     @node.update_attributes(params[:node])
     
@@ -184,13 +184,13 @@ class NodesController < ApplicationController
   
   # PUT /nodes/1/reparent?parent_id=2
   def reparent
-    @node = active_pile.nodes.find(params[:id])
+    @node = active_pile.nodes.find(params[:id], :include => [:parent, :prop])
     
     expire_cache_for(@node.parent) # old parent
     
     # put it as the first child of the parent
     if params[:target_pile_id].to_i == active_pile.id
-      @target = active_pile.nodes.find(params[:target_id])
+      @target = active_pile.nodes.find(params[:target_id], :include => :prop)
       
       unless @node.prop.class.deepable?
         return render(:nothing => true, :status => :bad_request) unless @target.root? || (@target.prop.is_a? PileRefProp)
@@ -205,7 +205,7 @@ class NodesController < ApplicationController
       end
     else
       target_pile = active_owner.piles.find(params[:target_pile_id])
-      @target = target_pile.nodes.find(params[:target_id])
+      @target = target_pile.nodes.find(params[:target_id], :include => [:prop, :pile])
       
       unless @node.prop.class.deepable?
         return render(:nothing => true, :status => :bad_request) unless @target.root? || (@target.prop.is_a? PileRefProp)
@@ -229,7 +229,7 @@ class NodesController < ApplicationController
   # DELETE /nodes/1
   # DELETE /nodes/1.xml
   def destroy
-    @node = active_pile.nodes.find(params[:id])
+    @node = active_pile.nodes.find(params[:id], :include => :parent)
     orig_parent_node = @node.parent
     @node.destroy
     
