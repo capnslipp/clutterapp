@@ -113,7 +113,8 @@ class Prop < ActiveRecord::Base
   end
   
   def badged?
-    self.class.badgeable? ? true : false # if badgeable, then always badged, for now; will be position-dependent eventually
+    # if badgeable, then always badged, for now; will be position-dependent eventually
+    self.class.badgeable?
   end
   
   
