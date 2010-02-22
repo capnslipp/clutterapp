@@ -288,7 +288,7 @@ function itemNewCancel(buttonOrNode) {
 				})
 			},
 			complete: function() {
-				newBody.closest('li.item').required().remove();
+				newBody.findItem().required().remove();
 				
 				ClutterApp.fsm.finishAction('itemNew', 'cancel');
 			}
@@ -324,7 +324,7 @@ function itemCreate(newNode, another) {
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
 	
 	var newBody = form.closest('.new.body').required();
-	var newItem = newBody.closest('li.item').required();
+	var newItem = newBody.findItem().required();
 	
 	newBody.showProgressOverlay();
 	
@@ -451,7 +451,7 @@ function itemEdit(link) {
 		
 		showBody.before(responseData);
 		
-		var editNode = showBody.closest('li.item').required();
+		var editNode = showBody.findItem().required();
 		var editBody = showBody.siblings('.edit.body').required();
 		
 		var startScaleX = 0.95; var endScaleX = 1.0;
@@ -596,7 +596,7 @@ function itemUpdate(form, another) {
 	function handleSuccess(responseData) {
 		showBody.replaceWith(responseData);
 		// showBody ref no longer valid from this point on
-		editBody.closest('li.item').required().applyReparentDroppability();
+		editBody.findItem().required().applyReparentDroppability();
 		
 		
 		var startScaleX = 0.95; var endScaleX = 1.0;
@@ -748,7 +748,7 @@ $(function() {
 	
 	actionButtons.find('a.delete').click(function() {
 		if (confirm("Are you sure?\n\nThis will delete this item and all of its sub-items."))
-			itemDelete($(this).closest('li.item'));
+			itemDelete($(this).findItem());
 		
 		return false;
 	});
@@ -1189,7 +1189,7 @@ function itemReparent(node, targetNode) {
 
 
 function badgeAdd(link, addType) {
-	var node = $(link).closest('li.item').required();
+	var node = $(link).findItem().required();
 	
 	var state;
 	if (node.children('.new').exists()) {
@@ -1285,7 +1285,7 @@ function badgeRemove(link) {
 	var deleteField = $(link).siblings('input[type=hidden]').required();
 	deleteField.val(1);
 	
-	var node = $(link).closest('li.item').required();
+	var node = $(link).findItem().required();
 	
 	var state;
 	if (node.children('.new').exists()) {
@@ -1306,7 +1306,7 @@ function badgeRemove(link) {
 	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('li.item').required();
+	var parentNode = node.parent().findItem().required();
 	
 	$.ajax({
 		type: 'get',
