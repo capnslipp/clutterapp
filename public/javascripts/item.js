@@ -1197,7 +1197,7 @@ function badgeAdd(link, addType) {
 		
 		if (!ClutterApp.fsm.changeState('itemNew', 'badgeAddLoad'))
 			return;
-	} else if (node.children('.edit').exists()) {
+	} else if ($('> .cont > .edit', node).exists()) {
 		state = 'edit';
 		
 		if (!ClutterApp.fsm.changeState('itemEdit', 'badgeAddLoad'))
@@ -1293,7 +1293,7 @@ function badgeRemove(link) {
 		
 		if (!ClutterApp.fsm.changeState('itemNew', 'badgeRemoveLoad'))
 			return;
-	} else if (node.children('.edit').exists()) {
+	} else if ($('> .cont > .edit', node).exists()) {
 		state = 'edit';
 		
 		if (!ClutterApp.fsm.changeState('itemEdit', 'badgeRemoveLoad'))
