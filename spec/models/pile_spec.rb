@@ -5,8 +5,8 @@ describe Pile do
   
   
   it "should create 2 Nodes, when creating 2 Users" do
-    u1_attributes = users(:a_user).destroy_to_attributes
-    u2_attributes = users(:another_user).destroy_to_attributes
+    u1_attributes = users(:slippy_douglas).destroy_to_attributes
+    u2_attributes = users(:josh_vera).destroy_to_attributes
     
     assert_difference 'Node.count', +2 do
       User.create u1_attributes
@@ -15,8 +15,8 @@ describe Pile do
   end
   
   it "should create 1 Node for each new Pile, when creating 2 Users" do
-    u1_attributes = users(:a_user).destroy_to_attributes
-    u2_attributes = users(:another_user).destroy_to_attributes
+    u1_attributes = users(:slippy_douglas).destroy_to_attributes
+    u2_attributes = users(:josh_vera).destroy_to_attributes
     
     u1 = User.create u1_attributes
     u2 = User.create u2_attributes

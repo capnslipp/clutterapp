@@ -6,7 +6,7 @@ describe UsersController do
   
   
   before(:each) do
-    @user = users(:a_user)
+    @user = users(:slippy_douglas)
   end
   
   
@@ -37,18 +37,18 @@ describe UsersController do
     end
     
     it "recognizes and generates #show" do
-      expected_path = '/a_user'
+      expected_path = '/slippy_douglas'
       
-      { :get => expected_path }.should route_to(:controller => 'users', :action => 'show', :id => 'a_user')
-      user_path('a_user').should == expected_path
+      { :get => expected_path }.should route_to(:controller => 'users', :action => 'show', :id => 'slippy_douglas')
+      user_path('slippy_douglas').should == expected_path
       polymorphic_path([@user]).should == expected_path
     end
     
     it "recognizes and generates #edit" do
-      expected_path = '/a_user/edit'
+      expected_path = '/slippy_douglas/edit'
       
-      { :get => expected_path }.should route_to(:controller => 'users', :action => 'edit', :id => 'a_user')
-      edit_user_path('a_user').should == expected_path
+      { :get => expected_path }.should route_to(:controller => 'users', :action => 'edit', :id => 'slippy_douglas')
+      edit_user_path('slippy_douglas').should == expected_path
       edit_polymorphic_path([@user]).should == expected_path
     end
     
@@ -61,18 +61,18 @@ describe UsersController do
     end
     
     it "recognizes and generates #update" do
-      expected_path = '/a_user'
+      expected_path = '/slippy_douglas'
       
-      { :put => expected_path }.should route_to(:controller => 'users', :action => 'update', :id => 'a_user')
-      user_path('a_user').should == expected_path
+      { :put => expected_path }.should route_to(:controller => 'users', :action => 'update', :id => 'slippy_douglas')
+      user_path('slippy_douglas').should == expected_path
       polymorphic_path([@user]).should == expected_path
     end
     
     it "recognizes and generates #destroy" do
-      expected_path = '/a_user'
+      expected_path = '/slippy_douglas'
       
-      { :delete => expected_path }.should route_to(:controller => 'users', :action => 'destroy', :id => 'a_user')
-      user_path('a_user').should == expected_path
+      { :delete => expected_path }.should route_to(:controller => 'users', :action => 'destroy', :id => 'slippy_douglas')
+      user_path('slippy_douglas').should == expected_path
       polymorphic_path([@user]).should == expected_path
     end
     

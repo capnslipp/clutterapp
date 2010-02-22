@@ -4,13 +4,15 @@ describe "datasets" do
   dataset :users, :piles, :nodes
   
   
-  it "should be working" do
+  it "should have a tree structure matching the constructed users, piles, and nodes" do
     
-    proper! users(:a_user) do
-      proper! piles(:a_users_default_pile)
-      proper! piles(:a_pile) do
-        proper! nodes(:a_piles_root_node) do
+    proper! users(:slippy_douglas) do
+      
+      proper! piles(:slippys) do
+        proper! piles(:slippys).root_node do
           proper! nodes(:a_plain_text_node)
+          proper! nodes(:plans_sub_pile_ref_node)
+          proper! nodes(:resposiblities_sub_pile_ref_node)
           proper! nodes(:a_todo_node) do
             proper! nodes(:a_sub_todo_node) do
               proper! nodes(:a_sub_sub_todo_node)
@@ -22,19 +24,36 @@ describe "datasets" do
           proper! nodes(:a_dated_todo_node)
           proper! nodes(:a_noted_todo_node)
           proper! nodes(:a_prioritzed_tagged_dated_noted_todo_node)
-        end # a_piles_root_node
-      end # a_pile
-      proper! piles(:a_better_pile) do
-        proper! nodes(:a_better_piles_root_node)
-      end
-    end # a_user
+        end # slippyss_root_node
+      end # slippys
+      
+      proper! piles(:plans_to_rule_the_world) do
+        proper! piles(:plans_to_rule_the_world).root_node do
+          proper! nodes(:plans_to_rule_the_world_desc_node)
+          proper! nodes(:step_1_sub_pile_ref_node)
+        end
+      end # plans_to_rule_the_world
+      
+      proper! piles(:step_1_the_girl) do
+        proper! piles(:step_1_the_girl).root_node do
+          proper! nodes(:step_1_the_girl_desc_node)
+        end
+      end # step_1_the_girl
+      
+      proper! piles(:every_day_responsibilities) do
+        proper! piles(:every_day_responsibilities).root_node do
+          proper! nodes(:every_day_responsibilities_one)
+        end
+      end # every_day_responsibilities
+      
+    end # slippy_douglas
     
-    proper! users(:another_user) do
-      proper! piles(:another_users_default_pile)
-      proper! piles(:another_pile) do
-        proper! nodes(:another_piles_root_node)
-      end # another_pile
-    end # another_user
+    
+    proper! users(:josh_vera) do
+      proper! piles(:joshs) do
+        proper! piles(:joshs).root_node
+      end # joshs
+    end # josh_vera
     
   end
   

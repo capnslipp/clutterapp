@@ -8,7 +8,8 @@
 		<h1 class="header">Piles</h1>
 		
 		<ul class="pile-list">
-			<% for pile in current_user.piles %>
+			<% current_user.piles.each do |pile| %>
+				<%- next if pile.pile_ref_prop %>
 				<li>
 					<div class="name">
 						<span class="sym">&there4;</span>
@@ -24,24 +25,28 @@
 <div id="main-area" class="left" <% if cookies['scope-panel.width'] %>style="margin-right: <%=cookies['scope-panel.width']%>px"<% end %>><% @skip_main_area_wrap = true %>
 	<div class="cont">
 		
-		<%- cache ({:node_section => @pile.root_node.id}.to_json) do -%>
-			<section id="<%=dom_id(@pile.root_node)%>" class="<%=dom_class(@pile.root_node)%> pile item" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
-				<div class="body">
-					<div class="back"></div>
+		<% content_tag_for :div, @pile.root_node, :class => "base item" do -%>
+			<%- cache ({:node_section => @pile.root_node.id}.to_json) do -%>
+				<section class="base pile cont" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
 					
-					<%= render :partial => 'nodes/action_stub' %>
+					<div class="body">
+						<div class="back"></div>
+						
+						<%= render :partial => 'nodes/action_stub' %>
+						
+						<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
+							<span class="owner"><%= @owner.name %> »</span> <span class="name"><%= @pile.name %></span>
+						</h1>
+					</div>
 					
-					<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
-						<span class="owner"><%= @owner.name %> »</span> <span class="name"><%= @pile.name %></span>
-					</h1>
-				</div>
-				
-				<ul class="item-list">
-					<%= render :partial => 'nodes/list_items', :locals => {:item => @pile.root_node} -%>
-				</ul>
-				
-				<%= render :partial => 'nodes/action_bar' %>
-			</section>
+					<ul class="item-list">
+						<%= render :partial => 'nodes/list_items', :locals => {:item => @pile.root_node} -%>
+					</ul>
+					
+					<%= render :partial => 'nodes/action_bar' %>
+					
+				</section>
+			<%- end -%>
 		<%- end -%>
 		
 	</div>

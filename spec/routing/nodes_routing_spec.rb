@@ -6,8 +6,8 @@ describe NodesController do
   
   
   before(:each) do
-    @user = users(:a_user)
-    @pile = piles(:a_pile)
+    @user = users(:slippy_douglas)
+    @pile = piles(:slippys)
     @node = nodes(:a_plain_text_node)
   end
     
@@ -17,11 +17,11 @@ describe NodesController do
      # valid routes
      
      it "recognizes and generates #new" do
-       expected_path = "/a_user/piles/#{@pile.id}/nodes/new"
+       expected_path = "/slippy_douglas/piles/#{@pile.id}/nodes/new"
        
-       { :get => expected_path }.should route_to(:controller => 'nodes', :action => 'new', :user_id => 'a_user', :pile_id => "#{@pile.id}")
+       { :get => expected_path }.should route_to(:controller => 'nodes', :action => 'new', :user_id => 'slippy_douglas', :pile_id => "#{@pile.id}")
        
-       new_user_pile_node_path(:pile_id => @pile.id, :user_id => 'a_user').should == expected_path
+       new_user_pile_node_path(:pile_id => @pile.id, :user_id => 'slippy_douglas').should == expected_path
        new_polymorphic_path([@user, @pile, :node]).should == expected_path
        
        new_node = @pile.root_node.children.build
@@ -29,56 +29,56 @@ describe NodesController do
      end
      
      it "recognizes and generates #edit" do
-       expected_path = "/a_user/piles/#{@pile.id}/nodes/#{@node.id}/edit"
+       expected_path = "/slippy_douglas/piles/#{@pile.id}/nodes/#{@node.id}/edit"
        
-       { :get => expected_path }.should route_to(:controller => 'nodes', :action => 'edit', :user_id => 'a_user', :pile_id => "#{@pile.id}", :id => "#{@node.id}")
+       { :get => expected_path }.should route_to(:controller => 'nodes', :action => 'edit', :user_id => 'slippy_douglas', :pile_id => "#{@pile.id}", :id => "#{@node.id}")
        
-       edit_user_pile_node_path(:id => @node.id, :pile_id => @pile.id, :user_id => 'a_user').should == expected_path
+       edit_user_pile_node_path(:id => @node.id, :pile_id => @pile.id, :user_id => 'slippy_douglas').should == expected_path
        edit_polymorphic_path([@user, @pile, @node]).should == expected_path
      end
      
      it "recognizes and generates #create" do
-       expected_path = "/a_user/piles/#{@pile.id}/nodes"
+       expected_path = "/slippy_douglas/piles/#{@pile.id}/nodes"
        
-       { :post => expected_path }.should route_to(:controller => 'nodes', :action => 'create', :user_id => 'a_user', :pile_id => "#{@pile.id}")
+       { :post => expected_path }.should route_to(:controller => 'nodes', :action => 'create', :user_id => 'slippy_douglas', :pile_id => "#{@pile.id}")
        
-       user_pile_nodes_path(:pile_id => @pile.id, :user_id => 'a_user').should == expected_path
+       user_pile_nodes_path(:pile_id => @pile.id, :user_id => 'slippy_douglas').should == expected_path
        polymorphic_path([@user, @pile, :nodes]).should == expected_path
      end
      
      it "recognizes and generates #update" do
-       expected_path = "/a_user/piles/#{@pile.id}/nodes/#{@node.id}"
+       expected_path = "/slippy_douglas/piles/#{@pile.id}/nodes/#{@node.id}"
        
-       { :put => expected_path }.should route_to(:controller => 'nodes', :action => 'update', :user_id => 'a_user', :pile_id => "#{@pile.id}", :id => "#{@node.id}")
+       { :put => expected_path }.should route_to(:controller => 'nodes', :action => 'update', :user_id => 'slippy_douglas', :pile_id => "#{@pile.id}", :id => "#{@node.id}")
        
-       user_pile_node_path(:id => @node.id, :pile_id => @pile.id, :user_id => 'a_user').should == expected_path
+       user_pile_node_path(:id => @node.id, :pile_id => @pile.id, :user_id => 'slippy_douglas').should == expected_path
        polymorphic_path([@user, @pile, @node]).should == expected_path
      end
      
      it "recognizes and generates #destroy" do
-       expected_path = "/a_user/piles/#{@pile.id}/nodes/#{@node.id}"
+       expected_path = "/slippy_douglas/piles/#{@pile.id}/nodes/#{@node.id}"
        
-       { :delete => expected_path }.should route_to(:controller => 'nodes', :action => 'destroy', :user_id => 'a_user', :pile_id => "#{@pile.id}", :id => "#{@node.id}")
+       { :delete => expected_path }.should route_to(:controller => 'nodes', :action => 'destroy', :user_id => 'slippy_douglas', :pile_id => "#{@pile.id}", :id => "#{@node.id}")
        
-       user_pile_node_path(:id => @node.id, :pile_id => @pile.id, :user_id => 'a_user').should == expected_path
+       user_pile_node_path(:id => @node.id, :pile_id => @pile.id, :user_id => 'slippy_douglas').should == expected_path
        polymorphic_path([@user, @pile, @node]).should == expected_path
      end
      
      it "recognizes and generates #reorder" do
-       expected_path = "/a_user/piles/#{@pile.id}/nodes/#{@node.id}/reorder"
+       expected_path = "/slippy_douglas/piles/#{@pile.id}/nodes/#{@node.id}/reorder"
        
-       { :put => expected_path }.should route_to(:controller => 'nodes', :action => 'reorder', :user_id => 'a_user', :pile_id => "#{@pile.id}", :id => "#{@node.id}")
+       { :put => expected_path }.should route_to(:controller => 'nodes', :action => 'reorder', :user_id => 'slippy_douglas', :pile_id => "#{@pile.id}", :id => "#{@node.id}")
        
-       reorder_user_pile_node_path(:id => @node.id, :pile_id => @pile.id, :user_id => 'a_user').should == expected_path
+       reorder_user_pile_node_path(:id => @node.id, :pile_id => @pile.id, :user_id => 'slippy_douglas').should == expected_path
        polymorphic_path([:reorder, @user, @pile, @node]).should == expected_path
      end
      
      it "recognizes and generates #reparent" do
-       expected_path = "/a_user/piles/#{@pile.id}/nodes/#{@node.id}/reparent"
+       expected_path = "/slippy_douglas/piles/#{@pile.id}/nodes/#{@node.id}/reparent"
        
-       { :put => expected_path }.should route_to(:controller => 'nodes', :action => 'reparent', :user_id => 'a_user', :pile_id => "#{@pile.id}", :id => "#{@node.id}")
+       { :put => expected_path }.should route_to(:controller => 'nodes', :action => 'reparent', :user_id => 'slippy_douglas', :pile_id => "#{@pile.id}", :id => "#{@node.id}")
        
-       reparent_user_pile_node_path(:id => @node.id, :pile_id => @pile.id, :user_id => 'a_user').should == expected_path
+       reparent_user_pile_node_path(:id => @node.id, :pile_id => @pile.id, :user_id => 'slippy_douglas').should == expected_path
        polymorphic_path([:reparent, @user, @pile, @node]).should == expected_path
      end
      
@@ -86,15 +86,13 @@ describe NodesController do
      # invalid routes
      
      it "doesn't recognize and generate #index" do
-       { :get => "/a_user/piles/#{@pile.id}/nodes" }.should_not be_routeable
+       { :get => "/slippy_douglas/piles/#{@pile.id}/nodes" }.should_not be_routeable
      end
      
-     it "doesn't recognize and generate #show" do
-       pending
-       
-       # still generating the route; Rails bug?
-       { :get => "/a_user/piles/#{@pile.id}/nodes/#{@node.id}" }.should_not be_routeable
-     end
+     #it "doesn't recognize and generate #show" do
+     #  # still generating the route; Rails bug?
+     #  { :get => "/slippy_douglas/piles/#{@pile.id}/nodes/#{@node.id}" }.should_not be_routeable
+     #end
      
    end
 end

@@ -6,7 +6,7 @@ describe PilesController do
   
   
   def bypass_authentication
-    PilesController.any_instance.stubs :logged_in? => true, :current_user => users(:a_user)
+    PilesController.any_instance.stubs :logged_in? => true, :current_user => users(:slippy_douglas)
   end
   
   before(:each) do
@@ -28,21 +28,21 @@ describe PilesController do
     
     it "should get new" do
       get :new,
-        :user_id => users(:a_user).to_param
+        :user_id => users(:slippy_douglas).to_param
     end
     
     
     it "should get edit" do
       get :edit,
-        :user_id => users(:a_user).to_param,
-        :id => users(:a_user).default_pile.to_param
+        :user_id => users(:slippy_douglas).to_param,
+        :id => users(:slippy_douglas).default_pile.to_param
     end
     
     
     it "should show pile" do
       get :show,
-        :user_id => users(:a_user).to_param,
-        :id => users(:a_user).default_pile.to_param
+        :user_id => users(:slippy_douglas).to_param,
+        :id => users(:slippy_douglas).default_pile.to_param
     end
     
   end
@@ -58,7 +58,7 @@ describe PilesController do
     it "should create pile" do
       assert_difference 'Pile.count', +1 do
         post :create,
-          :user_id => users(:a_user).to_param,
+          :user_id => users(:slippy_douglas).to_param,
           :pile => {
             :name => 'Test Pile PCT 1'
           }
@@ -71,8 +71,8 @@ describe PilesController do
     
     it "should update pile" do
       put :update,
-        :user_id => users(:a_user).to_param,
-        :id => users(:a_user).default_pile.to_param,
+        :user_id => users(:slippy_douglas).to_param,
+        :id => users(:slippy_douglas).default_pile.to_param,
         :pile => {}
       
       assigns[:pile].should be_valid
@@ -83,8 +83,8 @@ describe PilesController do
     it "should destroy pile" do
       assert_difference 'Pile.count', -1 do
         delete :destroy,
-          :user_id => users(:a_user).to_param,
-          :id => users(:a_user).default_pile.to_param
+          :user_id => users(:slippy_douglas).to_param,
+          :id => users(:slippy_douglas).default_pile.to_param
       end
     end
     

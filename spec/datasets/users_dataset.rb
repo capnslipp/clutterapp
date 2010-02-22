@@ -1,16 +1,16 @@
 class UsersDataset < Dataset::Base
   
   def load
-    create_user :a_user, :with => {
-      :login => 'a_user',
-      :email => 'a_user@example.com',
+    create_user :slippy_douglas, :with => {
+      :login => 'slippy_douglas',
+      :email => 'slippy_douglas@example.com',
       :password => 'secret',
       :password_confirmation => 'secret'
     }
     
-    create_user :another_user, :with => {
-      :login => 'another_user',
-      :email => 'another_user@example.com',
+    create_user :josh_vera, :with => {
+      :login => 'josh_vera',
+      :email => 'josh_vera@example.com',
       :password => 'secret',
       :password_confirmation => 'secret'
     }

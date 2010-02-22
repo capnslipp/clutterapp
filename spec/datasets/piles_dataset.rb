@@ -2,27 +2,27 @@ class PilesDataset < Dataset::Base
   uses :users
   
   def load
-    name_pile :a_users_default_pile,
-      :for => users(:a_user).default_pile
+    name_pile :slippys,
+      :for => users(:slippy_douglas).default_pile
     
-    create_pile :a_pile, :with => {
-      :name => 'A Pile',
-      :owner => users(:a_user)
+    create_pile :plans_to_rule_the_world, :with => {
+      :name => 'Plans to Rule the World',
+      :owner => users(:slippy_douglas)
     }
     
-    create_pile :a_better_pile, :with => {
-      :name => 'A Better Pile',
-      :owner => users(:a_user)
+    create_pile :step_1_the_girl, :with => {
+      :name => 'Step 1: The Girl',
+      :owner => users(:slippy_douglas)
+    }
+    
+    create_pile :every_day_responsibilities, :with => {
+      :name => 'Every Day Responsibilities',
+      :owner => users(:slippy_douglas)
     }
     
     
-    name_pile :another_users_default_pile,
-      :for => users(:another_user).default_pile
-    
-    create_pile :another_pile, :with => {
-      :name => 'Another Pile',
-      :owner => users(:another_user)
-    }
+    name_pile :joshs,
+      :for => users(:josh_vera).default_pile
   end
   
   helpers do

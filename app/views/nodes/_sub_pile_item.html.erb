@@ -1,0 +1,15 @@
+<%- cache ({:node_item => sub_pile_item.id}.to_json) do -%>
+	<% content_tag_for :li, sub_pile_item, :class => "show item", :'oc:url' => path_for([sub_pile_item.pile.owner, sub_pile_item.pile, sub_pile_item]) do -%>
+		<%- cache ({:node_section => sub_pile_item.prop.ref_pile.root_node.id}.to_json) do -%>
+			<% content_tag_for :section, sub_pile_item.prop.ref_pile.root_node, :class => "sub pile cont", :'oc:nodes-url' => path_for([sub_pile_item.prop.ref_pile.owner, sub_pile_item.prop.ref_pile, :nodes]) do %>
+				
+				<%= render :partial => 'nodes/show_body', :locals => {:node => sub_pile_item} %>
+				
+				<ul class="item-list">
+					<%= render :partial => 'nodes/list_items', :locals => {:item => sub_pile_item.prop.ref_pile.root_node} %>
+				</ul>
+				
+			<% end %>
+		<%- end -%>
+	<% end %>
+<%- end -%>

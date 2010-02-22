@@ -26,6 +26,15 @@ var kQuickTransitionDuration =		125;
 //}
 
 
+function deepNodeIDOfItem(node) {
+	var childBaseNode = node.children('.base_node');
+	if (childBaseNode.exists())
+		return nodeIDOfItem(childBaseNode);
+	else
+		return nodeIDOfItem(node);
+}
+
+
 function nodeIDOfItem(node) {
 	var nodeID = node.getAttr('id');
 	
@@ -35,6 +44,21 @@ function nodeIDOfItem(node) {
 		return nodeID.substring('node_'.length);
 	else
 		return null;
+}
+
+function pileForItem(node) {
+	if (node.children('.pile').exists())
+		return node.children('.pile');
+	else
+		return node.closest('.pile');
+}
+
+function pileIDOfItem(node) {
+	return pileForItem(node).getAttr('oc:nodes-url').match(/\/piles\/([0-9]+)\/nodes/)[1];
+}
+
+jQuery.fn.findItem = function() {
+	return this.closest('.item');
 }
 
 
@@ -47,30 +71,35 @@ function expandActionBar(node) {
 	
 	collapseActionBar();
 	
-	var nodeBody = node.children('.body').required();
+	var nodeBody = $('> .cont > .body, > .pile > .body', node).required();
 	
 	nodeBody.children('.action.stub').hide();
 	
 	nodeBody.addClass('active');
 	
-	if (!nodeBody.find('#action-bar')[0])
+	if (!nodeBody.find('#action-bar').exists())
 		$('#action-bar').prependTo(nodeBody);
 	
-	if (node.hasClass('pile'))
+	// only show the new buttons on the base pile node
+	if (node.children('.base.pile').exists())
 		$('#action-bar > .buttons > a:not(.new)').hide();
+	
+	// only show new sub-pile button on pile_ref nodes
+	if (!node.children('.pile').exists())
+		$('#action-bar > .buttons > a.new.child-pile').hide();
 	
 	// since it may be initially-hidden
 	safeShow($('#action-bar'));
 	
-	if (!node.hasClass('pile')) {
+	if (!node.is('.base.item')) {
 		node.activateReparentDraggable();
 		node.closest('ul.item-list').required().activateReorderSortable();
 	}
 }
 
 function collapseActionBar() {
-	var node = $('#action-bar').closest('.item').required();
-	var nodeBody = node.children('.body').required();
+	var node = $('#action-bar').findItem().required();
+	var nodeBody = $('> .cont > .body, > .pile > .body', node).required();
 	
 	
 	node.deactivateReparentDraggable();
@@ -91,21 +120,23 @@ function collapseActionBar() {
 }
 
 $(function() {
-	$('li.item > .show.body > .cont').live('click', function() {
-		expandActionBar($(this).closest('li.item')); return false;
-	});
-	$('section.pile.item > .body > .header').live('click', function() {
-		expandActionBar($(this).closest('section.pile.item')); return false;
-	});
+	$('.item > .base.pile > .body > .header').live('click', expand);
+	$('.item > .sub.pile > .body > .cont').live('click', expand);
+	$('.item > .cont > .body > .cont').live('click', expand);
+	
+	function expand() {
+		expandActionBar($(this).findItem()); return false;
+	}
 });
 
 $(function() {
-	$('li.item > .show.body > .action.stub .widget.collapsed a').live('click', function() {
-		expandActionBar($(this).closest('li.item')); return false;
-	});
-	$('section.pile.item > .body > .action.stub .widget.collapsed a').live('click', function() {
-		expandActionBar($(this).closest('section.pile.item')); return false;
-	});
+	$('.item > .base.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.item > .sub.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.item > .cont > .body > .action.stub .widget.collapsed a').live('click', expand);
+	
+	function expand() {
+		expandActionBar($(this).findItem()); return false;
+	}
 	
 	$('#action-bar .widget.expanded a').click(function() {
 		if (!ClutterApp.fsm.isBusy())
@@ -139,8 +170,8 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 	
 	$.ajax({
 		type: 'get',
-		url: parentNode.closest('.pile').getAttr('oc\:nodes-url') + '/new',
-		data: { 'node[prop_type]': type, 'node[parent_id]': nodeIDOfItem(parentNode), prev_sibling_id: prevSiblingNodeID, dup_prev: (dupPrev || '') },
+		url: pileForItem(parentNode).getAttr('oc\:nodes-url') + '/new',
+		data: { 'node[prop_type]': type, 'node[parent_id]': deepNodeIDOfItem(parentNode), prev_sibling_id: prevSiblingNodeID, dup_prev: (dupPrev || '') },
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError
@@ -150,7 +181,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 	function handleSuccess(responseData) {
 		hideProgressOverlay();
 		
-		var list = parentNode.children('.item-list').required();
+		var list = $('> .cont > .item-list', parentNode).required();
 		
 		if (!prevSiblingNode) {
 			list.prepend(responseData);
@@ -203,7 +234,7 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 		hideProgressOverlay();
 		ClutterApp.fill.hide();
 		
-		parentNode.children('.show.body')
+		$('> .cont > .show.body', parentNode)
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000); // @todo: fix
 		
 		
@@ -212,8 +243,12 @@ function itemNew(parentNode, type, prevSiblingNode, dupPrev) {
 }
 	
 $(function() {
-	var actionButtons = $('#action-bar > .buttons > a.new').required()
-		.click(function() { itemNew($(this).closest('.item'), 'text'); return false; });
+	var actionButtons = $('#action-bar > .buttons').required();
+	
+	actionButtons.children('a.new.child-item').required()
+		.click(function() { itemNew($(this).findItem(), 'text'); return false; });
+	actionButtons.children('a.new.child-pile').required()
+		.click(function() { itemNew($(this).findItem(), 'pile_ref'); return false; });
 });
 
 
@@ -223,7 +258,7 @@ function itemNewCancel(buttonOrNode) {
 		return;
 	
 	
-	var node = buttonOrNode.closest('.item').required();
+	var node = buttonOrNode.findItem().required();
 	var newBody = node.children('.new.body').required();
 	var form = newBody.children('form.new_node').required();
 	
@@ -341,7 +376,7 @@ function itemCreate(newNode, another) {
 					
 					
 					if (another) {
-						var parentItem = createdItem.parent().closest('.item');
+						var parentItem = createdItem.parent().findItem();
 						itemNew(parentItem, 'text', createdItem, true);
 					}
 				}
@@ -370,11 +405,11 @@ function itemCreate(newNode, another) {
 
 $(function() {
 	$('form.new_node').live('submit', function() {
-		itemCreate($(this).closest('.item')); return false;
+		itemCreate($(this).findItem()); return false;
 	});
 	
 	$('form.new_node input.another').live('click', function() {
-		itemCreate($(this).closest('.item'), true); return false;
+		itemCreate($(this).findItem(), true); return false;
 	});
 	
 	$().keydown(function(e) {
@@ -404,7 +439,7 @@ function itemEdit(link) {
 	
 	$.ajax({
 		type: 'get',
-		url: showBody.closest('.item').getAttr('oc\:url') + '/edit',
+		url: showBody.findItem().getAttr('oc\:url') + '/edit',
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError
@@ -466,7 +501,7 @@ function itemEdit(link) {
 }
 
 $(function() {
-	$('li.item > .show.body > .cont').live('dblclick', function() {
+	$('.item > .cont > .show.body > .cont, .item > .pile > .show.body > .cont').live('dblclick', function() {
 		itemEdit(this); return false;
 	});
 	$('#action-bar > .buttons > a.edit').click(function() {
@@ -480,8 +515,8 @@ function itemEditCancel(buttonOrNode) {
 	if (!ClutterApp.fsm.changeState('itemEdit', 'cancel'))
 		return;
 	
-	var node = buttonOrNode.closest('.item').required();
-	var editBody = node.children('.edit.body').required();
+	var node = buttonOrNode.findItem().required();
+	var editBody = $('> .cont > .edit.body', node).required();
 	var form = editBody.children('form.edit_node').required();
 	
 	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
@@ -595,8 +630,8 @@ function itemUpdate(form, another) {
 					
 					
 					if (another) {
-						var updatedNode = showBody.closest('.item');
-						var parentNode = updatedNode.parent().closest('.item');
+						var updatedNode = showBody.findItem();
+						var parentNode = updatedNode.parent().findItem();
 						itemNew(parentNode, 'text', updatedNode, true);
 					}
 				}
@@ -758,7 +793,7 @@ jQuery.fn.setupReorderSortable = function() {
 		axis: 'y',
 		containment: '#active-sorting-container',
 		tolerance: 'pointer',
-		handle: '> .show.body > #action-bar .move.reorder',
+		handle: '> .cont > .show.body > #action-bar .move.reorder, > section.base_node > .show.body > #action-bar .move.reorder',
 		helper: helper,
 		opacity: 0.5,
 		revert: true,
@@ -809,7 +844,7 @@ jQuery.fn.setupReorderSortable = function() {
 		list.addClass('active');
 		
 		var origPrevSibling = ui.item.prev('li.item');
-		origPrevSiblingID = origPrevSibling[0] ? nodeIDOfItem(origPrevSibling) : '';
+		origPrevSiblingID = origPrevSibling.exists() ? nodeIDOfItem(origPrevSibling) : '';
 		
 		var placeholder = ui.placeholder.required();
 		placeholder.prepend('<div class="back"></div> <div class="cont"></div>');
@@ -825,7 +860,7 @@ jQuery.fn.setupReorderSortable = function() {
 		
 		// @todo: optimize so this isn't being done twice
 		var prevSibling = ui.item.prev('li.item');
-		var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
+		var prevSiblingID = prevSibling.exists() ? nodeIDOfItem(prevSibling) : '';
 		
 		// only if the prevSibling has changed
 		if (prevSiblingID != origPrevSiblingID) {
@@ -853,7 +888,7 @@ function itemReorder(node) {
 	list.showProgressOverlay();
 	
 	var prevSibling = node.prev('li.item');
-	var prevSiblingID = prevSibling[0] ? nodeIDOfItem(prevSibling) : '';
+	var prevSiblingID = prevSibling.exists() ? nodeIDOfItem(prevSibling) : '';
 	
 	$.ajax({
 		type: 'post',
@@ -929,7 +964,7 @@ $(function() {
 });
 
 jQuery.fn.applyReparentDroppability = function() {
-	$(this).search('li.item > .show.body, section.pile.item > .body').activateReparentDroppable();
+	$(this).search('.item > .cont > .show.body, .item > .pile > .body').activateReparentDroppable();
 	return this;
 }
 
@@ -978,26 +1013,26 @@ jQuery.fn.setupReparentDroppable = function() {
 	}
 }
 
-function itemReparent(node, parentNode) {
+function itemReparent(node, targetNode) {
 	if (!ClutterApp.fsm.changeAction('itemReparent', 'load')) {
 		handleError(); // return the item back for now, since we have no way to prevent the drag from starting
 		return;
 	}
 	
 	node.required();
-	parentNode = $(parentNode).closest('.item').required();
+	targetNode = $(targetNode).findItem().required();
 	
 	collapseActionBar(); // so it doesn't get deleted when item it's contained on gets deleted
-	node.children('.body').addClass('active');
+	$('> .cont > .body', node).addClass('active');
 	node.setCSS('opacity', 0.5); // doesn't seem to be working (perhaps being overridden via jQueryUI code?)
 	
 	nodeOutStart();
-	parentNode.children('.body').required().showProgressOverlay();
+	$('> .cont > .body', targetNode).required().showProgressOverlay();
 	
 	$.ajax({
 		type: 'post',
 		url: node.getAttr('oc\:url') + '/reparent',
-		data: {_method: 'put', parent_id: nodeIDOfItem(parentNode)},
+		data: {_method: 'put', target_id: deepNodeIDOfItem(targetNode), target_pile_id: pileIDOfItem(targetNode)},
 		dataType: 'html',
 		success: handleSuccess,
 		error: handleError
@@ -1063,9 +1098,9 @@ function itemReparent(node, parentNode) {
 		hideProgressOverlay();
 		
 		
-		parentNode.children('.body').removeClass('active');
+		$('> .cont > .body', targetNode).removeClass('active');
 		
-		var list = parentNode.children('ul.item-list').required();
+		var list = $('> .cont > ul.item-list', targetNode).required();
 		
 		$('li.item', list).draggable('destroy');
 		$('.show.body', list).droppable('destroy');
@@ -1140,15 +1175,12 @@ function itemReparent(node, parentNode) {
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
-		parentNode.removeClass('active');
+		targetNode.removeClass('active');
+		hideProgressOverlay();
 		
-		function nodeOutRevert() {
-			$(this).removeAttr('style'); // clear out unnecessary styles
-		}
-		
-		node.find('.body:first .cont').required()
+		node.required().show().removeAttr('style'); // clear out transitional styles
+		node.required()
 			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
-		
 		
 		ClutterApp.fsm.finishAction('itemReparent', 'load');
 	}
@@ -1160,12 +1192,12 @@ function badgeAdd(link, addType) {
 	var node = $(link).closest('li.item').required();
 	
 	var state;
-	if (node.children('.new')[0]) {
+	if (node.children('.new').exists()) {
 		state = 'new';
 		
 		if (!ClutterApp.fsm.changeState('itemNew', 'badgeAddLoad'))
 			return;
-	} else if (node.children('.edit')[0]) {
+	} else if (node.children('.edit').exists()) {
 		state = 'edit';
 		
 		if (!ClutterApp.fsm.changeState('itemEdit', 'badgeAddLoad'))
@@ -1178,7 +1210,7 @@ function badgeAdd(link, addType) {
 	}
 	
 	var form = node.find('form').required();
-	var parentNode = node.parent().closest('.item').required();
+	var parentNode = node.parent().findItem().required();
 	
 	$.ajax({
 		type: 'get',
@@ -1198,7 +1230,7 @@ function badgeAdd(link, addType) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('li.new.item').find('.new.body').required();
+			var newBody = list.children('li.new.node').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
@@ -1211,7 +1243,7 @@ function badgeAdd(link, addType) {
 		}
 		else if (state == 'edit')
 		{
-			var showBody = node.children('.show.body').required();
+			var showBody = $('> .cont > .show.body', node).required();
 			var editBody = showBody.siblings('.edit.body').required();
 			
 			//var editBody = node.replaceWith(responseData); // possible?
@@ -1245,7 +1277,7 @@ $(function() {
 	$('#add-bar a.add.priority'	).live('click', function() { badgeAdd(this, 'priority'	); return false; });
 	$('#add-bar a.add.tag'		).live('click', function() { badgeAdd(this, 'tag'		); return false; });
 	$('#add-bar a.add.time'		).live('click', function() { badgeAdd(this, 'time'		); return false; });
-	$('#add-bar a.add.pile-ref'	).live('click', function() { badgeAdd(this, 'pile-ref'	); return false; });
+	$('#add-bar a.add.pile_ref'	).live('click', function() { badgeAdd(this, 'pile_ref'	); return false; });
 });
 
 
@@ -1256,12 +1288,12 @@ function badgeRemove(link) {
 	var node = $(link).closest('li.item').required();
 	
 	var state;
-	if (node.children('.new')[0]) {
+	if (node.children('.new').exists()) {
 		state = 'new';
 		
 		if (!ClutterApp.fsm.changeState('itemNew', 'badgeRemoveLoad'))
 			return;
-	} else if (node.children('.edit')[0]) {
+	} else if (node.children('.edit').exists()) {
 		state = 'edit';
 		
 		if (!ClutterApp.fsm.changeState('itemEdit', 'badgeRemoveLoad'))
@@ -1294,7 +1326,7 @@ function badgeRemove(link) {
 			//var newBody = node.replaceWith(responseData); // possible?
 			node.replaceWith(responseData);
 			
-			var newBody = list.children('li.new.item').find('.new.body').required();
+			var newBody = list.children('li.new.node').find('.new.body').required();
 			
 			newBody.find('.note.prop').find('textarea').elastic();
 			
@@ -1307,7 +1339,7 @@ function badgeRemove(link) {
 		}
 		else if (state == 'edit')
 		{
-			var showBody = node.children('.show.body').required();
+			var showBody = $('> .cont > .show.body', node).required();
 			var editBody = showBody.siblings('.edit.body').required();
 			
 			//var editBody = node.replaceWith(responseData); // possible?

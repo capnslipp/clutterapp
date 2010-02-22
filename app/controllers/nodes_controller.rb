@@ -16,7 +16,7 @@ class NodesController < ApplicationController
   # PUT /items/1/update_check_prop_checked
   def update_check_prop_checked
     logger.prefixed 'update_check_prop_checked', :light_green, 'params: ' + params.inspect
-    @node = active_pile.nodes.find(params[:id])
+    @node = active_pile.nodes.find(params[:id], :include => :prop)
     @prop = @node.prop
     @prop.checked = params[:checked]
     @prop.save!
@@ -33,7 +33,7 @@ class NodesController < ApplicationController
   def new
     node_attrs = params.delete(:node) || {}
     
-    @parent = active_pile.nodes.find(node_attrs.delete(:parent_id))
+    @parent = active_pile.nodes.find(node_attrs.delete(:parent_id), :include => :pile)
     node_attrs[:pile] = @parent.pile
     
     raise 'node[prop_type] param is required' if node_attrs[:prop_type].nil?
@@ -42,8 +42,11 @@ class NodesController < ApplicationController
     
     @node = @parent.children.build(node_attrs)
     
+    # build a sub-pile if the type is a RefPile
+    @node.prop.ref_pile = active_owner.piles.build(node_attrs[:prop_attributes][:ref_pile_attributes]) if @node.variant == PileRefProp
     
-    @prev_sibling = @parent.children.find params[:prev_sibling_id] if params[:prev_sibling_id].present?
+    
+    @prev_sibling = @parent.children.find(params[:prev_sibling_id], :include => :children) if params[:prev_sibling_id].present?
     
     
     add_attrs = []
@@ -88,6 +91,9 @@ class NodesController < ApplicationController
       child.pile = @node.pile
     end
     
+    # build a sub-pile if the type is a RefPile
+    @node.prop.ref_pile = (active_owner.piles.build node_attrs[:prop_attributes][:ref_pile_attributes]) if @node.variant == PileRefProp
+    
     
     if @node.save!
       if params[:prev_sibling_id].present? # put it after the given sibling
@@ -106,7 +112,12 @@ class NodesController < ApplicationController
       
       
       expire_cache_for(@node)
-      render :partial => 'show_item', :locals => {:item => @node}
+      
+      if @node.prop.is_a? PileRefProp
+        render :partial => 'sub_pile_item', :object => @node
+      else
+        render :partial => 'show_item', :locals => {:item => @node}
+      end
     else
       render :nothing => true, :status => :bad_request
     end
@@ -115,7 +126,7 @@ class NodesController < ApplicationController
   
   # GET /nodes/1/edit
   def edit
-    @node = active_pile.nodes.find(params[:id])
+    @node = active_pile.nodes.find(params[:id], :include => [:prop, {:children => :prop}])
     
     @node.attributes = params[:node]
     
@@ -137,7 +148,7 @@ class NodesController < ApplicationController
   
   # PUT /nodes/1
   def update
-    @node = active_pile.nodes.find(params[:id])
+    @node = active_pile.nodes.find(params[:id], :include => [:prop, :parent])
     
     @node.update_attributes(params[:node])
     
@@ -173,31 +184,52 @@ class NodesController < ApplicationController
   
   # PUT /nodes/1/reparent?parent_id=2
   def reparent
-    @node = active_pile.nodes.find(params[:id])
+    @node = active_pile.nodes.find(params[:id], :include => [:parent, :prop])
     
     expire_cache_for(@node.parent) # old parent
     
-    # put it as the last child of the parent
-    @parent = active_pile.nodes.find(params[:parent_id])
-    
-    first_child = @parent.children.first
-    first_child = first_child.right_sibling if first_child == @node
-    if first_child
-      @node.move_to_left_of first_child
+    # put it as the first child of the parent
+    if params[:target_pile_id].to_i == active_pile.id
+      @target = active_pile.nodes.find(params[:target_id], :include => :prop)
+      
+      unless @node.prop.class.deepable?
+        return render(:nothing => true, :status => :bad_request) unless @target.root? || (@target.prop.is_a? PileRefProp)
+      end
+      
+      first_child = @target.children.first
+      first_child = first_child.right_sibling if first_child == @node
+      if first_child
+        @node.move_to_left_of first_child
+      else
+        @node.move_to_child_of @target
+      end
     else
-      @node.move_to_child_of @parent
+      target_pile = active_owner.piles.find(params[:target_pile_id])
+      @target = target_pile.nodes.find(params[:target_id], :include => [:prop, :pile])
+      
+      unless @node.prop.class.deepable?
+        return render(:nothing => true, :status => :bad_request) unless @target.root? || (@target.prop.is_a? PileRefProp)
+      end
+      
+      Node.transaction do
+        # deep-duplicate the node into the new tree
+        @new_node = deep_clone_node_to_pile!(@node, @target.pile, @target)
+        
+        # delete it from the old tree
+        @node.destroy
+      end
     end
     
-    expire_cache_for(@parent) # new parent
+    expire_cache_for(@target) # new parent
     
-    render :partial => 'list_items', :locals => {:item => @parent}
+    render :partial => 'list_items', :locals => {:item => @target}
   end
   
   
   # DELETE /nodes/1
   # DELETE /nodes/1.xml
   def destroy
-    @node = active_pile.nodes.find(params[:id])
+    @node = active_pile.nodes.find(params[:id], :include => :parent)
     orig_parent_node = @node.parent
     @node.destroy
     
@@ -217,8 +249,35 @@ private
     expire_fragment ({:node_item => record.id}.to_json)
     expire_fragment ({:node_section => record.id}.to_json) if record.root?
     
-    expire_cache_for(record.parent) if record.parent # recursively invalidate all ancestors
-    # @todo: also invalidate the cache for any pile-ref nodes point at this pile's root node
+    # recursively invalidate all ancestors
+    expire_cache_for(record.parent) if record.parent
+    
+    # invalidate the cache for any pile ref nodes point at this pile's root node
+    if record.root?
+      pr = record.pile.pile_ref_prop
+      expire_cache_for(pr.node) if pr
+    end
+    # @note: This is a temporary hack; this approach is not even close to fast enough for all items to be parented by one "master Pile".
+    #   Rather, the correct and eventual solution is to track which sub-piles are expanded or collapsed and fetch and render each expanded decendent Pile into a content placeholder in it's parent Pile's fragment cache.
+    #   (probably using something like: http://github.com/tylerkovacs/extended_fragment_cache)
+  end
+  
+  def deep_clone_node_to_pile!(orig_node, dest_pile, dest_parent)
+    cloned_node = orig_node.clone
+    cloned_node.prop = orig_node.prop.clone
+    orig_node.prop.ref_pile = nil if orig_node.prop.is_a? PileRefProp # to avoid destroying the dependency
+    cloned_node.pile = dest_pile
+    dest_parent.children << cloned_node # saves as a side-effect
+    
+    first_child = dest_parent.children.first
+    first_child = first_child.right_sibling if first_child == cloned_node
+    cloned_node.move_to_left_of first_child if first_child
+    
+    orig_node.children.each do |onc|
+      deep_clone_node_to_pile!(onc, dest_pile, cloned_node)
+    end
+    
+    cloned_node
   end
   
 end
