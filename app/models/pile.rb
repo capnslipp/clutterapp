@@ -6,7 +6,7 @@ class Pile < ActiveRecord::Base
   
   has_many :nodes, :dependent => :destroy, :autosave => true
   
-  #Shares associations
+  # Shares associations
   has_many :shares
   has_many :users, :through => :shares
   
@@ -16,6 +16,10 @@ class Pile < ActiveRecord::Base
   
   #before_validation_on_create :create_root_node!
   after_create :root_node # ensures that it's created
+  
+  
+  named_scope :master, :include => :pile_ref_prop, :conditions => ['`pile_ref_props`.ref_pile_id IS NULL']
+  named_scope :nested, :joins => :pile_ref_prop
   
   
   def root_node
