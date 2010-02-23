@@ -3,7 +3,7 @@
 <h3>Your Piles</h3>
 
 <ul class="pile-list">
-	<% for pile in current_user.piles.all(:include => :owner) %>
+	<% @piles.each do |pile| %>
 		<li>
 			<div class="name">
 				<span class="sym">&there4;</span>

@@ -8,8 +8,7 @@
 		<h1 class="header">Piles</h1>
 		
 		<ul class="pile-list">
-			<% current_user.piles.each do |pile| %>
-				<%- next if pile.pile_ref_prop %>
+			<% @piles.each do |pile| %>
 				<li>
 					<div class="name">
 						<span class="sym">&there4;</span>

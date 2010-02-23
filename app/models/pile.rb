@@ -18,6 +18,10 @@ class Pile < ActiveRecord::Base
   after_create :root_node # ensures that it's created
   
   
+  named_scope :master, :include => :pile_ref_prop, :conditions => ['`pile_ref_props`.ref_pile_id IS NULL']
+  named_scope :nested, :joins => :pile_ref_prop
+  
+  
   def root_node
     @root_node ||= (nodes.first.root if nodes.first) || create_root_node
   end
