@@ -6,7 +6,7 @@ class Pile < ActiveRecord::Base
   
   has_many :nodes, :dependent => :destroy, :autosave => true
   
-  #Shares associations
+  # Shares associations
   has_many :shares
   has_many :users, :through => :shares
   
