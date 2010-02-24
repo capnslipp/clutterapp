@@ -4,10 +4,12 @@ class UserSessionsController < ApplicationController
   
   def new
     @user_session = UserSession.new
+    @user_session.remember_me = true
   end
   
   def create
     @user_session = UserSession.new(params[:user_session])
+    
     if @user_session.save
       flash[:notice] = "Logged in successfully"
       redirect_to home_path
