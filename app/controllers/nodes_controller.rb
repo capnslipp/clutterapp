@@ -270,10 +270,10 @@ private
     dest_parent.children << cloned_node # saves as a side-effect
     
     first_child = dest_parent.children.first
-    first_child = first_child.right_sibling if first_child == cloned_node
-    cloned_node.move_to_left_of first_child if first_child
+    cloned_node.move_to_left_of first_child unless cloned_node == first_child
     
-    orig_node.children.each do |onc|
+    # need to add them in reverse order one-by-one so they retain the same ordering
+    orig_node.children.reverse_each do |onc|
       deep_clone_node_to_pile!(onc, dest_pile, cloned_node)
     end
     
