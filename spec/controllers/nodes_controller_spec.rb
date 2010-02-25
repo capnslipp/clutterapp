@@ -136,6 +136,34 @@ describe NodesController do
         
       end
       
+      it "moving a node with children to a sub-Pile should retain the original ordering" do
+        # store off the values we'll check against after the request
+        @node_prop_values = [ nodes(:a_sub_todo_node), nodes(:a_sibling_sub_todo_node) ].collect {|n| n.prop.value }
+        @node_prop_values.each_with_index do |correct_value, at_index|
+          nodes(:a_todo_node).children.non_badgeable[at_index].prop.value.should == correct_value
+        end
+        
+        @n = nodes(:a_todo_node)
+        @tn = piles(:plans_to_rule_the_world).root_node
+        # store off the value of the moving node so we can be sure we found it the request
+        @n_value = @n.prop.value
+        
+        xhr :put, :reparent, :user_id => @n.pile.owner.to_param, :pile_id => @n.pile.to_param, :id => @n.to_param, :target_id => @tn.to_param, :target_pile_id => @tn.pile.to_param
+        
+        response.should be_success
+        
+        # find the node we moved
+        @new_n = @tn.children.non_badgeable.first
+        # make sure we have the correct node (values should be distinct in the sample dataset)
+        @new_n.prop.value.should == @n_value
+        
+        # check that the values line up
+        @node_prop_values.each_with_index do |correct_value, at_index|
+          # the nodes may have been cloned, so we need to check by the Prop value (which are distinct in the sample dataset)
+          @new_n.children.non_badgeable[at_index].prop.value.should == correct_value
+        end
+      end
+      
       describe "should not work" do
         it "moving a 1st-level item to a descendent of itself" do
           @n = nodes(:a_todo_node)
