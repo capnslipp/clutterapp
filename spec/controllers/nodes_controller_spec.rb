@@ -138,7 +138,7 @@ describe NodesController do
       
       it "moving a node with children to a sub-Pile should retain the original ordering" do
         # store off the values we'll check against after the request
-        @node_prop_values = [ nodes(:a_sub_todo_node), nodes(:a_sibling_sub_todo_node) ].collect {|n| n.prop.value }
+        @node_prop_values = [ nodes(:a_sub_todo_node), nodes(:a_sibling_sub_todo_node), nodes(:another_sibling_sub_todo_node) ].collect {|n| n.prop.value }
         @node_prop_values.each_with_index do |correct_value, at_index|
           nodes(:a_todo_node).children.non_badgeable[at_index].prop.value.should == correct_value
         end
