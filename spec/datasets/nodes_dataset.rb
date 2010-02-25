@@ -50,6 +50,14 @@ class NodesDataset < Dataset::Base
       ]
     }
     
+    create_node :a_sibling_sub_todo_node, :with => {
+      :parent => nodes(:a_todo_node),
+      :prop => TextProp.new(:value => "presentation is key"),
+      :children => [
+        Node.new(:prop => CheckProp.new)
+      ]
+    }
+    
     create_node :a_prioritized_todo_node, :with => {
       :parent => piles(:slippys).root_node,
       :prop => TextProp.new(:value => "eat fud"),

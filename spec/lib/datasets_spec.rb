@@ -17,6 +17,7 @@ describe "datasets" do
             proper! nodes(:a_sub_todo_node) do
               proper! nodes(:a_sub_sub_todo_node)
             end # a_sub_todo_node
+            proper! nodes(:a_sibling_sub_todo_node)
           end # a_todo_node
           proper! nodes(:a_prioritized_todo_node)
           proper! nodes(:a_tagged_todo_node)
