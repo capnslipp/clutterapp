@@ -1382,6 +1382,11 @@ $(function() {
 
 
 function collapseSubPile(link) {
+	if (!ClutterApp.fsm.changeAction('collapseSubPile', 'load')) {
+		handleError(); // return the item back for now, since we have no way to prevent the drag from starting
+		return;
+	}
+	
 	var node = $(link).findItem().required();
 	
 	$.ajax({
@@ -1432,6 +1437,8 @@ function collapseSubPile(link) {
 				complete: function() {
 					listPlaceholder.remove();
 					list.remove();
+					
+					ClutterApp.fsm.finishAction('collapseSubPile', 'load');
 				}
 			}
 		);
@@ -1448,6 +1455,11 @@ $(function() {
 
 
 function expandSubPile(link) {
+	if (!ClutterApp.fsm.changeAction('expandSubPile', 'load')) {
+		handleError(); // return the item back for now, since we have no way to prevent the drag from starting
+		return;
+	}
+	
 	var node = $(link).findItem().required();
 	
 	$.ajax({
@@ -1503,6 +1515,8 @@ function expandSubPile(link) {
 						bottom: '',
 						opacity: '',
 					});
+					
+					ClutterApp.fsm.finishAction('expandSubPile', 'load');
 				}
 			}
 		);
