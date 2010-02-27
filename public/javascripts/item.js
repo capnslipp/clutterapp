@@ -1386,10 +1386,46 @@ function collapseSubPile(link) {
 	
 	
 	function handleSuccess(responseData) {
-		$('> .sub.pile > .item-list', node).remove();
-		
 		$('> .sub.pile > .body > .bullet > a.collapsed', node).show();
 		$('> .sub.pile > .body > .bullet > a.expanded', node).hide();
+		
+		var list = $('> .sub.pile > .item-list', node).required();
+		
+		
+		// slide-out-disappear effect
+		
+		var listHeight = list.height();
+		
+		// set up placeholder
+		list.after('<div id="list-placeholder" style="height: ' + listHeight + 'px;"></div>');
+		var listPlaceholder = $('#list-placeholder');
+		//
+		//list.setCSS({
+		//	position: 'absolute',
+		//	width: '100%',
+		//	bottom: 0,
+		//});
+		
+		list.setCSS({
+			position: 'absolute',
+			width: '100%',
+			bottom: 0,
+			opacity: 1.0,
+		}).animate(
+			{opacity: 0.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeInQuad',
+				step: function(ratio) {
+					list.setCSS('opacity', 1.0 - ratio); // fade old list out as the new list fades in
+					listPlaceholder.setCSS('height', listHeight * ratio);
+				},
+				complete: function() {
+					listPlaceholder.remove();
+					list.remove();
+				}
+			}
+		);
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
@@ -1416,11 +1452,49 @@ function expandSubPile(link) {
 	
 	
 	function handleSuccess(responseData) {
-		$('> .sub.pile', node).required().append('<ul class="item-list"></ul>');
-		$('> .sub.pile > .item-list', node).required().append(responseData);
-		
 		$('> .sub.pile > .body > .bullet > a.expanded', node).show();
 		$('> .sub.pile > .body > .bullet > a.collapsed', node).hide();
+		
+		$('> .sub.pile', node).required().append('<ul class="item-list"></ul>');
+		var list = $('> .sub.pile > .item-list', node).required();
+		
+		list.append(responseData);
+		
+		
+		// slide-in-appear effect
+		
+		var listHeight = list.height();
+		
+		// set up placeholder
+		list.after('<div id="list-placeholder" style="height: 0px;"></div>');
+		listPlaceholder = $('#list-placeholder');
+		
+		list.setCSS({
+			position: 'absolute',
+			width: '100%',
+			bottom: 0,
+			opacity: 0.0,
+		}).animate(
+			{opacity: 1.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeOutQuad',
+				step: function(ratio) {
+					list.setCSS('opacity', 1.0 - ratio); // fade old list out as the new list fades in
+					listPlaceholder.setCSS('height', listHeight * ratio);
+				},
+				complete: function() {
+					listPlaceholder.remove();
+					// return to normal positioning and remove unnecessary styles
+					list.setCSS({
+						position: '',
+						width: '',
+						bottom: '',
+						opacity: '',
+					});
+				}
+			}
+		);
 	}
 	
 	function handleError(xhrObj, errStr, expObj) {
