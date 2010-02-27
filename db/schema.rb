@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100227075453) do
+ActiveRecord::Schema.define(:version => 20100227201353) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -26,11 +26,11 @@ ActiveRecord::Schema.define(:version => 20100227075453) do
 
   create_table "invites", :force => true do |t|
     t.integer  "sender_id"
-    t.string   "recipient_email", :null => false
-    t.string   "token",           :null => false
+    t.string   "recipient_email", :default => "", :null => false
+    t.string   "token",           :default => "", :null => false
     t.datetime "sent_at"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
   end
 
   create_table "nodes", :force => true do |t|
@@ -62,8 +62,8 @@ ActiveRecord::Schema.define(:version => 20100227075453) do
     t.integer  "owner_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name",       :limit => 100, :null => false
-    t.boolean  "expanded",                  :default => false
+    t.string   "name",       :limit => 100, :default => "",   :null => false
+    t.boolean  "expanded",                  :default => true
   end
 
   create_table "priority_props", :force => true do |t|
@@ -82,13 +82,13 @@ ActiveRecord::Schema.define(:version => 20100227075453) do
   end
 
   create_table "tag_props", :force => true do |t|
-    t.string   "tag",        :null => false
+    t.string   "tag",        :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "text_props", :force => true do |t|
-    t.string   "text",       :null => false
+    t.string   "text",       :default => "", :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -119,9 +119,9 @@ ActiveRecord::Schema.define(:version => 20100227075453) do
     t.datetime "last_login_at"
     t.string   "current_login_ip"
     t.string   "last_login_ip"
-    t.string   "persistence_token",                                            :null => false
-    t.string   "single_access_token",                                          :null => false
-    t.string   "perishable_token",                                             :null => false
+    t.string   "persistence_token",                            :default => "", :null => false
+    t.string   "single_access_token",                          :default => "", :null => false
+    t.string   "perishable_token",                             :default => "", :null => false
   end
 
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true
