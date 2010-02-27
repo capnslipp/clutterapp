@@ -1387,6 +1387,7 @@ function collapseSubPile(link) {
 	
 	function handleSuccess(responseData) {
 		$('> .sub.pile > .item-list', node).remove();
+		
 		$('> .sub.pile > .body > .bullet > a.collapsed', node).show();
 		$('> .sub.pile > .body > .bullet > a.expanded', node).hide();
 	}
@@ -1415,7 +1416,9 @@ function expandSubPile(link) {
 	
 	
 	function handleSuccess(responseData) {
-		$('> .sub.pile', node).append('<em class="item-list">[placeholder: reload to see content]</em>');
+		$('> .sub.pile', node).required().append('<ul class="item-list"></ul>');
+		$('> .sub.pile > .item-list', node).required().append(responseData);
+		
 		$('> .sub.pile > .body > .bullet > a.expanded', node).show();
 		$('> .sub.pile > .body > .bullet > a.collapsed', node).hide();
 	}

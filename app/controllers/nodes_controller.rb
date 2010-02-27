@@ -34,7 +34,11 @@ class NodesController < ApplicationController
     @node.prop.ref_pile.update_attributes! :expanded => params[:expanded]
     expire_cache_for(@node)
     
-    render :nothing => true, :status => :accepted
+    if @node.prop.ref_pile.expanded? # if we just expanded it
+      render :partial => 'list_items', :locals => {:item => @node.prop.ref_pile.root_node}
+    else # if we just collapsed it
+      render :nothing => true, :status => :accepted
+    end
   end
   
   
