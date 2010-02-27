@@ -1100,22 +1100,31 @@ function itemReparent(node, targetNode) {
 		
 		$('> .cont > .body', targetNode).removeClass('active');
 		
-		var list = $('> .cont > ul.item-list', targetNode).required();
-		
-		$('li.item', list).draggable('destroy');
-		$('.show.body', list).droppable('destroy');
-		
-		listCrossStart();
-		
 		nodeAJAXDone = true;
 		removeNodeWhenDone();
 		
 		
-		var oldListHeight;
-		var newListHeight;
-		var listPlaceholder;
-		
-		var newList;
+		// collapsed; skip the appear effect
+		if (targetNode.children('.sub.pile').hasClass('collapsed'))
+		{
+			ClutterApp.fsm.finishAction('itemReparent', 'load');
+		}
+		// expanded; normal appear effect
+		else
+		{
+			var list = $('> .cont > ul.item-list', targetNode).required();
+			
+			$('li.item', list).draggable('destroy');
+			$('.show.body', list).droppable('destroy');
+			
+			var oldListHeight;
+			var newListHeight;
+			var listPlaceholder;
+			
+			var newList;
+			
+			listCrossStart();
+		}
 		
 		function listCrossStart() {
 			// get old height
