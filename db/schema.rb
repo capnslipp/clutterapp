@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100227075453) do
+ActiveRecord::Schema.define(:version => 20100227201353) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -62,8 +62,8 @@ ActiveRecord::Schema.define(:version => 20100227075453) do
     t.integer  "owner_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name",       :limit => 100, :default => "",    :null => false
-    t.boolean  "expanded",                  :default => false
+    t.string   "name",       :limit => 100, :default => "",   :null => false
+    t.boolean  "expanded",                  :default => true
   end
 
   create_table "priority_props", :force => true do |t|

@@ -83,6 +83,9 @@ function expandActionBar(node) {
 	// only show the new buttons on the base pile node
 	if (node.children('.base.pile').exists())
 		$('#action-bar > .buttons > a:not(.new)').hide();
+	// if not the base pile; hide the new buttons if it's collapsed
+	else if (node.children('.sub.pile').hasClass('collapsed'))
+		$('#action-bar > .buttons > a:.new').hide();
 	
 	// only show new sub-pile button on pile_ref nodes
 	if (!node.children('.pile').exists())
@@ -1387,6 +1390,9 @@ function collapseSubPile(link) {
 		return;
 	}
 	
+	// collapse since it will have the new-child links hidden the next time it's opened
+	collapseActionBar();
+	
 	var node = $(link).findItem().required();
 	
 	$.ajax({
@@ -1400,8 +1406,9 @@ function collapseSubPile(link) {
 	
 	
 	function handleSuccess(responseData) {
-		$('> .sub.pile > .body > .bullet > a.collapsed', node).show();
 		$('> .sub.pile > .body > .bullet > a.expanded', node).hide();
+		$('> .sub.pile > .body > .bullet > a.collapsed', node).show();
+		$('> .sub.pile', node).removeClass('expanded').addClass('collapsed');
 		
 		var list = $('> .sub.pile > .item-list', node).required();
 		
@@ -1460,6 +1467,9 @@ function expandSubPile(link) {
 		return;
 	}
 	
+	// collapse since it will have the new-child links available the next time it's opened
+	collapseActionBar();
+	
 	var node = $(link).findItem().required();
 	
 	$.ajax({
@@ -1473,8 +1483,9 @@ function expandSubPile(link) {
 	
 	
 	function handleSuccess(responseData) {
-		$('> .sub.pile > .body > .bullet > a.expanded', node).show();
 		$('> .sub.pile > .body > .bullet > a.collapsed', node).hide();
+		$('> .sub.pile > .body > .bullet > a.expanded', node).show();
+		$('> .sub.pile', node).removeClass('collapsed').addClass('expanded');
 		
 		$('> .sub.pile', node).required().append('<ul class="item-list"></ul>');
 		var list = $('> .sub.pile > .item-list', node).required();
