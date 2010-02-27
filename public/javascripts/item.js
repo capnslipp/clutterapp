@@ -1372,6 +1372,64 @@ $(function() {
 
 
 
+function collapseSubPile(link) {
+	var node = $(link).findItem().required();
+	
+	$.ajax({
+		type: 'post',
+		url: node.getAttr('oc\:url') + '/sub_pile',
+		data: { _method: 'put', expanded: false },
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		$('> .sub.pile > .item-list', node).remove();
+		$('> .sub.pile > .body > .bullet > a.collapsed', node).show();
+		$('> .sub.pile > .body > .bullet > a.expanded', node).hide();
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+	}
+}
+
+$(function() {
+	$('.sub.pile > .body > .bullet > a.expanded').live('click', function() { collapseSubPile(this); return false; });
+});
+
+
+
+function expandSubPile(link) {
+	var node = $(link).findItem().required();
+	
+	$.ajax({
+		type: 'post',
+		url: node.getAttr('oc\:url') + '/sub_pile',
+		data: { _method: 'put', expanded: true },
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		$('> .sub.pile', node).append('<em class="item-list">[placeholder: reload to see content]</em>');
+		$('> .sub.pile > .body > .bullet > a.expanded', node).show();
+		$('> .sub.pile > .body > .bullet > a.collapsed', node).hide();
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+	}
+}
+
+$(function() {
+	$('.sub.pile > .body > .bullet > a.collapsed').live('click', function() { expandSubPile(this); return false; });
+});
+
+
+
 $(function() {
 	ClutterApp.defaultPanelWidth = $('#scope-panel').width();
 	
