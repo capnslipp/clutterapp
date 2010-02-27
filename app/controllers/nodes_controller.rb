@@ -172,6 +172,7 @@ class NodesController < ApplicationController
     
     if @node.save
       expire_cache_for(@node)
+      expire_cache_for(@node.prop.ref_pile.root_node) if @node.prop.is_a? PileRefProp
       render :partial => 'show_body', :locals => {:node => @node}
     else
       render :nothing => true, :status => :bad_request
