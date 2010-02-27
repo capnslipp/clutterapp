@@ -1100,22 +1100,31 @@ function itemReparent(node, targetNode) {
 		
 		$('> .cont > .body', targetNode).removeClass('active');
 		
-		var list = $('> .cont > ul.item-list', targetNode).required();
-		
-		$('li.item', list).draggable('destroy');
-		$('.show.body', list).droppable('destroy');
-		
-		listCrossStart();
-		
 		nodeAJAXDone = true;
 		removeNodeWhenDone();
 		
 		
-		var oldListHeight;
-		var newListHeight;
-		var listPlaceholder;
-		
-		var newList;
+		// collapsed; skip the appear effect
+		if (targetNode.children('.sub.pile').hasClass('collapsed'))
+		{
+			ClutterApp.fsm.finishAction('itemReparent', 'load');
+		}
+		// expanded; normal appear effect
+		else
+		{
+			var list = $('> .cont > ul.item-list', targetNode).required();
+			
+			$('li.item', list).draggable('destroy');
+			$('.show.body', list).droppable('destroy');
+			
+			var oldListHeight;
+			var newListHeight;
+			var listPlaceholder;
+			
+			var newList;
+			
+			listCrossStart();
+		}
 		
 		function listCrossStart() {
 			// get old height
@@ -1368,6 +1377,157 @@ function badgeRemove(link) {
 
 $(function() {
 	$('.line a.remove').live('click', function() { badgeRemove(this); return false; });
+});
+
+
+
+function collapseSubPile(link) {
+	if (!ClutterApp.fsm.changeAction('collapseSubPile', 'load')) {
+		handleError(); // return the item back for now, since we have no way to prevent the drag from starting
+		return;
+	}
+	
+	var node = $(link).findItem().required();
+	
+	$.ajax({
+		type: 'post',
+		url: node.getAttr('oc\:url') + '/sub_pile',
+		data: { _method: 'put', expanded: false },
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		$('> .sub.pile > .body > .bullet > a.collapsed', node).show();
+		$('> .sub.pile > .body > .bullet > a.expanded', node).hide();
+		
+		var list = $('> .sub.pile > .item-list', node).required();
+		
+		
+		// slide-out-disappear effect
+		
+		var listHeight = list.height();
+		
+		// set up placeholder
+		list.after('<div id="list-placeholder" style="height: ' + listHeight + 'px;"></div>');
+		var listPlaceholder = $('#list-placeholder');
+		//
+		//list.setCSS({
+		//	position: 'absolute',
+		//	width: '100%',
+		//	bottom: 0,
+		//});
+		
+		list.setCSS({
+			position: 'absolute',
+			width: '100%',
+			bottom: 0,
+			opacity: 1.0,
+		}).animate(
+			{opacity: 0.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeInQuad',
+				step: function(ratio) {
+					list.setCSS('opacity', 1.0 - ratio); // fade old list out as the new list fades in
+					listPlaceholder.setCSS('height', listHeight * ratio);
+				},
+				complete: function() {
+					listPlaceholder.remove();
+					list.remove();
+					
+					ClutterApp.fsm.finishAction('collapseSubPile', 'load');
+				}
+			}
+		);
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+	}
+}
+
+$(function() {
+	$('.sub.pile > .body > .bullet > a.expanded').live('click', function() { collapseSubPile(this); return false; });
+});
+
+
+
+function expandSubPile(link) {
+	if (!ClutterApp.fsm.changeAction('expandSubPile', 'load')) {
+		handleError(); // return the item back for now, since we have no way to prevent the drag from starting
+		return;
+	}
+	
+	var node = $(link).findItem().required();
+	
+	$.ajax({
+		type: 'post',
+		url: node.getAttr('oc\:url') + '/sub_pile',
+		data: { _method: 'put', expanded: true },
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		$('> .sub.pile > .body > .bullet > a.expanded', node).show();
+		$('> .sub.pile > .body > .bullet > a.collapsed', node).hide();
+		
+		$('> .sub.pile', node).required().append('<ul class="item-list"></ul>');
+		var list = $('> .sub.pile > .item-list', node).required();
+		
+		list.append(responseData);
+		
+		list.applyReparentDroppability();
+		
+		
+		// slide-in-appear effect
+		
+		var listHeight = list.height();
+		
+		// set up placeholder
+		list.after('<div id="list-placeholder" style="height: 0px;"></div>');
+		listPlaceholder = $('#list-placeholder');
+		
+		list.setCSS({
+			position: 'absolute',
+			width: '100%',
+			bottom: 0,
+			opacity: 0.0,
+		}).animate(
+			{opacity: 1.0},
+			{
+				duration: kDefaultTransitionDuration,
+				easing: 'easeOutQuad',
+				step: function(ratio) {
+					list.setCSS('opacity', 1.0 - ratio); // fade old list out as the new list fades in
+					listPlaceholder.setCSS('height', listHeight * ratio);
+				},
+				complete: function() {
+					listPlaceholder.remove();
+					// return to normal positioning and remove unnecessary styles
+					list.setCSS({
+						position: '',
+						width: '',
+						bottom: '',
+						opacity: '',
+					});
+					
+					ClutterApp.fsm.finishAction('expandSubPile', 'load');
+				}
+			}
+		);
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+	}
+}
+
+$(function() {
+	$('.sub.pile > .body > .bullet > a.collapsed').live('click', function() { expandSubPile(this); return false; });
 });
 
 

@@ -29,7 +29,8 @@ ActionController::Routing::Routes.draw do |map|
       piles.resources :nodes, :except => [:index, :show], :member => {
         :reorder => :put,
         :reparent => :put,
-        :update_check_prop_checked => :put # the action that won't die (it just keeps going and going and…)
+        :update_check_prop_checked => :put, # the action that won't die (it just keeps going and going and…)
+        :sub_pile => :put
       }
       
       # /:user_id/piles/:pile_id/props/:type

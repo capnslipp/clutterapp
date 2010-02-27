@@ -191,11 +191,17 @@ li { list-style-type: none; }
 	left: 4px;
 	width: 16px;
 	text-align: center;
-	/*vertical-align: middle;*/
+	vertical-align: middle;
 	/*line-height: 15px;*/
 }
-.item > .cont > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-top: 1px; }
-.item > .sub.pile > .body > .bullet .sym { font-size: 200%; display: inline-block; margin-left: -3px; margin-top: -1px; }
+.body > .bullet .sym {
+	line-height: 100%;
+	display: inline-block;
+}
+.item > .cont > .body > .bullet .sym { font-size: 150%; }
+.item > .sub.pile > .body > .bullet .sym { font-size: 175%; margin-left: -3px; margin-top: -3px; }
+.item > .sub.pile > .body > .bullet a.sym { opacity: 0.5; }
+.item > .sub.pile > .body > .bullet a.sym:hover { opacity: 1.0; }
 
 .item > .cont > .body > .action.stub,
 .item > .cont > .body > #action-bar,

@@ -2,13 +2,14 @@
 	<div class="back"></div>
 	
 	<div class="bullet">
-		<% if node.check_badge? %>
+		<%- if node.check_badge? -%>
 			<%= render :partial => prop_partial(node.check_badge, :show), :locals => {:node => node.check_badge} %>
-		<% elsif node.prop.is_a? PileRefProp %>
-			<span class="sym"><%# ∴ %>&#8756;</span>
-		<% else %>
+		<%- elsif node.prop.is_a? PileRefProp -%>
+			<a href="#" class="sym expanded" <%= 'style="display: none;"' unless node.prop.ref_pile.expanded? %>><%# ∴ %>&there4;</a>
+			<a href="#" class="sym collapsed" <%= 'style="display: none;"' if node.prop.ref_pile.expanded? %>><%# … %>&hellip;</a>
+		<%- else -%>
 			<span class="sym">•</span>
-		<% end %>
+		<%- end -%>
 	</div>
 	
 	<%= render :partial => 'nodes/action_stub' %>

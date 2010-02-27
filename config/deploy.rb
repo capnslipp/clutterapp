@@ -55,7 +55,7 @@ task :stag do
   
   set :deploy_to, '/var/www/clutterapp-stag'
   
-  set :branch, 'sub-pile-refs' # feel free to change this per-branch
+  set :branch, 'expandable-sub-piles' # feel free to change this per-branch
 end
 
 

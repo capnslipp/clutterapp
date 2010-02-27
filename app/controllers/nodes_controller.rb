@@ -18,12 +18,29 @@ class NodesController < ApplicationController
     logger.prefixed 'update_check_prop_checked', :light_green, 'params: ' + params.inspect
     @node = active_pile.nodes.find(params[:id], :include => :prop)
     @prop = @node.prop
-    @prop.checked = params[:checked]
-    @prop.save!
+    @prop.update_attributes! :checked => params[:checked]
     expire_cache_for(@prop)
     
     render :update do |page|
       page.call 'updateCheckPropField', "check_prop_#{@prop.id}", @prop.checked?
+    end
+  end
+  
+  
+  # PUT /items/1/update_check_prop_checked
+  def sub_pile
+    logger.prefixed 'sub_pile', :light_green, 'params: ' + params.inspect
+    @node = active_pile.nodes.find(params[:id], :include => {:prop => :ref_pile})
+    @node.prop.ref_pile.update_attributes! :expanded => params[:expanded]
+    
+    # @note: totally inefficient; invalidates tons of caches up the tree; will never work for one-big-pile approach
+    #   solution: render each sub-Pile independently with placeholder, then assemble them 
+    expire_cache_for(@node)
+    
+    if @node.prop.ref_pile.expanded? # if we just expanded it
+      render :partial => 'list_items', :locals => {:item => @node.prop.ref_pile.root_node}
+    else # if we just collapsed it
+      render :nothing => true, :status => :accepted
     end
   end
   
