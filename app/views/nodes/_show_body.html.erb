@@ -5,11 +5,7 @@
 		<%- if node.check_badge? -%>
 			<%= render :partial => prop_partial(node.check_badge, :show), :locals => {:node => node.check_badge} %>
 		<%- elsif node.prop.is_a? PileRefProp -%>
-			<%- if node.prop.ref_pile.expanded? -%>
-				<span class="sym"><%# ∴ %>&there4;</span>
-			<%- else -%>
-				<span class="sym"><%# … %>&hellip;</span>
-			<%- end -%>
+			<a href="#" class="sym"><%- if node.prop.ref_pile.expanded? -%><%# ∴ %>&there4;<%- else -%><%# … %>&hellip;<%- end -%></a>
 		<%- else -%>
 			<span class="sym">•</span>
 		<%- end -%>
