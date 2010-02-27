@@ -1460,6 +1460,8 @@ function expandSubPile(link) {
 		
 		list.append(responseData);
 		
+		list.applyReparentDroppability();
+		
 		
 		// slide-in-appear effect
 		
