@@ -18,8 +18,7 @@ class NodesController < ApplicationController
     logger.prefixed 'update_check_prop_checked', :light_green, 'params: ' + params.inspect
     @node = active_pile.nodes.find(params[:id], :include => :prop)
     @prop = @node.prop
-    @prop.checked = params[:checked]
-    @prop.save!
+    @prop.update_attributes! :checked => params[:checked]
     expire_cache_for(@prop)
     
     render :update do |page|
