@@ -28,6 +28,17 @@ class NodesController < ApplicationController
   end
   
   
+  # PUT /items/1/update_check_prop_checked
+  def sub_pile
+    logger.prefixed 'sub_pile', :light_green, 'params: ' + params.inspect
+    @node = active_pile.nodes.find(params[:id], :include => {:prop => :ref_pile})
+    @node.prop.ref_pile.update_attributes! :expanded => params[:expanded]
+    expire_cache_for(@node)
+    
+    render :nothing => true, :status => :accepted
+  end
+  
+  
   # GET /nodes/new
   # GET /nodes/new?prev_sibling_id=2
   def new
