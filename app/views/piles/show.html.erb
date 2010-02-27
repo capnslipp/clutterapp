@@ -25,7 +25,7 @@
 	<div class="cont">
 		
 		<% content_tag_for :div, @pile.root_node, :class => "base item" do -%>
-			<%- cache ({:node_section => @pile.root_node.id}.to_json) do -%>
+			<%- cache ({:base_node_section => @pile.root_node.id}.to_json) do -%>
 				<section class="base pile cont" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
 					
 					<div class="body">
