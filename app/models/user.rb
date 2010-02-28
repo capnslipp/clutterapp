@@ -177,7 +177,7 @@ protected
   
   def build_root_pile
     if self.root_pile
-      logger.warn %[build_root_pile attempted for User "#{self.login}" when one already exists]
+      logger.warn %[build_root_pile attempted for User##{self.id} "#{self.login}" when one already exists]
       return
     end
     
