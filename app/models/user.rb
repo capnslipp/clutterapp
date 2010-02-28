@@ -181,7 +181,7 @@ protected
       return
     end
     
-    self.root_pile = Pile.new(:name => %[<"#{self.login}"'s root pile>])
+    self.root_pile = Pile.new(:name => %[<#{self.login}'s root pile>])
   end
   
   def save_root_pile!
