@@ -25,10 +25,7 @@ class Pile < ActiveRecord::Base
   
   
   def children
-    # @todo: optimize
-    @children ||= self.owner.piles.select do |p|
-      p.pile_ref_prop && p.pile_ref_prop.node.pile == self
-    end
+    @children ||= self.owner.piles.all(:joins => { :pile_ref_prop => :node }, :conditions => ['`nodes`.pile_id = ?', self.id])
   end
   
   def ancestors
