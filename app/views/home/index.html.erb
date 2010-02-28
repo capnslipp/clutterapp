@@ -2,16 +2,16 @@
 
 <h3>Your Piles</h3>
 
-<ul class="pile-list">
-	<% @piles.each do |pile| %>
-		<li>
-			<div class="name">
-				<span class="sym">&there4;</span>
-				<%= link_to h(pile.name), [pile.owner, pile] %>
-			</div>
-		</li>
-	<% end %>
-</ul>
+<div id="pile-list">
+	<div class="pile name">
+		<span class="sym"><%# ∴ %>&there4;</span>
+		<%= link_to h(current_user.login), [current_user, current_user.root_pile] %>
+	</div>
+	
+	<ul>
+		<%= render :partial => 'piles/list_piles', :locals => { :pile => current_user.root_pile, :expand_to => lambda {|p| true } } %>
+	</ul>
+</div>
 
 <%= link_to 'Create a New Pile', [:new, current_user, :pile] %>
 

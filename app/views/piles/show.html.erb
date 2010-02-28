@@ -14,7 +14,7 @@
 			</div>
 			
 			<ul>
-				<%= render :partial => 'list_piles', :locals => { :pile => @owner.root_pile, :expand_to_pile => @pile } %>
+				<%= render :partial => 'list_piles', :locals => { :pile => @owner.root_pile, :expand_to => lambda {|p| p == @pile || @pile.ancestors.include?(p) } } %>
 			</ul>
 		</div>
 		
