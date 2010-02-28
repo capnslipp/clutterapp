@@ -14,7 +14,7 @@ class Pile < ActiveRecord::Base
   
   #validates_presence_of   :root_node, :message => 'is required'
   
-  belongs_to :root_node,  :dependent => :destroy, :class_name => 'BaseNode'
+  belongs_to :root_node,  :dependent => :destroy, :class_name => 'Node'
   before_validation_on_create :build_root_node
   after_create :save_root_node!
   
@@ -31,7 +31,7 @@ protected
       return
     end
     
-    self.root_node = BaseNode.create
+    self.root_node = Node.create
   end
   
   def save_root_node!

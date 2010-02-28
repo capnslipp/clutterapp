@@ -24,7 +24,7 @@
 <div id="main-area" class="left" <% if cookies['scope-panel.width'] %>style="margin-right: <%=cookies['scope-panel.width']%>px"<% end %>><% @skip_main_area_wrap = true %>
 	<div class="cont">
 		
-		<% content_tag_for :div, @pile.root_node, :class => "base item" do -%>
+		<% content_tag_for :div, @pile.root_node, :class => "base root item" do -%>
 			<%- cache ({:base_node_section => @pile.root_node.id}.to_json) do -%>
 				<section class="base pile cont" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
 					

@@ -81,7 +81,7 @@ describe "datasets" do
       block_given? ? proper_user!(instance, &block) : proper_user!(instance)
     elsif instance.instance_of? Pile
       block_given? ? proper_pile!(instance, &block) : proper_pile!(instance)
-    elsif (instance.instance_of? Node) || (instance.instance_of? BaseNode)
+    elsif (instance.instance_of? Node) || (instance.instance_of? Node)
       block_given? ? proper_node!(instance, &block) : proper_node!(instance)
     else
       raise "Undefined instance class “#{instance.class.name}”"
