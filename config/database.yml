@@ -41,3 +41,9 @@ development:
 test: &TEST
   database: clutter_test
   <<: *silver-delicious-built-in
+
+# for developing: use the same DB as the developemnt environment
+# for deployment: use custom database.yml in shared
+production:
+  database: clutter_development
+  <<: *silver-delicious-built-in
