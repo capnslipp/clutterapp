@@ -125,7 +125,11 @@ $(function() {
 	$('.item > .sub.pile > .body > .cont').live('click', expand);
 	$('.item > .cont > .body > .cont').live('click', expand);
 	
-	function expand() {
+	function expand(event) {
+		// don't do anything if this an actual link
+		if ($(event.target).hasClass('link'))
+			return true;
+		
 		expandActionBar($(this).findItem()); return false;
 	}
 });

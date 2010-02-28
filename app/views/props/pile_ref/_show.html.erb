@@ -1,3 +1,3 @@
 <div class="show pile_ref prop <%= 'badge' if node.prop.badged? -%>">
-	<h1 class="name"><%= h node.prop.ref_pile.name %></h1>
+	<h1 class="name"><%= h node.prop.ref_pile.name %> <a href="<%= url_for [node.prop.ref_pile.owner, node.prop.ref_pile] %>" class="link sym"><%# » %>&raquo;</a></h1>
 </div>
