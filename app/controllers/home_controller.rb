@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   before_filter :authorize
 
   def index
-    @piles = current_user.piles.master.all(:include => :owner)
+    @piles = [current_user.root_pile]
   end
   
 end

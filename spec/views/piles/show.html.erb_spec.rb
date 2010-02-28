@@ -7,7 +7,7 @@ describe "/piles/show.html.erb" do
   
   before(:each) do
     @user = users(:slippy_douglas)
-    assigns[:piles] = @piles = @user.piles.master
+    assigns[:piles] = @piles = [@user.root_pile]
     assigns[:pile] = @pile = @user.root_pile
   end
   

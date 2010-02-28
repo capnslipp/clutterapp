@@ -19,10 +19,6 @@ class Pile < ActiveRecord::Base
   after_create :save_root_node!
   
   
-  named_scope :master, :include => :pile_ref_prop, :conditions => ['`pile_ref_props`.ref_pile_id IS NULL']
-  named_scope :nested, :joins => :pile_ref_prop
-  
-  
   def root?
     self.id == self.owner.root_pile_id
   end
