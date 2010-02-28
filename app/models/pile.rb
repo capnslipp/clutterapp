@@ -28,8 +28,8 @@ class Pile < ActiveRecord::Base
   end
   
   
-  def sub_piles
-    @sub_piles ||= self.owner.piles.select do |p|
+  def children
+    @children ||= self.owner.piles.select do |p|
       p.pile_ref_prop && p.pile_ref_prop.node.pile == self
     end
   end
