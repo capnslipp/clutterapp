@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe InvitesController do
   include InvitesHelper
+  integrate_views
   
   
   it "should new" do

@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe FollowshipsController do
   dataset :users
+  integrate_views
   
   
   before(:each) do

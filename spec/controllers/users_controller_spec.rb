@@ -3,6 +3,7 @@ require 'spec_helper'
 describe UsersController do
   include UsersHelper
   dataset :users
+  integrate_views
   
   
   def post_create_user(options = {})
