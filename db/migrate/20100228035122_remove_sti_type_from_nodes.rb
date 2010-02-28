@@ -7,7 +7,7 @@ class RemoveStiTypeFromNodes < ActiveRecord::Migration
     add_column :nodes, :type, :string
     
     Node.all.each do |n|
-      n.update_attribute(:type, n.root? ? BaseNode.name : Node.name)
+      n.update_attribute(:type, n.root? ? 'BaseNode' : 'Node')
     end
   end
 end
