@@ -42,6 +42,18 @@ protected
   end
   
   
+  def no_cache
+    response.headers['Last-Modified'] = Time.now.httpdate
+    response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
+    
+    # HTTP 1.0
+    response.headers['Pragma'] = 'no-cache'
+    
+    # HTTP 1.1 ('pre-check=0, post-check=0' IE-specific)
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0, pre-check=0, post-check=0'
+  end
+  
+  
   def authorize
     redirect_to login_url unless current_user
   end

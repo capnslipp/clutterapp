@@ -7,6 +7,7 @@ class NodesController < ApplicationController
   
   #cache_sweeper :node_sweeper, :only => [:update_check_prop_checked, :create, :update, :reorder, :reparent, :destroy] # every action but :new and :edit
   
+  before_filter :no_cache
   before_filter :be_xhr_request
   before_filter :authorize
   before_filter :have_owner

@@ -1,4 +1,5 @@
 class PilesController < ApplicationController
+  before_filter :no_cache
   before_filter :authorize
   before_filter :have_owner
   before_filter :have_pile, :only => [:show, :edit, :update, :destroy]
