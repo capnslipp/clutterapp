@@ -61,9 +61,14 @@ li { list-style-type: none; }
 	margin: -16px; margin-bottom: -18px;
 	padding: 16px; padding-bottom: 18px;
 }
-.base.item > .pile > .body > .header > .owner { opacity: 0.25; }
-.base.item > .pile > .body > .header > .owner,
-.base.item > .pile > .body > .header > .name { white-space: nowrap; }
+.base.item > .pile > .body > .header > .pile.name { white-space: nowrap; }
+.base.item > .pile > .body > .header > a.pile.name { text-decoration: none; }
+.base.item > .pile > .body > .header > .pile.name .sym { opacity: 0.5; display: inline-block; font-size: 100%; margin-top: -4px; }
+.base.item > .pile > .body > .header > .owner.pile.name { opacity: 0.25; }
+.base.item > .pile > .body > .header > a.owner.pile.name:hover { opacity: 0.75; }
+.base.item > .pile > .body > .header > .ancestor.pile.name { opacity: 0.5; }
+.base.item > .pile > .body > .header > a.ancestor.pile.name:hover { opacity: 0.75; }
+
 
 .base.item > .pile > .body > .action.stub { float: right; width: auto; border: none; }
 .base.item > .pile > .body.active {
