@@ -11,7 +11,7 @@
 			<% @piles.each do |pile| %>
 				<li>
 					<div class="name">
-						<span class="sym">&there4;</span>
+						<span class="sym"><%# ∴ %>&there4;</span>
 						<%= link_to h(pile.name), [pile.owner, pile] %>
 					</div>
 				</li>
@@ -34,7 +34,10 @@
 						<%= render :partial => 'nodes/action_stub' %>
 						
 						<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
-							<span class="owner"><%= @owner.name %> <%# » %>&raquo;</span> <span class="name"><%= @pile.name %></span>
+							<span class="owner">
+								<%= @owner.name %>
+								<% unless @pile == @owner.root_pile %><%# » %>&raquo;</span> <span class="name"><%= @pile.name %><% end %>
+							</span>
 						</h1>
 					</div>
 					
