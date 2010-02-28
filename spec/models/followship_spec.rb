@@ -7,7 +7,7 @@ describe Followship do
   before(:each) do
     activate_authlogic
     @user = users(:slippy_douglas)
-    @pile = @user.default_pile
+    @pile = @user.root_pile
   end
   
   describe "Finding followships" do

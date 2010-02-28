@@ -9,8 +9,8 @@ describe "/piles/index.html.erb" do
     assigns[:pile_owner] = @user = users(:slippy_douglas)
     
     assigns[:piles] = [
-      @user.default_pile,
-      @user.default_pile
+      @user.root_pile,
+      @user.root_pile
     ]
   end
 

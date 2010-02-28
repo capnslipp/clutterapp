@@ -7,7 +7,7 @@ describe "/piles/new.html.erb" do
   
   before(:each) do
     @user = users(:slippy_douglas)
-    assigns[:pile] = @pile = @user.default_pile
+    assigns[:pile] = @pile = @user.root_pile
   end
   
   it "renders new pile form" do

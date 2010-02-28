@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100227201353) do
+ActiveRecord::Schema.define(:version => 20100228005133) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(:version => 20100227201353) do
     t.string   "persistence_token",                            :default => "", :null => false
     t.string   "single_access_token",                          :default => "", :null => false
     t.string   "perishable_token",                             :default => "", :null => false
+    t.integer  "root_pile_id"
   end
 
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true

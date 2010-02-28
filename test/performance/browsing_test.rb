@@ -13,7 +13,7 @@ class BrowsingTest < ActionController::PerformanceTest
     bypass_authentication
     
     @user = users(:slippy_douglas)
-    @pile = @user.default_pile
+    @pile = @user.root_pile
     
     26.times do
       @pile.nodes.rand.children.create!(:prop => Prop.rand_new, :pile => @pile)

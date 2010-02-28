@@ -8,7 +8,7 @@ describe "/piles/show.html.erb" do
   before(:each) do
     @user = users(:slippy_douglas)
     assigns[:piles] = @piles = @user.piles.master
-    assigns[:pile] = @pile = @user.default_pile
+    assigns[:pile] = @pile = @user.root_pile
   end
   
   it "renders attributes in <p>" do

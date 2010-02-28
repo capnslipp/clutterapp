@@ -35,14 +35,14 @@ describe PilesController do
     it "should get edit" do
       get :edit,
         :user_id => users(:slippy_douglas).to_param,
-        :id => users(:slippy_douglas).default_pile.to_param
+        :id => users(:slippy_douglas).root_pile.to_param
     end
     
     
     it "should show pile" do
       get :show,
         :user_id => users(:slippy_douglas).to_param,
-        :id => users(:slippy_douglas).default_pile.to_param
+        :id => users(:slippy_douglas).root_pile.to_param
     end
     
   end
@@ -72,7 +72,7 @@ describe PilesController do
     it "should update pile" do
       put :update,
         :user_id => users(:slippy_douglas).to_param,
-        :id => users(:slippy_douglas).default_pile.to_param,
+        :id => users(:slippy_douglas).root_pile.to_param,
         :pile => {}
       
       assigns[:pile].should be_valid
@@ -84,7 +84,7 @@ describe PilesController do
       assert_difference 'Pile.count', -1 do
         delete :destroy,
           :user_id => users(:slippy_douglas).to_param,
-          :id => users(:slippy_douglas).default_pile.to_param
+          :id => users(:slippy_douglas).root_pile.to_param
       end
     end
     
