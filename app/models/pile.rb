@@ -34,6 +34,18 @@ class Pile < ActiveRecord::Base
     end
   end
   
+  def ancestors
+    @ancestors ||= begin
+      ancestors = []
+      current_ancestor_pile = self
+      while !current_ancestor_pile.root?
+        current_ancestor_pile = current_ancestor_pile.pile_ref_prop.node.pile
+        ancestors << current_ancestor_pile
+      end
+      ancestors
+    end
+  end
+  
   
 protected
   

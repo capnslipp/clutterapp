@@ -5,8 +5,10 @@
 			<%= link_to h(sub_pile.name), [sub_pile.owner, sub_pile] %>
 		</div>
 		
-		<ul>
-			<%= render :partial => 'list_piles', :locals => {:pile => sub_pile} %>
-		</ul>
+		<%- if expand_to_pile == sub_pile || expand_to_pile.ancestors.include?(sub_pile) -%>
+			<ul>
+				<%= render :partial => 'list_piles', :locals => { :pile => sub_pile, :expand_to_pile => expand_to_pile } %>
+			</ul>
+		<%- end -%>
 	</li>
 <% end %>

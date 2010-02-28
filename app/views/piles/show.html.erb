@@ -14,7 +14,7 @@
 			</div>
 			
 			<ul>
-				<%= render :partial => 'list_piles', :locals => {:pile => @owner.root_pile} %>
+				<%= render :partial => 'list_piles', :locals => { :pile => @owner.root_pile, :expand_to_pile => @pile } %>
 			</ul>
 		</div>
 		
