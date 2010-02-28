@@ -5,16 +5,18 @@
 	<a href="#" class="ui-resizable-handle ui-resizable-w toggle"></a>
 	<div class="cont">
 		
-		<h1 class="header">Piles</h1>
-		
-		<div class="name">
-			<span class="sym"><%# ∴ %>&there4;</span>
-			<%= link_to h(@owner.login), [@owner, @owner.root_pile] %>
+		<div id="pile-list">
+			<h1 class="header">Piles</h1>
+			
+			<div class="pile name">
+				<span class="sym"><%# ∴ %>&there4;</span>
+				<%= link_to h(@owner.login), [@owner, @owner.root_pile] %>
+			</div>
+			
+			<ul>
+				<%= render :partial => 'list_piles', :locals => {:pile => @owner.root_pile} %>
+			</ul>
 		</div>
-		
-		<ul class="pile-list">
-			<%= render :partial => 'list_piles', :locals => {:pile => @owner.root_pile} %>
-		</ul>
 		
 	</div>
 </div>
