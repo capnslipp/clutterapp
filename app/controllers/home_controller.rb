@@ -4,7 +4,8 @@ class HomeController < ApplicationController
   before_filter :authorize
 
   def index
-    @piles = [current_user.root_pile]
+    @user = current_user
+    @root_pile = @user.root_pile
   end
   
 end

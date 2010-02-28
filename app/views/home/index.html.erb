@@ -1,17 +1,15 @@
-<h2>Welcome Back, <%= h current_user.name %></h2>
+<h2>Welcome Back, <%= h @user.name %></h2>
 
 <h3>Your Piles</h3>
 
 <div id="pile-list">
 	<div class="pile name">
 		<span class="sym"><%# ∴ %>&there4;</span>
-		<%= link_to h(current_user.login), [current_user, current_user.root_pile] %>
+		<%= link_to h(@user.login), [@user, @root_pile] %>
 	</div>
 	
 	<ul>
-		<%= render :partial => 'piles/list_piles', :locals => { :pile => current_user.root_pile, :expand_to => lambda {|p| true } } %>
+		<%= render :partial => 'piles/list_piles', :locals => { :pile => @root_pile, :expand_to => lambda {|p| true } } %>
 	</ul>
 </div>
-
-<%= link_to 'Create a New Pile', [:new, current_user, :pile] %>
 

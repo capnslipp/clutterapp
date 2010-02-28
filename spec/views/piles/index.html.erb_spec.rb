@@ -2,20 +2,11 @@ require 'spec_helper'
 
 describe "/piles/index.html.erb" do
   include PilesHelper
-  dataset :users
+  dataset :piles
   
-  
-  before(:each) do
-    assigns[:pile_owner] = @user = users(:slippy_douglas)
-    
-    assigns[:piles] = [
-      @user.root_pile,
-      @user.root_pile
-    ]
-  end
-
   it "renders a list of piles" do
-    assigns[:owner] = @owner = @user
+    assigns[:user] = @user = users(:slippy_douglas)
+    assigns[:root_pile] = @root_pile = piles(:slippys)
     
     render
   end
