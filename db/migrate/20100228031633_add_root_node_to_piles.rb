@@ -5,7 +5,7 @@ class AddRootNodeToPiles < ActiveRecord::Migration
     
     # add the column before starting the transaction
     Pile.all.each do |p|
-      p.update_attributes!(:root_node_id => p.nodes.first.root.id)
+      p.update_attribute(:root_node_id, p.nodes.first.root.id)
     end
   end
   
