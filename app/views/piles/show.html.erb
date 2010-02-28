@@ -7,15 +7,13 @@
 		
 		<h1 class="header">Piles</h1>
 		
+		<div class="name">
+			<span class="sym"><%# ∴ %>&there4;</span>
+			<%= link_to h(@owner.login), [@owner, @owner.root_pile] %>
+		</div>
+		
 		<ul class="pile-list">
-			<% @piles.each do |pile| %>
-				<li>
-					<div class="name">
-						<span class="sym"><%# ∴ %>&there4;</span>
-						<%= link_to h(pile.name), [pile.owner, pile] %>
-					</div>
-				</li>
-			<% end %>
+			<%= render :partial => 'list_piles', :locals => {:pile => @owner.root_pile} %>
 		</ul>
 		
 	</div>

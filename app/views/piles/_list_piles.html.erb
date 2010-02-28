@@ -1,0 +1,12 @@
+<% pile.sub_piles.each do |sub_pile| %>
+	<li>
+		<div class="name">
+			<span class="sym"><%# ∴ %>&there4;</span>
+			<%= link_to h(sub_pile.name), [sub_pile.owner, sub_pile] %>
+		</div>
+		
+		<ul class="pile-list">
+			<%= render :partial => 'list_piles', :locals => {:pile => sub_pile} %>
+		</ul>
+	</li>
+<% end %>
