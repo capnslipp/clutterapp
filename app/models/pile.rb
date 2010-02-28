@@ -23,6 +23,11 @@ class Pile < ActiveRecord::Base
   named_scope :nested, :joins => :pile_ref_prop
   
   
+  def root?
+    self.id == self.owner.root_pile_id
+  end
+  
+  
 protected
   
   def build_root_node

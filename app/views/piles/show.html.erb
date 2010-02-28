@@ -36,7 +36,7 @@
 						<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 							<span class="owner">
 								<%= @owner.name %>
-								<% unless @pile == @owner.root_pile %><%# » %>&raquo;</span> <span class="name"><%= @pile.name %><% end %>
+								<% unless @pile.root? %><%# » %>&raquo;</span> <span class="name"><%= @pile.name %><% end %>
 							</span>
 						</h1>
 					</div>
