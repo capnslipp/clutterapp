@@ -100,7 +100,7 @@
 }
 
 .text.prop {
-	display: inline-block; /* to prevent font magnification in horizontal mode on iPhone */
+	display: inline;
 }
 .edit.text.prop, .new.text.prop {
 	display: block;
@@ -109,7 +109,7 @@
 .time.prop {
 	color: <%= text_color.with(:a => 0.5).to_s(:css_rgba) %>;
 	
-	display: inline-block;
+	display: inline;
 	
 	padding: 0 2px;
 	/*background: <%= bright_bg_color %>;*/
