@@ -1,19 +1,13 @@
-<h1>Listing piles</h1>
+<h1><%= link_to h(@user.name), [@user] %>'s Piles</h1>
 
 
-<ul class="pile-list">
-	<% @piles.each do |pile| %>
-		<li>
-			<div class="name">
-				<span class="sym">&there4;</span>
-				<%= link_to h(pile.name), [@owner, pile] %>
-			</div>
-			<div class="line">
-				<%= link_to 'Edit', [:edit, @owner, pile] %>
-				<%= link_to 'Destroy', [@owner, pile], :confirm => 'Are you sure?', :method => :delete %>
-			</div>
-		</li>
-	<% end %>
-</ul>
-
-<%= link_to 'New Pile', [:new, @owner, :pile] %>
+<div id="pile-list">
+	<div class="pile name">
+		<span class="sym"><%# ∴ %>&there4;</span>
+		<%= link_to h(@user.login), [@user, @root_pile] %>
+	</div>
+	
+	<ul>
+		<%= render :partial => 'piles/list_piles', :locals => { :pile => @root_pile, :expand_to => lambda {|p| true } } %>
+	</ul>
+</div>

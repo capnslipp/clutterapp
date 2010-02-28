@@ -27,68 +27,13 @@ describe PilesController do
     end
     
     
-    it "should get new" do
-      get :new,
-        :user_id => users(:slippy_douglas).to_param
-    end
-    
-    
-    it "should get edit" do
-      get :edit,
-        :user_id => users(:slippy_douglas).to_param,
-        :id => users(:slippy_douglas).default_pile.to_param
-    end
-    
-    
     it "should show pile" do
       get :show,
         :user_id => users(:slippy_douglas).to_param,
-        :id => users(:slippy_douglas).default_pile.to_param
+        :id => users(:slippy_douglas).root_pile.to_param
     end
     
   end
   
-  
-  describe "POST/PUT/DELETE actions" do
-    
-    after(:each) do
-      response.should be_redirect
-    end
-    
-    
-    it "should create pile" do
-      assert_difference 'Pile.count', +1 do
-        post :create,
-          :user_id => users(:slippy_douglas).to_param,
-          :pile => {
-            :name => 'Test Pile PCT 1'
-          }
-        
-        assigns[:pile].should be_valid
-        response.should_not redirect_to(:action => 'new')
-      end
-    end
-    
-    
-    it "should update pile" do
-      put :update,
-        :user_id => users(:slippy_douglas).to_param,
-        :id => users(:slippy_douglas).default_pile.to_param,
-        :pile => {}
-      
-      assigns[:pile].should be_valid
-      response.should_not redirect_to(:action => 'edit')
-    end
-    
-    
-    it "should destroy pile" do
-      assert_difference 'Pile.count', -1 do
-        delete :destroy,
-          :user_id => users(:slippy_douglas).to_param,
-          :id => users(:slippy_douglas).default_pile.to_param
-      end
-    end
-    
-  end
   
 end

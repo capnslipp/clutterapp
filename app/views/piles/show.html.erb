@@ -5,18 +5,18 @@
 	<a href="#" class="ui-resizable-handle ui-resizable-w toggle"></a>
 	<div class="cont">
 		
-		<h1 class="header">Piles</h1>
-		
-		<ul class="pile-list">
-			<% @piles.each do |pile| %>
-				<li>
-					<div class="name">
-						<span class="sym">&there4;</span>
-						<%= link_to h(pile.name), [pile.owner, pile] %>
-					</div>
-				</li>
-			<% end %>
-		</ul>
+		<div id="pile-list">
+			<h1 class="header">Piles</h1>
+			
+			<div class="pile name">
+				<span class="sym"><%# ∴ %>&there4;</span>
+				<%= link_to h(@owner.login), [@owner, @owner.root_pile] %>
+			</div>
+			
+			<ul>
+				<%= render :partial => 'list_piles', :locals => { :pile => @owner.root_pile, :expand_to => lambda {|p| p == @pile || @pile.ancestors.include?(p) } } %>
+			</ul>
+		</div>
 		
 	</div>
 </div>
@@ -24,7 +24,7 @@
 <div id="main-area" class="left" <% if cookies['scope-panel.width'] %>style="margin-right: <%=cookies['scope-panel.width']%>px"<% end %>><% @skip_main_area_wrap = true %>
 	<div class="cont">
 		
-		<% content_tag_for :div, @pile.root_node, :class => "base item" do -%>
+		<% content_tag_for :div, @pile.root_node, :class => "base root item" do -%>
 			<%- cache ({:base_node_section => @pile.root_node.id}.to_json) do -%>
 				<section class="base pile cont" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
 					
@@ -34,7 +34,11 @@
 						<%= render :partial => 'nodes/action_stub' %>
 						
 						<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
-							<span class="owner"><%= @owner.name %> »</span> <span class="name"><%= @pile.name %></span>
+							<% unless @pile.root? %><a href="<%=path_for [@owner, @owner.root_pile]%>" class="owner pile name link"><%= @owner.name %> <span class="sym"><%# » %>&raquo;</span></a><% end %>
+							<% (@pile.ancestors.reverse - [@owner.root_pile]).each do |ancestor_pile| %>
+								<a href="<%=path_for [@owner, ancestor_pile]%>" class="ancestor pile name link"><%= ancestor_pile.name %> <span class="sym"><%# » %>&raquo;</span></a>
+							<% end %>
+							<span class="base pile name"><%= @pile.root? ? @pile.owner.name : @pile.name %></span>
 						</h1>
 					</div>
 					

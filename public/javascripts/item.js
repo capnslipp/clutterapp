@@ -27,9 +27,9 @@ var kQuickTransitionDuration =		125;
 
 
 function deepNodeIDOfItem(node) {
-	var childBaseNode = node.children('.base_node');
-	if (childBaseNode.exists())
-		return nodeIDOfItem(childBaseNode);
+	var childNode = node.children('.root.node');
+	if (childNode.exists())
+		return nodeIDOfItem(childNode);
 	else
 		return nodeIDOfItem(node);
 }
@@ -38,9 +38,7 @@ function deepNodeIDOfItem(node) {
 function nodeIDOfItem(node) {
 	var nodeID = node.getAttr('id');
 	
-	if (nodeID.match(/base_node_/))
-		return nodeID.substring('base_node_'.length);
-	else if (nodeID.match(/node_/))
+	if (nodeID.match(/node_/))
 		return nodeID.substring('node_'.length);
 	else
 		return null;
@@ -127,7 +125,11 @@ $(function() {
 	$('.item > .sub.pile > .body > .cont').live('click', expand);
 	$('.item > .cont > .body > .cont').live('click', expand);
 	
-	function expand() {
+	function expand(event) {
+		// don't do anything if this an actual link
+		if ($(event.target).hasClass('link'))
+			return true;
+		
 		expandActionBar($(this).findItem()); return false;
 	}
 });
@@ -796,7 +798,7 @@ jQuery.fn.setupReorderSortable = function() {
 		axis: 'y',
 		containment: '#active-sorting-container',
 		tolerance: 'pointer',
-		handle: '> .cont > .show.body > #action-bar .move.reorder, > section.base_node > .show.body > #action-bar .move.reorder',
+		handle: '> .cont > .show.body > #action-bar .move.reorder, > section.root.node > .show.body > #action-bar .move.reorder',
 		helper: helper,
 		opacity: 0.5,
 		revert: true,

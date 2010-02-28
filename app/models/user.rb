@@ -23,11 +23,12 @@ class User < ActiveRecord::Base
   before_create :set_starting_invite_limit
   
   
-  #before_validation_on_create :create_default_pile!
-  after_create :default_pile # ensures that it's created
-  
   # Piles associations
-  has_many :piles, :foreign_key => 'owner_id', :dependent => :destroy, :autosave => true
+  has_many :piles,        :dependent => :destroy, :foreign_key => 'owner_id'
+  
+  belongs_to :root_pile,  :dependent => :destroy, :class_name => Pile.name
+  before_validation_on_create :build_root_pile
+  after_create :save_root_pile!
   
   
   # Followship associations
@@ -46,14 +47,9 @@ class User < ActiveRecord::Base
   } }
   
   
-  has_many :piles, :foreign_key => 'owner_id', :dependent => :destroy, :autosave => true
   
-  
-  
-  # HACK HACK HACK -- how to do attr_accessible from here?
-  # prevents a user from submitting a crafted form that bypasses activation
-  # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :name, :password, :password_confirmation, :invite_token
+  # HACK HACK HACK -- how to do attr_accessible from here? Prevents a user from submitting a crafted form that bypasses activation anything else you want your user to change should be added here.
+  attr_accessible :login, :email, :name, :password, :password_confirmation, :invite_token, :root_pile, :root_pile_id
   
   
   
@@ -109,7 +105,7 @@ class User < ActiveRecord::Base
   end
   
   def shared_piles
-    Share.find(:all, :conditions => {:shared_pile_id => default_pile.id})
+    Share.find(:all, :conditions => {:shared_pile_id => root_pile.id})
   end
 
   def share_pile_with_public(pile)
@@ -164,10 +160,6 @@ class User < ActiveRecord::Base
   
   
   
-  def default_pile
-    @default_pile ||= piles.first || create_default_pile
-  end
-  
   # Method to send reset password
   def deliver_password_reset_instructions!
     reset_perishable_token!
@@ -183,12 +175,18 @@ protected
     self.invite_limit = DEFAULT_INVITATION_LIMIT
   end
   
-  def create_default_pile
-    @default_pile = Pile.create(:owner => self, :name => "#{self.name}'s Pile") unless piles.count > 0
+  def build_root_pile
+    if self.root_pile
+      logger.warn %[build_root_pile attempted for User##{self.id} "#{self.login}" when one already exists]
+      return
+    end
+    
+    self.root_pile = Pile.new(:name => %[<#{self.login}'s root pile>])
   end
   
-  def create_default_pile!
-    raise Exception.new('A default Pile could not be created because one for this User already exists.') if piles.count > 0
-    create_default_pile
+  def save_root_pile!
+    self.root_pile.owner = self # setting owner afterwards is necessary during creation
+    self.root_pile.save!
+    self.save!
   end
 end

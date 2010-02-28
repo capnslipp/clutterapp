@@ -10,32 +10,53 @@ class Pile < ActiveRecord::Base
   has_many :shares
   has_many :users, :through => :shares
   
-  has_one :pile_ref_prop, :foreign_key => :ref_pile_id
+  has_one :pile_ref_prop, :foreign_key => 'ref_pile_id'
   
   #validates_presence_of   :root_node, :message => 'is required'
   
-  #before_validation_on_create :create_root_node!
-  after_create :root_node # ensures that it's created
+  belongs_to :root_node,  :dependent => :destroy, :class_name => 'Node'
+  before_validation_on_create :build_root_node
+  after_create :save_root_node!
   
   
-  named_scope :master, :include => :pile_ref_prop, :conditions => ['`pile_ref_props`.ref_pile_id IS NULL']
-  named_scope :nested, :joins => :pile_ref_prop
+  def root?
+    self.id == self.owner.root_pile_id
+  end
   
   
-  def root_node
-    @root_node ||= (nodes.first.root if nodes.first) || create_root_node
+  def children
+    @children ||= self.owner.piles.all(:joins => { :pile_ref_prop => :node }, :conditions => ['`nodes`.pile_id = ?', self.id])
+  end
+  
+  def ancestors
+    # @todo: optimize
+    @ancestors ||= begin
+      ancestors = []
+      current_ancestor_pile = self
+      while !current_ancestor_pile.root?
+        current_ancestor_pile = current_ancestor_pile.pile_ref_prop.node.pile
+        ancestors << current_ancestor_pile
+      end
+      ancestors
+    end
   end
   
   
 protected
   
-  def create_root_node
-    @root_node = BaseNode.create(:pile => self) unless nodes.count > 0
+  def build_root_node
+    if self.root_node
+      logger.warn %[build_root_node attempted for Pile##{self.id} "#{self.name}" when one already exists]
+      return
+    end
+    
+    self.root_node = Node.create
   end
   
-  def create_root_node!
-    raise Exception.new('A root node could not be created because one for this Pile already exists.') if nodes.count > 0
-    create_root_node
+  def save_root_node!
+    self.root_node.pile = self # setting owner afterwards is necessary during creation
+    self.root_node.save!
+    self.save!
   end
   
 end

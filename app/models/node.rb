@@ -111,8 +111,11 @@ class Node < ActiveRecord::Base
 protected
   
   def validate
-    errors.add(:node, "must not be root") if root?
-    errors.add(:node, "must have a prop") unless prop
+    if root?
+      errors.add(:node, "must not have a prop (when root)") if prop
+    else
+      errors.add(:node, "must have a prop (when not root)") unless prop
+    end
   end
   
   def assign_children_parent

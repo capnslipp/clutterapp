@@ -3,7 +3,7 @@ class PilesDataset < Dataset::Base
   
   def load
     name_pile :slippys,
-      :for => users(:slippy_douglas).default_pile
+      :for => users(:slippy_douglas).root_pile
     
     create_pile :plans_to_rule_the_world, :with => {
       :name => 'Plans to Rule the World',
@@ -22,7 +22,7 @@ class PilesDataset < Dataset::Base
     
     
     name_pile :joshs,
-      :for => users(:josh_vera).default_pile
+      :for => users(:josh_vera).root_pile
   end
   
   helpers do
