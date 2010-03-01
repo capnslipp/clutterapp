@@ -23,6 +23,9 @@ class Pile < ActiveRecord::Base
     self.id == self.owner.root_pile_id
   end
   
+  def parent
+    self.pile_ref_prop && self.pile_ref_prop.node.pile
+  end
   
   def children
     @children ||= self.owner.piles.all(:joins => { :pile_ref_prop => :node }, :conditions => ['`nodes`.pile_id = ?', self.id])
@@ -34,7 +37,7 @@ class Pile < ActiveRecord::Base
       ancestors = []
       current_ancestor_pile = self
       while !current_ancestor_pile.root?
-        current_ancestor_pile = current_ancestor_pile.pile_ref_prop.node.pile
+        current_ancestor_pile = current_ancestor_pile.parent
         ancestors << current_ancestor_pile
       end
       ancestors
