@@ -12,7 +12,7 @@
 		
 		<%- if expand_to.call(sub_pile) -%>
 			<ul>
-				<%= render :partial => 'piles/list_piles', :locals => { :pile => sub_pile, :expand_to => expand_to, :base_scope => base_scope } %>
+				<%= render :partial => 'piles/list_scopes', :locals => { :pile => sub_pile, :expand_to => expand_to, :base_scope => base_scope } %>
 			</ul>
 		<%- end -%>
 	</li>
