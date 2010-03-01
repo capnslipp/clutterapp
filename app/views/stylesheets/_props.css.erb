@@ -130,10 +130,13 @@
 .new.prop, .edit.prop {
 	margin: -1px;
 	
+	display: inline-block;
+	
 	background: <%= focus_back %>;
 	border-width: 2px;
 	border-color: <%= focus_color %>;
 }
+.new.note.prop, .edit.note.prop { display: block; }
 /*.new.prop.badge, .edit.prop.badge { margin: 0 2px; }*/
 
 .new.prop input[type='submit'],
