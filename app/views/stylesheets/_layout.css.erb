@@ -428,26 +428,27 @@ li { list-style-type: none; }
 	min-width: <%= 320 - 10 - (16 * 2) %>px;
 }
 /* root-level scope-list */
-#scope-list > ul.scope-list {
-	margin-left: 0;
+#scope-list > ul {
+	/*margin-left: 0;*/
 	border: none;
-	padding-left: 0.5em; /* 0em - scope-item's indent */
+	/*padding-left: 0.5em; /* 0em - scope-item's indent */
 }
 
 /* all nested scope-lists */
-ul.scope-list {
-	margin-left: -0.5em; /* 0em + scope-item's indent */
-	border-left: 1px solid #eee;
-	padding-left: 1.5em; /* 1em - scope-item's indent */
+#scope-list ul {
+	/*margin-left: -0.5em; /* 0em + scope-item's indent */
+	border-left: 1px dotted <%= divider_color %>;
+	padding-left: 16px; /* 1em - scope-item's indent */
 }
-ul.scope-list > li.scope-item {
-	list-style-type: none;
+#scope-list ul > li {
+	/*list-style-type: none;
 	margin-left: 0;
-	text-indent: -0.5em;
+	/*text-indent: -0.5em;*/
 }
-/*.scope-list > .scope-item > .body { font-size: 1.0em; font-weight: bold; }
-.scope-list > .scope-item > .body * { color: #666; }
-.scope-list > .scope-item.current > .body { color: <%= accent_color %>; }*/
+#scope-list .scope.name { font-size: 1.0em; font-weight: bold; }
+#scope-list .scope.name * { color: #666; }
+#scope-list .base.scope.name * { color: #000; }
+#scope-list .child.scope.name * { color: #333; }
 
 
 #sidebar-right {
@@ -463,20 +464,6 @@ ul.scope-list > li.scope-item {
 	width: 15em;
 	margin: 1em;
 }
-
-/*#pile-box > .pile { font-weight: bold; color: #666; }
-#pile-box > .current.pile { color: <%= accent_color %>; }
-#pile-box > .action {}*/
-
-
-#view-options-box {
-	float: left; clear: left;
-	width: 15em;
-	margin: 1em;
-}
-
-#pile-list ul { padding-left: 16px; border-left: 1px dotted <%= divider_color %>; }
-#pile-list .pile.name { font-size: 15px; font-weight: bold; }
 
 
 /* user-bar */

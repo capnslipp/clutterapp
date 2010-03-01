@@ -5,16 +5,20 @@
 	<a href="#" class="ui-resizable-handle ui-resizable-w toggle"></a>
 	<div class="cont">
 		
-		<div id="pile-list">
+		<div id="scope-list">
 			<h1 class="header">Piles</h1>
 			
-			<div class="pile name">
+			<div class="scope name <%= 'base' if @pile == @owner.root_pile %>">
 				<span class="sym"><%# ∴ %>&there4;</span>
-				<%= link_to h(@owner.login), [@owner, @owner.root_pile] %>
+				<%- if @pile == @owner.root_pile -%>
+					<span><%=h @owner.login%></span>
+				<%- else -%>
+					<%= link_to h(@owner.login), [@owner, @owner.root_pile] %>
+				<%- end -%>
 			</div>
 			
 			<ul>
-				<%= render :partial => 'list_piles', :locals => { :pile => @owner.root_pile, :expand_to => lambda {|p| p == @pile || @pile.ancestors.include?(p) } } %>
+				<%= render :partial => 'piles/list_piles', :locals => { :pile => @owner.root_pile, :expand_to => lambda {|p| p == @pile || @pile.ancestors.include?(p) }, :base_scope => @pile } %>
 			</ul>
 		</div>
 		

@@ -3,10 +3,10 @@
 
 <h3>Public Piles</h3>
 
-<ul class="pile-list">
+<ul class="scope-list">
 	<% for pile in @public_piles %>
 		<li>
-			<div class="name">
+			<div class="scope name">
 				<span class="sym">&there4;</span>
 				<%= link_to h(pile.name), [pile.owner, pile] %>
 			</div>
@@ -17,10 +17,10 @@
 
 <h3>Piles Shared with You</h3>
 
-<ul class="pile-list">
+<ul class="scope-list">
 	<% for pile in @shared_piles %>
 		<li>
-			<div class="name">
+			<div class="scope name">
 				<span class="sym">&there4;</span>
 				<%= link_to h(pile.name), [pile.owner, pile] %>
 			</div>
