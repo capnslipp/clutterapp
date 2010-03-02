@@ -233,14 +233,15 @@ ClutterApp.fill.show = function(modalElement) {
 		if (!this._elem.parent('#main-area').exists())
 			$('#main-area').prepend(this._elem);
 		
-		this._elem.stop(true).fadeIn(kDefaultTransitionDuration);
+		//this._elem.stop(true).fadeIn(kDefaultTransitionDuration);
 	}
 }
 
 ClutterApp.fill.hide = function(modalElement) {
 	if (this._active) {
 		this._active = false;
-		this._elem.stop(true).fadeOut(kDefaultTransitionDuration, showModalElement);
+		//this._elem.stop(true).fadeOut(kDefaultTransitionDuration, showModalElement);
+		showModalElement();
 	} else {
 		showModalElement();
 	}

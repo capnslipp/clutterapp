@@ -267,7 +267,7 @@ function itemNewCancel(buttonOrNode) {
 	var newBody = node.children('.new.body').required();
 	var form = newBody.children('form.new_node').required();
 	
-	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
+	form.find('input, textarea').required().setAttr('disabled', 'disabled');
 	
 	ClutterApp.fill.hide();
 		
@@ -326,8 +326,6 @@ function itemCreate(newNode, another) {
 	
 	var form = newNode.find('form').required();
 	
-	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
-	
 	var newBody = form.closest('.new.body').required();
 	var newItem = newBody.findItem().required();
 	
@@ -341,6 +339,8 @@ function itemCreate(newNode, another) {
 		success: handleSuccess,
 		error: handleError
 	});
+	
+	form.find('input, textarea').required().setAttr('disabled', 'disabled');
 	
 	
 	function handleSuccess(responseData) {
@@ -400,7 +400,7 @@ function itemCreate(newNode, another) {
 				.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 		});
 		
-		form.find('input[type=submit], input[type=button]').required().removeAttr('disabled');
+		form.find('input, textarea').required().removeAttr('disabled');
 		formFocus(form);
 		
 		
@@ -524,7 +524,7 @@ function itemEditCancel(buttonOrNode) {
 	var editBody = $('> .cont > .edit.body', node).required();
 	var form = editBody.children('form.edit_node').required();
 	
-	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
+	form.find('input, textarea').required().setAttr('disabled', 'disabled');
 	
 	ClutterApp.fill.hide();
 	
@@ -581,8 +581,6 @@ function itemUpdate(form, another) {
 	
 	form.required();
 	
-	form.find('input[type=submit], input[type=button]').required().setAttr('disabled', 'disabled');
-	
 	var editBody = form.closest('.edit.body').required();
 	var showBody = editBody.siblings('.show.body').required();
 	
@@ -596,6 +594,8 @@ function itemUpdate(form, another) {
 		success: handleSuccess,
 		error: handleError
 	});
+	
+	form.find('input, textarea').required().setAttr('disabled', 'disabled');
 	
 	
 	function handleSuccess(responseData) {
@@ -655,7 +655,7 @@ function itemUpdate(form, another) {
 				.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
 		});
 		
-		form.find('input[type=submit], input[type=button]').required().removeAttr('disabled');
+		form.find('input, textarea').required().removeAttr('disabled');
 		formFocus(form);
 		
 		

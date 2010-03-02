@@ -98,6 +98,7 @@ input[type='button'].cancel, input[type='submit'].cancel {
 input[type='button'].cancel:active, input[type='submit'].cancel:active {
 	background: <%= bg_color.to_s(:css_rgba) %>;
 	border-color: <%= accent_color %>;
+	float: right;
 }
 
 input[type='button'].done, input[type='submit'].done {
@@ -150,12 +151,9 @@ input[type='button'].another:active, input[type='submit'].another:active {
 	background: repeat 0 0;
 }
 
-.item > .show.body > .overlay {
-	left: -4px; right: -4px;
-	<%= border_radius_decl %>
-}
-
-.item > .overlay {
+.item > .overlay,
+.item > .show.body > .overlay,
+.item > .cont > .show.body > .overlay {
 	left: -4px; right: -4px;
 	<%= border_radius_decl %>
 }

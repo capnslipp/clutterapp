@@ -109,7 +109,7 @@ $(function() {
 	function animateMomentum(areaElement) {
 		ClutterApp.touchInfo.momentumY *= ClutterApp.touchInfo.kDecelFrictionFactor;
 		
-		if (Math.abs(ClutterApp.touchInfo.momentumY) >= 0.25) {
+		if (Math.abs(ClutterApp.touchInfo.momentumY) >= 0.5) {
 			var currScrollY = areaElement.scrollTop();
 			areaElement.scrollTop(currScrollY + ClutterApp.touchInfo.momentumY);
 		} else {

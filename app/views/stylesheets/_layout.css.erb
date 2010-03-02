@@ -182,15 +182,21 @@ li { list-style-type: none; }
 	position: absolute;
 	/*width: 100%;*/ left: 0; right: 0;
 }
-.item > .body .line {
+.item > .body .line,
+.item > .cont > .body .line {
 	/*overflow: auto; width: 100%; /* to contain floating elements */
-	margin-top: 2px;
 	margin-bottom: 4px;
 }
 .item > .new.body .finish.line,
 .item > .cont > .edit.body .finish.line {
 	float: right;
+	margin: -4px; margin-top: 8px;
 }
+.item > .new.body .button-pair,
+.item > .cont > .edit.body .button-pair { float: right; }
+
+.button-pair { margin-left: 4px; display: inline-block; white-space: nowrap; }
+
 .body > .bullet {
 	position: absolute;
 	left: 4px;

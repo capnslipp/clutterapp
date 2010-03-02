@@ -108,7 +108,7 @@
 	top: 4px; left: 0;
 	width: 1em;
 	padding: 0 2px;
-	margin: 0 2px;
+	margin: 0 4px 0 0;
 	vertical-align: middle;
 	text-align: center;
 }
@@ -116,12 +116,13 @@
 #add-bar .button {
 	width: auto;
 	padding: 0 8px;
+	margin: 4px 8px 4px 0;
 }
 
 #add-bar a.button,
 a.button, a.button .sym { color: <%= wash_text_color %>; }
 
-#add-bar a { margin-right: 4px; }
+#add-bar a { margin-right: 8px; }
 
 #add-bar a:hover {
 	text-shadow:	0 2px	3px <%= shadow_color(1.0).to_s(:css_rgba) %>,
