@@ -1,8 +1,6 @@
 /* standard tags */
 
 html, body {
-	position: relative;
-	
 	background-color: <%= bg_color %>;
 	color: <%= text_color %>;
 	height: 100%;
@@ -20,9 +18,8 @@ body, input, textarea {
 }
 
 #base {
-	position: absolute;
-	width: 100%; height: 100%;
-	top: 0; bottom: 0;
+	position: relative;
+	height: auto; min-height: 100%;
 	overflow-x: hidden;
 }
 
