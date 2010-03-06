@@ -107,16 +107,14 @@
 }
 
 .time.prop {
-	color: <%= text_color.with(:a => 0.5).to_s(:css_rgba) %>;
+	color: <%= text_color.with(:a => 0.75).to_s(:css_rgba) %>;
 	
 	display: inline;
 	
 	padding: 0 2px;
 	/*background: <%= bright_bg_color %>;*/
-	
-	font-size: 14px;
-	font-weight: bold;
 }
+.time.prop, .time.prop input { font: 13px Times, 'Times New Roman', serif; }
 .time.prop.badge { /*float: left;*/ }
 .show.time.prop {
 	border: none;

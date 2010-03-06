@@ -13,8 +13,8 @@ body {
 }
 
 body, input, textarea {
-	font: 13px Helvetica, Arial, sans-serif;
-	line-height: 20px;
+	font: 12px Helvetica, Arial, sans-serif;
+	line-height: 18px;
 }
 
 #base {
@@ -41,19 +41,13 @@ body, input, textarea {
 
 a { color: <%= text_color %>; }
 
-h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; }
-section h1,
-h1 { font-size: 18px; line-height: 24px; }
-section section h1,
-h2 { font-size: 17px; line-height: 17px; color: <%= wash_color %>; }
-section section section h1,
-h3 { font-size: 16px; line-height: 16px; color: <%= wash_color %>; }
-section section section section h1,
-h4 { font-size: 15px; line-height: 15px; color: <%= wash_color %>; }
-section section section section section h1,
-h5 { font-size: 14px; line-height: 14px; color: <%= wash_color %>; }
-section section section section section section h1,
-h6 { font-size: 13px; line-height: 13px; color: <%= wash_color %>; }
+h1 { font-weight: bold; margin: 0; }
+h1 { font-size: 20px; line-height: 24px; }
+section h1 { font-size: 18px; line-height: 24px; }
+section section h1 { font-size: 18px; line-height: 18px; color: <%= wash_color %>; }
+section section section h1 { font-size: 16px; line-height: 16px; color: <%= wash_color %>; }
+section section section section h1 { font-size: 14px; line-height: 14px; color: <%= wash_color %>; }
+section section section section section h1 { font-size: 12px; line-height: 12px; color: <%= wash_color %>; }
 
 em { font-weight: bold; font-style: normal; color: <%= (inverted? ? '#222'.to_color.invert : '#222'.to_color).to_s(:css) %>; }
 
