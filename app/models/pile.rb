@@ -8,7 +8,7 @@ class Pile < ActiveRecord::Base
   
   # Shares associations
   has_many :shares
-  has_many :users, :through => :shares
+  #has_many :users, :through => :shares
   
   has_one :pile_ref_prop, :foreign_key => 'ref_pile_id'
   

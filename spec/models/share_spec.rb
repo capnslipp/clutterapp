@@ -5,6 +5,8 @@ describe Share do
   
   
   it "should create a new instance given valid attributes" do
+    pending
+    
     @share = Share.create!(
       :user => users(:slippy_douglas),
       :pile=> piles(:plans_to_rule_the_world)
@@ -12,6 +14,8 @@ describe Share do
   end
   
   it "should not create a new instance given invalid attributes" do
+    pending
+    
     raising_lambdas = []
     
     raising_lambdas << lambda do

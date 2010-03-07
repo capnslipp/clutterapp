@@ -31,11 +31,12 @@ class User < ActiveRecord::Base
   after_create :save_root_pile!
   
   
-  # Followship associations
+  # Share associations
   
-  has_many :shares
-  has_many :authorized_piles, :through => :shares, :source => :pile, :conditions => {'shares.authorized' => true}
-  has_many :public_piles, :through => :shares, :source => :pile, :conditions => {'shares.public' => true}
+  has_many :shares, :through => :piles, :source => :owner
+  
+  #has_many :authorized_piles, :through => :shares, :source => :pile, :conditions => {'shares.authorized' => true}
+  #has_many :public_piles, :through => :shares, :source => :pile, :conditions => {'shares.public' => true}
   
   
   
@@ -51,7 +52,7 @@ class User < ActiveRecord::Base
   
   # sharing methods
   def share_pile_with_user(user, pile)
-    shares.create!(:user => user, :pile => pile, :authorized => true)
+    shares.create!(:sharee => user, :pile => pile, :authorized => true)
   end
   
   def shared_piles
@@ -59,7 +60,7 @@ class User < ActiveRecord::Base
   end
 
   def share_pile_with_public(pile)
-    shares.create!(:user => self, :pile => pile, :public => true)
+    shares.create!(:pile => pile, :public => true)
   end
   
   def sharees

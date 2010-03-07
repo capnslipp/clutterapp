@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100307215710) do
+ActiveRecord::Schema.define(:version => 20100307224706) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(:version => 20100307215710) do
   end
 
   create_table "shares", :force => true do |t|
-    t.integer  "user_id"
+    t.integer  "sharee_id"
     t.integer  "pile_id"
     t.datetime "created_at"
     t.datetime "updated_at"
