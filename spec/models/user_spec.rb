@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe User do
-  dataset :users
+  dataset :users, :piles
   
   
   before(:each) do
@@ -86,7 +86,6 @@ describe User do
   describe "sharing" do
     
     it "should be able to share 1 pile with 1 followee" do
-      pending
       users(:slippy_douglas).follow users(:josh_vera)
       users(:slippy_douglas).share_pile_with_user(
         users(:josh_vera),
@@ -98,7 +97,6 @@ describe User do
     end
     
     it "should be able to share 1 pile with 1 follower" do
-      pending
       users(:josh_vera).follow users(:slippy_douglas)
       users(:slippy_douglas).share_pile_with_user(
         users(:josh_vera),
@@ -110,18 +108,15 @@ describe User do
     end
     
     it "should be able to share a pile publicly" do
-      pending
       users(:slippy_douglas).share_pile_with_public users(:slippy_douglas).root_pile
     end
     
     it "should not let users access piles that aren't shared" do
-      pending
       users(:slippy_douglas).authorized_piles << users(:josh_vera).root_pile
       users(:slippy_douglas).authorized_piles.count.should == 0
     end
     
     it "should have access to the sharees you share a pile with" do
-      pending
       users(:slippy_douglas).share_pile_with_user(
         users(:josh_vera),
         users(:slippy_douglas).root_pile
@@ -132,35 +127,32 @@ describe User do
     end
     
     it "should be able to share pile with followers" do
-      pending
       users(:slippy_douglas).share_pile_with_followers users(:slippy_douglas).root_pile
       
       users(:slippy_douglas).followers.each do |follower|
         follower.authorized_piles.first.should == users(:slippy_douglas).root_pile
       end
       
-      #@user2.follow(@user)
-      #@user.followers.count.should == 1
-      #@user.share_pile_with_followers(@pile1)
-      #for follower in @user.followers
-      #  follower.authorized_piles.first.should == @pile1
-      #end
+      users(:josh_vera).follow(users(:slippy_douglas))
+      users(:slippy_douglas).followers.count.should == 1
+      users(:slippy_douglas).share_pile_with_followers(piles(:plans_to_rule_the_world))
+      for follower in users(:slippy_douglas).followers
+        follower.authorized_piles.first.should == piles(:plans_to_rule_the_world)
+      end
     end
     
     it "should be able to share pile with followees" do
-      pending
-      @user.follow(@user2)
-      @user.share_pile_with_followees(@pile1)
-      @user.followees.each do |followee|
-        followee.authorized_piles.first.should == @pile1
+      users(:slippy_douglas).follow(users(:josh_vera))
+      users(:slippy_douglas).share_pile_with_followees(piles(:plans_to_rule_the_world))
+      users(:slippy_douglas).followees.each do |followee|
+        followee.authorized_piles.first.should == piles(:plans_to_rule_the_world)
       end
     end
     
     it "should have access to people sharing with you" do
-      pending
-      @user.share_pile_with_user(@user2, @pile1)
-      @user2.sharers.count.should == 1
-      @user2.sharers.first.should == @user
+      users(:slippy_douglas).share_pile_with_user(users(:josh_vera), piles(:plans_to_rule_the_world))
+      users(:josh_vera).sharers.count.should == 1
+      users(:josh_vera).sharers.first.should == users(:slippy_douglas)
     end
   end
   
@@ -173,10 +165,10 @@ describe User do
       users(:slippy_douglas).followees.count.should == 1
     end
     
-    # For this test, the @user follows @user2
-    # So how should @user2 have access to @user?
+    # For this test, the users(:slippy_douglas) follows users(:josh_vera)
+    # So how should users(:josh_vera) have access to users(:slippy_douglas)?
     # I'm thinking the user_id in Followship should be akin to 
-    # follower_id. and @user.followers should be 1?
+    # follower_id. and users(:slippy_douglas).followers should be 1?
     it "should be able to follow 1 user" do
       users(:slippy_douglas).follow users(:josh_vera)
       
@@ -184,11 +176,12 @@ describe User do
     end
     
     it "should be able to follow 10 Users and have a followees count of 10" do
-      pending
-      
-      1.upto(10) do
+      1.upto(10) do |n|
         users(:slippy_douglas).follow(User.create(
-          …
+          :login => "user_#{n}",
+          :email => "user_#{n}@example.com",
+          :password => 'secret',
+          :password_confirmation => 'secret'
         ))
       end
       
@@ -196,13 +189,14 @@ describe User do
     end
     
     it "should be able to follow 10 Users and each of them should be followed by it" do
-      pending
-      
       followees = []
       
-      1.upto(10) do
+      1.upto(10) do |n|
         followees << followee_user = User.create(
-          …
+          :login => "user_#{n}",
+          :email => "user_#{n}@example.com",
+          :password => 'secret',
+          :password_confirmation => 'secret'
         )
         users(:slippy_douglas).follow followee_user
       end
@@ -213,11 +207,12 @@ describe User do
     end
     
     it "should be able to have 10 Users follow it and have a followers count of 10" do
-      pending
-      
-      1.upto(10) do
+      1.upto(10) do |n|
         User.create(
-          …
+          :login => "user_#{n}",
+          :email => "user_#{n}@example.com",
+          :password => 'secret',
+          :password_confirmation => 'secret'
         ).follow users(:slippy_douglas)
       end
       
@@ -225,13 +220,14 @@ describe User do
     end
     
     it "should be able to have 10 Users follow it and each of them should be following it" do
-      pending
-      
       followers = []
       
-      1.upto(10) do
+      1.upto(10) do |n|
         followers << follower_user = User.create(
-          …
+          :login => "user_#{n}",
+          :email => "user_#{n}@example.com",
+          :password => 'secret',
+          :password_confirmation => 'secret'
         )
         follower_user.follow users(:slippy_douglas)
       end
@@ -248,36 +244,30 @@ describe User do
     end
     
     it "should let user access who follows it" do
-      pending
-      
       u1 = users(:slippy_douglas)
       u2 = users(:slippy_douglas)
-      u1.follow(@user)
-      u2.follow(@user)
+      u1.follow(users(:slippy_douglas))
+      u2.follow(users(:slippy_douglas))
       
-      @user.followers.count.should == 2
+      users(:slippy_douglas).followers.count.should == 2
     end
     
     it "should let user access who it follows" do
-      pending
-      
       u1 = users(:slippy_douglas)
       u2 = users(:slippy_douglas)
-      @user.follow(u1)
-      @user.follow(u2)
+      users(:slippy_douglas).follow(u1)
+      users(:slippy_douglas).follow(u2)
       
-      @user.followees.count.should == 2
+      users(:slippy_douglas).followees.count.should == 2
     end
     
     it "should find unique users by who the user follows" do
-      pending
-      
       10.times do |f|
-        Followship.create(:user_id => users(:slippy_douglas).id, :followee_id => @user.id)
-        Followship.create(:user_id => users(:slippy_douglas).id, :followee_id => users(:slippy_douglas).id)
+        users(:slippy_douglas).follow users(:josh_vera)
+        users(:josh_vera).follow users(:slippy_douglas)
       end
       
-      User.followers_of(@user).count.should == 10
+      users(:slippy_douglas).followers.count.should == 10
     end
     
     describe "when both users are following each other" do
