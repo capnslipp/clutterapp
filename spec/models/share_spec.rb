@@ -1,24 +1,48 @@
 require 'spec_helper'
 
 describe Share do
-  dataset :users
+  dataset :users, :piles
   
   
-  before(:each) do
-    @user1 = users(:slippy_douglas)
-    @user2 = users(:slippy_douglas)
-    @pile1 = @user1.root_pile
-    @pile2 = @user2.root_pile
-  end
-
   it "should create a new instance given valid attributes" do
-    @share = Share.new(:user_id => @user1.id, :pile_id => @user1.root_pile.id)
-    @share.should be_valid
+    @share = Share.create!(
+      :user => users(:slippy_douglas),
+      :pile=> piles(:plans_to_rule_the_world)
+    )
   end
   
   it "should not create a new instance given invalid attributes" do
-    @share = Share.new(:user_id => @user1.id, :pile_id => @user1.id)
-    @share.should_not be_valid
+    raising_lambdas = []
+    
+    raising_lambdas << lambda do
+      @share = Share.create!(
+        :user => users(:slippy_douglas),
+        :pile => nil
+      )
+    end
+    
+    raising_lambdas << lambda do
+      @share = Share.create!(
+        :user => nil,
+        :pile => piles(:plans_to_rule_the_world)
+      )
+    end
+    
+    raising_lambdas << lambda do
+      @share = Share.create!(
+        :user => nil,
+        :pile => nil
+      )
+    end
+    
+    raising_lambdas << lambda do
+      @share = Share.create!(
+        :user => piles(:plans_to_rule_the_world),
+        :pile => users(:slippy_douglas)
+      )
+    end
+    
+    raising_lambdas.each {|rl| rl.should raise_error(ActiveRecord::ActiveRecordError) }
   end
   
 end

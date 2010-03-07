@@ -1,6 +1,7 @@
 class Share < ActiveRecord::Base
   belongs_to :user
-  belongs_to :pile, :class_name => "Pile", :foreign_key => "pile_id"
   validates_presence_of :user
+  
+  belongs_to :pile
   validates_presence_of :pile
 end
