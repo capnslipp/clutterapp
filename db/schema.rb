@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100228040924) do
+ActiveRecord::Schema.define(:version => 20100307000000) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -74,11 +74,11 @@ ActiveRecord::Schema.define(:version => 20100228040924) do
 
   create_table "shares", :force => true do |t|
     t.integer  "user_id"
-    t.integer  "shared_pile_id"
+    t.integer  "pile_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "authorized",     :default => false
-    t.boolean  "public",         :default => false
+    t.boolean  "authorized", :default => false
+    t.boolean  "public",     :default => false
   end
 
   create_table "tag_props", :force => true do |t|
