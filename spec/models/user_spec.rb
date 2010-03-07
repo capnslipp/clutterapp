@@ -388,7 +388,11 @@ describe User do
   end
   
   it "should create 1 Node for each new User, when creating 2 Users" do
-    u1, u2 = users(:slippy_douglas), users(:slippy_douglas)
+    @u1_attributes = users(:slippy_douglas).destroy_to_attributes
+    @u2_attributes = users(:josh_vera).destroy_to_attributes
+    
+    u1 = User.create! @u1_attributes
+    u2 = User.create! @u2_attributes
     
     Node.all.select {|n| n.root.pile.owner == u1 }.count.should == 1
     Node.all.select {|n| n.root.pile.owner == u2 }.count.should == 1
