@@ -34,16 +34,18 @@ class User < ActiveRecord::Base
   # Followship associations
   has_many :followships
   has_many :followees, :through => :followships
+  has_many :followers, :through => :followships, :source => :user, :conditions => {'followships.user_id' => self.id}
+  #named_scope :followers, :joins => {:followships => :users}
   
   has_many :shares
-  has_many :authorized_piles, :through => :shares, :source => :pile, :conditions => ["authorized = ?", true]
-  has_many :public_piles, :through => :shares, :source => :pile, :conditions => [ "public = ?", true ]
+  has_many :authorized_piles, :through => :shares, :source => :pile, :conditions => {'shares.authorized' => true}
+  has_many :public_piles, :through => :shares, :source => :pile, :conditions => {'shares.public' => true}
 
   
   # @fix: get it to properly alias tables so that "a_user.followees.followers_of(self)" works
   named_scope :followers_of, proc {|a_user| {
       :conditions => { :followships_4_followers_of => {:followee_id => a_user.id} },
-      :joins => %q{INNER JOIN `followships` as followships_4_followers_of ON followships_4_followers_of.user_id = users.id} #:joins => :followships # with "followships as followships_4_followers_of" alias
+      :joins => %q{INNER JOIN `followships` as followships_4_followers_of ON followships_4_followers_of.user_id = users.id} # :joins => :followships # with "followships as followships_4_followers_of" alias
   } }
   
   
@@ -60,35 +62,24 @@ class User < ActiveRecord::Base
   #Followship methods
   
   def follow(user_to_follow)
-    followship = followships.create(:followee => user_to_follow)
-    
-    #logger.debug "User is already following #{user_to_follow.login}" unless followship.save
+    self.followships.create!(:followee => user_to_follow)
   end
-  
-  # Combining the two into the follow one above
-  #def follow(user)
-  #  followship = followships.build(:user_id => user.id, :followee_id => self.id)
-  #  unless followship.save
-  #    logger.debug "User is already following #{user.login}"
-  #  end
-  #end
   
   def unfollow(user_to_unfollow)
-    followship = Followship.find_by_user_and_followee(self, user_to_unfollow)
-    followship.destroy if followship
+    self.followships.find_by_followee(user_to_unfollow).destroy
   end
   
-  def following?(followee_user)
-    self.followees.include? followee_user
+  def following?(possible_followee)
+    self.followees.include? possible_followee
   end
   
-  def followed_by?(follower_user)
-    self.followers.include? follower_user
+  def followed_by?(possible_follower)
+    self.followers.include? possible_follower
   end
   
-  def followers
-    User.followers_of(self)
-  end
+  #def followers
+  #  User.followers_of(self)
+  #end
   
   def friends
     followees.followers_of(self)

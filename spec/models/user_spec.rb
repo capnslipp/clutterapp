@@ -127,16 +127,13 @@ describe User do
     end
     
     it "should be able to share pile with followers" do
-      users(:slippy_douglas).share_pile_with_followers users(:slippy_douglas).root_pile
+      pending
+      users(:josh_vera).follow users(:slippy_douglas)
+      users(:slippy_douglas).followers.count.should == 1
+      
+      users(:slippy_douglas).share_pile_with_followers piles(:plans_to_rule_the_world)
       
       users(:slippy_douglas).followers.each do |follower|
-        follower.authorized_piles.first.should == users(:slippy_douglas).root_pile
-      end
-      
-      users(:josh_vera).follow(users(:slippy_douglas))
-      users(:slippy_douglas).followers.count.should == 1
-      users(:slippy_douglas).share_pile_with_followers(piles(:plans_to_rule_the_world))
-      for follower in users(:slippy_douglas).followers
         follower.authorized_piles.first.should == piles(:plans_to_rule_the_world)
       end
     end
@@ -159,17 +156,7 @@ describe User do
   
   
   describe "followees" do
-    it "should be able to add 1 followee" do
-      users(:slippy_douglas).follow users(:josh_vera)
-      
-      users(:slippy_douglas).followees.count.should == 1
-    end
-    
-    # For this test, the users(:slippy_douglas) follows users(:josh_vera)
-    # So how should users(:josh_vera) have access to users(:slippy_douglas)?
-    # I'm thinking the user_id in Followship should be akin to 
-    # follower_id. and users(:slippy_douglas).followers should be 1?
-    it "should be able to follow 1 user" do
+    it "should be able to follow a user" do
       users(:slippy_douglas).follow users(:josh_vera)
       
       users(:slippy_douglas).followees.count.should == 1
@@ -240,7 +227,8 @@ describe User do
     it "should let followees follow the user" do
       users(:slippy_douglas).follow users(:josh_vera)
       
-      users(:josh_vera).followers.count.should == 1
+      puts Followship.all(:conditions => { :user_id => users(:slippy_douglas).id }).count.should == 1
+      puts users(:josh_vera).followers.count.should == 1
     end
     
     it "should let user access who follows it" do
