@@ -85,28 +85,6 @@ describe User do
   
   describe "sharing" do
     
-    it "should be able to share 1 pile with 1 followee" do
-      users(:slippy_douglas).follow users(:josh_vera)
-      users(:slippy_douglas).share_pile_with_user(
-        users(:josh_vera),
-        users(:slippy_douglas).root_pile
-      )
-      
-      users(:josh_vera).authorized_piles.count.should == 1
-      users(:slippy_douglas).shared_piles.count.should == 1
-    end
-    
-    it "should be able to share 1 pile with 1 follower" do
-      users(:josh_vera).follow users(:slippy_douglas)
-      users(:slippy_douglas).share_pile_with_user(
-        users(:josh_vera),
-        users(:slippy_douglas).root_pile
-      )
-      
-      users(:josh_vera).authorized_piles.count.should == 1
-      users(:slippy_douglas).shared_piles.count.should == 1
-    end
-    
     it "should be able to share a pile publicly" do
       users(:slippy_douglas).share_pile_with_public users(:slippy_douglas).root_pile
     end
@@ -126,26 +104,6 @@ describe User do
       users(:slippy_douglas).sharees.first.should == users(:josh_vera)
     end
     
-    it "should be able to share pile with followers" do
-      pending
-      users(:josh_vera).follow users(:slippy_douglas)
-      users(:slippy_douglas).followers.count.should == 1
-      
-      users(:slippy_douglas).share_pile_with_followers piles(:plans_to_rule_the_world)
-      
-      users(:slippy_douglas).followers.each do |follower|
-        follower.authorized_piles.first.should == piles(:plans_to_rule_the_world)
-      end
-    end
-    
-    it "should be able to share pile with followees" do
-      users(:slippy_douglas).follow(users(:josh_vera))
-      users(:slippy_douglas).share_pile_with_followees(piles(:plans_to_rule_the_world))
-      users(:slippy_douglas).followees.each do |followee|
-        followee.authorized_piles.first.should == piles(:plans_to_rule_the_world)
-      end
-    end
-    
     it "should have access to people sharing with you" do
       users(:slippy_douglas).share_pile_with_user(users(:josh_vera), piles(:plans_to_rule_the_world))
       users(:josh_vera).sharers.count.should == 1
@@ -153,129 +111,6 @@ describe User do
     end
   end
   
-  
-  
-  describe "followees" do
-    it "should be able to follow a user" do
-      users(:slippy_douglas).follow users(:josh_vera)
-      
-      users(:slippy_douglas).followees.count.should == 1
-    end
-    
-    it "should be able to follow 10 Users and have a followees count of 10" do
-      1.upto(10) do |n|
-        users(:slippy_douglas).follow(User.create(
-          :login => "user_#{n}",
-          :email => "user_#{n}@example.com",
-          :password => 'secret',
-          :password_confirmation => 'secret'
-        ))
-      end
-      
-      users(:slippy_douglas).followees.count.should == 10
-    end
-    
-    it "should be able to follow 10 Users and each of them should be followed by it" do
-      followees = []
-      
-      1.upto(10) do |n|
-        followees << followee_user = User.create(
-          :login => "user_#{n}",
-          :email => "user_#{n}@example.com",
-          :password => 'secret',
-          :password_confirmation => 'secret'
-        )
-        users(:slippy_douglas).follow followee_user
-      end
-      
-      followees.each do |fu|
-        fu.should be_followed_by(users(:slippy_douglas))
-      end
-    end
-    
-    it "should be able to have 10 Users follow it and have a followers count of 10" do
-      1.upto(10) do |n|
-        User.create(
-          :login => "user_#{n}",
-          :email => "user_#{n}@example.com",
-          :password => 'secret',
-          :password_confirmation => 'secret'
-        ).follow users(:slippy_douglas)
-      end
-      
-      users(:slippy_douglas).followers.count.should == 10
-    end
-    
-    it "should be able to have 10 Users follow it and each of them should be following it" do
-      followers = []
-      
-      1.upto(10) do |n|
-        followers << follower_user = User.create(
-          :login => "user_#{n}",
-          :email => "user_#{n}@example.com",
-          :password => 'secret',
-          :password_confirmation => 'secret'
-        )
-        follower_user.follow users(:slippy_douglas)
-      end
-      
-      followers.each do |fu|
-        fu.should be_following(users(:slippy_douglas))
-      end
-    end
-    
-    it "should let followees follow the user" do
-      users(:slippy_douglas).follow users(:josh_vera)
-      
-      puts Followship.all(:conditions => { :user_id => users(:slippy_douglas).id }).count.should == 1
-      puts users(:josh_vera).followers.count.should == 1
-    end
-    
-    it "should let user access who follows it" do
-      u1 = users(:slippy_douglas)
-      u2 = users(:slippy_douglas)
-      u1.follow(users(:slippy_douglas))
-      u2.follow(users(:slippy_douglas))
-      
-      users(:slippy_douglas).followers.count.should == 2
-    end
-    
-    it "should let user access who it follows" do
-      u1 = users(:slippy_douglas)
-      u2 = users(:slippy_douglas)
-      users(:slippy_douglas).follow(u1)
-      users(:slippy_douglas).follow(u2)
-      
-      users(:slippy_douglas).followees.count.should == 2
-    end
-    
-    it "should find unique users by who the user follows" do
-      10.times do |f|
-        users(:slippy_douglas).follow users(:josh_vera)
-        users(:josh_vera).follow users(:slippy_douglas)
-      end
-      
-      users(:slippy_douglas).followers.count.should == 10
-    end
-    
-    describe "when both users are following each other" do
-      before(:each) do
-        users(:slippy_douglas).follow users(:josh_vera)
-        users(:josh_vera).follow users(:slippy_douglas)
-      end  
-      
-      it "should be mutual friends" do
-        users(:slippy_douglas).should be_friends_with(users(:josh_vera))
-        users(:josh_vera).should be_friends_with(users(:slippy_douglas))
-      end
-      
-      it "should be included in each other's friends list" do
-        users(:slippy_douglas).friends.should be_include(users(:josh_vera))
-        users(:josh_vera).friends.should be_include(users(:slippy_douglas))
-      end
-    end
-    
-  end
   
   
   describe "invite" do

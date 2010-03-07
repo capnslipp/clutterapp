@@ -32,21 +32,10 @@ class User < ActiveRecord::Base
   
   
   # Followship associations
-  has_many :followships
-  has_many :followees, :through => :followships
-  has_many :followers, :through => :followships, :source => :user, :conditions => {'followships.user_id' => self.id}
-  #named_scope :followers, :joins => {:followships => :users}
   
   has_many :shares
   has_many :authorized_piles, :through => :shares, :source => :pile, :conditions => {'shares.authorized' => true}
   has_many :public_piles, :through => :shares, :source => :pile, :conditions => {'shares.public' => true}
-
-  
-  # @fix: get it to properly alias tables so that "a_user.followees.followers_of(self)" works
-  named_scope :followers_of, proc {|a_user| {
-      :conditions => { :followships_4_followers_of => {:followee_id => a_user.id} },
-      :joins => %q{INNER JOIN `followships` as followships_4_followers_of ON followships_4_followers_of.user_id = users.id} # :joins => :followships # with "followships as followships_4_followers_of" alias
-  } }
   
   
   
@@ -59,40 +48,10 @@ class User < ActiveRecord::Base
     login
   end
   
-  #Followship methods
   
-  def follow(user_to_follow)
-    self.followships.create!(:followee => user_to_follow)
-  end
-  
-  def unfollow(user_to_unfollow)
-    self.followships.find_by_followee(user_to_unfollow).destroy
-  end
-  
-  def following?(possible_followee)
-    self.followees.include? possible_followee
-  end
-  
-  def followed_by?(possible_follower)
-    self.followers.include? possible_follower
-  end
-  
-  #def followers
-  #  User.followers_of(self)
-  #end
-  
-  def friends
-    followees.followers_of(self)
-  end
-  
-  def friends_with?(another_user)
-    self.friends.include? another_user
-  end
-  
-  
-  #sharing methods
+  # sharing methods
   def share_pile_with_user(user, pile)
-    shares.create(:user => user, :pile => pile, :authorized => true)
+    shares.create!(:user => user, :pile => pile, :authorized => true)
   end
   
   def shared_piles
@@ -100,19 +59,11 @@ class User < ActiveRecord::Base
   end
 
   def share_pile_with_public(pile)
-    shares.create(:user => self, :pile => pile, :public => true)
+    shares.create!(:user => self, :pile => pile, :public => true)
   end
   
   def sharees
     Share.find(:all, :conditions => {:pile_id => piles}).collect(&:user)
-  end
-  
-  def share_pile_with_followers(pile)
-    followers.each {|f| share_pile_with_user(f, pile) }
-  end
-  
-  def share_pile_with_followees(pile)
-    followees.each {|f| share_pile_with_user(f, pile) }
   end
   
   def sharers
