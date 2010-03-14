@@ -9,23 +9,20 @@ describe SpecificUserShare do
   end
   
   it "should not create a new instance given invalid attributes" do
-    raising_lambdas = []
+    @share = described_class.create :pile => nil, :sharee => users(:slippy_douglas)
+    lambda { @share.save! }.should raise_error(ActiveRecord::ActiveRecordError)
     
-    lambda {
-      @share = SpecificUserShare.create! :pile => nil, :sharee => users(:slippy_douglas)
-    }.should raise_error(ActiveRecord::ActiveRecordError)
+    @share = described_class.create :pile_id => 0, :sharee => users(:slippy_douglas)
+    lambda { @share.save! }.should raise_error(ActiveRecord::ActiveRecordError)
     
-    lambda {
-      @share = SpecificUserShare.create! :pile => piles(:plans_to_rule_the_world), :sharee => nil
-    }.should raise_error(ActiveRecord::ActiveRecordError)
+    @share = described_class.create :pile => piles(:plans_to_rule_the_world), :sharee => nil
+    lambda { @share.save! }.should raise_error(ActiveRecord::ActiveRecordError)
     
-    lambda {
-      @share = SpecificUserShare.create! :pile => nil, :sharee => nil
-    }.should raise_error(ActiveRecord::ActiveRecordError)
+    @share = described_class.create :pile => piles(:plans_to_rule_the_world), :sharee_id => 0
+    lambda { @share.save! }.should raise_error(ActiveRecord::ActiveRecordError)
     
-    lambda {
-      @share = SpecificUserShare.create! :pile => users(:slippy_douglas), :sharee => piles(:plans_to_rule_the_world) # swapped on purpose
-    }.should raise_error(ActiveRecord::ActiveRecordError)
+    @share = described_class.create :pile => nil, :sharee => nil
+    lambda { @share.save! }.should raise_error(ActiveRecord::ActiveRecordError)
   end
   
   it "should not allow more than one per Pile" do
