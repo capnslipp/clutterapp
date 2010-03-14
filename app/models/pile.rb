@@ -66,15 +66,17 @@ class Pile < ActiveRecord::Base
   end
   
   def unshare_publicly
-    public_shares.destroy
+    # first, since there should only be one PublicShare for this Pile
+    public_shares.first.destroy
   end
   
-  def share_with(user)
-    specific_user_shares.create! :sharee => user
+  def share_with(sharee)
+    specific_user_shares.create! :sharee => sharee
   end
   
-  def unshare_with(user)
-    specific_user_shares(:conditions => {:user => user}).destroy
+  def unshare_with(sharee)
+    # first, since there should only be one SpecificUserShare for this Pile and sharee
+    specific_user_shares(:conditions => {:sharee => sharee}).first.destroy
   end
   
   
