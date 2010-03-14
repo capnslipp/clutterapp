@@ -1,0 +1,3 @@
+class PublicShare < Share
+  
+end
