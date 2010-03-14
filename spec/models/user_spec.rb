@@ -86,37 +86,23 @@ describe User do
   describe "sharing" do
     
     it "should be able to share a pile publicly" do
-      pending
+      # precondition
+      piles(:plans_to_rule_the_world).should_not be_shared_publicly
       
-      users(:slippy_douglas).share_pile_with_public users(:slippy_douglas).root_pile
+      # spec
+      piles(:plans_to_rule_the_world).share_publicly
+      piles(:plans_to_rule_the_world).should be_shared_publicly
     end
     
-    it "should not let users access piles that aren't shared" do
-      pending
+    it "should be able to share a pile with a specific user" do
+      # precondition
+      piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
       
-      users(:slippy_douglas).authorized_piles << users(:josh_vera).root_pile
-      users(:slippy_douglas).authorized_piles.count.should == 0
+      # spec
+      piles(:plans_to_rule_the_world).share_with users(:josh_vera)
+      piles(:plans_to_rule_the_world).should be_shared_with_specific_users
     end
     
-    it "should have access to the sharees you share a pile with" do
-      pending
-      
-      users(:slippy_douglas).share_pile_with_user(
-        users(:josh_vera),
-        users(:slippy_douglas).root_pile
-      )
-      
-      users(:slippy_douglas).sharees.count.should == 1
-      users(:slippy_douglas).sharees.first.should == users(:josh_vera)
-    end
-    
-    it "should have access to people sharing with you" do
-      pending
-      
-      users(:slippy_douglas).share_pile_with_user(users(:josh_vera), piles(:plans_to_rule_the_world))
-      users(:josh_vera).sharers.count.should == 1
-      users(:josh_vera).sharers.first.should == users(:slippy_douglas)
-    end
   end
   
   
