@@ -5,7 +5,7 @@ describe SpecificUserShare do
   
   
   it "should create a new instance given valid attributes" do
-    @share = SpecificUserShare.create! :pile => piles(:plans_to_rule_the_world), :sharee => users(:josh_vera)
+    @share = described_class.create! :pile => piles(:plans_to_rule_the_world), :sharee => users(:josh_vera)
   end
   
   it "should not create a new instance given invalid attributes" do
