@@ -61,6 +61,23 @@ class Pile < ActiveRecord::Base
   end
   
   
+  def share_publicly
+    public_shares.create!
+  end
+  
+  def unshare_publicly
+    public_shares.destroy
+  end
+  
+  def share_with(user)
+    specific_user_shares.create! :sharee => user
+  end
+  
+  def unshare_with(user)
+    specific_user_shares(:conditions => {:user => user}).destroy
+  end
+  
+  
   
 protected
   

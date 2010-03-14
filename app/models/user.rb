@@ -51,9 +51,6 @@ class User < ActiveRecord::Base
   
   
   # sharing methods
-  def share_pile_with_user(user, pile)
-    shares.create!(:sharee => user, :pile => pile, :authorized => true)
-  end
   
   def shared_piles
     Share.find(:all, :conditions => {:pile_id => piles})
