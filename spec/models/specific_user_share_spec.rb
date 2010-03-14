@@ -34,4 +34,9 @@ describe SpecificUserShare do
     lambda { @share.save! }.should raise_error(ActiveRecord::ActiveRecordError)
   end
   
+  it "should not allow sharing with the owner" do
+    @share = described_class.create :pile => piles(:plans_to_rule_the_world), :sharee => piles(:plans_to_rule_the_world).owner
+    lambda { @share.save! }.should raise_error(ActiveRecord::ActiveRecordError)
+  end
+  
 end
