@@ -24,4 +24,14 @@ describe PublicShare do
     }.should raise_error(ActiveRecord::ActiveRecordError)
   end
   
+  it "should not allow more than one per Pile" do
+    # first should succeed
+    @share = PublicShare.create! :pile => piles(:plans_to_rule_the_world)
+    
+    # second should fail
+    lambda {
+      @share = PublicShare.create! :pile => piles(:plans_to_rule_the_world)
+    }.should raise_error(ActiveRecord::ActiveRecordError)
+  end
+  
 end
