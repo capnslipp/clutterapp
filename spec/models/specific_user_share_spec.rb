@@ -28,4 +28,13 @@ describe SpecificUserShare do
     }.should raise_error(ActiveRecord::ActiveRecordError)
   end
   
+  it "should not allow more than one per Pile" do
+    # first should succeed
+    @share = described_class.create! :pile => piles(:plans_to_rule_the_world), :sharee => users(:josh_vera)
+    
+    # second should fail
+    @share = described_class.create :pile => piles(:plans_to_rule_the_world), :sharee => users(:josh_vera)
+    lambda { @share.save! }.should raise_error(ActiveRecord::ActiveRecordError)
+  end
+  
 end
