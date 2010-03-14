@@ -10,6 +10,22 @@ class Pile < ActiveRecord::Base
   has_many :shares
   #has_many :users, :through => :shares
   
+  has_many :public_shares
+  has_many :specific_user_shares
+  
+  def shared?
+    shares.count > 0
+  end
+  
+  def shared_publicly?
+    public_shares.count > 0
+  end
+  
+  def shared_with_specific_users?
+    specific_user_shares.count > 0
+  end
+  
+  
   has_one :pile_ref_prop, :foreign_key => 'ref_pile_id'
   
   #validates_presence_of   :root_node, :message => 'is required'
@@ -43,6 +59,7 @@ class Pile < ActiveRecord::Base
       ancestors
     end
   end
+  
   
   
 protected
