@@ -85,7 +85,7 @@ describe User do
   
   describe "sharing" do
     
-    it "should be able to share a pile publicly" do
+    it "should be able to share a Pile publicly" do
       # precondition
       piles(:plans_to_rule_the_world).should_not be_shared_publicly
       
@@ -94,7 +94,7 @@ describe User do
       piles(:plans_to_rule_the_world).should be_shared_publicly
     end
     
-    it "should be able to share a pile with a specific user" do
+    it "should be able to share a Pile with a specific User" do
       # precondition
       piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
       
