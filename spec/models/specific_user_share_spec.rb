@@ -12,39 +12,36 @@ describe SpecificUserShare do
   end
   
   it "should not create a new instance given invalid attributes" do
-    pending
-    
     raising_lambdas = []
     
-    raising_lambdas << lambda do
-      @share = Share.create!(
-        :user => users(:slippy_douglas),
-        :pile => nil
+    lambda {
+      @share = SpecificUserShare.create!(
+        :pile => nil,
+        :sharee => users(:slippy_douglas)
       )
-    end
+    }.should raise_error(ActiveRecord::ActiveRecordError)
     
-    raising_lambdas << lambda do
-      @share = Share.create!(
-        :user => nil,
-        :pile => piles(:plans_to_rule_the_world)
+    lambda {
+      @share = SpecificUserShare.create!(
+        :pile => piles(:plans_to_rule_the_world),
+        :sharee => nil
       )
-    end
+    }.should raise_error(ActiveRecord::ActiveRecordError)
     
-    raising_lambdas << lambda do
-      @share = Share.create!(
-        :user => nil,
-        :pile => nil
+    lambda {
+      @share = SpecificUserShare.create!(
+        :pile => nil,
+        :sharee => nil
       )
-    end
+    }.should raise_error(ActiveRecord::ActiveRecordError)
     
-    raising_lambdas << lambda do
-      @share = Share.create!(
-        :user => piles(:plans_to_rule_the_world),
-        :pile => users(:slippy_douglas)
+    lambda {
+      @share = SpecificUserShare.create!(
+        # swapped on purpose
+        :pile => users(:slippy_douglas),
+        :sharee => piles(:plans_to_rule_the_world)
       )
-    end
-    
-    raising_lambdas.each {|rl| rl.should raise_error(ActiveRecord::ActiveRecordError) }
+    }.should raise_error(ActiveRecord::ActiveRecordError)
   end
   
 end

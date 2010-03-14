@@ -11,39 +11,17 @@ describe PublicShare do
   end
   
   it "should not create a new instance given invalid attributes" do
-    pending
-    
-    raising_lambdas = []
-    
-    raising_lambdas << lambda do
-      @share = Share.create!(
-        :user => users(:slippy_douglas),
+    lambda {
+      @share = PublicShare.create!(
         :pile => nil
       )
-    end
+    }.should raise_error(ActiveRecord::ActiveRecordError)
     
-    raising_lambdas << lambda do
-      @share = Share.create!(
-        :user => nil,
-        :pile => piles(:plans_to_rule_the_world)
-      )
-    end
-    
-    raising_lambdas << lambda do
-      @share = Share.create!(
-        :user => nil,
-        :pile => nil
-      )
-    end
-    
-    raising_lambdas << lambda do
-      @share = Share.create!(
-        :user => piles(:plans_to_rule_the_world),
+    lambda {
+      @share = PublicShare.create!(
         :pile => users(:slippy_douglas)
       )
-    end
-    
-    raising_lambdas.each {|rl| rl.should raise_error(ActiveRecord::ActiveRecordError) }
+    }.should raise_error(ActiveRecord::ActiveRecordError)
   end
   
 end
