@@ -83,49 +83,6 @@ describe User do
   end
   
   
-  describe "sharing" do
-    
-    it "should be able to share a Pile publicly" do
-      # precondition
-      piles(:plans_to_rule_the_world).should_not be_shared_publicly
-      
-      # spec
-      piles(:plans_to_rule_the_world).share_publicly
-      piles(:plans_to_rule_the_world).should be_shared_publicly
-    end
-    
-    it "should be able to unshare a publicly shared Pile" do
-      # precondition
-      piles(:plans_to_rule_the_world).share_publicly
-      piles(:plans_to_rule_the_world).should be_shared_publicly
-      
-      # spec
-      piles(:plans_to_rule_the_world).unshare_publicly
-      piles(:plans_to_rule_the_world).should_not be_shared_publicly
-    end
-    
-    it "should be able to share a Pile with a specific User" do
-      # precondition
-      piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
-      
-      # spec
-      piles(:plans_to_rule_the_world).share_with users(:josh_vera)
-      piles(:plans_to_rule_the_world).should be_shared_with_specific_users
-    end
-    
-    it "should be able to unshare a Pile shared with a specific User" do
-      # precondition
-      piles(:plans_to_rule_the_world).share_with users(:josh_vera)
-      piles(:plans_to_rule_the_world).should be_shared_with_specific_users
-      
-      # spec
-      piles(:plans_to_rule_the_world).unshare_with users(:josh_vera)
-      piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
-    end
-    
-  end
-  
-  
   
   describe "invite" do
     
