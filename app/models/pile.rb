@@ -13,6 +13,8 @@ class Pile < ActiveRecord::Base
   has_many :public_shares
   has_many :specific_user_shares
   
+  named_scope :shared_publicly, :joins => :public_shares
+  
   named_scope :shared_with_user, lambda {|sharee_user|
     { :joins => :specific_user_shares, :conditions => {:shares => {:sharee_id => sharee_user.id}} }
   }

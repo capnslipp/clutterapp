@@ -31,9 +31,9 @@ class UsersController < ApplicationController
   def show
     @user = User.find_by_login(params[:id])
     
-    if !@user.nil?
-      @public_piles = [] #@user.piles # @todo: make it actually show only public piles, once they're implemented
-      @shared_piles = []
+    if @user
+      @public_piles = @user.piles.shared_publicly
+      @piles_shared_with_us = @user.piles.shared_with_user(current_user).all
       render # show.html.erb
       
     else

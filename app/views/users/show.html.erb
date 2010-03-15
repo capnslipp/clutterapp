@@ -3,8 +3,8 @@
 
 <h3>Public Piles</h3>
 
-<ul class="scope-list">
-	<% for pile in @public_piles %>
+<ul>
+	<% @public_piles.each do |pile| %>
 		<li>
 			<div class="scope name">
 				<span class="sym">&there4;</span>
@@ -17,8 +17,8 @@
 
 <h3>Piles Shared with You</h3>
 
-<ul class="scope-list">
-	<% for pile in @shared_piles %>
+<ul>
+	<% @piles_shared_with_us.each do |pile| %>
 		<li>
 			<div class="scope name">
 				<span class="sym">&there4;</span>
