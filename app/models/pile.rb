@@ -61,8 +61,10 @@ class Pile < ActiveRecord::Base
   end
   
   
-  def share_publicly
-    public_shares.create!
+  SHARE_PUBLICLY_DEFAULT_OPTIONS = { :modifiable => false }
+  def share_publicly(options = {})
+    options.reverse_merge! SHARE_PUBLICLY_DEFAULT_OPTIONS
+    public_shares.create! :modifiable => options[:modifiable]
   end
   
   def unshare_publicly
@@ -70,8 +72,10 @@ class Pile < ActiveRecord::Base
     public_shares.first.destroy
   end
   
-  def share_with(sharee)
-    specific_user_shares.create! :sharee => sharee
+  SHARE_WITH_DEFAULT_OPTIONS = { :modifiable => false }
+  def share_with(sharee, options = {})
+    options.reverse_merge! SHARE_WITH_DEFAULT_OPTIONS
+    specific_user_shares.create! :sharee => sharee, :modifiable => options[:modifiable]
   end
   
   def unshare_with(sharee)
