@@ -34,15 +34,15 @@ class Pile < ActiveRecord::Base
   end
   
   def modifiable_publicly?
-    public_shares(:conditions => { :modifiable => true }).exists?
+    public_shares.exists?(:modifiable => true)
   end
   
   def accessible_by_user?(user)
-    specific_user_shares(:conditions => { :sharee => user }).exists?
+    specific_user_shares.exists?(:sharee_id => user.id)
   end
   
   def modifiable_by_user?(user)
-    specific_user_shares(:conditions => { :sharee => user, :modifiable => true }).exists?
+    specific_user_shares.exists?(:sharee_id => user.id, :modifiable => true)
   end
   
   
