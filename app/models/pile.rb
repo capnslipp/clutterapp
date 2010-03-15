@@ -13,6 +13,13 @@ class Pile < ActiveRecord::Base
   has_many :public_shares
   has_many :specific_user_shares
   
+  named_scope :shared_with_user, lambda {|sharee_user|
+    { :joins => :specific_user_shares, :conditions => {:shares => {:sharee_id => sharee_user.id}} }
+  }
+  named_scope :shared_by_user, lambda {|owner_user|
+    { :joins => :shares, :conditions => {:piles => {:owner_id => owner_user.id}} }
+  }
+  
   # helpers for the owner's view
   
   def shared?
