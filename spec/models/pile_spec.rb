@@ -28,42 +28,75 @@ describe Pile do
   
   describe "sharing" do
     
-    it "should be able to share a Pile publicly" do
-      # precondition
-      piles(:plans_to_rule_the_world).should_not be_shared_publicly
+    describe "a Pile publicly" do
+      before(:each) do
+        # safety precondition
+        piles(:plans_to_rule_the_world).should_not be_shared_publicly
+      end
       
-      # spec
-      piles(:plans_to_rule_the_world).share_publicly
-      piles(:plans_to_rule_the_world).should be_shared_publicly
+      it "should be non-modifiable, by default" do
+        piles(:plans_to_rule_the_world).share_publicly
+        piles(:plans_to_rule_the_world).should be_shared
+        piles(:plans_to_rule_the_world).should be_shared_publicly
+        piles(:plans_to_rule_the_world).should be_accessible_publicly
+        piles(:plans_to_rule_the_world).should_not be_modifiable_publicly
+      end
+      
+      it "should be modifiable, when set" do
+        piles(:plans_to_rule_the_world).share_publicly(:modifiable => true)
+        piles(:plans_to_rule_the_world).should be_shared
+        piles(:plans_to_rule_the_world).should be_shared_publicly
+        piles(:plans_to_rule_the_world).should be_accessible_publicly
+        piles(:plans_to_rule_the_world).should be_modifiable_publicly
+      end
     end
     
-    it "should be able to unshare a publicly shared Pile" do
-      # precondition
-      piles(:plans_to_rule_the_world).share_publicly
-      piles(:plans_to_rule_the_world).should be_shared_publicly
+    describe "unsharing a publicly shared Pile" do
+      before(:each) do
+        piles(:plans_to_rule_the_world).share_publicly
+        piles(:plans_to_rule_the_world).should be_shared_publicly
+      end
       
-      # spec
-      piles(:plans_to_rule_the_world).unshare_publicly
-      piles(:plans_to_rule_the_world).should_not be_shared_publicly
+      it "should work" do
+        piles(:plans_to_rule_the_world).unshare_publicly
+        piles(:plans_to_rule_the_world).should_not be_shared
+        piles(:plans_to_rule_the_world).should_not be_shared_publicly
+      end
     end
     
-    it "should be able to share a Pile with a specific User" do
-      # precondition
-      piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
+    describe "a Pile with a specific User" do
+      before(:each) do
+        piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
+      end
       
-      # spec
-      piles(:plans_to_rule_the_world).share_with users(:josh_vera)
-      piles(:plans_to_rule_the_world).should be_shared_with_specific_users
+      it "should be non-modifiable, by default" do
+        piles(:plans_to_rule_the_world).share_with(users(:josh_vera))
+        piles(:plans_to_rule_the_world).should be_shared
+        piles(:plans_to_rule_the_world).should be_shared_with_specific_users
+        piles(:plans_to_rule_the_world).should be_accessible_by_user(users(:josh_vera))
+        piles(:plans_to_rule_the_world).should_not be_modifiable_by_user(users(:josh_vera))
+      end
+      
+      it "should be modifiable, when set" do
+        piles(:plans_to_rule_the_world).share_with(users(:josh_vera), :modifiable => true)
+        piles(:plans_to_rule_the_world).should be_shared
+        piles(:plans_to_rule_the_world).should be_shared_with_specific_users
+        piles(:plans_to_rule_the_world).should be_accessible_by_user(users(:josh_vera))
+        piles(:plans_to_rule_the_world).should be_modifiable_by_user(users(:josh_vera))
+      end
     end
     
-    it "should be able to unshare a Pile shared with a specific User" do
-      # precondition
-      piles(:plans_to_rule_the_world).share_with users(:josh_vera)
-      piles(:plans_to_rule_the_world).should be_shared_with_specific_users
+    describe "unsharing a Pile shared with a specific User" do
+      before(:each) do
+        piles(:plans_to_rule_the_world).share_with users(:josh_vera)
+        piles(:plans_to_rule_the_world).should be_shared_with_specific_users
+      end
       
-      # spec
-      piles(:plans_to_rule_the_world).unshare_with users(:josh_vera)
-      piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
+      it "should work" do
+        piles(:plans_to_rule_the_world).unshare_with users(:josh_vera)
+        piles(:plans_to_rule_the_world).should_not be_shared
+        piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
+      end
     end
     
   end

@@ -13,16 +13,36 @@ class Pile < ActiveRecord::Base
   has_many :public_shares
   has_many :specific_user_shares
   
+  # helpers for the owner's view
+  
   def shared?
-    shares.count > 0
+    shares.exists?
   end
   
   def shared_publicly?
-    public_shares.count > 0
+    public_shares.exists?
   end
   
   def shared_with_specific_users?
-    specific_user_shares.count > 0
+    specific_user_shares.exists?
+  end
+  
+  # helpers for permission determination
+  
+  def accessible_publicly?
+    public_shares.exists?
+  end
+  
+  def modifiable_publicly?
+    public_shares(:conditions => { :modifiable => true }).exists?
+  end
+  
+  def accessible_by_user?(user)
+    specific_user_shares(:conditions => { :sharee => user }).exists?
+  end
+  
+  def modifiable_by_user?(user)
+    specific_user_shares(:conditions => { :sharee => user, :modifiable => true }).exists?
   end
   
   
