@@ -35,7 +35,7 @@
 		<li>
 			<div class="scope name">
 				<span class="sym"><%# ∴ %>&there4;</span>
-				<%= link_to h(pile.name), [pile.owner, pile] %>
+				<%= link_to h(pile.owner.login), [pile.owner] %> <%# » %>&raquo; <%= link_to h(pile.name), [pile.owner, pile] %>
 			</div>
 		</li>
 	<% end %>
