@@ -33,11 +33,7 @@ class User < ActiveRecord::Base
   
   # Share associations
   
-  has_many :shares, :through => :piles, :source => :owner
-  
-  #has_many :authorized_piles, :through => :shares, :source => :pile, :conditions => {'shares.authorized' => true}
-  #has_many :public_piles, :through => :shares, :source => :pile, :conditions => {'shares.public' => true}
-  
+  has_many :shares, :through => :piles
   
   
   # HACK HACK HACK -- how to do attr_accessible from here? Prevents a user from submitting a crafted form that bypasses activation anything else you want your user to change should be added here.
@@ -47,25 +43,6 @@ class User < ActiveRecord::Base
   
   def to_param
     login
-  end
-  
-  
-  # sharing methods
-  
-  def shared_piles
-    Share.find(:all, :conditions => {:pile_id => piles})
-  end
-
-  def share_pile_with_public(pile)
-    shares.create!(:pile => pile, :public => true)
-  end
-  
-  def sharees
-    Share.find(:all, :conditions => {:pile_id => piles}).collect(&:user)
-  end
-  
-  def sharers
-    authorized_piles.collect(&:owner)
   end
   
   
