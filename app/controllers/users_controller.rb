@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :authorize, :except => [:new, :create]
+  before_filter :be_logged_in, :except => [:new, :create]
   
   # render new.rhtml
   def new

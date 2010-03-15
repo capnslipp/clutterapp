@@ -1,8 +1,9 @@
 class PilesController < ApplicationController
   before_filter :no_cache
-  before_filter :authorize
+  before_filter :be_logged_in
   before_filter :have_owner
   before_filter :have_pile, :only => [:show, :edit, :update, :destroy]
+  before_filter :have_access
   
   
   # GET /piles

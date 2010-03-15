@@ -17,21 +17,24 @@ class ApplicationController < ActionController::Base
   filter_parameter_logging :password, :password_confirmation
   
   
+  def active_owner_id
+    active_owner_id = params[:user_id]
+    active_owner_id ||= params[:id] if controller_name == 'users'
+    return active_owner_id
+  end
+  
   def active_owner
-    @active_owner
+    return @active_owner ||= User.find_by_login(active_owner_id)
   end
   
-  def has_owner?
-    @active_owner != nil
+  def active_pile_id
+    active_pile_id = params[:pile_id]
+    active_pile_id ||= params[:id] if controller_name == 'piles'
+    return active_pile_id
   end
-  
   
   def active_pile
-    @active_pile
-  end
-  
-  def has_pile?
-    @active_pile != nil
+    return @active_pile ||= active_owner.piles.find(active_pile_id)
   end
   
   
@@ -54,7 +57,7 @@ protected
   end
   
   
-  def authorize
+  def be_logged_in
     redirect_to login_url unless current_user
   end
   
@@ -64,49 +67,45 @@ protected
   
   
   def have_owner
-    return if @active_owner
-    
-    owner_id = params[:user_id]
-    owner_id ||= params[:id] if controller_name == 'users'
-    
-    if owner_id.nil?
-      flash[:error] = "No user_id specified."
-      redirect_to user_path(current_user)
-      
+    if active_owner_id.nil?
+      flash[:error] = "No user specified."
+      redirect_to current_user
+    elsif active_owner.nil?
+      flash[:error] = "User “#{active_owner_id}” doesn't exist."
+      redirect_to current_user
     else
-      @active_owner = User.find_by_login(owner_id)
-      
-      if @active_owner.nil?
-        flash[:warning] = "No such user exists."
-        redirect_to user_path(current_user)
-      elsif @active_owner != current_user
-        flash[:warning] = "You can't really see this pile since it's not yours."
-        redirect_to user_path(current_user)
-      end
-      
+      return # success
+    end
+  end
+  
+  def have_pile
+    if active_pile_id.nil?
+      flash[:error] = "No pile specified."
+      redirect_to [active_owner, :piles]
+    elsif active_pile.nil?
+      flash[:error] = "Pile “#{active_pile_id}” doesn't exist."
+      redirect_to [active_owner, :piles]
+    else
+      return # success
     end
   end
   
   
-  def have_pile
-    return if @active_pile
-    
-    pile_id = params[:pile_id]
-    pile_id ||= params[:id] if controller_name == 'piles'
-    
-    if pile_id.nil?
-      flash[:error] = "No pile_id specified."
-      redirect_to polymorphic_path([active_owner, :piles])
+  def have_access
+    if active_pile.accessible_publicly? || active_pile.accessible_by_user?(current_user)
+      return # success
     else
-      @active_pile = active_owner.piles.find(pile_id)
-      
-      if @active_pile.nil?
-        flash[:warning] = "No such pile exists."
-        redirect_to polymorphic_path([active_owner, :piles])
-      elsif @active_pile.owner != current_user
-        # @todo: check if the user is authorized to view and/or edit this pile
-      end
-      
+      flash[:warning] = "You do not have access to “#{active_owner_id}”'s pile “#{active_pile_id}”."
+      redirect_to current_user
+    end
+  end
+  
+  def have_modify_access
+    if active_pile.modifiable_publicly? || active_pile.modifiable_by_user?(current_user)
+      return # success
+    else
+      flash[:warning] = "You do not have modify access for “#{active_owner_id}”'s pile “#{active_pile_id}”."
+      redirect_to current_user
     end
   end
   
