@@ -47,11 +47,11 @@ class Pile < ActiveRecord::Base
   end
   
   def accessible_by_user?(user)
-    specific_user_shares.exists?(:sharee_id => user.id)
+    user == owner || specific_user_shares.exists?(:sharee_id => user.id)
   end
   
   def modifiable_by_user?(user)
-    specific_user_shares.exists?(:sharee_id => user.id, :modifiable => true)
+    user == owner || specific_user_shares.exists?(:sharee_id => user.id, :modifiable => true)
   end
   
   
