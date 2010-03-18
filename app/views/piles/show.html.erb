@@ -26,6 +26,7 @@
 </div>
 
 <div id="main-area" class="left" <% if cookies['scope-panel.width'] %>style="margin-right: <%=cookies['scope-panel.width']%>px"<% end %>><% @skip_main_area_wrap = true %>
+	<div class="back"></div>
 	<div class="cont">
 		
 		<% content_tag_for :div, @pile.root_node, :class => "base root item" do -%>

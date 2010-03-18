@@ -58,9 +58,17 @@
 	
 	
 	<div id="page">
-		<% unless @skip_main_area_wrap %><div id="main-area"><div class="cont"><% end %>
+		<div class="back"></div>
+		<% if @skip_main_area_wrap %>
 			<%= yield %>
-		<% unless @skip_main_area_wrap %></div></div><% end %>
+		<% else %>
+			<div id="main-area">
+				<div class="back"></div>
+				<div class="cont">
+					<%= yield %>
+				</div>
+			</div>
+		<% end %>
 	</div>
 	
 </div>

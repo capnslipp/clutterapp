@@ -53,13 +53,13 @@ li { list-style-type: none; }
 
 .item > .pile > .body { display: block; border: none; }
 .base.item > .pile > .body {
-	margin: -16px; margin-bottom: 0;
-	padding: 16px; padding-bottom: 18px;
+	margin: -6px -4px; margin-bottom: 0;
+	padding: 12px; padding-bottom: 18px;
 }
 .item > .pile > .body > .header { position: relative; }
 .base.item > .pile > .body > .header {
-	margin: -16px; margin-bottom: -18px;
-	padding: 16px; padding-bottom: 18px;
+	margin: -8px; margin-bottom: -18px;
+	padding: 8px; padding-bottom: 18px;
 }
 .base.item > .pile > .body > .header > .pile.name { white-space: nowrap; }
 .base.item > .pile > .body > .header > a.pile.name { text-decoration: none; }
@@ -124,15 +124,19 @@ li { list-style-type: none; }
 }
 .body.active > .back {
 	position: absolute; z-index: 1;
-	top: 0; bottom: 0; left: -2px; right: -2px;
+	top: 0; bottom: 0; left: -6px; right: -6px;
 	
 	background: <%= bright_bg_color %>;
 	<%= border_radius_decl('4px') %>
 	<%= deep_shadow_decl(shadow_color.with(:a =>0.1)) %>
 }
+.base > .body.active > .back {
+	<%= border_radius_decl('10px 10px 4px 4px') %>
+	top: 0; bottom: 0; left: -2px; right: -2px;
+}
 .body.active > .hyper { /* used to super-highlight items */
 	position: absolute; z-index: 0;
-	top: 0; bottom: 0; left: -2px; right: -2px;
+	top: 0; bottom: 0; left: -6px; right: -6px;
 	
 	background: <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
 	<%= border_radius_decl('8px') %>
@@ -199,7 +203,7 @@ li { list-style-type: none; }
 
 .body > .bullet {
 	position: absolute;
-	left: 4px;
+	left: 0;
 	width: 16px;
 	text-align: center;
 	vertical-align: middle;
@@ -223,7 +227,7 @@ li { list-style-type: none; }
 }
 .base.item > .pile > .body > .action.stub,
 .base.item > .pile > .body > #action-bar {
-	right: 20px;
+	right: 8px;
 }
 
 
@@ -242,6 +246,15 @@ li { list-style-type: none; }
 	position: absolute;
 	width: 100%; top: 24px; bottom: 0;
 	/*overflow-y: scroll;*/
+}
+
+#page > .back {
+	position: absolute; z-index: 0;
+	top: 0; bottom: 0; left: 0; right: 0;
+	
+	background: rgba(204, 34, 0, 1.0);
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgba(204, 0, 0, 0.0)), to(rgba(204, 0, 0, 0.5)));
+	background-image: -moz-linear-gradient(0% 0% 270deg, rgba(204, 0, 0, 0.0), rgba(204, 0, 0, 0.5));
 }
 
 
@@ -420,6 +433,24 @@ li { list-style-type: none; }
 	top: 0; bottom: 0; /*height: 100%;*/
 	left: 0; right: 0; /*width: 100%;*/
 }
+#main-area > .back {
+	position: absolute; z-index: 0;
+	left: 8px; right: 8px;
+	top: 8px; bottom: 8px;
+	
+	background: #fff;
+	background-image: -webkit-gradient(linear, 0% 50%, 0% 0%, from(rgba(0, 0, 0, 0.0)), to(rgba(0, 0, 0, 0.1)));
+	background-image: -moz-linear-gradient(0% 50% 90deg, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.1));
+	        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+	   -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+	-webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+	
+	        border-radius: 12px;
+	   -moz-border-radius: 12px;
+	-webkit-border-radius: 12px;
+	border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
 #main-area.left,
 #main-area.middle {
     margin-right: 360px;
@@ -429,7 +460,9 @@ li { list-style-type: none; }
     margin-left: 360px;
 }
 #main-area > .cont {
-	padding: 16px;
+	position: relative; z-index: 1;
+	
+	padding: 20px;
 	
 	min-width: <%= 320 - 10 - (16 * 2) %>px;
 }
