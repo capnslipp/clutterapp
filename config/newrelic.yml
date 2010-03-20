@@ -3,7 +3,7 @@
 # Rails applications with deep visibility and low overhead.  For more
 # information, visit www.newrelic.com.
 #
-# 
+# This configuration file is custom generated for 6bitt.com
 #
 # here are the settings that are common to all environments
 common: &default_settings
