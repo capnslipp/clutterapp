@@ -30,12 +30,12 @@ describe Pile do
     
     describe "a Pile publicly" do
       before(:each) do
-        # safety precondition
-        piles(:plans_to_rule_the_world).should_not be_shared_publicly
+        piles(:plans_to_rule_the_world).shares.destroy
       end
       
       it "should be non-modifiable, by default" do
         piles(:plans_to_rule_the_world).share_publicly
+        
         piles(:plans_to_rule_the_world).should be_shared
         piles(:plans_to_rule_the_world).should be_shared_publicly
         piles(:plans_to_rule_the_world).should be_accessible_publicly
@@ -44,6 +44,7 @@ describe Pile do
       
       it "should be modifiable, when set" do
         piles(:plans_to_rule_the_world).share_publicly(:modifiable => true)
+        
         piles(:plans_to_rule_the_world).should be_shared
         piles(:plans_to_rule_the_world).should be_shared_publicly
         piles(:plans_to_rule_the_world).should be_accessible_publicly
@@ -53,12 +54,13 @@ describe Pile do
     
     describe "unsharing a publicly shared Pile" do
       before(:each) do
+        piles(:plans_to_rule_the_world).shares.destroy
         piles(:plans_to_rule_the_world).share_publicly
-        piles(:plans_to_rule_the_world).should be_shared_publicly
       end
       
       it "should work" do
         piles(:plans_to_rule_the_world).unshare_publicly
+        
         piles(:plans_to_rule_the_world).should_not be_shared
         piles(:plans_to_rule_the_world).should_not be_shared_publicly
       end
@@ -66,11 +68,12 @@ describe Pile do
     
     describe "a Pile with a specific User" do
       before(:each) do
-        piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
+        piles(:plans_to_rule_the_world).shares.destroy
       end
       
       it "should be non-modifiable, by default" do
         piles(:plans_to_rule_the_world).share_with(users(:josh_vera))
+        
         piles(:plans_to_rule_the_world).should be_shared
         piles(:plans_to_rule_the_world).should be_shared_with_specific_users
         piles(:plans_to_rule_the_world).should be_accessible_by_user(users(:josh_vera))
@@ -79,6 +82,7 @@ describe Pile do
       
       it "should be modifiable, when set" do
         piles(:plans_to_rule_the_world).share_with(users(:josh_vera), :modifiable => true)
+        
         piles(:plans_to_rule_the_world).should be_shared
         piles(:plans_to_rule_the_world).should be_shared_with_specific_users
         piles(:plans_to_rule_the_world).should be_accessible_by_user(users(:josh_vera))
@@ -88,14 +92,17 @@ describe Pile do
     
     describe "unsharing a Pile shared with a specific User" do
       before(:each) do
-        piles(:plans_to_rule_the_world).share_with users(:josh_vera)
-        piles(:plans_to_rule_the_world).should be_shared_with_specific_users
+        piles(:plans_to_rule_the_world).shares.destroy
+        piles(:plans_to_rule_the_world).share_with(users(:josh_vera))
       end
       
       it "should work" do
-        piles(:plans_to_rule_the_world).unshare_with users(:josh_vera)
+        piles(:plans_to_rule_the_world).unshare_with(users(:josh_vera))
+        
         piles(:plans_to_rule_the_world).should_not be_shared
         piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
+        piles(:plans_to_rule_the_world).should_not be_accessible_by_user(users(:josh_vera))
+        piles(:plans_to_rule_the_world).should_not be_modifiable_by_user(users(:josh_vera))
       end
     end
     
