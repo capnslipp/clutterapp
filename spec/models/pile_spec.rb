@@ -31,6 +31,7 @@ describe Pile do
     describe "a Pile publicly" do
       before(:each) do
         piles(:plans_to_rule_the_world).shares.destroy
+        piles(:step_1_the_girl).shares.destroy
       end
       
       it "should be non-modifiable, by default" do
@@ -50,11 +51,27 @@ describe Pile do
         piles(:plans_to_rule_the_world).should be_accessible_publicly
         piles(:plans_to_rule_the_world).should be_modifiable_publicly
       end
+      
+      it "should effectively share all sub-Piles (that don't have explicit sharing settings)" do
+        piles(:plans_to_rule_the_world).share_publicly
+        
+        piles(:plans_to_rule_the_world).should be_accessible_publicly
+        piles(:step_1_the_girl).should be_accessible_publicly
+      end
+      
+      it "should not change the actual sharing settings on sub-Piles" do
+        piles(:step_1_the_girl).should_not be_shared
+        
+        piles(:plans_to_rule_the_world).share_publicly
+        
+        piles(:step_1_the_girl).should_not be_shared
+      end
     end
     
     describe "unsharing a publicly shared Pile" do
       before(:each) do
         piles(:plans_to_rule_the_world).shares.destroy
+        piles(:step_1_the_girl).shares.destroy
         piles(:plans_to_rule_the_world).share_publicly
       end
       
@@ -64,11 +81,27 @@ describe Pile do
         piles(:plans_to_rule_the_world).should_not be_shared
         piles(:plans_to_rule_the_world).should_not be_shared_publicly
       end
+      
+      it "should effectively unshare all sub-Piles (that don't have explicit sharing settings)" do
+        piles(:plans_to_rule_the_world).share_publicly
+        
+        piles(:plans_to_rule_the_world).should_not be_accessible_publicly
+        piles(:step_1_the_girl).should_not be_accessible_publicly
+      end
+      
+      it "should not change the actual sharing settings on sub-Piles" do
+        piles(:step_1_the_girl).should_not be_shared
+        
+        piles(:plans_to_rule_the_world).unshare_with(users(:josh_vera))
+        
+        piles(:step_1_the_girl).should_not be_shared
+      end
     end
     
     describe "a Pile with a specific User" do
       before(:each) do
         piles(:plans_to_rule_the_world).shares.destroy
+        piles(:step_1_the_girl).shares.destroy
       end
       
       it "should be non-modifiable, by default" do
@@ -88,11 +121,27 @@ describe Pile do
         piles(:plans_to_rule_the_world).should be_accessible_by_user(users(:josh_vera))
         piles(:plans_to_rule_the_world).should be_modifiable_by_user(users(:josh_vera))
       end
+      
+      it "should effectively share all sub-Piles (that don't have explicit sharing settings)" do
+        piles(:plans_to_rule_the_world).share_with(users(:josh_vera))
+
+        piles(:plans_to_rule_the_world).should be_accessible_by_user(users(:josh_vera))
+        piles(:step_1_the_girl).should be_accessible_by_user(users(:josh_vera))
+      end
+      
+      it "should not change the actual sharing settings on sub-Piles" do
+        piles(:step_1_the_girl).should_not be_shared
+        
+        piles(:plans_to_rule_the_world).share_with(users(:josh_vera))
+        
+        piles(:step_1_the_girl).should_not be_shared
+      end
     end
     
     describe "unsharing a Pile shared with a specific User" do
       before(:each) do
         piles(:plans_to_rule_the_world).shares.destroy
+        piles(:step_1_the_girl).shares.destroy
         piles(:plans_to_rule_the_world).share_with(users(:josh_vera))
       end
       
@@ -103,6 +152,21 @@ describe Pile do
         piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
         piles(:plans_to_rule_the_world).should_not be_accessible_by_user(users(:josh_vera))
         piles(:plans_to_rule_the_world).should_not be_modifiable_by_user(users(:josh_vera))
+      end
+      
+      it "should effectively unshare all sub-Piles (that don't have explicit sharing settings)" do
+        piles(:plans_to_rule_the_world).unshare_with(users(:josh_vera))
+        
+        piles(:plans_to_rule_the_world).should_not be_accessible_by_user(users(:josh_vera))
+        piles(:step_1_the_girl).should_not be_accessible_by_user(users(:josh_vera))
+      end
+      
+      it "should not change the actual sharing settings on sub-Piles" do
+        piles(:step_1_the_girl).should_not be_shared
+        
+        piles(:plans_to_rule_the_world).unshare_with(users(:josh_vera))
+        
+        piles(:step_1_the_girl).should_not be_shared
       end
     end
     
