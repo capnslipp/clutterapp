@@ -107,17 +107,25 @@
 }
 
 .time.prop {
-	color: <%= text_color.with(:a => 0.75).to_s(:css_rgba) %>;
+	color: <%= text_color.with(:a => 0.875).to_s(:css_rgba) %>;
 	
 	display: inline;
+	
+	vertical-align: baseline;
+	text-align: center;
 	
 	padding: 0 2px;
 	/*background: <%= bright_bg_color %>;*/
 }
-.time.prop, .time.prop input { font: 13px Times, 'Times New Roman', serif; }
-.time.prop.badge { /*float: left;*/ }
-.show.time.prop {
-	border: none;
+.time.prop, .time.prop input { font: bold 11px/13px Times, 'Times New Roman', serif; }
+.time.prop.badge {
+	display: inline-block;
+	
+	background: <%= bright_bg_color %>;
+	border-color: <%= generic_border_color.to_s(:css_rgba) %>;
+	padding: 0 4px;
+	
+	<%= border_radius_decl('8px') %>
 }
 
 .show.pile_ref.prop { margin-top: 2px; }
