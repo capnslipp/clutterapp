@@ -12,9 +12,11 @@ class NodesController < ApplicationController
   before_filter :be_logged_in
   before_filter :have_owner, :have_pile
   before_filter :have_modify_access
+  before_filter :have_access, :only => [:sub_pile]
+  before_filter :have_modify_access, :except => [:sub_pile]
   
   
-  # PUT /items/1/update_check_prop_checked
+  # PUT /nodes/1/update_check_prop_checked
   def update_check_prop_checked
     logger.prefixed 'update_check_prop_checked', :light_green, 'params: ' + params.inspect
     @node = active_pile.nodes.find(params[:id], :include => :prop)
@@ -28,7 +30,7 @@ class NodesController < ApplicationController
   end
   
   
-  # PUT /items/1/update_check_prop_checked
+  # PUT /nodes/1/sub_pile
   def sub_pile
     logger.prefixed 'sub_pile', :light_green, 'params: ' + params.inspect
     @node = active_pile.nodes.find(params[:id], :include => {:prop => :ref_pile})
