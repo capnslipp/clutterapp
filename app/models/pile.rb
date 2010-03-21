@@ -22,7 +22,7 @@ class Pile < ActiveRecord::Base
     { :joins => :shares, :conditions => {:piles => {:owner_id => owner_user.id}} }
   }
   
-  # helpers for the owner's view
+  # helpers for the sharing settings on this Pile (primarily for the owner)
   
   def shared?
     shares.exists?
@@ -36,22 +36,28 @@ class Pile < ActiveRecord::Base
     specific_user_shares.exists?
   end
   
-  # helpers for permission determination
+  # helpers for permission determination, whether effective or explicitly set
   
   def accessible_publicly?
-    public_shares.exists?
+    public_shares.exists? ||
+      (parent.accessible_publicly? if parent)
   end
   
   def modifiable_publicly?
-    public_shares.exists?(:modifiable => true)
+    public_shares.exists?(:modifiable => true) ||
+      (parent.modifiable_publicly? if parent)
   end
   
   def accessible_by_user?(user)
-    user == owner || specific_user_shares.exists?(:sharee_id => user.id)
+    user == owner ||
+      specific_user_shares.exists?(:sharee_id => user.id) ||
+      (parent.accessible_by_user?(user) if parent)
   end
   
   def modifiable_by_user?(user)
-    user == owner || specific_user_shares.exists?(:sharee_id => user.id, :modifiable => true)
+    user == owner ||
+      specific_user_shares.exists?(:sharee_id => user.id, :modifiable => true) ||
+      (parent.modifiable_by_user?(user) if parent)
   end
   
   
