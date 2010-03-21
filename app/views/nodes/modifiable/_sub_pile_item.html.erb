@@ -5,9 +5,9 @@
 			
 			<%- cache ({:node_section => sub_pile.root_node.id}.to_json) do -%>
 				<% content_tag_for :section, sub_pile.root_node, :class => "sub pile cont expanded root", :'oc:nodes-url' => path_for([sub_pile.owner, sub_pile, :nodes]) do %>
-					<%= render :partial => 'nodes/show_body', :locals => {:node => sub_pile_item} %>
+					<%= render_subscoped :modifiable, :partial => 'nodes/show_body', :locals => {:node => sub_pile_item} %>
 					<ul class="item-list">
-						<%= render :partial => 'nodes/list_items', :locals => {:item => sub_pile.root_node} %>
+						<%= render_subscoped :modifiable, :partial => 'nodes/list_items', :locals => {:item => sub_pile.root_node} %>
 					</ul>
 				<% end %>
 			<%- end -%>
@@ -15,7 +15,7 @@
 		<%- else -%>
 			
 			<% content_tag_for :section, sub_pile.root_node, :class => "sub pile cont collapsed root", :'oc:nodes-url' => path_for([sub_pile.owner, sub_pile, :nodes]) do %>
-				<%= render :partial => 'nodes/show_body', :locals => {:node => sub_pile_item} %>
+				<%= render_subscoped :modifiable, :partial => 'nodes/show_body', :locals => {:node => sub_pile_item} %>
 			<% end %>
 			
 		<%- end -%>

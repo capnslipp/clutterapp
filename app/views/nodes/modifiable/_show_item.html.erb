@@ -2,10 +2,10 @@
 	<% content_tag_for :li, item, :class => "show item", :'oc:url' => path_for([item.pile.owner, item.pile, item]) do %>
 		<div class="cont">
 			
-			<%= render :partial => 'nodes/show_body', :locals => {:node => item} %>
+			<%= render_subscoped :modifiable, :partial => 'nodes/show_body', :locals => {:node => item} %>
 			
 			<ul class="item-list">
-				<%= render :partial => 'nodes/list_items', :locals => {:item => item} %>
+				<%= render_subscoped :modifiable, :partial => 'nodes/list_items', :locals => {:item => item} %>
 			</ul>
 			
 		</div>
