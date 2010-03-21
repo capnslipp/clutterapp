@@ -40,8 +40,13 @@ module ApplicationHelper
     end
   end
   
-  # for rendering view partials in sub-directories, falling back to a "default" sub-directory
-  def render_subscoped(subscope, options = {})
+  
+  # for rendering view partials in sub-scope directories, remembering the current sub-scope (if not explicitly given), and falling back to a "default" sub-scope directory
+  def render_subscoped(options = {})
+    @subscope_stack ||= []
+    @subscope_stack.push(options[:subscope]) if options[:subscope]
+    raise ArgumentError.new("no subscopes present; make sure at least one is specified with options[:subscope] at the outer-most render_subscoped") if @subscope_stack.empty?
+    
     partial_path = options[:partial] || raise(ArgumentError.new(":partial option is required"))
     controller_path = /^([^\/]+)\//.match(partial_path)[1] if partial_path.include?('/')
     controller_path ||= self.is_a?(ActionController::Base) ? self.class.controller_path : controller.class.controller_path
@@ -49,7 +54,7 @@ module ApplicationHelper
     
     begin
       # first, try the specific sub-directory
-      specific_path = "#{controller_path}/#{subscope}/#{trimmed_path}"
+      specific_path = "#{controller_path}/#{@subscope_stack.last}/#{trimmed_path}"
       render options.merge({:partial => specific_path})
       
     rescue ActionView::MissingTemplate
@@ -63,6 +68,8 @@ module ApplicationHelper
         raise ActionView::MissingTemplate.new(view_paths, "('#{specific_path}' OR '#{fallback_path}')")
       end
     end
+  ensure
+    @subscope_stack.pop if options[:subscope]
   end
   
   
