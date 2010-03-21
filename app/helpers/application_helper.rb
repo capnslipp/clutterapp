@@ -54,7 +54,7 @@ module ApplicationHelper
     
     begin
       # first, try the specific sub-directory
-      specific_path = "#{controller_path}/#{@subscope_stack.last}/#{trimmed_path}"
+      specific_path = "#{controller_path}/#{current_subscope}/#{trimmed_path}"
       render options.merge({:partial => specific_path})
       
     rescue ActionView::MissingTemplate
@@ -70,6 +70,10 @@ module ApplicationHelper
     end
   ensure
     @subscope_stack.pop if options[:subscope]
+  end
+  
+  def current_subscope
+    @subscope_stack.last
   end
   
   def pile_subscope(pile, user = current_user)

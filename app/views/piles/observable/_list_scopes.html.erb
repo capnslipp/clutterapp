@@ -1,0 +1,19 @@
+<%- base_scope = nil unless defined?(base_scope) -%>
+<% pile.children.each do |sub_pile| %>
+	<li>
+		<div class="scope name <%= 'base' if sub_pile == base_scope %> <%= 'child' if pile == base_scope %>">
+			<span class="sym"><%# ∴ %>&there4;</span>
+			<%- if sub_pile == base_scope -%>
+				<span><%=h sub_pile.name%></span>
+			<%- else -%>
+				<%= link_to h(sub_pile.name), [sub_pile.owner, sub_pile] %>
+			<%- end -%>
+		</div>
+		
+		<%- if expand_to.call(sub_pile) -%>
+			<ul>
+				<%= render_subscoped :partial => 'list_scopes', :locals => { :pile => sub_pile, :expand_to => expand_to, :base_scope => base_scope } %>
+			</ul>
+		<%- end -%>
+	</li>
+<% end %>

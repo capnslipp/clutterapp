@@ -1,5 +1,5 @@
-<%- cache ({:node_item => item.id, :subscope => :modifiable}.to_json) do -%>
-	<% content_tag_for :li, item, :class => "show item #{current_subscope}", :'oc:url' => path_for([item.pile.owner, item.pile, item]) do %>
+<%- cache ({:node_item => item.id, :subscope => :observable}.to_json) do -%>
+	<% content_tag_for :li, item, :class => "show item #{current_subscope}" do %>
 		<div class="cont">
 			
 			<%= render_subscoped :partial => 'nodes/show_body', :locals => {:node => item} %>
