@@ -1,4 +1,6 @@
 class PilesController < ApplicationController
+  include ApplicationHelper
+  
   before_filter :no_cache
   before_filter :be_logged_in
   before_filter :have_owner
