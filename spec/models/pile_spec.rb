@@ -30,8 +30,8 @@ describe Pile do
     
     describe "a Pile publicly" do
       before(:each) do
-        piles(:plans_to_rule_the_world).shares.destroy
-        piles(:step_1_the_girl).shares.destroy
+        piles(:plans_to_rule_the_world).shares.destroy_all
+        piles(:step_1_the_girl).shares.destroy_all
       end
       
       it "should be non-modifiable, by default" do
@@ -70,8 +70,8 @@ describe Pile do
     
     describe "unsharing a publicly shared Pile" do
       before(:each) do
-        piles(:plans_to_rule_the_world).shares.destroy
-        piles(:step_1_the_girl).shares.destroy
+        piles(:plans_to_rule_the_world).shares.destroy_all
+        piles(:step_1_the_girl).shares.destroy_all
         piles(:plans_to_rule_the_world).share_publicly
       end
       
@@ -100,8 +100,8 @@ describe Pile do
     
     describe "a Pile with a specific User" do
       before(:each) do
-        piles(:plans_to_rule_the_world).shares.destroy
-        piles(:step_1_the_girl).shares.destroy
+        piles(:plans_to_rule_the_world).shares.destroy_all
+        piles(:step_1_the_girl).shares.destroy_all
       end
       
       it "should be non-modifiable, by default" do
@@ -140,8 +140,8 @@ describe Pile do
     
     describe "unsharing a Pile shared with a specific User" do
       before(:each) do
-        piles(:plans_to_rule_the_world).shares.destroy
-        piles(:step_1_the_girl).shares.destroy
+        piles(:plans_to_rule_the_world).shares.destroy_all
+        piles(:step_1_the_girl).shares.destroy_all
         piles(:plans_to_rule_the_world).share_with(users(:josh_vera))
       end
       
