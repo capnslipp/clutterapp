@@ -5,17 +5,17 @@ class PilesDataset < Dataset::Base
     name_pile :slippys,
       :for => users(:slippy_douglas).root_pile
     
-    create_pile :plans_to_rule_the_world, :with => {
+    create_pile :plans, :with => {
       :name => 'Plans to Rule the World',
       :owner => users(:slippy_douglas)
     }
     
-    create_pile :step_1_the_girl, :with => {
+    create_pile :step_1, :with => {
       :name => 'Step 1: The Girl',
       :owner => users(:slippy_douglas)
     }
     
-    create_pile :every_day_responsibilities, :with => {
+    create_pile :every_day, :with => {
       :name => 'Every Day Responsibilities',
       :owner => users(:slippy_douglas)
     }

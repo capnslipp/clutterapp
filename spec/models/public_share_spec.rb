@@ -5,7 +5,7 @@ describe PublicShare do
   
   
   it "should create a new instance given valid attributes" do
-    @share = described_class.create! :pile => piles(:plans_to_rule_the_world)
+    @share = described_class.create! :pile => piles(:plans)
   end
   
   it "should not create a new instance given invalid attributes" do
@@ -18,10 +18,10 @@ describe PublicShare do
   
   it "should not allow more than one per Pile" do
     # first should succeed
-    @share = described_class.create! :pile => piles(:plans_to_rule_the_world)
+    @share = described_class.create! :pile => piles(:plans)
     
     # second should fail
-    @share = described_class.create :pile => piles(:plans_to_rule_the_world)
+    @share = described_class.create :pile => piles(:plans)
     lambda { @share.save! }.should raise_error(ActiveRecord::ActiveRecordError)
   end
   
