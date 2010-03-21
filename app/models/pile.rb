@@ -41,6 +41,18 @@ class Pile < ActiveRecord::Base
   #   observable: can view it in a view-only state; mutually exclusive with modifiable
   #   modifiable: can modify and change it; mutually exclusive with observable
   
+  def accessible?(user_or_nil)
+    accessible_publicly? || (accessible_by_user?(user_or_nil) if user_or_nil)
+  end
+  
+  def observable?(user_or_nil)
+    observable_publicly? || (observable_by_user?(user_or_nil) if user_or_nil)
+  end
+  
+  def modifiable?(user_or_nil)
+    modifiable_publicly? || (modifiable_by_user?(user_or_nil) if user_or_nil)
+  end
+  
   def accessible_publicly?
     public_shares.exists? ||
       (parent.accessible_publicly? if parent)
