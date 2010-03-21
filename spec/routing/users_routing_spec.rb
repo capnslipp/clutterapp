@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe UsersController do
   include ActionController::PolymorphicRoutes
-  dataset :users
+  dataset :users, :piles, :nodes
   
   
   before(:each) do

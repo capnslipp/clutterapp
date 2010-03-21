@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "/piles/show.html.erb" do
   include PilesHelper
-  dataset :users
+  dataset :users, :piles, :nodes
   
   
   before(:each) do

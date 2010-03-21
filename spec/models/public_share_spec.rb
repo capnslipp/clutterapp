@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe PublicShare do
-  dataset :users, :piles
+  dataset :users, :piles, :nodes
   
   
   it "should create a new instance given valid attributes" do

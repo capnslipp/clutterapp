@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe User do
-  dataset :users, :piles
+  dataset :users, :piles, :nodes
   
   
   before(:each) do

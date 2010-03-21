@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Pile do
-  dataset :users, :piles
+  dataset :users, :piles, :nodes
   
   
   it "should create 2 Nodes, when creating 2 Users" do
