@@ -40,6 +40,7 @@ describe Pile do
         piles(:plans_to_rule_the_world).should be_shared
         piles(:plans_to_rule_the_world).should be_shared_publicly
         piles(:plans_to_rule_the_world).should be_accessible_publicly
+        piles(:plans_to_rule_the_world).should be_observable_publicly
         piles(:plans_to_rule_the_world).should_not be_modifiable_publicly
       end
       
@@ -49,6 +50,7 @@ describe Pile do
         piles(:plans_to_rule_the_world).should be_shared
         piles(:plans_to_rule_the_world).should be_shared_publicly
         piles(:plans_to_rule_the_world).should be_accessible_publicly
+        piles(:plans_to_rule_the_world).should_not be_observable_publicly
         piles(:plans_to_rule_the_world).should be_modifiable_publicly
       end
       
@@ -80,6 +82,9 @@ describe Pile do
         
         piles(:plans_to_rule_the_world).should_not be_shared
         piles(:plans_to_rule_the_world).should_not be_shared_publicly
+        piles(:plans_to_rule_the_world).should_not be_accessible_publicly
+        piles(:plans_to_rule_the_world).should_not be_observable_publicly
+        piles(:plans_to_rule_the_world).should_not be_modifiable_publicly
       end
       
       it "should effectively unshare all sub-Piles (that don't have explicit sharing settings)" do
@@ -110,6 +115,7 @@ describe Pile do
         piles(:plans_to_rule_the_world).should be_shared
         piles(:plans_to_rule_the_world).should be_shared_with_specific_users
         piles(:plans_to_rule_the_world).should be_accessible_by_user(users(:josh_vera))
+        piles(:plans_to_rule_the_world).should be_observable_by_user(users(:josh_vera))
         piles(:plans_to_rule_the_world).should_not be_modifiable_by_user(users(:josh_vera))
       end
       
@@ -119,6 +125,7 @@ describe Pile do
         piles(:plans_to_rule_the_world).should be_shared
         piles(:plans_to_rule_the_world).should be_shared_with_specific_users
         piles(:plans_to_rule_the_world).should be_accessible_by_user(users(:josh_vera))
+        piles(:plans_to_rule_the_world).should_not be_observable_by_user(users(:josh_vera))
         piles(:plans_to_rule_the_world).should be_modifiable_by_user(users(:josh_vera))
       end
       
@@ -151,6 +158,7 @@ describe Pile do
         piles(:plans_to_rule_the_world).should_not be_shared
         piles(:plans_to_rule_the_world).should_not be_shared_with_specific_users
         piles(:plans_to_rule_the_world).should_not be_accessible_by_user(users(:josh_vera))
+        piles(:plans_to_rule_the_world).should_not be_observable_by_user(users(:josh_vera))
         piles(:plans_to_rule_the_world).should_not be_modifiable_by_user(users(:josh_vera))
       end
       

@@ -37,10 +37,18 @@ class Pile < ActiveRecord::Base
   end
   
   # helpers for permission determination, whether effective or explicitly set
+  #   accessible: can access it in any way
+  #   observable: can view it in a view-only state; mutually exclusive with modifiable
+  #   modifiable: can modify and change it; mutually exclusive with observable
   
   def accessible_publicly?
     public_shares.exists? ||
       (parent.accessible_publicly? if parent)
+  end
+  
+  def observable_publicly?
+    public_shares.exists?(:modifiable => false) ||
+      (parent.modifiable_publicly? if parent)
   end
   
   def modifiable_publicly?
@@ -51,6 +59,12 @@ class Pile < ActiveRecord::Base
   def accessible_by_user?(user)
     user == owner ||
       specific_user_shares.exists?(:sharee_id => user.id) ||
+      (parent.accessible_by_user?(user) if parent)
+  end
+  
+  def observable_by_user?(user)
+    user == owner ||
+      specific_user_shares.exists?(:sharee_id => user.id, :modifiable => false) ||
       (parent.accessible_by_user?(user) if parent)
   end
   
