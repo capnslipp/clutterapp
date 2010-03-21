@@ -83,7 +83,7 @@ describe Pile do
       end
       
       it "should effectively unshare all sub-Piles (that don't have explicit sharing settings)" do
-        piles(:plans_to_rule_the_world).share_publicly
+        piles(:plans_to_rule_the_world).unshare_publicly
         
         piles(:plans_to_rule_the_world).should_not be_accessible_publicly
         piles(:step_1_the_girl).should_not be_accessible_publicly
