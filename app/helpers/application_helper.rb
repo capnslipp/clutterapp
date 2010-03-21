@@ -77,7 +77,17 @@ module ApplicationHelper
   end
   
   def pile_subscope(pile, user = current_user)
-    pile.modifiable?(user) ? :modifiable : :observable
+    # first, check for direct modifiability/observability
+    if pile.modifiable?(user, false)
+      :modifiable
+    elsif pile.observable?(user, false)
+      :observable
+    # if neither of those were set, check for inherited modifiability/observability
+    elsif pile.modifiable?(user)
+      :modifiable
+    elsif pile.observable?(user)
+      :observable
+    end
   end
   
   

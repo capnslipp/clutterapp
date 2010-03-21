@@ -9,7 +9,7 @@
 	</div>
 	
 	<ul>
-		<%= render :partial => 'piles/list_scopes', :locals => { :pile => @root_pile, :expand_to => lambda {|p| p == @root_pile } } %>
+		<%= render_subscoped :partial => 'piles/list_scopes', :locals => { :pile => @root_pile, :expand_to => lambda {|p| p == @root_pile } }, :subscope => pile_subscope(@root_pile) %>
 	</ul>
 </div>
 
