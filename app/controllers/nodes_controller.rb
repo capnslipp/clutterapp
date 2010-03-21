@@ -39,7 +39,7 @@ class NodesController < ApplicationController
     expire_cache_for(@node)
     
     if @node.prop.ref_pile.expanded? # if we just expanded it
-      render_subscoped :partial => 'list_items', :locals => {:item => @node.prop.ref_pile.root_node}, :subscope => :modifiable
+      render_subscoped :partial => 'list_items', :locals => {:item => @node.prop.ref_pile.root_node}, :subscope => pile_subscope(@node.prop.ref_pile)
     else # if we just collapsed it
       render :nothing => true, :status => :accepted
     end

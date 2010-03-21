@@ -35,7 +35,7 @@
 					<div class="body">
 						<div class="back"></div>
 						
-						<%= render_subscoped :partial => 'nodes/action_stub', :subscope => :modifiable %>
+						<%= render_subscoped :partial => 'nodes/action_stub', :subscope => pile_subscope(@pile) %>
 						
 						<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 							<% unless @pile.root? %><a href="<%=path_for [@owner, @owner.root_pile]%>" class="owner pile name link"><%= @owner.name %> <span class="sym"><%# » %>&raquo;</span></a><% end %>
@@ -47,10 +47,10 @@
 					</div>
 					
 					<ul class="item-list">
-						<%= render_subscoped :partial => 'nodes/list_items', :locals => {:item => @pile.root_node}, :subscope => :modifiable %>
+						<%= render_subscoped :partial => 'nodes/list_items', :locals => {:item => @pile.root_node}, :subscope => pile_subscope(@pile) %>
 					</ul>
 					
-					<%= render_subscoped :partial => 'nodes/action_bar', :subscope => :modifiable %>
+					<%= render_subscoped :partial => 'nodes/action_bar', :subscope => pile_subscope(@pile) %>
 					
 				</section>
 			<%- end -%>

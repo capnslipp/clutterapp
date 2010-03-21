@@ -72,5 +72,9 @@ module ApplicationHelper
     @subscope_stack.pop if options[:subscope]
   end
   
+  def pile_subscope(pile, user = current_user)
+    pile.modifiable?(user) ? :modifiable : :observable
+  end
+  
   
 end
