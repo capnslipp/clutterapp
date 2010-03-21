@@ -75,7 +75,7 @@ class Pile < ActiveRecord::Base
   end
   
   def parent
-    self.pile_ref_prop && self.pile_ref_prop.node.pile
+    self.pile_ref_prop.node.pile if self.pile_ref_prop
   end
   
   def children
@@ -103,8 +103,7 @@ class Pile < ActiveRecord::Base
   end
   
   def unshare_publicly
-    # first, since there should only be one PublicShare for this Pile
-    public_shares.first.destroy
+    public_shares.destroy_all
   end
   
   SHARE_WITH_DEFAULT_OPTIONS = { :modifiable => false }
@@ -114,8 +113,7 @@ class Pile < ActiveRecord::Base
   end
   
   def unshare_with(sharee)
-    # first, since there should only be one SpecificUserShare for this Pile and sharee
-    specific_user_shares(:conditions => {:sharee => sharee}).first.destroy
+    su_shares = specific_user_shares(:conditions => {:sharee => sharee}).destroy_all
   end
   
   
