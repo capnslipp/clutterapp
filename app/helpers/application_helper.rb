@@ -42,9 +42,10 @@ module ApplicationHelper
   
   
   # for rendering view partials in sub-scope directories, remembering the current sub-scope (if not explicitly given), and falling back to a "default" sub-scope directory
+  # @TODO: refactor this as an alias_method_chain of ActionController's and ActionView's render methods
   def render_subscoped(options = {})
     @subscope_stack ||= []
-    @subscope_stack.push(options[:subscope]) if options[:subscope]
+    @subscope_stack.push(options[:subscope]) if options.has_key?(:subscope)
     raise ArgumentError.new("no subscopes present; make sure at least one is specified with options[:subscope] at the outer-most render_subscoped") if @subscope_stack.empty?
     
     partial_path = options[:partial] || raise(ArgumentError.new(":partial option is required"))
@@ -69,7 +70,7 @@ module ApplicationHelper
       end
     end
   ensure
-    @subscope_stack.pop if options[:subscope]
+    @subscope_stack.pop if options.has_key?(:subscope)
   end
   
   def current_subscope
@@ -87,6 +88,8 @@ module ApplicationHelper
       :modifiable
     elsif pile.observable?(user)
       :observable
+    else
+      raise ArgumentError.new("pile ##{pile.id} is not accessible by user ##{user.id}")
     end
   end
   
