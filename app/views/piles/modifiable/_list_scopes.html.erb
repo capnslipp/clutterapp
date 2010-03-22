@@ -1,14 +1,16 @@
 <%- base_scope = nil unless defined?(base_scope) -%>
 <% pile.children.each do |sub_pile| %>
 	<li>
-		<div class="scope name <%= 'base' if sub_pile == base_scope %> <%= 'child' if pile == base_scope %>">
-			<span class="sym"><%# ∴ %>&there4;</span>
-			<%- if sub_pile == base_scope -%>
-				<span><%=h sub_pile.name%></span>
-			<%- else -%>
-				<%= link_to h(sub_pile.name), [sub_pile.owner, sub_pile] %>
-			<%- end -%>
-		</div>
+		<%- if sub_pile.accessible?(current_user) -%>
+			<div class="scope name <%= 'base' if sub_pile == base_scope %> <%= 'child' if pile == base_scope %>">
+				<span class="sym"><%# ∴ %>&there4;</span>
+				<%- if sub_pile == base_scope -%>
+					<span><%=h sub_pile.name%></span>
+				<%- else -%>
+					<%= link_to h(sub_pile.name), [sub_pile.owner, sub_pile] %>
+				<%- end -%>
+			</div>
+		<%- end -%>
 		
 		<%- if expand_to.call(sub_pile) -%>
 			<ul>
