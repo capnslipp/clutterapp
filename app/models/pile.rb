@@ -60,7 +60,7 @@ class Pile < ActiveRecord::Base
   
   def observable_publicly?(inheriting = true)
     public_shares.exists?(:modifiable => false) ||
-      (parent.modifiable_publicly? if inheriting && parent)
+      (parent.observable_publicly? if inheriting && parent)
   end
   
   def modifiable_publicly?(inheriting = true)
@@ -77,7 +77,7 @@ class Pile < ActiveRecord::Base
   def observable_by_user?(user, inheriting = true)
     user == owner ||
       specific_user_shares.exists?(:sharee_id => user.id, :modifiable => false) ||
-      (parent.accessible_by_user?(user) if inheriting && parent)
+      (parent.observable_by_user?(user) if inheriting && parent)
   end
   
   def modifiable_by_user?(user, inheriting = true)
