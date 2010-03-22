@@ -121,9 +121,9 @@ function collapseActionBar() {
 }
 
 $(function() {
-	$('.item > .base.pile > .body > .header').live('click', expand);
-	$('.item > .sub.pile > .body > .cont').live('click', expand);
-	$('.item > .cont > .body > .cont').live('click', expand);
+	$('.modifiable.item > .base.pile > .body > .header').live('click', expand);
+	$('.modifiable.item > .sub.pile > .body > .cont').live('click', expand);
+	$('.modifiable.item > .cont > .body > .cont').live('click', expand);
 	
 	function expand(event) {
 		// don't do anything if this an actual link
@@ -135,9 +135,9 @@ $(function() {
 });
 
 $(function() {
-	$('.item > .base.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
-	$('.item > .sub.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
-	$('.item > .cont > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.modifiable.item > .base.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.modifiable.item > .sub.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.modifiable.item > .cont > .body > .action.stub .widget.collapsed a').live('click', expand);
 	
 	function expand() {
 		expandActionBar($(this).findItem()); return false;
@@ -506,7 +506,7 @@ function itemEdit(link) {
 }
 
 $(function() {
-	$('.item > .cont > .show.body > .cont, .item > .pile > .show.body > .cont').live('dblclick', function() {
+	$('.modifiable.item > .cont > .show.body > .cont, .modifiable.item > .pile > .show.body > .cont').live('dblclick', function() {
 		itemEdit(this); return false;
 	});
 	$('#action-bar > .buttons > a.edit').click(function() {
@@ -969,7 +969,7 @@ $(function() {
 });
 
 jQuery.fn.applyReparentDroppability = function() {
-	$(this).search('.item > .cont > .show.body, .item > .pile > .body').activateReparentDroppable();
+	$(this).search('.modifiable.item > .cont > .show.body, .item > .pile > .body').activateReparentDroppable();
 	return this;
 }
 
@@ -992,7 +992,7 @@ jQuery.fn.deactivateReparentDroppable = function() {
 
 jQuery.fn.setupReparentDroppable = function() {
 	this.droppable({
-		accept: 'li.item',
+		accept: 'li.modifiable.item',
 		hoverClass: 'active',
 		scope: 'item-reparent',
 		tolerance: 'pointer',

@@ -12,9 +12,11 @@ class NodesController < ApplicationController
   before_filter :be_logged_in
   before_filter :have_owner, :have_pile
   before_filter :have_modify_access
+  before_filter :have_access, :only => [:sub_pile]
+  before_filter :have_modify_access, :except => [:sub_pile]
   
   
-  # PUT /items/1/update_check_prop_checked
+  # PUT /nodes/1/update_check_prop_checked
   def update_check_prop_checked
     logger.prefixed 'update_check_prop_checked', :light_green, 'params: ' + params.inspect
     @node = active_pile.nodes.find(params[:id], :include => :prop)
@@ -28,7 +30,7 @@ class NodesController < ApplicationController
   end
   
   
-  # PUT /items/1/update_check_prop_checked
+  # PUT /nodes/1/sub_pile
   def sub_pile
     logger.prefixed 'sub_pile', :light_green, 'params: ' + params.inspect
     @node = active_pile.nodes.find(params[:id], :include => {:prop => :ref_pile})
@@ -39,7 +41,7 @@ class NodesController < ApplicationController
     expire_cache_for(@node)
     
     if @node.prop.ref_pile.expanded? # if we just expanded it
-      render :partial => 'list_items', :locals => {:item => @node.prop.ref_pile.root_node}
+      render_subscoped :partial => 'list_items', :locals => {:item => @node.prop.ref_pile.root_node}, :subscope => pile_subscope(@node.prop.ref_pile)
     else # if we just collapsed it
       render :nothing => true, :status => :accepted
     end
@@ -86,7 +88,7 @@ class NodesController < ApplicationController
     end
     
     
-    render :partial => 'new_item', :locals => {:item => @node}
+    render_subscoped :partial => 'new_item', :locals => {:item => @node}, :subscope => :modifiable
   end
   
   
@@ -132,9 +134,9 @@ class NodesController < ApplicationController
       expire_cache_for(@node)
       
       if @node.prop.is_a? PileRefProp
-        render :partial => 'sub_pile_item', :object => @node
+        render_subscoped :partial => 'sub_pile_item', :object => @node, :subscope => :modifiable
       else
-        render :partial => 'show_item', :locals => {:item => @node}
+        render_subscoped :partial => 'show_item', :locals => {:item => @node}, :subscope => :modifiable
       end
     else
       render :nothing => true, :status => :bad_request
@@ -160,7 +162,7 @@ class NodesController < ApplicationController
     end
     
     
-    render :partial => 'edit_body', :locals => {:node => @node}
+    render_subscoped :partial => 'edit_body', :locals => {:node => @node}, :subscope => :modifiable
   end
   
   
@@ -174,9 +176,9 @@ class NodesController < ApplicationController
     if @node.save
       expire_cache_for(@node)
       expire_cache_for(@node.prop.ref_pile.root_node) if @node.prop.is_a? PileRefProp
-      render :partial => 'show_body', :locals => {:node => @node}
+      render_subscoped :partial => 'show_body', :locals => {:node => @node}, :subscope => :modifiable
     else
-      render :nothing => true, :status => :bad_request
+      render_subscoped :nothing => true, :status => :bad_request, :subscope => :modifiable
     end
   end
   
@@ -241,7 +243,7 @@ class NodesController < ApplicationController
     
     expire_cache_for(@target) # new parent
     
-    render :partial => 'list_items', :locals => {:item => @target}
+    render_subscoped :partial => 'list_items', :locals => {:item => @target}, :subscope => :modifiable
   end
   
   

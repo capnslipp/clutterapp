@@ -1,0 +1,23 @@
+<%- cache ({:node_item => sub_pile_item.id, :subscope => current_subscope}.to_json) do -%>
+	<% content_tag_for :li, sub_pile_item, :class => "show item #{current_subscope}", :'oc:url' => path_for([sub_pile_item.pile.owner, sub_pile_item.pile, sub_pile_item]) do -%>
+		<%- sub_pile = sub_pile_item.prop.ref_pile -%>
+		<%- if sub_pile.expanded? -%>
+			
+			<%- cache ({:node_section => sub_pile.root_node.id, :subscope => current_subscope}.to_json) do -%>
+				<% content_tag_for :section, sub_pile.root_node, :class => "sub pile cont expanded root", :'oc:nodes-url' => path_for([sub_pile.owner, sub_pile, :nodes]) do %>
+					<%= render_subscoped :partial => 'nodes/show_body', :locals => {:node => sub_pile_item} %>
+					<ul class="item-list">
+						<%= render_subscoped :partial => 'nodes/list_items', :locals => {:item => sub_pile.root_node} %>
+					</ul>
+				<% end %>
+			<%- end -%>
+			
+		<%- else -%>
+			
+			<% content_tag_for :section, sub_pile.root_node, :class => "sub pile cont collapsed root", :'oc:nodes-url' => path_for([sub_pile.owner, sub_pile, :nodes]) do %>
+				<%= render_subscoped :partial => 'nodes/show_body', :locals => {:node => sub_pile_item} %>
+			<% end %>
+			
+		<%- end -%>
+	<% end %>
+<%- end -%>

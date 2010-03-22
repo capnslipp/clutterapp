@@ -1,0 +1,3 @@
+<div class="show check prop <%= 'badge' if node.prop.badged? -%>">
+	<%= check_box_tag "check_prop_#{node.prop.id}", '1', node.prop.checked?, :disabled => true %>
+</div>

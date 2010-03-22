@@ -41,4 +41,57 @@ module ApplicationHelper
   end
   
   
+  # for rendering view partials in sub-scope directories, remembering the current sub-scope (if not explicitly given), and falling back to a "default" sub-scope directory
+  # @TODO: refactor this as an alias_method_chain of ActionController's and ActionView's render methods
+  def render_subscoped(options = {})
+    @subscope_stack ||= []
+    @subscope_stack.push(options[:subscope]) if options.has_key?(:subscope)
+    raise ArgumentError.new("no subscopes present; make sure at least one is specified with options[:subscope] at the outer-most render_subscoped") if @subscope_stack.empty?
+    
+    partial_path = options[:partial] || raise(ArgumentError.new(":partial option is required"))
+    controller_path = /^([^\/]+)\//.match(partial_path)[1] if partial_path.include?('/')
+    controller_path ||= self.is_a?(ActionController::Base) ? self.class.controller_path : controller.class.controller_path
+    trimmed_path = partial_path.sub(/^#{controller_path}\//, '')
+    
+    begin
+      # first, try the specific sub-directory
+      specific_path = "#{controller_path}/#{current_subscope}/#{trimmed_path}"
+      render options.merge({:partial => specific_path})
+      
+    rescue ActionView::MissingTemplate
+      begin
+        # next, try the fallback sub-directory
+        fallback_path = "#{controller_path}/default/#{trimmed_path}"
+        render options.merge({:partial => fallback_path})
+        
+      rescue ActionView::MissingTemplate
+        # last, spit back a custom MissingTemplate message
+        raise ActionView::MissingTemplate.new(view_paths, "('#{specific_path}' OR '#{fallback_path}')")
+      end
+    end
+  ensure
+    @subscope_stack.pop if options.has_key?(:subscope)
+  end
+  
+  def current_subscope
+    @subscope_stack.last
+  end
+  
+  def pile_subscope(pile, user = current_user)
+    # first, check for direct modifiability/observability
+    if pile.modifiable?(user, false)
+      :modifiable
+    elsif pile.observable?(user, false)
+      :observable
+    # if neither of those were set, check for inherited modifiability/observability
+    elsif pile.modifiable?(user)
+      :modifiable
+    elsif pile.observable?(user)
+      :observable
+    else
+      raise ArgumentError.new("pile ##{pile.id} is not accessible by user ##{user.id}")
+    end
+  end
+  
+  
 end

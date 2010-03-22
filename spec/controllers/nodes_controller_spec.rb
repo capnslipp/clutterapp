@@ -76,9 +76,9 @@ describe NodesController do
       it "given a request for a new direct sub-item of a sub-pile" do
         xhr :get, :new,
           :user_id => users(:slippy_douglas).to_param,
-          :pile_id => piles(:every_day_responsibilities).to_param,
+          :pile_id => piles(:every_day).to_param,
           :node => {
-            :parent_id => piles(:every_day_responsibilities).root_node.to_param,
+            :parent_id => piles(:every_day).root_node.to_param,
             :prop_type => 'text'
           }
         
@@ -88,9 +88,9 @@ describe NodesController do
       it "given a request for a new sub-sub-item of a sub-pile" do
         xhr :get, :new,
           :user_id => users(:slippy_douglas).to_param,
-          :pile_id => piles(:every_day_responsibilities).to_param,
+          :pile_id => piles(:every_day).to_param,
           :node => {
-            :parent_id => nodes(:every_day_responsibilities_one).to_param,
+            :parent_id => nodes(:every_day_one).to_param,
             :prop_type => 'text'
           }
         
@@ -100,9 +100,9 @@ describe NodesController do
       it "given a request for a new direct sub-pile of a sub-pile" do
         xhr :get, :new,
           :user_id => users(:slippy_douglas).to_param,
-          :pile_id => piles(:every_day_responsibilities).to_param,
+          :pile_id => piles(:every_day).to_param,
           :node => {
-            :parent_id => piles(:every_day_responsibilities).root_node.to_param,
+            :parent_id => piles(:every_day).root_node.to_param,
             :prop_type => 'pile_ref'
           }
         
@@ -144,7 +144,7 @@ describe NodesController do
         end
         
         @n = nodes(:a_todo_node)
-        @tn = piles(:plans_to_rule_the_world).root_node
+        @tn = piles(:plans).root_node
         # store off the value of the moving node so we can be sure we found it the request
         @n_value = @n.prop.value
         
@@ -185,26 +185,26 @@ describe NodesController do
       describe "should work" do
         it "moving a 1st-level item to the 1st level of a sub-Pile" do
           @n = nodes(:a_plain_text_node)
-          @tn = piles(:plans_to_rule_the_world).root_node
+          @tn = piles(:plans).root_node
         end
         
         it "moving a descendent item to the 1st level of a sub-Pile" do
           @n = nodes(:a_sub_sub_todo_node)
-          @tn = piles(:plans_to_rule_the_world).root_node
+          @tn = piles(:plans).root_node
         end
         
         it "moving a the 1st level sub-Pile to the 1st level of a sub-Pile" do
           @n = nodes(:resposiblities_sub_pile_ref_node)
-          @tn = piles(:plans_to_rule_the_world).root_node
+          @tn = piles(:plans).root_node
         end
         
         it "moving a 1st-level item to the 1st level of a parent Pile" do
-          @n = nodes(:plans_to_rule_the_world_desc_node)
+          @n = nodes(:plans_desc_node)
           @tn = piles(:slippys).root_node
         end
         
         it "moving a 1st-level item to descendent item of a parent Pile" do
-          @n = nodes(:plans_to_rule_the_world_desc_node)
+          @n = nodes(:plans_desc_node)
           @tn = nodes(:a_sub_sub_todo_node)
         end
         

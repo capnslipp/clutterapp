@@ -18,12 +18,12 @@ class NodesDataset < Dataset::Base
     
     create_node :plans_sub_pile_ref_node, :with => {
       :parent => piles(:slippys).root_node,
-      :prop => PileRefProp.new(:value => piles(:plans_to_rule_the_world))
+      :prop => PileRefProp.new(:value => piles(:plans))
     }
     
     create_node :resposiblities_sub_pile_ref_node, :with => {
       :parent => piles(:slippys).root_node,
-      :prop => PileRefProp.new(:value => piles(:every_day_responsibilities))
+      :prop => PileRefProp.new(:value => piles(:every_day))
     }
     
     create_node :a_todo_node, :with => {
@@ -146,27 +146,27 @@ EOS
   end
   
   def set_up_plans_to_rule_the_world_pile
-    create_node :plans_to_rule_the_world_desc_node, :with => {
-      :parent => piles(:plans_to_rule_the_world).root_node,
+    create_node :plans_desc_node, :with => {
+      :parent => piles(:plans).root_node,
       :prop => TextProp.new(:value => "multi-step process including figuring out people, finding an impossible niche only I can fill, and strapping on tight")
     }
     
     create_node :step_1_sub_pile_ref_node, :with => {
-      :parent => piles(:plans_to_rule_the_world).root_node,
-      :prop => PileRefProp.new(:value => piles(:step_1_the_girl))
+      :parent => piles(:plans).root_node,
+      :prop => PileRefProp.new(:value => piles(:step_1))
     }
   end
   
   def set_up_step_1_the_girl_pile
-    create_node :step_1_the_girl_desc_node, :with => {
-      :parent => piles(:step_1_the_girl).root_node,
+    create_node :step_1_desc_node, :with => {
+      :parent => piles(:step_1).root_node,
       :prop => TextProp.new(:value => "first is needed a girl like no other, for support, purpose, drive, motivation, sanity, and other corrective measures and emotional satisfaction")
     }
   end
   
   def set_up_every_day_responsibilities_pile
-    create_node :every_day_responsibilities_one, :with => {
-      :parent => piles(:every_day_responsibilities).root_node,
+    create_node :every_day_one, :with => {
+      :parent => piles(:every_day).root_node,
       :prop => TextProp.new(:value => "make moniez"),
       :children => [
         Node.new(:prop => CheckProp.new)
