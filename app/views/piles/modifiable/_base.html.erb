@@ -1,4 +1,4 @@
-<% content_tag_for :div, @pile.root_node, :class => "base root item" do -%>
+<% content_tag_for :div, @pile.root_node, :class => "base root item #{current_subscope}" do -%>
 	<%- cache ({:base_node_section => @pile.root_node.id, :subscope => :modifiable}.to_json) do -%>
 		<section class="base pile cont" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
 			
