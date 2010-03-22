@@ -96,7 +96,7 @@ protected
       return # success
     else
       flash[:warning] = "You do not have access to “#{active_owner_id}”'s pile “#{active_pile_id}”."
-      redirect_to current_user
+      redirect_to current_user || home_url
     end
   end
   
@@ -105,7 +105,7 @@ protected
       return # success
     else
       flash[:warning] = "You do not have modify access for “#{active_owner_id}”'s pile “#{active_pile_id}”."
-      redirect_to current_user
+      redirect_to current_user || home_url
     end
   end
   
