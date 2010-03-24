@@ -13,4 +13,12 @@ class SpecificUserShare < Share
     errors.add_to_base("sharing a Pile with its owner is pointless and not allowed") unless pile && pile.owner != sharee
   end
   
+  def sharee_by_login
+    sharee.login
+  end
+  
+  def sharee_by_login=(login)
+    sharee = User.find_by_login(login)
+  end
+  
 end

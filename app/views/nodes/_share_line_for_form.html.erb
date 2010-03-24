@@ -8,7 +8,7 @@
 				publicly
 			<%- elsif share.is_a? SpecificUserShare -%>
 				with
-				<strong><%= share.sharee.name %></strong>
+				<%= form.text_field :sharee_by_login, :class => 'field' %>
 			<%- end -%>
 		</em>
 		(can modify: <%= form.check_box :modifiable, :class => 'field' %> )
