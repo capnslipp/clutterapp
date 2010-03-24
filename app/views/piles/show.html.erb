@@ -18,7 +18,9 @@
 			</div>
 			
 			<ul>
-				<%= render_subscoped :partial => 'list_scopes', :locals => { :pile => @owner.root_pile, :expand_to => lambda {|p| p == @pile || @pile.ancestors.include?(p) }, :base_scope => @pile }, :subscope => subscope_of(@pile) %>
+				<%- subscope subscope_of(@pile) do -%>
+					<%= render :partial => 'list_scopes', :locals => { :pile => @owner.root_pile, :expand_to => lambda {|p| p == @pile || @pile.ancestors.include?(p) }, :base_scope => @pile } %>
+				<%- end -%>
 			</ul>
 		</div>
 		
@@ -27,6 +29,8 @@
 
 <div id="main-area" class="left" <% if cookies['scope-panel.width'] %>style="margin-right: <%=cookies['scope-panel.width']%>px"<% end %>><% @skip_main_area_wrap = true %>
 	<div class="cont">
-		<%= render_subscoped :partial => 'base', :subscope => subscope_of(@pile) %>
+		<%- subscope subscope_of(@pile) do -%>
+			<%= render :partial => 'base' %>
+		<%- end -%>
 	</div>
 </div>

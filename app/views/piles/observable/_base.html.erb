@@ -16,10 +16,12 @@
 			</div>
 			
 			<ul class="item-list">
-				<%= render_subscoped :partial => 'nodes/list_items', :locals => {:item => @pile.root_node} %>
+				<%= render :partial => 'nodes/list_items', :locals => {:item => @pile.root_node} %>
 			</ul>
 			
-			<%= render_subscoped :partial => 'nodes/action_bar', :subscope => :modifiable %><%# need to still render this in case any descendant Piles are modifiable %>
+			<%- subscope :modifiable do -%>
+				<%= render :partial => 'nodes/action_bar' %><%# need to still render this in case any descendant Piles are modifiable %>
+			<%- end -%>
 			
 		</section>
 	<%- end -%>
