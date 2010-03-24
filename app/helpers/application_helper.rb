@@ -77,7 +77,7 @@ module ApplicationHelper
     @subscope_stack.last
   end
   
-  def pile_subscope(pile, user = current_user)
+  def subscope_of(pile, user = current_user)
     # first, check for direct modifiability/observability
     if pile.modifiable?(user, false)
       :modifiable
