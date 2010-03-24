@@ -121,9 +121,9 @@ function collapseActionBar() {
 }
 
 $(function() {
-	$('.item > .base.pile > .body > .header').live('click', expand);
-	$('.item > .sub.pile > .body > .cont').live('click', expand);
-	$('.item > .cont > .body > .cont').live('click', expand);
+	$('.modifiable.item > .base.pile > .body > .header').live('click', expand);
+	$('.modifiable.item > .sub.pile > .body > .cont').live('click', expand);
+	$('.modifiable.item > .cont > .body > .cont').live('click', expand);
 	
 	function expand(event) {
 		// don't do anything if this an actual link
@@ -135,9 +135,9 @@ $(function() {
 });
 
 $(function() {
-	$('.item > .base.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
-	$('.item > .sub.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
-	$('.item > .cont > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.modifiable.item > .base.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.modifiable.item > .sub.pile > .body > .action.stub .widget.collapsed a').live('click', expand);
+	$('.modifiable.item > .cont > .body > .action.stub .widget.collapsed a').live('click', expand);
 	
 	function expand() {
 		expandActionBar($(this).findItem()); return false;
@@ -506,7 +506,7 @@ function itemEdit(link) {
 }
 
 $(function() {
-	$('.item > .cont > .show.body > .cont, .item > .pile > .show.body > .cont').live('dblclick', function() {
+	$('.modifiable.item > .cont > .show.body > .cont, .modifiable.item > .pile > .show.body > .cont').live('dblclick', function() {
 		itemEdit(this); return false;
 	});
 	$('#action-bar > .buttons > a.edit').click(function() {
@@ -969,7 +969,7 @@ $(function() {
 });
 
 jQuery.fn.applyReparentDroppability = function() {
-	$(this).search('.item > .cont > .show.body, .item > .pile > .body').activateReparentDroppable();
+	$(this).search('.modifiable.item > .cont > .show.body, .item > .pile > .body').activateReparentDroppable();
 	return this;
 }
 
@@ -992,7 +992,7 @@ jQuery.fn.deactivateReparentDroppable = function() {
 
 jQuery.fn.setupReparentDroppable = function() {
 	this.droppable({
-		accept: 'li.item',
+		accept: 'li.modifiable.item',
 		hoverClass: 'active',
 		scope: 'item-reparent',
 		tolerance: 'pointer',
@@ -1285,13 +1285,102 @@ function badgeAdd(link, addType) {
 }
 
 $(function() {
-	$('#add-bar a.add.text'		).live('click', function() { badgeAdd(this, 'text'		); return false; });
-	$('#add-bar a.add.check'	).live('click', function() { badgeAdd(this, 'check'		); return false; });
-	$('#add-bar a.add.note'		).live('click', function() { badgeAdd(this, 'note'		); return false; });
-	$('#add-bar a.add.priority'	).live('click', function() { badgeAdd(this, 'priority'	); return false; });
-	$('#add-bar a.add.tag'		).live('click', function() { badgeAdd(this, 'tag'		); return false; });
-	$('#add-bar a.add.time'		).live('click', function() { badgeAdd(this, 'time'		); return false; });
-	$('#add-bar a.add.pile_ref'	).live('click', function() { badgeAdd(this, 'pile_ref'	); return false; });
+	$('#add-bar a.add.text'			).live('click', function() { badgeAdd(this, 'text'		); return false; });
+	$('#add-bar a.add.check'		).live('click', function() { badgeAdd(this, 'check'		); return false; });
+	$('#add-bar a.add.note'			).live('click', function() { badgeAdd(this, 'note'		); return false; });
+	$('#add-bar a.add.priority'		).live('click', function() { badgeAdd(this, 'priority'	); return false; });
+	$('#add-bar a.add.tag'			).live('click', function() { badgeAdd(this, 'tag'		); return false; });
+	$('#add-bar a.add.time'			).live('click', function() { badgeAdd(this, 'time'		); return false; });
+	$('#add-bar a.add.pile_ref'		).live('click', function() { badgeAdd(this, 'pile_ref'	); return false; });
+});
+
+
+
+function shareAdd(link, addType) {
+	var node = $(link).findItem().required();
+	
+	var state;
+	if (node.children('.new').exists()) {
+		state = 'new';
+		
+		if (!ClutterApp.fsm.changeState('itemNew', 'shareAddLoad'))
+			return;
+	} else if ($('> .cont > .edit', node).exists()) {
+		state = 'edit';
+		
+		if (!ClutterApp.fsm.changeState('itemEdit', 'shareAddLoad'))
+			return;
+	} else {
+		if (window.console && window.console.assert)
+			window.console.assert('invalid state');
+		
+		return;
+	}
+	
+	var form = node.find('form').required();
+	var parentNode = node.parent().findItem().required();
+	
+	$.ajax({
+		type: 'get',
+		url: (state == 'new') ? form.getAttr('action').replace(/\?/, '/new?') : (node.getAttr('oc\:url') + '/edit'),
+		data: form.serialize() + '&' + $.param({'add_share[share_type]': addType}),
+		dataType: 'html',
+		success: handleSuccess,
+		error: handleError
+	});
+	
+	
+	function handleSuccess(responseData) {
+		if (state == 'new')
+		{
+			var list = node.parent('.item-list').required();
+			
+			//var newBody = node.replaceWith(responseData); // possible?
+			node.replaceWith(responseData);
+			
+			var newBody = list.children('li.new.node').find('.new.body').required();
+			
+			newBody.find('.note.prop').find('textarea').elastic();
+			
+			ClutterApp.fill.show(newBody);
+			
+			formFocus(newBody.find('form').required());
+			
+			
+			ClutterApp.fsm.finishState('itemNew', 'shareAddLoad');
+		}
+		else if (state == 'edit')
+		{
+			var showBody = $('> .cont > .show.body', node).required();
+			var editBody = showBody.siblings('.edit.body').required();
+			
+			//var editBody = node.replaceWith(responseData); // possible?
+			editBody.replaceWith(responseData);
+			
+			var editBody = showBody.siblings('.edit.body').required();
+			
+			editBody.find('.note.prop').find('textarea').elastic();
+			
+			ClutterApp.fill.show(editBody);
+			formFocus(editBody.find('form').required());
+			
+			
+			ClutterApp.fsm.finishState('itemEdit', 'shareAddLoad');
+		}
+	}
+	
+	function handleError(xhrObj, errStr, expObj) {
+		node.find('.body:first .cont').required()
+			.effect('highlight', {color: 'rgb(31, 31, 31)'}, 2000);
+		
+		
+		ClutterApp.fsm.finishState('itemNew', 'shareAddLoad') || ClutterApp.fsm.finishState('itemEdit', 'shareAddLoad');
+	}
+}
+
+$(function() {
+	$('#add-share-bar a.add.public'			).live('click', function() { shareAdd(this, 'public'		); return false; });
+	$('#add-share-bar a.add.specific_user'	).live('click', function() { shareAdd(this, 'specific_user'	); return false; });
 });
 
 

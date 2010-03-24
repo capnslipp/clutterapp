@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Invite do
-  dataset :users
+  dataset :users, :piles, :nodes
   
   
   before(:each) do

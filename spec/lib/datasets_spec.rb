@@ -29,22 +29,22 @@ describe "datasets" do
         end # slippyss_root_node
       end # slippys
       
-      proper! piles(:plans_to_rule_the_world) do
-        proper! piles(:plans_to_rule_the_world).root_node do
-          proper! nodes(:plans_to_rule_the_world_desc_node)
+      proper! piles(:plans) do
+        proper! piles(:plans).root_node do
+          proper! nodes(:plans_desc_node)
           proper! nodes(:step_1_sub_pile_ref_node)
         end
       end # plans_to_rule_the_world
       
-      proper! piles(:step_1_the_girl) do
-        proper! piles(:step_1_the_girl).root_node do
-          proper! nodes(:step_1_the_girl_desc_node)
+      proper! piles(:step_1) do
+        proper! piles(:step_1).root_node do
+          proper! nodes(:step_1_desc_node)
         end
       end # step_1_the_girl
       
-      proper! piles(:every_day_responsibilities) do
-        proper! piles(:every_day_responsibilities).root_node do
-          proper! nodes(:every_day_responsibilities_one)
+      proper! piles(:every_day) do
+        proper! piles(:every_day).root_node do
+          proper! nodes(:every_day_one)
         end
       end # every_day_responsibilities
       

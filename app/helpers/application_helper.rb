@@ -41,4 +41,34 @@ module ApplicationHelper
   end
   
   
+  def subscope(subscope, &block)
+    @subscope_stack ||= []
+    @subscope_stack.push(subscope)
+    
+    block.call
+    
+    @subscope_stack.pop
+  end
+  
+  def current_subscope
+    @subscope_stack.last
+  end
+  
+  def subscope_of(pile, user = current_user)
+    # first, check for direct modifiability/observability
+    if pile.modifiable?(user, false)
+      :modifiable
+    elsif pile.observable?(user, false)
+      :observable
+    # if neither of those were set, check for inherited modifiability/observability
+    elsif pile.modifiable?(user)
+      :modifiable
+    elsif pile.observable?(user)
+      :observable
+    else
+      raise ArgumentError.new("pile ##{pile.id} is not accessible by user ##{user.id}")
+    end
+  end
+  
+  
 end

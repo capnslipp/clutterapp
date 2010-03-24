@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe UsersController do
   include UsersHelper
-  dataset :users
+  dataset :users, :piles, :nodes
   integrate_views
   
   

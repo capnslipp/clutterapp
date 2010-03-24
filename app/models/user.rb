@@ -31,21 +31,9 @@ class User < ActiveRecord::Base
   after_create :save_root_pile!
   
   
-  # Followship associations
-  has_many :followships
-  has_many :followees, :through => :followships
+  # Share associations
   
-  has_many :shares
-  has_many :authorized_piles, :through => :shares, :source => :pile, :conditions => ["authorized = ?", true]
-  has_many :public_piles, :through => :shares, :source => :pile, :conditions => [ "public = ?", true ]
-
-  
-  # @fix: get it to properly alias tables so that "a_user.followees.followers_of(self)" works
-  named_scope :followers_of, proc {|a_user| {
-      :conditions => { :followships_4_followers_of => {:followee_id => a_user.id} },
-      :joins => %q{INNER JOIN `followships` as followships_4_followers_of ON followships_4_followers_of.user_id = users.id} #:joins => :followships # with "followships as followships_4_followers_of" alias
-  } }
-  
+  has_many :shares, :through => :piles
   
   
   # HACK HACK HACK -- how to do attr_accessible from here? Prevents a user from submitting a crafted form that bypasses activation anything else you want your user to change should be added here.
@@ -57,60 +45,6 @@ class User < ActiveRecord::Base
     login
   end
   
-  #Followship methods
-  
-  def follow(user_to_follow)
-    followship = followships.create(:followee => user_to_follow)
-    
-    #logger.debug "User is already following #{user_to_follow.login}" unless followship.save
-  end
-  
-  # Combining the two into the follow one above
-  #def follow(user)
-  #  followship = followships.build(:user_id => user.id, :followee_id => self.id)
-  #  unless followship.save
-  #    logger.debug "User is already following #{user.login}"
-  #  end
-  #end
-  
-  def unfollow(user_to_unfollow)
-    followship = Followship.find_by_user_and_followee(self, user_to_unfollow)
-    followship.destroy if followship
-  end
-  
-  def following?(followee_user)
-    self.followees.include? followee_user
-  end
-  
-  def followed_by?(follower_user)
-    self.followers.include? follower_user
-  end
-  
-  def followers
-    User.followers_of(self)
-  end
-  
-  def friends
-    followees.followers_of(self)
-  end
-  
-  def friends_with?(another_user)
-    self.friends.include? another_user
-  end
-  
-  
-  #sharing methods
-  def share_pile_with_user(user, pile)
-    shares.create(:user => user, :pile => pile, :authorized => true)
-  end
-  
-  def shared_piles
-    Share.find(:all, :conditions => {:shared_pile_id => root_pile.id})
-  end
-
-  def share_pile_with_public(pile)
-    shares.create(:user => self, :pile => pile, :public => true)
-  end
   
   # validating setters and utils
   

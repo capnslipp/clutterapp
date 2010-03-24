@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "/piles/index.html.erb" do
   include PilesHelper
-  dataset :piles
+  dataset :users, :piles, :nodes
   
   it "renders a list of piles" do
     assigns[:user] = @user = users(:slippy_douglas)

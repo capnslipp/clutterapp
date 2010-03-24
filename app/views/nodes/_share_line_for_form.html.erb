@@ -1,0 +1,16 @@
+<div class="line">
+	<%= form.hidden_field(:_destroy) %>
+	<%- unless share._destroy -%>
+		<a href="#" class="remove button" onclick="return false;"><span class="sym"><%# ✖ %>&#10006;</span></a>
+		<em>
+			shared
+			<%- if share.is_a? PublicShare -%>
+				publicly
+			<%- elsif share.is_a? SpecificUserShare -%>
+				with
+				<%= form.text_field :sharee_by_login, :class => 'field' %>
+			<%- end -%>
+		</em>
+		(can modify: <%= form.check_box :modifiable, :class => 'field' %> )
+	<%- end -%>
+</div>
