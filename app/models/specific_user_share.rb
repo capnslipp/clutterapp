@@ -14,11 +14,11 @@ class SpecificUserShare < Share
   end
   
   def sharee_by_login
-    sharee.login
+    self.sharee.login if self.sharee
   end
   
   def sharee_by_login=(login)
-    sharee = User.find_by_login(login)
+    self.sharee = User.find_by_login(login)
   end
   
 end

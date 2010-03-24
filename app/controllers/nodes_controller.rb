@@ -168,6 +168,23 @@ class NodesController < ApplicationController
     end
     
     
+    if params[:add_share]
+      add_share_attrs = params.delete(:add_share)
+      
+      share_type = add_share_attrs.delete(:share_type)
+      raise 'add_share[share_type] param is required' if share_type.nil?
+      
+      case share_type
+        when 'public':
+          @node.prop.ref_pile.public_shares.build(add_share_attrs)
+        when 'specific_user':
+          @node.prop.ref_pile.specific_user_shares.build(add_share_attrs)
+        else
+          raise 'unknown share type'
+      end
+    end
+    
+    
     subscope :modifiable do
       if @node.prop.is_a? PileRefProp
         render :partial => 'edit_sub_pile_body', :locals => {:node => @node}

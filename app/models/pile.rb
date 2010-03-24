@@ -8,7 +8,6 @@ class Pile < ActiveRecord::Base
   
   # Shares associations
   has_many :shares
-  accepts_nested_attributes_for :shares, :allow_destroy => true
   #has_many :users, :through => :shares
   
   has_many :public_shares
