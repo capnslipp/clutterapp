@@ -169,7 +169,11 @@ class NodesController < ApplicationController
     
     
     subscope :modifiable do
-      render :partial => 'edit_body', :locals => {:node => @node}
+      if @node.prop.is_a? PileRefProp
+        render :partial => 'edit_sub_pile_body', :locals => {:node => @node}
+      else
+        render :partial => 'edit_body', :locals => {:node => @node}
+      end
     end
   end
   
