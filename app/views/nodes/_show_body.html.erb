@@ -3,7 +3,7 @@
 	
 	<div class="bullet">
 		<%- if node.check_badge? -%>
-			<%= render_subscoped :partial => prop_partial(node.check_badge, :show), :locals => {:node => node.check_badge} %>
+			<%= render :partial => prop_partial(node.check_badge, :show), :locals => {:node => node.check_badge} %>
 		<%- elsif node.prop.is_a? PileRefProp -%>
 			<a href="#" class="sym expanded" <%= 'style="display: none;"' unless node.prop.ref_pile.expanded? %>><%# ∴ %>&there4;</a>
 			<a href="#" class="sym collapsed" <%= 'style="display: none;"' if node.prop.ref_pile.expanded? %>><%# … %>&hellip;</a>
@@ -12,27 +12,27 @@
 		<%- end -%>
 	</div>
 	
-	<%= render_subscoped :partial => 'nodes/action_stub' %>
+	<%= render :partial => 'nodes/action_stub' if current_subscope == :modifiable %>
 	
 	<div class="cont" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 		<% if node.priority_badge? %>
-			<%= render_subscoped :partial => prop_partial(node.priority_badge, :show), :locals => {:node => node.priority_badge} %>
+			<%= render :partial => prop_partial(node.priority_badge, :show), :locals => {:node => node.priority_badge} %>
 		<% end %>
 		
-		<%= render_subscoped :partial => prop_partial(node, :show), :locals => {:node => node} %>
+		<%= render :partial => prop_partial(node, :show), :locals => {:node => node} %>
 		
 		<% if node.tag_badges? %>
 			<%- node.tag_badges.sort.each do |tag_badge| -%>
-				<%= render_subscoped :partial => prop_partial(tag_badge, :show), :locals => {:node => tag_badge} %>
+				<%= render :partial => prop_partial(tag_badge, :show), :locals => {:node => tag_badge} %>
 			<%- end -%>
 		<% end %>
 		<% if node.time_badge? %>
-			<%= render_subscoped :partial => prop_partial(node.time_badge, :show), :locals => {:node => node.time_badge} %>
+			<%= render :partial => prop_partial(node.time_badge, :show), :locals => {:node => node.time_badge} %>
 		<% end %>
 		
 		<% if node.note_badge? %>
 			<div class="line">
-				<%= render_subscoped :partial => prop_partial(node.note_badge, :show), :locals => {:node => node.note_badge} %>
+				<%= render :partial => prop_partial(node.note_badge, :show), :locals => {:node => node.note_badge} %>
 			</div>
 		<% end %>
 	</div>

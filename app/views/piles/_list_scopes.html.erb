@@ -14,7 +14,7 @@
 		
 		<%- if expand_to.call(sub_pile) -%>
 			<ul>
-				<%= render_subscoped :partial => 'list_scopes', :locals => { :pile => sub_pile, :expand_to => expand_to, :base_scope => base_scope } %>
+				<%= render :partial => 'list_scopes', :locals => { :pile => sub_pile, :expand_to => expand_to, :base_scope => base_scope } %>
 			</ul>
 		<%- end -%>
 	</li>
