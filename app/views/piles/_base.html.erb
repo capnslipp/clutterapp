@@ -1,14 +1,16 @@
 <% content_tag_for :div, @pile.root_node, :class => "base root item #{current_subscope}" do -%>
-	<%- cache ({:base_node_section => @pile.root_node.id, :subscope => :observable}.to_json) do -%>
+	<%- cache ({:base_node_section => @pile.root_node.id, :subscope => current_subscope}.to_json) do -%>
 		<section class="base pile cont" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
 			
 			<div class="body">
 				<div class="back"></div>
 				
+				<%= render :partial => 'nodes/action_stub' %>
+				
 				<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 					<% unless @pile.root? %><a href="<%=path_for [@owner, @owner.root_pile]%>" class="owner pile name link"><%= @owner.name %> <span class="sym"><%# » %>&raquo;</span></a><% end %>
 					<% (@pile.ancestors.reverse - [@owner.root_pile]).each do |ancestor_pile| %>
-						<%- next if !ancestor_pile.accessible?(current_user) -%>
+						<%- next unless ancestor_pile.accessible?(current_user) -%>
 						<a href="<%=path_for [@owner, ancestor_pile]%>" class="ancestor pile name link"><%= ancestor_pile.name %> <span class="sym"><%# » %>&raquo;</span></a>
 					<% end %>
 					<span class="base pile name"><%= @pile.root? ? @pile.owner.name : @pile.name %></span>
@@ -20,7 +22,7 @@
 			</ul>
 			
 			<%- subscope :modifiable do -%>
-				<%= render :partial => 'nodes/action_bar' %><%# need to still render this in case any descendant Piles are modifiable %>
+				<%= render :partial => 'nodes/action_bar' %><%# need to always render this in case any descendant Piles are modifiable %>
 			<%- end -%>
 			
 		</section>

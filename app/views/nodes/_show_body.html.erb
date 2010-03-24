@@ -12,7 +12,7 @@
 		<%- end -%>
 	</div>
 	
-	<%= render :partial => 'nodes/action_stub' %>
+	<%= render :partial => 'nodes/action_stub' if current_subscope == :modifiable %>
 	
 	<div class="cont" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 		<% if node.priority_badge? %>
