@@ -6,8 +6,10 @@
 			
 			<%- node_form.fields_for :prop do |prop_form| -%>
 				<%- prop_form.fields_for :ref_pile do |ref_pile_form| -%>
-					<%- node.prop.ref_pile.public_shares.each do |public_share| -%>
-						<%= render :partial => 'nodes/public_share_line_for_form', :locals => { :share => public_share, :form => ref_pile_form } %>
+					<%- node.prop.ref_pile.shares.each do |share| -%>
+						<% node_form.fields_for :shares, share do |share_fields| %>
+							<%= render :partial => 'nodes/share_line_for_form', :locals => { :share => share, :form => share_fields } %>
+						<%- end -%>
 					<%- end -%>
 				<%- end -%>
 			<%- end -%>
