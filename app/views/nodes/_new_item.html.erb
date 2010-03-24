@@ -1,9 +1,5 @@
 <% content_tag_for :li, item, :class => "new #{dom_class(item)} item", :'oc:url' => path_for([item.pile.owner, item.pile, item]) do %>
 	
-	<%- if item.prop.is_a? PileRefProp -%>
-		<%= render :partial => 'new_sub_pile_body', :locals => {:node => item} %>
-	<%- else -%>
-		<%= render :partial => 'new_body', :locals => {:node => item} %>
-	<%- end -%>
+	<%= render :partial => 'new_body', :locals => {:node => item} %>
 	
 <% end %>
