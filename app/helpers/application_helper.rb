@@ -73,6 +73,15 @@ module ApplicationHelper
     @subscope_stack.pop if options.has_key?(:subscope)
   end
   
+  def subscope(subscope, &block)
+    @subscope_stack ||= []
+    @subscope_stack.push(subscope)
+    
+    block.call
+    
+    @subscope_stack.pop
+  end
+  
   def current_subscope
     @subscope_stack.last
   end
