@@ -1,7 +1,7 @@
 <%- base_scope = nil unless defined?(base_scope) -%>
 <% pile.children.each do |sub_pile| %>
 	<li>
-		<%- if sub_pile.accessible?(current_user) -%>
+		<%- if sub_pile.accessible_publicly? || (sub_pile.accessible_by_user?(current_user) if current_user) -%>
 			<div class="scope name <%= 'base' if sub_pile == base_scope %> <%= 'child' if pile == base_scope %>">
 				<span class="sym"><%# ∴ %>&there4;</span>
 				<%- if sub_pile == base_scope -%>
