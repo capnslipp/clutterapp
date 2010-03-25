@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
   end
   
   def active_pile
-    return @active_pile ||= active_owner.piles.find(active_pile_id)
+    return @active_pile ||= active_owner.piles.find_by_id(active_pile_id)
   end
   
   
@@ -69,10 +69,10 @@ protected
   def have_owner
     if active_owner_id.nil?
       flash[:error] = "No user specified."
-      redirect_to current_user
+      redirect_to current_user || home_url
     elsif active_owner.nil?
       flash[:error] = "User “#{active_owner_id}” doesn't exist."
-      redirect_to current_user
+      redirect_to current_user || home_url
     else
       return # success
     end
@@ -92,20 +92,20 @@ protected
   
   
   def have_access
-    if active_pile.accessible?(current_user)
+    if active_pile.accessible_publicly? || active_pile.accessible_by_user?(current_user)
       return # success
     else
       flash[:warning] = "You do not have access to “#{active_owner_id}”'s pile “#{active_pile_id}”."
-      redirect_to current_user
+      redirect_to current_user || home_url
     end
   end
   
   def have_modify_access
-    if active_pile.modifiable?(current_user)
+    if active_pile.modifiable_publicly? || active_pile.modifiable_by_user?(current_user)
       return # success
     else
       flash[:warning] = "You do not have modify access for “#{active_owner_id}”'s pile “#{active_pile_id}”."
-      redirect_to current_user
+      redirect_to current_user || home_url
     end
   end
   

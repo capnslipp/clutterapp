@@ -5,7 +5,9 @@
 			<div class="body">
 				<div class="back"></div>
 				
-				<%= render :partial => 'nodes/action_stub' %>
+				<%= render :partial => 'nodes/action_stub' if current_subscope == :modifiable %>
+				
+				<%= render :partial => 'piles/share_status', :locals => {:pile => @pile} if current_subscope == :modifiable %>
 				
 				<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 					<% unless @pile.root? %><a href="<%=path_for [@owner, @owner.root_pile]%>" class="owner pile name link"><%= @owner.name %> <span class="sym"><%# » %>&raquo;</span></a><% end %>
@@ -21,9 +23,7 @@
 				<%= render :partial => 'nodes/list_items', :locals => {:item => @pile.root_node} %>
 			</ul>
 			
-			<%- subscope :modifiable do -%>
-				<%= render :partial => 'nodes/action_bar' %><%# need to always render this in case any descendant Piles are modifiable %>
-			<%- end -%>
+			<%= render :partial => 'nodes/action_bar' %><%# need to always render this in case any descendant Piles are modifiable %>
 			
 		</section>
 	<%- end -%>

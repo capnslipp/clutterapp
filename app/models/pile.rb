@@ -26,66 +26,49 @@ class Pile < ActiveRecord::Base
   
   # helpers for the sharing settings on this Pile (primarily for the owner)
   
-  def shared?
-    shares.exists?
-  end
-  
-  def shared_publicly?
-    public_shares.exists?
-  end
-  
-  def shared_with_specific_users?
-    specific_user_shares.exists?
-  end
-  
   # helpers for permission determination, whether effective or explicitly set
   #   accessible: can access it in any way
   #   observable: can view it in a view-only state; mutually exclusive with modifiable
   #   modifiable: can modify and change it; mutually exclusive with observable
   
-  def accessible?(user_or_nil, inheriting = true)
-    accessible_publicly?(inheriting) || (accessible_by_user?(user_or_nil, inheriting) if user_or_nil)
+  def accessible?(inheriting = true)
+    return !!( accessible_publicly?(inheriting) || accessible_by_users?(inheriting) )
   end
-  
-  def observable?(user_or_nil, inheriting = true)
-    observable_publicly?(inheriting) || (observable_by_user?(user_or_nil, inheriting) if user_or_nil)
+  def observable?(inheriting = true)
+    return !!( observable_publicly?(inheriting) || observable_by_users?(inheriting) )
   end
-  
-  def modifiable?(user_or_nil, inheriting = true)
-    modifiable_publicly?(inheriting) || (modifiable_by_user?(user_or_nil, inheriting) if user_or_nil)
+  def modifiable?(inheriting = true)
+    return !!( modifiable_publicly?(inheriting) || modifiable_by_users?(inheriting) )
   end
   
   def accessible_publicly?(inheriting = true)
-    public_shares.exists? ||
-      (parent.accessible_publicly? if inheriting && parent)
+    return !!( public_shares.exists? || (parent.accessible_publicly? if inheriting && parent) )
   end
-  
   def observable_publicly?(inheriting = true)
-    public_shares.exists?(:modifiable => false) ||
-      (parent.observable_publicly? if inheriting && parent)
+    return !!( public_shares.exists?(:modifiable => false) || (parent.observable_publicly? if inheriting && parent) )
+  end
+  def modifiable_publicly?(inheriting = true)
+    return !!( public_shares.exists?(:modifiable => true) || (parent.modifiable_publicly? if inheriting && parent) )
   end
   
-  def modifiable_publicly?(inheriting = true)
-    public_shares.exists?(:modifiable => true) ||
-      (parent.modifiable_publicly? if inheriting && parent)
+  def accessible_by_users?(inheriting = true)
+    return !!( specific_user_shares.exists? || (parent.accessible_by_users? if inheriting && parent) )
+  end
+  def observable_by_users?(inheriting = true)
+    return !!( specific_user_shares.exists?(:modifiable => false) || (parent.observable_by_users? if inheriting && parent) )
+  end
+  def modifiable_by_users?(inheriting = true)
+    return !!( specific_user_shares.exists?(:modifiable => true) || (parent.modifiable_by_users? if inheriting && parent) )
   end
   
   def accessible_by_user?(user, inheriting = true)
-    user == owner ||
-      specific_user_shares.exists?(:sharee_id => user.id) ||
-      (parent.accessible_by_user?(user) if inheriting && parent)
+    return !!( user == owner || specific_user_shares.exists?(:sharee_id => user.id) || (parent.accessible_by_user?(user) if inheriting && parent) )
   end
-  
   def observable_by_user?(user, inheriting = true)
-    user == owner ||
-      specific_user_shares.exists?(:sharee_id => user.id, :modifiable => false) ||
-      (parent.observable_by_user?(user) if inheriting && parent)
+    return !!( user == owner || specific_user_shares.exists?(:sharee_id => user.id, :modifiable => false) || (parent.observable_by_user?(user) if inheriting && parent) )
   end
-  
   def modifiable_by_user?(user, inheriting = true)
-    user == owner ||
-      specific_user_shares.exists?(:sharee_id => user.id, :modifiable => true) ||
-      (parent.modifiable_by_user?(user) if inheriting && parent)
+    return !!( user == owner || specific_user_shares.exists?(:sharee_id => user.id, :modifiable => true) || (parent.modifiable_by_user?(user) if inheriting && parent) )
   end
   
   

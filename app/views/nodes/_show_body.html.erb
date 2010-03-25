@@ -14,6 +14,8 @@
 	
 	<%= render :partial => 'nodes/action_stub' if current_subscope == :modifiable %>
 	
+	<%= render :partial => 'piles/share_status', :locals => {:pile => node.prop.ref_pile} if node.prop.is_a?(PileRefProp) && current_subscope == :modifiable %>
+	
 	<div class="cont" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
 		<% if node.priority_badge? %>
 			<%= render :partial => prop_partial(node.priority_badge, :show), :locals => {:node => node.priority_badge} %>

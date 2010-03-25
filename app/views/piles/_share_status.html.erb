@@ -1,0 +1,27 @@
+<div class="share status">
+	
+	<%- if pile.observable_by_users?(false) -%>
+		<span class="user observe sym"><%# ◔ %>&#9684;</span>
+	<%- elsif pile.observable_by_users?(true) -%>
+		<span class="inherit user observe sym"><%# ◔ %>&#9684;</span>
+	<%- end -%>
+	
+	<%- if pile.modifiable_by_users?(false) -%>
+		<span class="user modify sym"><%# ◔ %>&#9684;</span>
+	<%- elsif pile.modifiable_by_users?(true) -%>
+		<span class="inherit user modify sym"><%# ◔ %>&#9684;</span>
+	<%- end -%>
+	
+	<%- if pile.observable_publicly?(false) -%>
+		<span class="public observe sym"><%# ◕ %>&#9685;</span>
+	<%- elsif pile.observable_publicly?(true) -%>
+		<span class="inherit public observe sym"><%# ◕ %>&#9685;</span>
+	<%- end -%>
+	
+	<%- if pile.modifiable_publicly?(false) -%>
+		<span class="public modify sym"><%# ◕ %>&#9685;</span>
+	<%- elsif pile.modifiable_publicly?(true) -%>
+		<span class="inherit public modify sym"><%# ◕ %>&#9685;</span>
+	<%- end -%>
+	
+</div>

@@ -235,6 +235,20 @@ li { list-style-type: none; }
 .pile_ref > h1.name a.sym { opacity: 0.5; }
 .pile_ref > h1.name a.sym:hover { opacity: 1.0; }
 
+.share.status {
+	float: right;
+	display: inline-block;
+	margin: 0 0.25em;
+}
+.share.status .sym {
+	font-size: 150%;
+	line-height: 100%;
+}
+.share.status .observe { color: <%= text_color.to_s %>; }
+.share.status .modify { color: <%= (accent_color * 0.5).to_s %>; }
+.share.status .inherit { opacity: 0.25; }
+
+
 
 /* page */
 #page {

@@ -37,8 +37,8 @@ describe Pile do
       it "should be non-modifiable, by default" do
         piles(:plans).share_publicly
         
-        piles(:plans).should be_shared
-        piles(:plans).should be_shared_publicly
+        piles(:plans).should be_accessible
+        piles(:plans).should be_accessible_publicly
         piles(:plans).should be_accessible_publicly
         piles(:plans).should be_observable_publicly
         piles(:plans).should_not be_modifiable_publicly
@@ -47,8 +47,8 @@ describe Pile do
       it "should be modifiable, when set" do
         piles(:plans).share_publicly(:modifiable => true)
         
-        piles(:plans).should be_shared
-        piles(:plans).should be_shared_publicly
+        piles(:plans).should be_accessible
+        piles(:plans).should be_accessible_publicly
         piles(:plans).should be_accessible_publicly
         piles(:plans).should_not be_observable_publicly
         piles(:plans).should be_modifiable_publicly
@@ -62,11 +62,11 @@ describe Pile do
       end
       
       it "should not change the actual sharing settings on sub-Piles" do
-        piles(:step_1).should_not be_shared
+        piles(:step_1).should_not be_accessible(false)
         
         piles(:plans).share_publicly
         
-        piles(:step_1).should_not be_shared
+        piles(:step_1).should_not be_accessible(false)
       end
     end
     
@@ -80,8 +80,8 @@ describe Pile do
       it "should work" do
         piles(:plans).unshare_publicly
         
-        piles(:plans).should_not be_shared
-        piles(:plans).should_not be_shared_publicly
+        piles(:plans).should_not be_accessible
+        piles(:plans).should_not be_accessible_publicly
         piles(:plans).should_not be_accessible_publicly
         piles(:plans).should_not be_observable_publicly
         piles(:plans).should_not be_modifiable_publicly
@@ -95,11 +95,11 @@ describe Pile do
       end
       
       it "should not change the actual sharing settings on sub-Piles" do
-        piles(:step_1).should_not be_shared
+        piles(:step_1).should_not be_accessible(false)
         
         piles(:plans).unshare_with(users(:josh_vera))
         
-        piles(:step_1).should_not be_shared
+        piles(:step_1).should_not be_accessible(false)
       end
     end
     
@@ -112,8 +112,8 @@ describe Pile do
       it "should be non-modifiable, by default" do
         piles(:plans).share_with(users(:josh_vera))
         
-        piles(:plans).should be_shared
-        piles(:plans).should be_shared_with_specific_users
+        piles(:plans).should be_accessible(false)
+        piles(:plans).should be_accessible_by_users
         piles(:plans).should be_accessible_by_user(users(:josh_vera))
         piles(:plans).should be_observable_by_user(users(:josh_vera))
         piles(:plans).should_not be_modifiable_by_user(users(:josh_vera))
@@ -122,8 +122,8 @@ describe Pile do
       it "should be modifiable, when set" do
         piles(:plans).share_with(users(:josh_vera), :modifiable => true)
         
-        piles(:plans).should be_shared
-        piles(:plans).should be_shared_with_specific_users
+        piles(:plans).should be_accessible(false)
+        piles(:plans).should be_accessible_by_users
         piles(:plans).should be_accessible_by_user(users(:josh_vera))
         piles(:plans).should_not be_observable_by_user(users(:josh_vera))
         piles(:plans).should be_modifiable_by_user(users(:josh_vera))
@@ -137,11 +137,11 @@ describe Pile do
       end
       
       it "should not change the actual sharing settings on sub-Piles" do
-        piles(:step_1).should_not be_shared
+        piles(:step_1).should_not be_accessible(false)
         
         piles(:plans).share_with(users(:josh_vera))
         
-        piles(:step_1).should_not be_shared
+        piles(:step_1).should_not be_accessible(false)
       end
     end
     
@@ -155,8 +155,8 @@ describe Pile do
       it "should work" do
         piles(:plans).unshare_with(users(:josh_vera))
         
-        piles(:plans).should_not be_shared
-        piles(:plans).should_not be_shared_with_specific_users
+        piles(:plans).should_not be_accessible
+        piles(:plans).should_not be_accessible_by_users
         piles(:plans).should_not be_accessible_by_user(users(:josh_vera))
         piles(:plans).should_not be_observable_by_user(users(:josh_vera))
         piles(:plans).should_not be_modifiable_by_user(users(:josh_vera))
@@ -170,11 +170,11 @@ describe Pile do
       end
       
       it "should not change the actual sharing settings on sub-Piles" do
-        piles(:step_1).should_not be_shared
+        piles(:step_1).should_not be_accessible(false)
         
         piles(:plans).unshare_with(users(:josh_vera))
         
-        piles(:step_1).should_not be_shared
+        piles(:step_1).should_not be_accessible(false)
       end
     end
     

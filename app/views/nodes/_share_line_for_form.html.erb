@@ -11,6 +11,6 @@
 				<%= form.text_field :sharee_by_login, :class => 'field' %>
 			<%- end -%>
 		</em>
-		(can modify: <%= form.check_box :modifiable, :class => 'field' %> )
+		<% unless share.is_a? PublicShare %>(can modify: <%= form.check_box :modifiable, :class => 'field' %> )<% end %>
 	<%- end -%>
 </div>
