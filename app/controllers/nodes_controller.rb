@@ -9,11 +9,9 @@ class NodesController < ApplicationController
   
   before_filter :no_cache
   before_filter :be_xhr_request
-  before_filter :be_logged_in
   before_filter :have_owner, :have_pile
-  before_filter :have_modify_access
-  before_filter :have_access, :only => [:sub_pile]
-  before_filter :have_modify_access, :except => [:sub_pile]
+  before_filter :have_access
+  before_filter :be_logged_in, :have_modify_access, :except => [:sub_pile]
   
   
   # PUT /nodes/1/update_check_prop_checked
