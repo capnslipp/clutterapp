@@ -302,10 +302,12 @@ private
     
     logger.prefixed 'NodesController#expire_cache_for', :light_yellow, "cache invalidated for Node ##{record.id}"
     
-    expire_fragment ({:node_item => record.id}.to_json)
-    if record.root?
-      expire_fragment ({:node_section => record.id}.to_json)
-      expire_fragment ({:base_node_section => record.id}.to_json)
+    [:modifiable, :observable].each do |subscope|
+      expire_fragment ({:node_item => record.id, :subscope => subscope}.to_json)
+      if record.root?
+        expire_fragment ({:node_section => record.id, :subscope => subscope}.to_json)
+        expire_fragment ({:base_node_section => record.id, :subscope => subscope}.to_json)
+      end
     end
     
     # recursively invalidate all ancestors
