@@ -42,6 +42,8 @@ module ApplicationHelper
   
   
   def subscope(subscope, &block)
+    raise ArgumentError.new("subscope must be present") unless subscope.present?
+    
     @subscope_stack ||= []
     @subscope_stack.push(subscope)
     
@@ -65,8 +67,6 @@ module ApplicationHelper
       :modifiable
     elsif pile.observable?(user)
       :observable
-    else
-      raise ArgumentError.new("pile ##{pile.id} is not accessible by user ##{user.id}")
     end
   end
   

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100314233605) do
+ActiveRecord::Schema.define(:version => 20100325040526) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(:version => 20100314233605) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "sharee_id"
-    t.boolean  "modifiable"
+    t.boolean  "modifiable", :default => false, :null => false
   end
 
   create_table "tag_props", :force => true do |t|
