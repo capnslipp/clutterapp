@@ -1,0 +1,34 @@
+<div class="edit body">
+	<%- form_for node, :url => path_for([node.pile.owner, node.pile, node]), :html => {:method => 'put'} do |node_form| -%>
+		<div class="cont">
+			
+			<div class="line"><%= render :partial => prop_partial(node, :edit), :locals => { :node => node, :form => node_form } %></div>
+			
+			<%- node_form.fields_for :prop do |prop_form| -%>
+				<%- prop_form.fields_for :ref_pile do |ref_pile_form| -%>
+					<%- node.prop.ref_pile.public_shares.each do |share| -%>
+						<% ref_pile_form.fields_for :public_shares, share do |share_fields| %>
+							<%= render :partial => 'nodes/share_line_for_form', :locals => { :share => share, :form => share_fields } %>
+						<%- end -%>
+					<%- end -%>
+					<%- node.prop.ref_pile.specific_user_shares.each do |share| -%>
+						<% ref_pile_form.fields_for :specific_user_shares, share do |share_fields| %>
+							<%= render :partial => 'nodes/share_line_for_form', :locals => { :share => share, :form => share_fields } %>
+						<%- end -%>
+					<%- end -%>
+				<%- end -%>
+			<%- end -%>
+			
+			<%= render :partial => 'nodes/add_share_bar' %>
+			
+			<div class="finish line">
+				<div class="button-pair">
+					<%# ✓ %><%= node_form.submit '&#10003; done', :class => 'done' %>
+					<%# ✚ %><%= button_tag '&#10010; another', :class => 'another' %>
+				</div>
+				<%= button_tag '&#10006; cancel', :class => 'cancel' %>
+			</div>
+			
+		</div>
+	<%- end -%>
+</div>

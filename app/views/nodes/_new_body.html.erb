@@ -1,18 +1,19 @@
-<div class="edit body">
-	<%- form_for node, :url => path_for([node.pile.owner, node.pile, node]), :html => {:method => 'put'} do |node_form| -%>
+<div class="new body">
+	<%- prev_sibling_id = @prev_sibling.id if @prev_sibling -%>
+	<%- form_for node, :url => polymorphic_path([node.pile.owner, node.pile, node], :'node[parent_id]' => node.parent_id, :'node[prop_type]' => node.variant, :prev_sibling_id => prev_sibling_id), :html => {:method => 'post'} do |node_form| -%>
 		<div class="cont">
 			
-			<div class="line"><%= render_subscoped :partial => prop_partial(node, :edit), :locals => { :node => node, :form => node_form } %></div>
+			<div class="line"><%= render :partial => prop_partial(node, :new), :locals => { :node => node, :form => node_form } %></div>
 			
 			<%- if node.prop.class.nodeable? -%>
 				<%- node.children.sort.each do |badge_node| -%><%# can't use children.badgeable here, since some of them may be unsaved %>
 					<%- next unless badge_node.prop.badged? -%>
 					<% node_form.fields_for 'children', badge_node do |badge_fields| %>
-						<%= render_subscoped :partial => 'nodes/line_for_form', :locals => { :node => badge_node, :form => badge_fields, :state => (badge_node.new_record? ? :new : :edit) } %>
+						<%= render :partial => 'nodes/line_for_form', :locals => { :state => :new, :node => badge_node, :form => badge_fields } %>
 					<%- end -%>
 				<%- end -%>
 				
-				<%= render_subscoped :partial => 'nodes/add_bar' %>
+				<%= render :partial => 'nodes/add_bar' %>
 			<%- end -%>
 			
 			<div class="finish line">

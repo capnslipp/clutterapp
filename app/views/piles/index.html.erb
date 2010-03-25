@@ -8,6 +8,8 @@
 	</div>
 	
 	<ul>
-		<%= render_subscoped :partial => 'piles/list_scopes', :locals => { :pile => @root_pile, :expand_to => lambda {|p| true } }, :subscope => pile_subscope(@root_pile) %>
+		<%- subscope subscope_of(@root_pile) do -%>
+			<%= render :partial => 'piles/list_scopes', :locals => { :pile => @root_pile, :expand_to => lambda {|p| true } } %>
+		<%- end -%>
 	</ul>
 </div>
