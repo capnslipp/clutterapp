@@ -58,14 +58,14 @@ module ApplicationHelper
   
   def subscope_of(pile, user = current_user)
     # first, check for direct modifiability/observability
-    if pile.modifiable?(user, false)
+    if pile.modifiable_publicly?(false) || (pile.modifiable_by_user?(user, false) if user)
       :modifiable
-    elsif pile.observable?(user, false)
+    elsif pile.observable_publicly?(false) || (pile.observable_by_user?(user, false) if user)
       :observable
     # if neither of those were set, check for inherited modifiability/observability
-    elsif pile.modifiable?(user)
+    elsif pile.observable_publicly?(true) || (pile.modifiable_by_user?(user, true) if user)
       :modifiable
-    elsif pile.observable?(user)
+    elsif pile.observable_publicly?(true) || (pile.observable_by_user?(user, true) if user)
       :observable
     end
   end

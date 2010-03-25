@@ -34,7 +34,7 @@ class NodesController < ApplicationController
     @node = active_pile.nodes.find(params[:id], :include => {:prop => :ref_pile})
     @node.prop.ref_pile.expanded = params[:expanded]
     
-    if @node.prop.ref_pile.modifiable?(current_user)
+    if @node.prop.ref_pile.modifiable_by_user?(current_user)
       @node.prop.ref_pile.save!
       
       # @note: totally inefficient; invalidates tons of caches up the tree; will never work for one-big-pile approach
