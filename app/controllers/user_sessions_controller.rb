@@ -12,12 +12,11 @@ class UserSessionsController < ApplicationController
     
     if @user_session.save
       flash[:notice] = "Logged in successfully"
-      redirect_to home_path
+      redirect_to home_url
     else
       flash[:notice] = "Login incorrect"
       @login       = params[:login]
       @remember_me = params[:remember_me]
-      
       render :action => 'new'
     end
   end
