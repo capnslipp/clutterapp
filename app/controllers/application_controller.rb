@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
   end
   
   def active_pile
-    return @active_pile ||= active_owner.piles.find(active_pile_id)
+    return @active_pile ||= active_owner.piles.find_by_id(active_pile_id)
   end
   
   
@@ -69,10 +69,10 @@ protected
   def have_owner
     if active_owner_id.nil?
       flash[:error] = "No user specified."
-      redirect_to current_user
+      redirect_to current_user || home_url
     elsif active_owner.nil?
       flash[:error] = "User “#{active_owner_id}” doesn't exist."
-      redirect_to current_user
+      redirect_to current_user || home_url
     else
       return # success
     end
