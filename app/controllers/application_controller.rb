@@ -92,7 +92,7 @@ protected
   
   
   def have_access
-    if active_pile.accessible_publicly? || active_pile.accessible_by_user?(current_user)
+    if active_pile.accessible_publicly? || (active_pile.accessible_by_user?(current_user) if current_user)
       return # success
     else
       flash[:warning] = "You do not have access to “#{active_owner_id}”'s pile “#{active_pile_id}”."
@@ -101,7 +101,7 @@ protected
   end
   
   def have_modify_access
-    if active_pile.modifiable_publicly? || active_pile.modifiable_by_user?(current_user)
+    if active_pile.modifiable_publicly? || (active_pile.modifiable_by_user?(current_user) if current_user)
       return # success
     else
       flash[:warning] = "You do not have modify access for “#{active_owner_id}”'s pile “#{active_pile_id}”."
