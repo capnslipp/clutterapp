@@ -55,7 +55,7 @@ task :stag do
   
   set :deploy_to, '/var/www/clutterapp-stag'
   
-  set :branch, 'root-pile-refactor' # feel free to change this per-branch
+  set :branch, 'master' # feel free to change this per-branch
 end
 
 

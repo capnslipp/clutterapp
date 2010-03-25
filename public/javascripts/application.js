@@ -263,7 +263,7 @@ var kPreShowProgressDelay = 500;
 // first creates a "#progress-overlay" element as a child of the element called on, then fades and animates it in
 jQuery.fn.showProgressOverlay = function(options) {
 	if (options == undefined) options = {};
-	var targetOpacity = options.opacity || 0.75;
+	var targetOpacity = options.opacity || 0.9;
 	
 	if ($('#progress-overlay')[0]) {
 		var oldOverlay = hideProgressOverlay();
@@ -282,7 +282,7 @@ jQuery.fn.showProgressOverlay = function(options) {
 		{opacity: 0.0}, kPreShowProgressDelay, 'linear', // delay for a bit before starting
 		function() {
 			overlay.setCSS(
-				{opacity: 0.1, backgroundPosition: '0px 0px', backgroundImage: 'url("/images/anim.progress.in.bk-tr-aliased-white.16x32.gif")'}
+				{opacity: 0.05, backgroundPosition: '0px 0px', backgroundImage: 'url("/images/anim.progress.in.wh-tr-aliased.16x32.gif")'}
 			).animate(
 				{opacity: targetOpacity, backgroundPosition: '16px 0px'}, 500, 'easeInQuad',
 				function() {
@@ -305,7 +305,7 @@ function animateProgressOverlay() {
 	
 	overlay.setCSS({
 		backgroundPosition: '0px 0px',
-		backgroundImage: 'url("/images/anim.progress.full.bk-tr.16x32.png")',
+		backgroundImage: 'url("/images/anim.progress.full.wh-tr.16x32.png")',
 	}).animate(
 		{backgroundPosition: '1600px 0px'}, 50000, 'linear',
 		function() {
@@ -323,7 +323,7 @@ function hideProgressOverlay() {
 	overlay.stop(true, false);
 	
 	var overlayOpacity = overlay.getCSS('opacity');
-	if (overlayOpacity < 0.1) {
+	if (overlayOpacity < 0.05) {
 		// if barely visible, just hide it
 		overlay.remove();
 	} else {
@@ -331,7 +331,7 @@ function hideProgressOverlay() {
 		var overlayBGPosX = overlay.getCSS('backgroundPosition').asBGPosToArray()[0];
 		
 		overlay.setCSS({
-			backgroundImage: 'url("/images/anim.progress.out.bk-tr-aliased-white.16x32.gif")',
+			backgroundImage: 'url("/images/anim.progress.out.wh-tr-aliased.16x32.gif")',
 			backgroundPosition: overlayBGPosX + 'px 0px',
 		}).animate(
 			{opacity: 0.1, backgroundPosition: (overlayBGPosX + 16) + 'px 0px'},
@@ -358,7 +358,7 @@ if (ClutterApp.hasZoomSupport) {
 		
 		setTimeout(function() {
 			window.scrollTo(0, 0);
-		}, 0);
+		}, 1000);
 	});
 }
 
