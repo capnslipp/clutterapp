@@ -32,11 +32,15 @@ class NodesController < ApplicationController
   def sub_pile
     logger.prefixed 'sub_pile', :light_green, 'params: ' + params.inspect
     @node = active_pile.nodes.find(params[:id], :include => {:prop => :ref_pile})
-    @node.prop.ref_pile.update_attributes! :expanded => params[:expanded]
+    @node.prop.ref_pile.expanded = params[:expanded]
     
-    # @note: totally inefficient; invalidates tons of caches up the tree; will never work for one-big-pile approach
-    #   solution: render each sub-Pile independently with placeholder, then assemble them 
-    expire_cache_for(@node)
+    if @node.prop.ref_pile.modifiable?(current_user)
+      @node.prop.ref_pile.save!
+      
+      # @note: totally inefficient; invalidates tons of caches up the tree; will never work for one-big-pile approach
+      #   solution: render each sub-Pile independently with placeholder, then assemble them 
+      expire_cache_for(@node)
+    end
     
     if @node.prop.ref_pile.expanded? # if we just expanded it
       subscope subscope_of(@node.prop.ref_pile) do
