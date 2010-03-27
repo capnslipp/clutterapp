@@ -11,21 +11,3 @@ _gaq.push(['_trackPageview']);
 	document.documentElement.firstChild.appendChild(ga);
 })();
 </script>
-
-<%# Clicky Tracking Code %>
-<script type="text/javascript">
-var clicky_custom = {session: { <%- if current_user: -%>user: '<%=current_user.name%>',<%- end -%> },};
-var clicky = { log: function(){ return; } };
-var async_site_id = _fill_in_;
-(function() {
-  function clicky_load() {
-    var s = document.createElement('script');
-    s.type = 'text/javascript';
-    s.src = ( document.location.protocol == 'https:' ? 'https://static.getclicky.com' : 'http://static.getclicky.com' ) + '/js';
-    document.body.appendChild( s );
-  }
-  if( window.addEventListener ) window.addEventListener( 'load', clicky_load, false );
-  else if( window.attachEvent ) window.attachEvent( 'onload', clicky_load );
-  else clicky_load();
-})();
-</script>

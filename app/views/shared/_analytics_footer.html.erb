@@ -1,2 +1,14 @@
 <%# Clicky Tracking Code %>
+<script type="text/javascript">
+var clicky_custom = {session: { <%- if current_user: -%>user: '<%=current_user.name%>',<%- end -%> },};
+var clicky = { log: function(){ return; }, goal: function(){ return; }};
+var clicky_site_id = _fill_in_;
+(function() {
+	var s = document.createElement('script');
+	s.type = 'text/javascript';
+	s.async = true;
+	s.src = ( document.location.protocol == 'https:' ? 'https://static.getclicky.com' : 'http://static.getclicky.com' ) + '/js';
+	( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+})();
+</script>
 <noscript><p><img width="1" height="1" src="http://in.getclicky.com/_fill_in_ns.gif" style="position: absolute; z-index: -1000; width: 0; height: 0;"/></p></noscript>
