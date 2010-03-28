@@ -43,11 +43,11 @@ a { color: <%= text_color %>; }
 
 h1 { font-weight: bold; margin: 0; }
 h1 { font-size: 20px; line-height: 24px; }
-section h1 { font-size: 18px; line-height: 24px; }
-section section h1 { font-size: 18px; line-height: 18px; color: <%= wash_color %>; }
-section section section h1 { font-size: 16px; line-height: 16px; color: <%= wash_color %>; }
-section section section section h1 { font-size: 14px; line-height: 14px; color: <%= wash_color %>; }
-section section section section section h1 { font-size: 12px; line-height: 12px; color: <%= wash_color %>; }
+.section h1 { font-size: 18px; line-height: 24px; }
+.section .section h1 { font-size: 18px; line-height: 18px; color: <%= wash_color %>; }
+.section .section .section h1 { font-size: 16px; line-height: 16px; color: <%= wash_color %>; }
+.section .section .section .section h1 { font-size: 14px; line-height: 14px; color: <%= wash_color %>; }
+.section .section .section .section .section h1 { font-size: 12px; line-height: 12px; color: <%= wash_color %>; }
 
 em { font-weight: bold; font-style: normal; color: <%= (inverted? ? '#222'.to_color.invert : '#222'.to_color).to_s(:css) %>; }
 

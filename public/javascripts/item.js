@@ -798,7 +798,7 @@ jQuery.fn.setupReorderSortable = function() {
 		axis: 'y',
 		containment: '#active-sorting-container',
 		tolerance: 'pointer',
-		handle: '> .cont > .show.body > #action-bar .move.reorder, > section.root.node > .show.body > #action-bar .move.reorder',
+		handle: '> .cont > .show.body > #action-bar .move.reorder, > .root.node > .show.body > #action-bar .move.reorder',
 		helper: helper,
 		opacity: 0.5,
 		revert: true,

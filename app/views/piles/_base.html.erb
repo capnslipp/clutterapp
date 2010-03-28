@@ -1,6 +1,6 @@
 <% content_tag_for :div, @pile.root_node, :class => "base root item #{current_subscope}" do -%>
 	<%- cache ({:base_node_section => @pile.root_node.id, :subscope => current_subscope}.to_json) do -%>
-		<section class="base pile cont" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
+		<div class="section base pile cont" oc:nodes-url="<%=path_for([@owner, @pile, :nodes])%>">
 			
 			<div class="body">
 				<div class="back"></div>
@@ -25,6 +25,6 @@
 			
 			<%= render :partial => 'nodes/action_bar' %><%# need to always render this in case any descendant Piles are modifiable %>
 			
-		</section>
+		</div>
 	<%- end -%>
 <%- end -%>
