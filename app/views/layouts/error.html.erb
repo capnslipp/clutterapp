@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:oc="http://orgclut.com/xmlns/oc" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	<title><%= "ClutterApp » #{controller.controller_name} » #{controller.action_name} #{params[:id]}" %></title>
+	<meta http-equiv="X-UA-Compatible" content="chrome=1"/>
+	<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
+	<%= stylesheet_link_tag (StylesheetsController::STATIC_STYLESHEET_NAMES + StylesheetsController::DYNAMIC_STYLESHEET_NAMES), :media => 'all' unless ActionController::Base.perform_caching %>
+	<%= stylesheet_link_tag 'all', :media => 'all' if ActionController::Base.perform_caching %><%# all these are cached together by the StylesheetsController %>
+	<% js_files = [
+			{:src => 'jquery', :min => 'jquery.min'},
+			{:src => 'jquery-ui', :min => 'jquery-ui.min'},
+			{:src => 'jrails'},
+			{:src => 'jquery.easing', :min => 'jquery.easing.min'},
+			{:src => 'jquery.color', :min => 'jquery.color.min'},
+			{:src => 'jquery.backgroundPosition', :min => 'jquery.backgroundPosition.min'},
+			{:src => 'jquery.elastic', :min => 'jquery.elastic.min'},
+			{:src => 'jquery.cookie'},
+			{:src => 'jquery.conventionalize'},
+			{:src => 'util'},
+			{:src => 'application'},
+			{:src => 'touch'},
+		] %>
+	<%= javascript_include_tag js_files.collect{|file_h| file_h[:src] } unless ActionController::Base.perform_caching %>
+	<%= javascript_include_tag js_files.collect{|file_h| file_h[:min] || file_h[:src] }, :cache => true if ActionController::Base.perform_caching %>
+	<%= javascript_include_tag 'item' if @enable_item_view_js %>
+	<%= render :partial => 'shared/analytics_header' if analytics? %>
+</head>
+<body>
+
+<div id="base">
+	
+	<%= render :partial => 'shared/google_chrome_frame' unless current_user %>
+	
+	<div id="fill" class="initially-hidden"></div>
+	
+	<div id="top-bar">
+		<div class="back"><div class="fill"></div></div>
+		
+		<div class="logo">
+			<a href="<%= current_user ? home_path : root_path %>" style="text-decoration: none; background: none;">
+				<div style="color: #fff; opacity: 0.0; position: absolute; z-index: 1; margin: 2px;">Clutter<sub>App</sub></div>
+				<%= image_tag 'logo.clutterapp.wh-or-tr.dark-glow.90x17.png', :style => 'width: 90px; height: 17px; position: relative; z-index: 0;' %>
+			</a>
+		</div>
+		
+		<div class="content">
+		</div>
+		
+		<div class="corner">
+			<%= render :partial => 'users/user_bar' %>
+		</div>
+	</div>
+	
+	
+	<div id="page">
+		<div id="main-area"><div class="cont">
+			<%= yield %>
+		</div></div>
+	</div>
+	
+</div>
+
+
+<%= render :partial => 'shared/analytics_footer' if analytics? %>
+</body>
+</html>

@@ -41,13 +41,14 @@ body, input, textarea {
 
 a { color: <%= text_color %>; }
 
-h1 { font-weight: bold; margin: 0; }
+h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; }
+h1 .sub, h2 .sub, h3 .sub, h4 .sub, h5 .sub, h6 .sub { font-size: 0.7em; opacity: 0.7; text-indent: 0.25em; }
 h1 { font-size: 20px; line-height: 24px; }
-.section h1 { font-size: 18px; line-height: 24px; }
-.section .section h1 { font-size: 18px; line-height: 18px; color: <%= wash_color %>; }
-.section .section .section h1 { font-size: 16px; line-height: 16px; color: <%= wash_color %>; }
-.section .section .section .section h1 { font-size: 14px; line-height: 14px; color: <%= wash_color %>; }
-.section .section .section .section .section h1 { font-size: 12px; line-height: 12px; color: <%= wash_color %>; }
+h2, .section h1 { font-size: 18px; line-height: 24px; }
+h3, .section .section h1 { font-size: 18px; line-height: 18px; color: <%= wash_color %>; }
+h4, .section .section .section h1 { font-size: 16px; line-height: 16px; color: <%= wash_color %>; }
+h5, .section .section .section .section h1 { font-size: 14px; line-height: 14px; color: <%= wash_color %>; }
+h6, .section .section .section .section .section h1 { font-size: 12px; line-height: 12px; color: <%= wash_color %>; }
 
 em { font-weight: bold; font-style: normal; color: <%= (inverted? ? '#222'.to_color.invert : '#222'.to_color).to_s(:css) %>; }
 
@@ -155,8 +156,13 @@ input[type='button'].another:active, input[type='submit'].another:active {
 
 /* flash messages, notices, and warnings */
 
-.flash.message { color: <%= wash_text_color * 0.8 %>; }
-.flash.notice { color: <%= wash_text_color * 0.8 %>; }
-.flash.warning { color: <%= wash_text_color %>; font-style: italic; }
-.flash.error { color: <%= wash_text_color %>; font-weight: bold; }
+.flash.message { color: <%= text_color + 0.2 %>; }
+.flash.notice { color: <%= text_color + 0.2 %>; }
+.flash.warning { color: <%= text_color %>; font-style: italic; }
+.flash.error { color: <%= text_color %>; font-weight: bold; }
+
+#top-bar .flash.message { color: <%= wash_text_color * 0.8 %>; }
+#top-bar .flash.notice { color: <%= wash_text_color * 0.8 %>; }
+#top-bar .flash.warning { color: <%= wash_text_color %>; }
+#top-bar .flash.error { color: <%= wash_text_color %>; }
 

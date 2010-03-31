@@ -1,0 +1,19 @@
+<h1>
+	That didn't quite work as expected.
+	<div class="sub">
+		<% if flash[:message]: %><span class="flash message"><%= flash[:message] %></span><% end %>
+		<% if flash[:notice]: %><span class="flash notice"><%= flash[:notice] %></span><% end %>
+		<% if flash[:warning]: %><span class="flash warning"><%= flash[:warning] %></span><% end %>
+		<% if flash[:error]: %><span class="flash error"><%= flash[:error] %></span><% end %>
+	</div>
+</h1>
+
+<div style="margin: 32px;">
+	<p>Perhaps one of the following is closer to your intended destination…</p>
+	<ul>
+		<li><%= link_to "The Front Page", :root %></li>
+		<% begin %><li><%= link_to "Your Home/Dashboard", :home %></li><% end if current_user? %>
+		<% begin %><li><%= link_to "#{active_owner.login}'s Home", :home %></li><% end if active_owner? %>
+		<% begin %><li><%= link_to "#{active_owner.login}'s Pile “#{active_pile.name}”", :home %></li><% end if active_pile? %>
+	<ul>
+</div>
