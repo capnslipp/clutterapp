@@ -13,7 +13,7 @@
 	<ul class="textual">
 		<li><%= link_to "The Front Page", :root %></li>
 		<% begin %><li><%= link_to "Your Dashboard", :home %></li><% end if current_user? %>
-		<% begin %><li><%= link_to "#{active_owner.login}'s Home", :home %></li><% end if active_owner? %>
-		<% begin %><li><%= link_to "#{active_owner.login}'s Pile “#{active_pile.name}”", :home %></li><% end if active_pile? %>
+		<% begin %><li><%= link_to "#{active_owner.login}'s Home", [active_owner] %></li><% end if active_owner? %>
+		<% begin %><li><%= link_to "#{active_owner.login}'s Pile “#{active_pile.name}”", [active_pile.owner, active_pile] %></li><% end if active_pile? %>
 	<ul>
 </div>
