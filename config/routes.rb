@@ -1,6 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
   
-  map.resources :password_resets
   #map.resources :followships, :only => [:index, :create, :destroy], :member => { :toggle_follow => :post }
   
   map.stylesheets '/stylesheets/all.css', :controller => 'stylesheets', :action => 'all'
