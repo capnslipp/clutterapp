@@ -1,0 +1,13 @@
+<h1>
+	Oddly enough…
+	<div class="sub">
+		<% if flash[:message]: %><span class="flash message"><%= flash[:message] %></span><% end %>
+		<% if flash[:notice]: %><span class="flash notice"><%= flash[:notice] %></span><% end %>
+		<% if flash[:warning]: %><span class="flash warning"><%= flash[:warning] %></span><% end %>
+		<% if flash[:error]: %><span class="flash error"><%= flash[:error] %></span><% end %>
+	</div>
+</h1>
+
+<div style="margin: 32px;">
+	<p>Would you like to <%= link_to 'log out', logout_path, :method => :delete %> now?</p>
+</div>

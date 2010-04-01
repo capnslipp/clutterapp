@@ -37,23 +37,31 @@ protected
   
   
   def be_logged_in
-    redirect_to login_url unless current_user
+    return if current_user?
+    
+    flash.now[:error] = "You must have an account and be logged in to use this page."
+    render_error :log_in_necessary
+    return false
   end
   
   def be_visiting
-    redirect_to home_url if current_user
+    return unless current_user?
+    
+    flash.now[:error] = "You must be logged out in order to visit this page."
+    render_error :log_out_necessary
+    return false
   end
   
   
   def have_owner
     if active_owner_id.nil?
       flash.now[:error] = "No user specified."
-      render_not_found
+      render_error :not_found
       return false
       
     elsif active_owner.nil?
       flash.now[:error] = "User “#{active_owner_id}” doesn't exist."
-      render_not_found
+      render_error :not_found
       return false
       
     else
@@ -64,12 +72,12 @@ protected
   def have_pile
     if active_pile_id.nil?
       flash.now[:error] = "No pile specified."
-      render_not_found
+      render_error :not_found
       return false
       
     elsif active_pile.nil?
       flash.now[:error] = "Pile “#{active_pile_id}” doesn't exist or doesn't belong to “#{active_owner_id}”."
-      render_not_found
+      render_error :not_found
       return false
       
     else
@@ -149,32 +157,16 @@ private
   end
   
   
-  def require_user
-    unless current_user
-      store_location
-      flash[:notice] = "You must be logged in to access this page"
-      redirect_to new_user_session_url
+  def render_error(type)
+    type = type.to_sym
+    
+    status = case type
+      when :not_found then :not_found
+      when :log_in_necessary then :unauthorized
+      when :log_out_necessary then :unauthorized
     end
-  end
-  
-  def require_no_user
-    if current_user
-      # silent redirect
-      redirect_to home_path
-    end
-  end
-  
-  def store_location
-    session[:return_to] = request.request_uri
-  end
-  
-  def redirect_back_or_default(default)
-    redirect_to(session[:return_to] || default)
-    session[:return_to] = nil
-  end
-  
-  def render_not_found
-    render :template => 'error/not_found', :layout => 'error', :status => :not_found
+    
+    render :template => "error/#{type}", :layout => 'error', :status => status
   end
   
 end

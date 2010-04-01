@@ -11,8 +11,7 @@
 	<%= f.password_field :password %><br />
 	<br/>
 	
-	<%= f.check_box :remember_me, :value => true %><%= f.label 'Keep Me Logged In' %><br/>
-	<br/>
+		<%= f.label :dont_remember_me, '<em>automatically log out</em> at the end of this browser session' %>
 	
 	<%= f.submit "Login" %>
 <% end %>
