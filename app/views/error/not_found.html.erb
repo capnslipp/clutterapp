@@ -12,7 +12,7 @@
 	<p>Perhaps one of the following is closer to your intended destination…</p>
 	<ul class="textual">
 		<li><%= link_to "The Front Page", :root %></li>
-		<% begin %><li><%= link_to "Your Home/Dashboard", :home %></li><% end if current_user? %>
+		<% begin %><li><%= link_to "Your Dashboard", :home %></li><% end if current_user? %>
 		<% begin %><li><%= link_to "#{active_owner.login}'s Home", :home %></li><% end if active_owner? %>
 		<% begin %><li><%= link_to "#{active_owner.login}'s Pile “#{active_pile.name}”", :home %></li><% end if active_pile? %>
 	<ul>

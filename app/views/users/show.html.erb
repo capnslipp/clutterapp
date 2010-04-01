@@ -1,7 +1,6 @@
-<!-- User.has_name? not implemented
-<h2><%= h "#{@user.name}" %><%= h " (#{@user.login})" if @user.has_name? %></h2>  -->
+<h1><%= h @user.name %><%= h " (#{@user.login})" if @user.has_name? %></h1>
 
-<h3>Public Piles</h3>
+<h2>Public Piles</h2>
 
 <ul>
 	<% @public_piles.each do |pile| %>
@@ -15,15 +14,17 @@
 </ul>
 
 
-<h3>Piles Shared with You</h3>
-
-<ul>
-	<% @piles_shared_with_us.each do |pile| %>
-		<li>
-			<div class="scope name">
-				<span class="sym">&there4;</span>
-				<%= link_to h(pile.name), [pile.owner, pile] %>
-			</div>
-		</li>
-	<% end %>
-</ul>
+<%- if @piles_shared_with_us -%>
+	<h2>Piles Shared with You</h2>
+	
+	<ul>
+		<% @piles_shared_with_us.each do |pile| %>
+			<li>
+				<div class="scope name">
+					<span class="sym">&there4;</span>
+					<%= link_to h(pile.name), [pile.owner, pile] %>
+				</div>
+			</li>
+		<% end %>
+	</ul>
+<%- end -%>
