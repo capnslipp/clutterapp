@@ -90,8 +90,9 @@ protected
     if active_pile.accessible_publicly? || (active_pile.accessible_by_user?(current_user) if current_user)
       return # success
     else
-      flash[:warning] = "You do not have access to “#{active_owner_id}”'s pile “#{active_pile_id}”."
-      redirect_to current_user || home_url
+      flash.now[:error] = "You do not have access to “#{active_owner_id}”'s pile “#{active_pile_id}”."
+      render_error :no_access
+      return false
     end
   end
   
@@ -99,8 +100,9 @@ protected
     if active_pile.modifiable_publicly? || (active_pile.modifiable_by_user?(current_user) if current_user)
       return # success
     else
-      flash[:warning] = "You do not have modify access for “#{active_owner_id}”'s pile “#{active_pile_id}”."
-      redirect_to current_user || home_url
+      flash.now[:error] = "You do not have modify access for “#{active_owner_id}”'s pile “#{active_pile_id}”."
+      render_error :no_access
+      return false
     end
   end
   
@@ -160,13 +162,15 @@ private
   def render_error(type)
     type = type.to_sym
     
-    status = case type
-      when :not_found then :not_found
-      when :log_in_necessary then :unauthorized
-      when :log_out_necessary then :unauthorized
-    end
+    # keys are error types, values are HTTP status codes
+    types_to_statuses = {
+      :not_found =>         :not_found,
+      :log_in_necessary =>  :unauthorized,
+      :log_out_necessary => :unauthorized,
+      :no_access =>         :unauthorized
+    }
     
-    render :template => "error/#{type}", :layout => 'error', :status => status
+    render :template => "error/#{type}", :layout => 'error', :status => types_to_statuses[type]
   end
   
 end

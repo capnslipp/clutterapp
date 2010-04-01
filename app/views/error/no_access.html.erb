@@ -1,0 +1,18 @@
+<h1>
+	No Peeking.
+	<div class="sub">
+		<% if flash[:message]: %><span class="flash message"><%= flash[:message] %></span><% end %>
+		<% if flash[:notice]: %><span class="flash notice"><%= flash[:notice] %></span><% end %>
+		<% if flash[:warning]: %><span class="flash warning"><%= flash[:warning] %></span><% end %>
+		<% if flash[:error]: %><span class="flash error"><%= flash[:error] %></span><% end %>
+	</div>
+</h1>
+
+<div style="margin: 32px;">
+	<p>However, we assure you can peruse the following:</p>
+	<ul class="textual">
+		<li><%= link_to "The Front Page", :root %></li>
+		<% begin %><li><%= link_to "Your Dashboard", :home %></li><% end if current_user? %>
+		<% begin %><li><%= link_to "#{active_owner.login}'s Home", [active_owner] %></li><% end if active_owner? %>
+	<ul>
+</div>
