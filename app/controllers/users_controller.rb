@@ -35,15 +35,10 @@ class UsersController < ApplicationController
   
   def show
     @user = active_owner
-    if @user
-      @public_piles = @user.piles.shared_publicly.all
-      @piles_shared_with_us = @user.piles.shared_with_user(current_user).all if current_user?
-      
-      render # show.html.erb
-    else
-      flash[:error]  = %{Couldn't find user by the name of "#{params[:id]}".}
-      redirect_to home_path
-    end
+    @public_piles = @user.piles.shared_publicly.all
+    @piles_shared_with_us = @user.piles.shared_with_user(current_user).all if current_user?
+    
+    render # show.html.erb
   end
   
   
