@@ -52,6 +52,11 @@ h6, .section .section .section .section .section h1 { font-size: 12px; line-heig
 
 em { font-weight: bold; font-style: normal; color: <%= (inverted? ? '#222'.to_color.invert : '#222'.to_color).to_s(:css) %>; }
 
+p, ul.textual, ol.textual { margin-bottom: 1em; }
+
+ul.textual li { list-style: disc inside; }
+ol.textual li { list-style: decimal inside; }
+
 
 form {
 	/*width: 100%;*/ /*neccessary?*/
@@ -165,4 +170,8 @@ input[type='button'].another:active, input[type='submit'].another:active {
 #top-bar .flash.notice { color: <%= wash_text_color * 0.8 %>; }
 #top-bar .flash.warning { color: <%= wash_text_color %>; }
 #top-bar .flash.error { color: <%= wash_text_color %>; }
+
+
+form .prefix { padding-right: 1em; text-align: right; }
+
 

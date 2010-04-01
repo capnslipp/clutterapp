@@ -3,15 +3,21 @@
 <% form_for @user_session, :url => [:user_session] do |f| %>
 	<%= f.error_messages %>
 	
-	<%= f.label :login %><br/>
-	<%= f.text_field :login %><br/>
-	<br/>
+	<table>
+		<tr class="line">
+			<td class="prefix"><%= f.label :login, 'login' %></td>
+			<td><%= f.text_field :login %></td>
+		</tr>
+		<tr class="line">
+			<td class="prefix"><%= f.label :password, 'password' %></td>
+			<td><%= f.password_field :password %></td>
+		</tr>
+	</table>
 	
-	<%= f.label :password %><br/>
-	<%= f.password_field :password %><br />
-	<br/>
-	
+	<div class="line">
+		<%= f.check_box :dont_remember_me, :value => !@user_session.remember_me %>
 		<%= f.label :dont_remember_me, '<em>automatically log out</em> at the end of this browser session' %>
+	</div>
 	
 	<%= f.submit "Login" %>
 <% end %>

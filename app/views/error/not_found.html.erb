@@ -10,7 +10,7 @@
 
 <div style="margin: 32px;">
 	<p>Perhaps one of the following is closer to your intended destination…</p>
-	<ul>
+	<ul class="textual">
 		<li><%= link_to "The Front Page", :root %></li>
 		<% begin %><li><%= link_to "Your Home/Dashboard", :home %></li><% end if current_user? %>
 		<% begin %><li><%= link_to "#{active_owner.login}'s Home", :home %></li><% end if active_owner? %>
