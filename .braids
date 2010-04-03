@@ -1,36 +1,29 @@
 --- 
-vendor/plugins/awesome_nested_set: 
-  squashed: true
-  url: git://github.com/collectiveidea/awesome_nested_set.git
-  branch: master
-  type: git
-  revision: c7fae7938dd2677e7df7c7ed325f0975067b5ea3
-  remote: braid/vendor/plugins/awesome-nested-set
 vendor/plugins/yaml_db: 
   squashed: true
-  branch: master
   url: git://github.com/ludicast/yaml_db.git
+  branch: master
   type: git
   revision: 2b3e3546da41e88c2a339c676232480d6383ac5c
   remote: braid/vendor/plugins/yaml-db
 vendor/plugins/dataset: 
   squashed: true
-  url: git://github.com/aiwilliams/dataset.git
   branch: master
+  url: git://github.com/aiwilliams/dataset.git
   type: git
   revision: c4fe809f4421b57257f3323717ec534f301ffc95
   remote: braid/vendor/plugins/dataset
-vendor/plugins/git_r_backup: 
-  squashed: true
-  url: git://github.com/slippyd/git_r_backup.git
-  branch: master
-  type: git
-  revision: 5edfa847ac39f8c70d87167fafa40679f4508358
-  remote: braid/vendor/plugins/git-r-backup
 vendor/plugins/default_routing: 
   squashed: true
-  url: git://github.com/slippyd/default_routing.git
   branch: master
+  url: git://github.com/slippyd/default_routing.git
   type: git
   revision: baf836a68d7bf77138b029a872d4eda8c6309c03
   remote: braid/vendor/plugins/default-routing
+vendor/plugins/git_r_backup: 
+  squashed: true
+  branch: master
+  url: git://github.com/slippyd/git_r_backup.git
+  type: git
+  revision: 5edfa847ac39f8c70d87167fafa40679f4508358
+  remote: braid/vendor/plugins/git-r-backup
