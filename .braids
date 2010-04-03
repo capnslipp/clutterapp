@@ -13,6 +13,13 @@ vendor/plugins/dataset:
   type: git
   revision: c4fe809f4421b57257f3323717ec534f301ffc95
   remote: braid/vendor/plugins/dataset
+vendor/plugins/inverse_of: 
+  squashed: true
+  url: git://github.com/oggy/inverse_of.git
+  branch: master
+  type: git
+  revision: 717726d61da6f6fd6083b763295ff1166b1607ec
+  remote: braid/vendor/plugins/inverse-of
 vendor/plugins/default_routing: 
   squashed: true
   branch: master
