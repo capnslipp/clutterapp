@@ -185,11 +185,15 @@ EOS
   helpers do
     
     def create_node(dataset_name, opts = {})
+      raise ArgumentError.new ":with option is required" unless opts.has_key?(:with)
+      
       u = Node.create! opts[:with]
       name_model u, dataset_name
     end
     
     def name_node(dataset_name, opts = {})
+      raise ArgumentError.new ":for option must not be nil" if opts[:for].nil?
+      
       name_model opts[:for], dataset_name
     end
     
