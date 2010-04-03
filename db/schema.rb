@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100403032712) do
+ActiveRecord::Schema.define(:version => 20100403035807) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -37,9 +37,11 @@ ActiveRecord::Schema.define(:version => 20100403032712) do
     t.integer  "version",    :default => 0
     t.integer  "pile_id"
     t.string   "ancestry"
+    t.integer  "position"
   end
 
   add_index "nodes", ["ancestry"], :name => "index_nodes_on_ancestry"
+  add_index "nodes", ["position"], :name => "index_nodes_on_position"
 
   create_table "note_props", :force => true do |t|
     t.text     "note",       :null => false
