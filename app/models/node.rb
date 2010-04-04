@@ -1,6 +1,5 @@
 class Node < ActiveRecord::Base
-  has_ancestry
-  acts_as_list :scope => :parent
+  acts_as_nested_set
   
   belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true, :dependent => :destroy
   
