@@ -247,7 +247,7 @@ class NodesController < ApplicationController
       @target = active_pile.nodes.find(params[:target_id], :include => :prop)
       
       unless @node.prop.class.deepable?
-        return render(:nothing => true, :status => :bad_request) unless @target.is_root? || (@target.prop.is_a? PileRefProp)
+        return render(:nothing => true, :status => :bad_request) unless @target.root? || (@target.prop.is_a? PileRefProp)
       end
       
       first_child = @target.children.first
@@ -262,7 +262,7 @@ class NodesController < ApplicationController
       @target = target_pile.nodes.find(params[:target_id], :include => [:prop, :pile])
       
       unless @node.prop.class.deepable?
-        return render(:nothing => true, :status => :bad_request) unless @target.is_root? || (@target.prop.is_a? PileRefProp)
+        return render(:nothing => true, :status => :bad_request) unless @target.root? || (@target.prop.is_a? PileRefProp)
       end
       
       Node.transaction do
@@ -303,7 +303,7 @@ private
     
     [:modifiable, :observable].each do |subscope|
       expire_fragment ({:node_item => record.id, :subscope => subscope}.to_json)
-      if record.is_root?
+      if record.root?
         expire_fragment ({:node_section => record.id, :subscope => subscope}.to_json)
         expire_fragment ({:base_node_section => record.id, :subscope => subscope}.to_json)
       end
@@ -313,7 +313,7 @@ private
     expire_cache_for(record.parent) if record.parent
     
     # invalidate the cache for any pile ref nodes point at this pile's root node
-    if record.is_root?
+    if record.root?
       pr = record.pile.pile_ref_prop
       expire_cache_for(pr.node) if pr
     end
@@ -329,10 +329,11 @@ private
     cloned_node.prop = orig_node.prop.clone
     orig_node.prop.ref_pile = nil if orig_node.prop.is_a? PileRefProp # to avoid destroying the dependency
     cloned_node.pile = dest_pile
+    dest_parent.children << cloned_node # saves as a side-effect
     
     first_child = dest_parent.children.first
     if first_child
-      cloned_node.move_to_left_of(first_child) # saves as a side-effect
+      cloned_node.move_to_left_of(first_child) unless cloned_node == first_child # saves as a side-effect
     else
       cloned_node.move_to_child_of(dest_parent) # saves as a side-effect
     end

@@ -187,10 +187,7 @@ EOS
     def create_node(dataset_name, opts = {})
       raise ArgumentError.new ":with option is required" unless opts.has_key?(:with)
       
-      with_children = opts[:with].delete(:children)
       u = Node.create! opts[:with]
-      with_children.each {|c| u.children << c } if with_children
-      
       name_model u, dataset_name
     end
     

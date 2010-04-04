@@ -10,7 +10,7 @@ class Node < ActiveRecord::Base
   
   
   accepts_nested_attributes_for :prop, :allow_destroy => true
-  #accepts_nested_attributes_for :children, :allow_destroy => true
+  accepts_nested_attributes_for :children, :allow_destroy => true
   
   
   named_scope :varianted, lambda {|variant_or_name|
@@ -108,7 +108,7 @@ class Node < ActiveRecord::Base
     end
   end
   
-  begin # Node Ordering Compatibility (per awesome_nested_set) Utilities
+  begin # Node Ordering Compatibility Utilities
     
     # accepts the typical array of ids from a scriptaculous sortable. It is called on the instance being moved
     def sort(array_of_ids)
@@ -116,42 +116,6 @@ class Node < ActiveRecord::Base
         move_to_left_of siblings.find(array_of_ids.second)
       else
         move_to_right_of siblings.find(array_of_ids[array_of_ids.index(id.to_s) - 1])
-      end
-    end
-    
-    def move_to_child_of(reference_instance)
-      transaction do
-        remove_from_list
-        self.update_attributes!(:parent => reference_instance)
-        add_to_list_bottom
-        save!
-      end
-    end
-    
-    def move_to_left_of(reference_instance)
-      transaction do
-        remove_from_list
-        reference_instance.reload # Things have possibly changed in this list
-        self.update_attributes!(:parent_id => reference_instance.parent_id)
-        reference_item_position = reference_instance.position
-        increment_positions_on_lower_items(reference_item_position)
-        self.update_attribute(:position, reference_item_position)
-      end
-    end
-    
-    def move_to_right_of(reference_instance)
-      transaction do
-        remove_from_list
-        reference_instance.reload # Things have possibly changed in this list
-        self.update_attributes!(:parent_id => reference_instance.parent_id)
-        if reference_instance.lower_item
-          lower_item_position = reference_instance.lower_item.position
-          increment_positions_on_lower_items(lower_item_position)
-          self.update_attribute(:position, lower_item_position)
-        else
-          add_to_list_bottom
-          save!
-        end
       end
     end
     
@@ -202,7 +166,7 @@ class Node < ActiveRecord::Base
 protected
   
   def validate
-    if is_root?
+    if root?
       errors.add(:node, "must not have a prop (when root)") if prop
     else
       errors.add(:node, "must have a prop (when not root)") unless prop

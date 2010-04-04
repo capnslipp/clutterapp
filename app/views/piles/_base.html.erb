@@ -10,12 +10,12 @@
 				<%= render :partial => 'piles/share_status', :locals => {:pile => @pile} if current_subscope == :modifiable %>
 				
 				<h1 class="header" onclick="void(0)"><%# onclick, for MobileSafari, with Love -%>
-					<% unless @pile.is_root? %><a href="<%=path_for [@owner, @owner.root_pile]%>" class="owner pile name link"><%= @owner.name %> <span class="sym"><%# » %>&raquo;</span></a><% end %>
+					<% unless @pile.root? %><a href="<%=path_for [@owner, @owner.root_pile]%>" class="owner pile name link"><%= @owner.name %> <span class="sym"><%# » %>&raquo;</span></a><% end %>
 					<% (@pile.ancestors.reverse - [@owner.root_pile]).each do |ancestor_pile| %>
 						<%- next unless ancestor_pile.accessible_publicly? || (ancestor_pile.accessible_by_user?(current_user) if current_user) -%>
 						<a href="<%=path_for [@owner, ancestor_pile]%>" class="ancestor pile name link"><%= ancestor_pile.name %> <span class="sym"><%# » %>&raquo;</span></a>
 					<% end %>
-					<span class="base pile name"><%= @pile.is_root? ? @pile.owner.name : @pile.name %></span>
+					<span class="base pile name"><%= @pile.root? ? @pile.owner.name : @pile.name %></span>
 				</h1>
 			</div>
 			

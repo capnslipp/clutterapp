@@ -89,7 +89,7 @@ class Pile < ActiveRecord::Base
   #after_create :save_root_node!
   
   
-  def is_root?
+  def root?
     self.id == self.owner.root_pile_id
   end
   
@@ -106,7 +106,7 @@ class Pile < ActiveRecord::Base
     @ancestors ||= begin
       ancestors = []
       current_ancestor_pile = self
-      while !current_ancestor_pile.is_root?
+      while !current_ancestor_pile.root?
         current_ancestor_pile = current_ancestor_pile.parent
         ancestors << current_ancestor_pile
       end
