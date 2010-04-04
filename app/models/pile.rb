@@ -25,11 +25,27 @@ class Pile < ActiveRecord::Base
     { :joins => :shares, :conditions => {:piles => {:owner_id => owner_user.id}} }
   }
   
+  
+  has_one :pile_ref_prop, :foreign_key => 'ref_pile_id'
+  
+  #validates_presence_of   :root_node, :message => 'is required'
+  
+  belongs_to :root_node, :class_name => Node.name
+  carpesium :root_node
+  #before_validation_on_create :build_root_node
+  #after_create :save_root_node!
+  
+  
   def after_initialize
     if new_record?
-      build_root_node
+      build_root_node if self.root_node.nil?
     end
   end
+  
+  def build_root_node(attrs = {})
+    self.root_node = self.nodes.build(attrs)
+  end
+  
   
   # helpers for the sharing settings on this Pile (primarily for the owner)
   
@@ -77,16 +93,6 @@ class Pile < ActiveRecord::Base
   def modifiable_by_user?(user, inheriting = true)
     return !!( user == owner || specific_user_shares.exists?(:sharee_id => user.id, :modifiable => true) || (parent.modifiable_by_user?(user) if inheriting && parent) )
   end
-  
-  
-  has_one :pile_ref_prop, :foreign_key => 'ref_pile_id'
-  
-  #validates_presence_of   :root_node, :message => 'is required'
-  
-  belongs_to :root_node, :class_name => Node.name
-  carpesium :root_node
-  #before_validation_on_create :build_root_node
-  #after_create :save_root_node!
   
   
   def root?
@@ -138,12 +144,6 @@ class Pile < ActiveRecord::Base
   
   
 protected
-  
-  def build_root_node
-    self.root_node = Node.new(
-      :pile => self
-    )
-  end
   
   #def save_root_node!
   #  self.root_node.pile = self # setting owner afterwards is necessary during creation

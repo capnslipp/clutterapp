@@ -40,12 +40,18 @@ class User < ActiveRecord::Base
   # HACK HACK HACK -- how to do attr_accessible from here? Prevents a user from submitting a crafted form that bypasses activation anything else you want your user to change should be added here.
   attr_accessible :login, :email, :name, :password, :password_confirmation, :invite_token, :root_pile, :root_pile_id
   
+  
   def after_initialize
     if new_record?
-      build_root_pile
+      build_root_pile if self.root_pile.nil?
     end
   end
   
+  def build_root_pile(attrs = {})
+    self.root_pile = self.piles.build( attrs.merge(
+      :name => "<#{self.login}'s root pile>"
+    ) )
+  end
   
   
   def to_param
@@ -115,13 +121,6 @@ protected
   
   def set_starting_invite_limit
     self.invite_limit = DEFAULT_INVITATION_LIMIT
-  end
-  
-  def build_root_pile
-    self.root_pile = Pile.new(
-      :name => %[<#{self.login}'s root pile>],
-      :owner => self
-    )
   end
   
   #def save_root_pile!

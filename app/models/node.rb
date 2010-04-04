@@ -1,16 +1,15 @@
 class Node < ActiveRecord::Base
   acts_as_nested_set :scope => :pile, :dependent => :destroy
   
+  accepts_nested_attributes_for :children, :allow_destroy => true
+  
   belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true, :dependent => :destroy
+  accepts_nested_attributes_for :prop, :allow_destroy => true
   
   belongs_to :pile, :inverse_of => :nodes
   before_validation_on_create :assign_children_parent
   before_validation_on_create :assign_pile
   validates_presence_of :pile
-  
-  
-  accepts_nested_attributes_for :prop, :allow_destroy => true
-  accepts_nested_attributes_for :children, :allow_destroy => true
   
   
   named_scope :varianted, lambda {|variant_or_name|
@@ -56,10 +55,10 @@ class Node < ActiveRecord::Base
   end
   
   
-  def build_prop(params)
+  def build_prop(attrs = {})
     self.prop = Prop.derive_variant(
-      params.delete('variant_name')
-    ).new(params)
+      attrs.delete('variant_name')
+    ).new(attrs)
   end
   
   

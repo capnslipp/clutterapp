@@ -20,7 +20,7 @@ class NodesController < ApplicationController
     @node = active_pile.nodes.find(params[:id], :include => :prop)
     @prop = @node.prop
     @prop.update_attributes! :checked => params[:checked]
-    expire_cache_for(@prop)
+    expire_cache_for(@node)
     
     render :update do |page|
       page.call 'updateCheckPropField', "check_prop_#{@prop.id}", @prop.checked?
@@ -30,7 +30,6 @@ class NodesController < ApplicationController
   
   # PUT /nodes/1/sub_pile
   def sub_pile
-    logger.prefixed 'sub_pile', :light_green, 'params: ' + params.inspect
     @node = active_pile.nodes.find(params[:id], :include => {:prop => :ref_pile})
     @node.prop.ref_pile.expanded = params[:expanded]
     
@@ -111,11 +110,6 @@ class NodesController < ApplicationController
     node_attrs[:prop_attributes][:variant_name] = node_attrs.delete(:prop_type)
     
     @node = @parent.children.build(node_attrs)
-    
-    #@node.children.each do |child|
-    #  child.parent = @node
-    #  child.pile = @node.pile
-    #end
     
     # build a sub-pile if the type is a RefPile
     @node.prop.ref_pile = (active_owner.piles.build node_attrs[:prop_attributes][:ref_pile_attributes]) if @node.variant == PileRefProp
@@ -297,10 +291,6 @@ class NodesController < ApplicationController
 private
   
   def expire_cache_for(record)
-    record = record.node if record.is_a? Prop
-    
-    logger.prefixed 'NodesController#expire_cache_for', :light_yellow, "cache invalidated for Node ##{record.id}"
-    
     [:modifiable, :observable].each do |subscope|
       expire_fragment ({:node_item => record.id, :subscope => subscope}.to_json)
       if record.root?
