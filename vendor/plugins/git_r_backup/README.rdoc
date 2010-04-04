@@ -1,0 +1,127 @@
+= git_r_backup
+
+Git 'R Backup is a (really) simple utility for backing up your Rails apps into a Git repository.
+
+
+
+== Why back up to Git?
+
+Why not? It's fast, it's efficient, it's versioned, it's distributed, and it's compressed. Seriously, why wouldn't you want to?
+
+
+My reasoning why backing up to Git is awesome:
+1. Since the database is backed up as YAML, it compresses down quite nicely and diffs are easy to see as well.
+2. Since it's distributed, it's easy as pie to move and and remotely back up your backups. After all, a back up on the same server is a bit pointless.
+3. Since it will make you popular with the ladies (though there's a few steps beyond the scope of this document inferred), there's no reason not to.
+
+
+
+== Requirements
+
+* a Rails 2.x app (Rails 3 may work; who knows?)
+* the yaml_db plugin/gem (http://github.com/ludicast/yaml_db)
+* the git gem (http://gemcutter.org/gems/git)
+
+
+
+== Usage
+
+To install in your Rails app:
+  $ script/plugin install git://github.com/slippyd/git_r_backup.git
+  
+  Initialized empty Git repository in /Users/slippyd/Sites/_teh_best_app_eva_/vendor/plugins/git_r_backup/.git/
+  remote: Counting objects: 17, done.
+  remote: Compressing objects: 100% (12/12), done.
+  remote: Total 17 (delta 1), reused 0 (delta 0)
+  Unpacking objects: 100% (17/17), done.
+  From git://github.com/slippyd/git_r_backup
+   * branch            HEAD       -> FETCH_HEAD
+
+Then, set up a git repo to back up to:
+  $ git init /_somewhere_nice_and_cozy_/backup_cache
+  
+  Initialized empty Git repository in /_somewhere_nice_and_cozy_/backup_cache/.git/
+
+And git 'er backed-up!
+  $ rake git_r_backup:db CACHE='/_somewhere_nice_and_cozy_/backup_cache'
+  
+  (in /Users/slippyd/Desktop/blah_app)
+  (in /Users/slippyd/Desktop/blah_app)
+  Backed up database.
+
+If needing to back up assets as well:
+  $ rake git_r_backup:all CACHE='/_somewhere_nice_and_cozy_/backup_cache' ASSETS='public/assets'
+  
+  (in /Users/slippyd/Desktop/blah_app)
+  (in /Users/slippyd/Desktop/blah_app)
+  No backup of database necessary.
+  Backed up assets.
+
+And pow. Backed up, committed to the repo, and even pushed if the repo has a remote origin.
+
+
+
+== Full Usage
+
+=== Rake Commands
+
+[git_r_backup:db]     Fires off a 'rake db:dump' and backs up the data.yml and schema.rb generated to the CACHE repo.
+                      * required args: CACHE
+                      * optional args: BASE, APP, SUB
+
+[git_r_backup:assets] Copies and backs up the given ASSETS path to the CACHE repo.
+                      * required args: CACHE, ASSETS
+                      * optional args: BASE, APP, SUB
+
+[git_r_backup:all]    Runs both 'git_r_backup:db' and 'git_r_backup:assets' (in essential, that is).
+                      * required args: CACHE, ASSETS
+                      * optional args: BASE, APP, SUB
+
+
+=== Environment Variable Args
+
+[CACHE]   The filesystem path to the Git repository to back up to.
+
+[ASSETS]  The filesystem path to the folder containing the assets that need to be backed up.
+
+[BASE]    A path prefix, that if specified, is prepended to the CACHE, APP, and ASSETS paths.
+          * Defaults to the present working directory ('pwd').
+
+[APP]     The directory of the app.
+          * Note that rake still needs to be run from the directory of the app, so this is only needed when specifying BASE.
+          * Defaults to the same directory as BASE ('./').
+
+[SUB]     Creates a sub-folder (or path) inside the Git repository and puts the files in there instead.
+          * Useful if backing up multiple servers/deployments/environments to the same backup repo, or if backing up to the code repo (naughty, naughty).
+
+
+=== Things to Watch Out For
+
+* You may need RAILS_ENV=production (or whichever environment) in environment variable args.
+* Make sure the user doing the backing up has permissions and authority to copy to the Git repo and to push up changes (that is, if the repo has a remote origin, which is should sooner-than-later).
+* If running it from cron, you'll need to doctor the invocation up a bit. Here's what mine looks like:
+    26 3 * * * cd /www/clutterapp/current && /usr/local/bin/rake git_r_backup:db BASE='/www/clutterapp' APP='current' CACHE='shared/backup_cache' SUB='snaotn.clutterapp' RAILS_ENV=production
+  I would suggest using a tool like Whenever instead (Ryan Bates reveals all at http://railscasts.com/episodes/164-cron-in-ruby).
+
+
+
+== To Do
+
+* Bundle the yaml_db and the git gems into this plug-in.
+* Make into a gem with CLI magic that can be called independent of rake.
+* Fix the calls straight to command-line git with proper usage of a git plugin/gem OR build in the necessary code to talk to git, eliminating the need for that external dependency.
+* Add more Love.
+
+
+
+== License
+
+(The MIT License)
+
+Copyright (c) 2009-2010 Slippy Douglas
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
