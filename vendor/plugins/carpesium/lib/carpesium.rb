@@ -44,6 +44,8 @@ module Carpesium
         end
         
         define_method(reset_method_name) do
+          @already_saved_associated_records_for ||= {}
+          
           @already_saved_associated_records_for[association_name] = false
         end
         
