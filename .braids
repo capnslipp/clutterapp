@@ -6,6 +6,13 @@ vendor/plugins/yaml_db:
   type: git
   revision: 2b3e3546da41e88c2a339c676232480d6383ac5c
   remote: braid/vendor/plugins/yaml-db
+vendor/plugins/carpesium: 
+  squashed: true
+  url: git://github.com/slippyd/carpesium.git
+  branch: master
+  type: git
+  revision: c0a0ab01f2f7efc1ce904679a47a47c62c12b82b
+  remote: braid/vendor/plugins/carpesium
 vendor/plugins/dataset: 
   squashed: true
   branch: master
