@@ -112,10 +112,10 @@ class NodesController < ApplicationController
     
     @node = @parent.children.build(node_attrs)
     
-    @node.children.each do |child|
-      child.parent = @node
-      child.pile = @node.pile
-    end
+    #@node.children.each do |child|
+    #  child.parent = @node
+    #  child.pile = @node.pile
+    #end
     
     # build a sub-pile if the type is a RefPile
     @node.prop.ref_pile = (active_owner.piles.build node_attrs[:prop_attributes][:ref_pile_attributes]) if @node.variant == PileRefProp
@@ -199,7 +199,7 @@ class NodesController < ApplicationController
   
   # PUT /nodes/1
   def update
-    @node = active_pile.nodes.find(params[:id], :include => [:prop, :parent])
+    @node = active_pile.nodes.find(params[:id], :include => :prop)
     
     @node.update_attributes(params[:node])
     
@@ -238,7 +238,7 @@ class NodesController < ApplicationController
   
   # PUT /nodes/1/reparent?parent_id=2
   def reparent
-    @node = active_pile.nodes.find(params[:id], :include => [:parent, :prop])
+    @node = active_pile.nodes.find(params[:id], :include => :prop)
     
     expire_cache_for(@node.parent) # old parent
     
@@ -247,7 +247,7 @@ class NodesController < ApplicationController
       @target = active_pile.nodes.find(params[:target_id], :include => :prop)
       
       unless @node.prop.class.deepable?
-        return render(:nothing => true, :status => :bad_request) unless @target.root? || (@target.prop.is_a? PileRefProp)
+        return render(:nothing => true, :status => :bad_request) unless @target.is_root? || (@target.prop.is_a? PileRefProp)
       end
       
       first_child = @target.children.first
@@ -262,12 +262,12 @@ class NodesController < ApplicationController
       @target = target_pile.nodes.find(params[:target_id], :include => [:prop, :pile])
       
       unless @node.prop.class.deepable?
-        return render(:nothing => true, :status => :bad_request) unless @target.root? || (@target.prop.is_a? PileRefProp)
+        return render(:nothing => true, :status => :bad_request) unless @target.is_root? || (@target.prop.is_a? PileRefProp)
       end
       
       Node.transaction do
         # deep-duplicate the node into the new tree
-        @new_node = deep_clone_node_to_pile!(@node, @target.pile, @target)
+        @new_node = deep_clone_node!(@node, @target)
         
         # delete it from the old tree
         @node.destroy
@@ -285,8 +285,7 @@ class NodesController < ApplicationController
   # DELETE /nodes/1
   # DELETE /nodes/1.xml
   def destroy
-    @node = active_pile.nodes.find(params[:id], :include => :parent)
-    orig_parent_node = @node.parent
+    @node = active_pile.nodes.find(params[:id])
     @node.destroy
     
     expire_cache_for(@node)
@@ -304,7 +303,7 @@ private
     
     [:modifiable, :observable].each do |subscope|
       expire_fragment ({:node_item => record.id, :subscope => subscope}.to_json)
-      if record.root?
+      if record.is_root?
         expire_fragment ({:node_section => record.id, :subscope => subscope}.to_json)
         expire_fragment ({:base_node_section => record.id, :subscope => subscope}.to_json)
       end
@@ -314,7 +313,7 @@ private
     expire_cache_for(record.parent) if record.parent
     
     # invalidate the cache for any pile ref nodes point at this pile's root node
-    if record.root?
+    if record.is_root?
       pr = record.pile.pile_ref_prop
       expire_cache_for(pr.node) if pr
     end
@@ -323,19 +322,24 @@ private
     #   (probably using something like: http://github.com/tylerkovacs/extended_fragment_cache)
   end
   
-  def deep_clone_node_to_pile!(orig_node, dest_pile, dest_parent)
+  def deep_clone_node!(orig_node, dest_parent)
+    dest_pile = dest_parent.pile
+    
     cloned_node = orig_node.clone
     cloned_node.prop = orig_node.prop.clone
     orig_node.prop.ref_pile = nil if orig_node.prop.is_a? PileRefProp # to avoid destroying the dependency
     cloned_node.pile = dest_pile
-    dest_parent.children << cloned_node # saves as a side-effect
     
     first_child = dest_parent.children.first
-    cloned_node.move_to_left_of first_child unless cloned_node == first_child
+    if first_child
+      cloned_node.move_to_left_of(first_child) # saves as a side-effect
+    else
+      cloned_node.move_to_child_of(dest_parent) # saves as a side-effect
+    end
     
     # need to add them in reverse order one-by-one so they retain the same ordering
     orig_node.children.reverse_each do |onc|
-      deep_clone_node_to_pile!(onc, dest_pile, cloned_node)
+      deep_clone_node!(onc, cloned_node)
     end
     
     cloned_node

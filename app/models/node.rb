@@ -5,8 +5,9 @@ class Node < ActiveRecord::Base
   belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true, :dependent => :destroy
   
   belongs_to :pile, :inverse_of => :nodes
+  before_validation_on_create :assign_pile
+  validates_presence_of :pile
   #before_validation_on_create :assign_children_parent
-  #before_validation_on_create :assign_pile
   
   
   accepts_nested_attributes_for :prop, :allow_destroy => true
@@ -157,6 +158,47 @@ class Node < ActiveRecord::Base
     
   end
   
+  begin # Pending Children
+    public
+    
+    def children=(children)
+      attributes['pending_children'] = children
+    end
+    
+    def children_with_pending
+      if new_record?
+        attributes['pending_children'] ||= []
+      else
+        attributes['pending_children'] || children_without_pending
+      end
+    end
+    alias_method_chain :children, :pending
+    
+    protected
+    
+    def save_pending_children
+      return unless attributes['pending_children']
+      
+      last_known_existing_child = children_without_pending.first
+      
+      attributes['pending_children'].each do |c|
+        if c.parent == self && !c.changed.include?('parent')
+          last_known_existing_child = c
+        else
+          if last_known_existing_child
+            c.move_to_right_of(last_known_existing_child)
+          else
+            c.move_to_child_of(self)
+          end
+        end
+      end
+      
+      attributes['pending_children'] = nil
+    end
+    after_save :save_pending_children
+    
+  end
+  
   
 protected
   
@@ -177,9 +219,8 @@ protected
   #  end
   #end
   
-  #def assign_pile
-  #  return if self.pile
-  #  self.pile = parent.pile if parent
-  #end
+  def assign_pile
+    self.pile = parent.pile if parent
+  end
   
 end

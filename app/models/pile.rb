@@ -1,10 +1,10 @@
 class Pile < ActiveRecord::Base
   belongs_to :owner, :class_name => User.name, :inverse_of => :piles
-  #validates_presence_of :owner, :message => 'is required'
+  validates_presence_of :owner
   
   validates_length_of :name, :within => 1..255
   
-  has_many :nodes, :dependent => :destroy, :inverse_of => :pile#, :autosave => true
+  has_many :nodes, :dependent => :destroy, :inverse_of => :pile
   
   
   # Shares associations
@@ -83,12 +83,13 @@ class Pile < ActiveRecord::Base
   
   #validates_presence_of   :root_node, :message => 'is required'
   
-  belongs_to :root_node, :class_name => Node.name#, :autosave => true
+  belongs_to :root_node, :class_name => Node.name
+  carpesium :root_node
   #before_validation_on_create :build_root_node
   #after_create :save_root_node!
   
   
-  def root?
+  def is_root?
     self.id == self.owner.root_pile_id
   end
   
@@ -105,7 +106,7 @@ class Pile < ActiveRecord::Base
     @ancestors ||= begin
       ancestors = []
       current_ancestor_pile = self
-      while !current_ancestor_pile.root?
+      while !current_ancestor_pile.is_root?
         current_ancestor_pile = current_ancestor_pile.parent
         ancestors << current_ancestor_pile
       end
@@ -139,7 +140,9 @@ class Pile < ActiveRecord::Base
 protected
   
   def build_root_node
-    self.root_node = Node.new
+    self.root_node = Node.new(
+      :pile => self
+    )
   end
   
   #def save_root_node!

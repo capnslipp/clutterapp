@@ -26,7 +26,8 @@ class User < ActiveRecord::Base
   # Piles associations
   has_many :piles, :dependent => :destroy, :foreign_key => 'owner_id', :inverse_of => :owner
   
-  belongs_to :root_pile, :class_name => Pile.name, :inverse_of => :owner#, :autosave => true
+  belongs_to :root_pile, :class_name => Pile.name, :inverse_of => :owner
+  carpesium :root_pile
   #before_validation_on_create :build_root_pile
   #after_create :save_root_pile!
   
