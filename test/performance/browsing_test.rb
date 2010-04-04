@@ -16,7 +16,7 @@ class BrowsingTest < ActionController::PerformanceTest
     @pile = @user.root_pile
     
     26.times do
-      @pile.nodes.rand.children.create!(:prop => Prop.rand_new, :pile => @pile)
+      @pile.nodes.rand.children.create!(:prop => Prop.rand_new)
     end
   end
   

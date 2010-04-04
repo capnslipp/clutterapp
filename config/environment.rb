@@ -37,9 +37,9 @@ Rails::Initializer.run do |config|
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
-  config.gem 'slippyd-colorist', :lib => 'colorist', :version => '>=0.0.5', :source => 'http://gemcutter.org'
-  config.gem 'authlogic', :lib => 'authlogic', :source => 'http://gemcutter.org'
-  config.gem 'jrails', :lib => 'jrails', :source => 'http://gemcutter.org'
+  config.gem 'slippyd-colorist', :lib => 'colorist', :version => '>=0.0.5'
+  config.gem 'authlogic'
+  config.gem 'jrails'
   # config.gem for 'rspec', 'rpsec-rails', and 'thoughbot-factorygirl' are in config/environments/test.rb
   
   # Only load the plugins named here, in the order given. By default, all plugins 

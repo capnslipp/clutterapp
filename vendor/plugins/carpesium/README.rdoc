@@ -1,0 +1,32 @@
+= Carpesium
+
+Carpesium is an anti-save-recursion plugin for ActiveRecord. It essentially short-circuits recursive autosave attempts (via the autosave_associated_records_for_{association's name} method) by returning early if the association has already been been autosaved.
+
+Notably, it can prevent stack overflows when you have two models that have belongs_to declarations pointing at each other (such as when AModel has_many BModel, but also wants to point at specific instances of AModel via belongs_to).
+
+
+== Example
+
+pile.rb:
+  class Pile < ActiveRecord::Base
+    # columns:
+    #   root_node_id:integer
+    
+    has_many :nodes, :dependent => :destroy
+    
+    belongs_to :root_node, :class_name => Node.name
+    carpesium :root_node
+  end
+
+node.rb:
+  def Node < ActiveRecord::Base
+    # columns:
+    #   pile_id:integer
+    
+    belongs_to :pile
+  end
+
+Without 'carpesium :root_node', ActiveRecord will cause a "SystemStackError: stack level too deep" error to be thrown. With Carpesium, all is well… unless there's an actual invalid attribute, of course.
+
+
+Copyright (c) 2010 Slippy Douglas, released under the MIT license

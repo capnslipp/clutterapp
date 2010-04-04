@@ -19,7 +19,7 @@ class UsersDataset < Dataset::Base
   helpers do
     
     def create_user(dataset_name, opts = {})
-      raise ArgumentError unless opts.has_key?(:with)
+      raise ArgumentError.new ":with option is required" unless opts.has_key?(:with)
       
       u = User.create! opts[:with]
       name_model u, dataset_name

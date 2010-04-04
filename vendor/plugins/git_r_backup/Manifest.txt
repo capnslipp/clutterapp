@@ -1,8 +1,9 @@
 .autotest
 History.txt
 Manifest.txt
-README.txt
+README.rdoc
 Rakefile
 bin/git_r_backup
 lib/git_r_backup.rb
-test/test_git_r_backup.rb
+spec/git_r_backup_spec.rb
+tasks/git_r_backup.rake

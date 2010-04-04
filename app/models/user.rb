@@ -24,11 +24,12 @@ class User < ActiveRecord::Base
   
   
   # Piles associations
-  has_many :piles,        :dependent => :destroy, :foreign_key => 'owner_id'
+  has_many :piles, :dependent => :destroy, :foreign_key => 'owner_id', :inverse_of => :owner
   
-  belongs_to :root_pile,  :dependent => :destroy, :class_name => Pile.name
-  before_validation_on_create :build_root_pile
-  after_create :save_root_pile!
+  belongs_to :root_pile, :class_name => Pile.name, :inverse_of => :owner
+  carpesium :root_pile
+  #before_validation_on_create :build_root_pile
+  #after_create :save_root_pile!
   
   
   # Share associations
@@ -39,6 +40,18 @@ class User < ActiveRecord::Base
   # HACK HACK HACK -- how to do attr_accessible from here? Prevents a user from submitting a crafted form that bypasses activation anything else you want your user to change should be added here.
   attr_accessible :login, :email, :name, :password, :password_confirmation, :invite_token, :root_pile, :root_pile_id
   
+  
+  def after_initialize
+    if new_record?
+      build_root_pile if self.root_pile.nil?
+    end
+  end
+  
+  def build_root_pile(attrs = {})
+    self.root_pile = self.piles.build( attrs.merge(
+      :name => "<#{self.login}'s root pile>"
+    ) )
+  end
   
   
   def to_param
@@ -93,6 +106,15 @@ class User < ActiveRecord::Base
   end
   
   
+  #def root_pile
+  #  return attributes['root_pile'] if attributes['root_pile']
+  #  
+  #  root_pile = build_root_pile
+  #  root_pile.save!
+  #  update_attribute :root_pile_id, root_pile.id
+  #end
+  
+  
 protected
   
   DEFAULT_INVITATION_LIMIT = (1.0/0.0) # infinity
@@ -101,18 +123,9 @@ protected
     self.invite_limit = DEFAULT_INVITATION_LIMIT
   end
   
-  def build_root_pile
-    if self.root_pile
-      logger.warn %[build_root_pile attempted for User##{self.id} "#{self.login}" when one already exists]
-      return
-    end
-    
-    self.root_pile = Pile.new(:name => %[<#{self.login}'s root pile>])
-  end
-  
-  def save_root_pile!
-    self.root_pile.owner = self # setting owner afterwards is necessary during creation
-    self.root_pile.save!
-    self.save!
-  end
+  #def save_root_pile!
+  #  self.root_pile.owner = self # setting owner afterwards is necessary during creation
+  #  self.root_pile.save!
+  #  self.save!
+  #end
 end

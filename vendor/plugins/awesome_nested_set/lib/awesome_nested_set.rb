@@ -271,7 +271,7 @@ module CollectiveIdea #:nodoc:
 
         # Returns true if this is a root node.
         def root?
-          parent.nil?
+          parent_id.nil?
         end
         
         def leaf?
@@ -280,7 +280,7 @@ module CollectiveIdea #:nodoc:
 
         # Returns true is this is a child node
         def child?
-          !parent.nil?
+          !parent_id.nil?
         end
 
         # order by left column

@@ -1,6 +1,6 @@
-=== 1.0.0 / 2009-12-23
+=== 1.0.0 / 2010-02-14
 
-* 1 major enhancement
+* It works.
 
-  * Birthday!
+  * Yep, it seems to work now. Happy Valentine's Day, all!
 

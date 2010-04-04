@@ -1,10 +1,11 @@
 class Pile < ActiveRecord::Base
-  belongs_to :owner, :class_name => User.name
-  validates_presence_of :owner_id, :message => 'is required'
+  belongs_to :owner, :class_name => User.name, :inverse_of => :piles
+  validates_presence_of :owner
   
   validates_length_of :name, :within => 1..255
   
-  has_many :nodes, :dependent => :destroy, :autosave => true
+  has_many :nodes, :dependent => :destroy, :inverse_of => :pile
+  
   
   # Shares associations
   has_many :shares
@@ -23,6 +24,28 @@ class Pile < ActiveRecord::Base
   named_scope :shared_by_user, lambda {|owner_user|
     { :joins => :shares, :conditions => {:piles => {:owner_id => owner_user.id}} }
   }
+  
+  
+  has_one :pile_ref_prop, :foreign_key => 'ref_pile_id'
+  
+  #validates_presence_of   :root_node, :message => 'is required'
+  
+  belongs_to :root_node, :class_name => Node.name
+  carpesium :root_node
+  #before_validation_on_create :build_root_node
+  #after_create :save_root_node!
+  
+  
+  def after_initialize
+    if new_record?
+      build_root_node if self.root_node.nil?
+    end
+  end
+  
+  def build_root_node(attrs = {})
+    self.root_node = self.nodes.build(attrs)
+  end
+  
   
   # helpers for the sharing settings on this Pile (primarily for the owner)
   
@@ -70,15 +93,6 @@ class Pile < ActiveRecord::Base
   def modifiable_by_user?(user, inheriting = true)
     return !!( user == owner || specific_user_shares.exists?(:sharee_id => user.id, :modifiable => true) || (parent.modifiable_by_user?(user) if inheriting && parent) )
   end
-  
-  
-  has_one :pile_ref_prop, :foreign_key => 'ref_pile_id'
-  
-  #validates_presence_of   :root_node, :message => 'is required'
-  
-  belongs_to :root_node,  :dependent => :destroy, :class_name => 'Node'
-  before_validation_on_create :build_root_node
-  after_create :save_root_node!
   
   
   def root?
@@ -131,19 +145,10 @@ class Pile < ActiveRecord::Base
   
 protected
   
-  def build_root_node
-    if self.root_node
-      logger.warn %[build_root_node attempted for Pile##{self.id} "#{self.name}" when one already exists]
-      return
-    end
-    
-    self.root_node = Node.create
-  end
-  
-  def save_root_node!
-    self.root_node.pile = self # setting owner afterwards is necessary during creation
-    self.root_node.save!
-    self.save!
-  end
+  #def save_root_node!
+  #  self.root_node.pile = self # setting owner afterwards is necessary during creation
+  #  self.root_node.save!
+  #  self.save!
+  #end
   
 end

@@ -107,11 +107,6 @@ class AwesomeNestedSetTest < TestCaseClass
     assert categories(:top_level_2).root?
   end
   
-  def test_unsaved_root?
-    new_top = Category.new(:name => 'New Top')
-    assert new_top.root?
-  end
-  
   def test_leaves_class_method
     assert_equal Category.find(:all, :conditions => "#{Category.right_column_name} - #{Category.left_column_name} = 1"), Category.leaves
     assert_equal Category.leaves.count, 4
@@ -213,25 +208,6 @@ class AwesomeNestedSetTest < TestCaseClass
   def test_children
     category = categories(:top_level)
     category.children.each {|c| assert_equal category.id, c.parent_id }
-  end
-  
-  def test_child?
-    assert !categories(:top_level).child?
-    assert !categories(:top_level_2).child?
-    assert categories(:child_1).child?
-    assert categories(:child_2).child?
-    assert categories(:child_2_1).child?
-    assert categories(:child_3).child?
-  end
-  
-  def test_unsaved_child?
-    new_child = Category.new(:name => 'New Child')
-    new_child.parent = categories(:top_level)
-    assert new_child.child?
-    
-    new_sub_child = Category.new(:name => 'New Sub-Child')
-    new_sub_child.parent = new_child
-    assert new_sub_child.child?
   end
   
   def test_order_of_children

@@ -1,15 +1,15 @@
 class Node < ActiveRecord::Base
   acts_as_nested_set :scope => :pile, :dependent => :destroy
   
-  belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true, :dependent => :destroy
+  accepts_nested_attributes_for :children, :allow_destroy => true
   
-  belongs_to :pile
+  belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true, :dependent => :destroy
+  accepts_nested_attributes_for :prop, :allow_destroy => true
+  
+  belongs_to :pile, :inverse_of => :nodes
   before_validation_on_create :assign_children_parent
   before_validation_on_create :assign_pile
-  
-  
-  accepts_nested_attributes_for :prop, :allow_destroy => true
-  accepts_nested_attributes_for :children, :allow_destroy => true
+  validates_presence_of :pile
   
   
   named_scope :varianted, lambda {|variant_or_name|
@@ -55,10 +55,10 @@ class Node < ActiveRecord::Base
   end
   
   
-  def build_prop(params)
+  def build_prop(attrs = {})
     self.prop = Prop.derive_variant(
-      params.delete('variant_name')
-    ).new(params)
+      attrs.delete('variant_name')
+    ).new(attrs)
   end
   
   
@@ -107,28 +107,38 @@ class Node < ActiveRecord::Base
     end
   end
   
+  begin # Node Ordering Compatibility Utilities
+    
+    # accepts the typical array of ids from a scriptaculous sortable. It is called on the instance being moved
+    def sort(array_of_ids)
+      if array_of_ids.first == id.to_s
+        move_to_left_of siblings.find(array_of_ids.second)
+      else
+        move_to_right_of siblings.find(array_of_ids[array_of_ids.index(id.to_s) - 1])
+      end
+    end
+    
+  end
+  
   
 protected
   
   def validate
-    if root?
-      errors.add(:node, "must not have a prop (when root)") if prop
+    if parent.nil?
+      errors.add(:node, "must not have a prop (when parent-less)") if prop
     else
-      errors.add(:node, "must have a prop (when not root)") unless prop
+      errors.add(:node, "must have a prop (when having a parent)") unless prop
     end
   end
   
   def assign_children_parent
-    children.each do |child|
-      next unless child.new_record?
-      next if child.parent
-      
-      child.parent = self
+    children.each do |c|
+      next if c.parent_id && c.parent_id == self.id
+      c.parent = self
     end
   end
   
   def assign_pile
-    return if self.pile
     self.pile = parent.pile if parent
   end
   
