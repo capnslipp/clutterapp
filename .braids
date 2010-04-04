@@ -1,4 +1,11 @@
 --- 
+vendor/plugins/awesome_nested_set: 
+  squashed: true
+  url: git://github.com/collectiveidea/awesome_nested_set.git
+  branch: master
+  type: git
+  revision: b9aba888f5f28e7ce47af4a36c2ae1df17640b38
+  remote: braid/vendor/plugins/awesome-nested-set
 vendor/plugins/yaml_db: 
   squashed: true
   url: git://github.com/ludicast/yaml_db.git
