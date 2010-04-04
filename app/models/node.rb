@@ -1,12 +1,12 @@
 class Node < ActiveRecord::Base
-  acts_as_nested_set
+  acts_as_nested_set :scope => :pile, :dependent => :destroy
   
   belongs_to :prop, :polymorphic => true, :autosave => true, :validate => true, :dependent => :destroy
   
   belongs_to :pile, :inverse_of => :nodes
+  before_validation_on_create :assign_children_parent
   before_validation_on_create :assign_pile
   validates_presence_of :pile
-  #before_validation_on_create :assign_children_parent
   
   
   accepts_nested_attributes_for :prop, :allow_destroy => true
@@ -121,66 +121,23 @@ class Node < ActiveRecord::Base
     
   end
   
-  begin # Pending Children
-    public
-    
-    def children=(children)
-      attributes['pending_children'] = children
-    end
-    
-    def children_with_pending
-      if new_record?
-        attributes['pending_children'] ||= []
-      else
-        attributes['pending_children'] || children_without_pending
-      end
-    end
-    alias_method_chain :children, :pending
-    
-    protected
-    
-    def save_pending_children
-      return unless attributes['pending_children']
-      
-      last_known_existing_child = children_without_pending.first
-      
-      attributes['pending_children'].each do |c|
-        if c.parent == self && !c.changed.include?('parent')
-          last_known_existing_child = c
-        else
-          if last_known_existing_child
-            c.move_to_right_of(last_known_existing_child)
-          else
-            c.move_to_child_of(self)
-          end
-        end
-      end
-      
-      attributes['pending_children'] = nil
-    end
-    after_save :save_pending_children
-    
-  end
-  
   
 protected
   
   def validate
-    if root?
-      errors.add(:node, "must not have a prop (when root)") if prop
+    if parent.nil?
+      errors.add(:node, "must not have a prop (when parent-less)") if prop
     else
-      errors.add(:node, "must have a prop (when not root)") unless prop
+      errors.add(:node, "must have a prop (when having a parent)") unless prop
     end
   end
   
-  #def assign_children_parent
-  #  children.each do |child|
-  #    next unless child.new_record?
-  #    next if child.parent
-  #    
-  #    child.parent = self
-  #  end
-  #end
+  def assign_children_parent
+    children.each do |c|
+      next if c.parent_id && c.parent_id == self.id
+      c.parent = self
+    end
+  end
   
   def assign_pile
     self.pile = parent.pile if parent
