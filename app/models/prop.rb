@@ -107,9 +107,9 @@ class Prop < ActiveRecord::Base
   def self::badgeable?; false; end
   
   def self::is_badgeable
-    class_eval(<<-EOS, __FILE__, __LINE__)
-      def self::badgeable?; true; end
-    EOS
+    (class << self; self; end).send :define_method, :badgeable? do
+      true
+    end
   end
   
   def badged?
@@ -122,9 +122,9 @@ class Prop < ActiveRecord::Base
   def self::stackable?; false; end
   
   def self::is_stackable
-    class_eval(<<-EOS, __FILE__, __LINE__)
-      def self::stackable?; true; end
-    EOS
+    (class << self; self; end).send :define_method, :stackable? do
+      true
+    end
   end
   
   
@@ -132,9 +132,9 @@ class Prop < ActiveRecord::Base
   def self::nodeable?; false; end
   
   def self::is_nodeable
-    class_eval(<<-EOS, __FILE__, __LINE__)
-      def self::nodeable?; true; end
-    EOS
+    (class << self; self; end).send :define_method, :nodeable? do
+      true
+    end
   end
   
   
@@ -142,9 +142,9 @@ class Prop < ActiveRecord::Base
   def self::deepable?; true; end
   
   def self::isnt_deepable
-    class_eval(<<-EOS, __FILE__, __LINE__)
-      def self::deepable?; false; end
-    EOS
+    (class << self; self; end).send :define_method, :deepable? do
+      false
+    end
   end
   
 end
