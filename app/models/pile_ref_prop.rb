@@ -21,4 +21,8 @@ class PileRefProp < Prop
     new :ref_pile => Pile.new
   end
   
+  def self::friendly_name
+    return 'pile' # overrides the default of 'pile_ref'
+  end
+  
 end

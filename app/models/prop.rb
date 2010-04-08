@@ -40,7 +40,11 @@ class Prop < ActiveRecord::Base
     name = self.to_s
     raise NameError.new('all prop sub-classes must end in the word "Prop"', name) unless name =~ /Prop$/
     name = name[0...-('Prop'.length)]
-    name.underscore
+    return name.underscore
+  end
+  
+  def self::friendly_name
+    return short_name.humanize.downcase
   end
   
   def variant
