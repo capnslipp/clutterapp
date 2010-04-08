@@ -63,7 +63,7 @@ module ApplicationHelper
     elsif pile.observable_publicly?(false) || (pile.observable_by_user?(user, false) if user)
       :observable
     # if neither of those were set, check for inherited modifiability/observability
-    elsif pile.observable_publicly?(true) || (pile.modifiable_by_user?(user, true) if user)
+    elsif pile.modifiable_publicly?(true) || (pile.modifiable_by_user?(user, true) if user)
       :modifiable
     elsif pile.observable_publicly?(true) || (pile.observable_by_user?(user, true) if user)
       :observable
