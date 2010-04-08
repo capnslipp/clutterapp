@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100325040526) do
+ActiveRecord::Schema.define(:version => 20100408034822) do
 
   create_table "check_props", :force => true do |t|
     t.boolean  "checked",    :default => false, :null => false
@@ -24,6 +24,12 @@ ActiveRecord::Schema.define(:version => 20100325040526) do
     t.datetime "sent_at"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+  end
+
+  create_table "link_props", :force => true do |t|
+    t.string   "link",       :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "nodes", :force => true do |t|

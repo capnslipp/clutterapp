@@ -1,0 +1,20 @@
+<h1>Listing link_props</h1>
+
+<table>
+  <tr>
+    <th>Link</th>
+  </tr>
+
+<% @link_props.each do |link_prop| %>
+  <tr>
+    <td><%=h link_prop.link %></td>
+    <td><%= link_to 'Show', link_prop %></td>
+    <td><%= link_to 'Edit', edit_link_prop_path(link_prop) %></td>
+    <td><%= link_to 'Destroy', link_prop, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New link_prop', new_link_prop_path %>

@@ -57,7 +57,7 @@ class Prop < ActiveRecord::Base
   
   
   def self::variants
-    [TextProp, CheckProp, PriorityProp, TagProp, TimeProp, NoteProp, PileRefProp]
+    [TextProp, CheckProp, LinkProp, PriorityProp, TagProp, TimeProp, NoteProp, PileRefProp]
   end
   
   def self::badgeable_variants

@@ -1,0 +1,16 @@
+<h1>Editing link_prop</h1>
+
+<% form_for(@link_prop) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :link %><br />
+    <%= f.text_field :link %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @link_prop %> |
+<%= link_to 'Back', link_props_path %>
