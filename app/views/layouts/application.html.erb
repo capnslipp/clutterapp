@@ -8,9 +8,7 @@
 	<%= stylesheet_link_tag (StylesheetsController::STATIC_STYLESHEET_NAMES + StylesheetsController::DYNAMIC_STYLESHEET_NAMES), :media => 'all' unless ActionController::Base.perform_caching %>
 	<%= stylesheet_link_tag 'all', :media => 'all' if ActionController::Base.perform_caching %><%# all these are cached together by the StylesheetsController %>
 	<% js_files = [
-			{:src => 'util'},
 			{:src => 'application'},
-			{:src => 'touch'},
 		] %>
 	<%= javascript_include_tag js_files.collect{|file_h| file_h[:src] } unless ActionController::Base.perform_caching %>
 	<%= javascript_include_tag js_files.collect{|file_h| file_h[:min] || file_h[:src] }, :cache => true if ActionController::Base.perform_caching %>
