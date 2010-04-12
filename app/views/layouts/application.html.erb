@@ -8,15 +8,6 @@
 	<%= stylesheet_link_tag (StylesheetsController::STATIC_STYLESHEET_NAMES + StylesheetsController::DYNAMIC_STYLESHEET_NAMES), :media => 'all' unless ActionController::Base.perform_caching %>
 	<%= stylesheet_link_tag 'all', :media => 'all' if ActionController::Base.perform_caching %><%# all these are cached together by the StylesheetsController %>
 	<% js_files = [
-			{:src => 'jquery', :min => 'jquery.min'},
-			{:src => 'jquery-ui', :min => 'jquery-ui.min'},
-			{:src => 'jrails'},
-			{:src => 'jquery.easing', :min => 'jquery.easing.min'},
-			{:src => 'jquery.color', :min => 'jquery.color.min'},
-			{:src => 'jquery.backgroundPosition', :min => 'jquery.backgroundPosition.min'},
-			{:src => 'jquery.elastic', :min => 'jquery.elastic.min'},
-			{:src => 'jquery.cookie'},
-			{:src => 'jquery.conventionalize'},
 			{:src => 'util'},
 			{:src => 'application'},
 			{:src => 'touch'},
