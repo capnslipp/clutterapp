@@ -8,6 +8,8 @@
 	<%= stylesheet_link_tag (StylesheetsController::STATIC_STYLESHEET_NAMES + StylesheetsController::DYNAMIC_STYLESHEET_NAMES), :media => 'all' unless ActionController::Base.perform_caching %>
 	<%= stylesheet_link_tag 'all', :media => 'all' if ActionController::Base.perform_caching %><%# all these are cached together by the StylesheetsController %>
 	<% js_files = [
+			{:src => 'prototype', :min => 'prototype.min'},
+			{:src => 's2', :min => 's2.min'},
 			{:src => 'application'},
 		] %>
 	<%= javascript_include_tag js_files.collect{|file_h| file_h[:src] } unless ActionController::Base.perform_caching %>
