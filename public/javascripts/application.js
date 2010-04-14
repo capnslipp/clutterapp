@@ -12,11 +12,13 @@ CA.setActiveItem = function(item) {
 	if (this._activeItem) {
 		this.inactiveItemBodyMorph( this._activeItem.select('> .cont > .body').first() );
 		
-		var textPropInput = this._activeItem.select('> .cont > .body > .cont > input.text.prop').first();
+		var textPropInput = this._activeItem.select('> .cont > .body > .cont > textarea.text.prop').first();
 		if (textPropInput) {
 			var textValue = textPropInput.getValue();
 			var textClass = textPropInput.readAttribute('class');
 			textPropInput.replace('<div class="'+textClass+'">'+textValue.escapeHTML()+'</div>');
+			var textProp = this._activeItem.select('> .cont > .body > .cont > .text.prop').first();
+			textProp.removeClassName('magic');
 		}
 	}
 	
@@ -27,11 +29,9 @@ CA.setActiveItem = function(item) {
 		
 		var textProp = this._activeItem.select('> .cont > .body > .cont > .text.prop').first();
 		if (textProp) {
-			var textContent = textProp.innerHTML.unescapeHTML();
+			var textContent = textProp.innerHTML.unescapeHTML().strip();
 			var textClass = textProp.readAttribute('class');
-			textProp.replace('<input class="'+textClass+'" value="'+textContent+'"/>');
-			var textPropInput = this._activeItem.select('input.text.prop').first();
-			textPropInput.focus();
+			textProp.replace('<textarea rows="1" class="magic '+textClass+'">'+textContent+'</textarea>');
 		}
 	}
 };

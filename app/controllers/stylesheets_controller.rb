@@ -2,7 +2,7 @@ class StylesheetsController < ApplicationController
   layout  nil
   
   
-  STATIC_STYLESHEET_NAMES = ['reset']
+  STATIC_STYLESHEET_NAMES = ['reset', 'magic']
   DYNAMIC_STYLESHEET_NAMES = ['main', 'layout', 'button-bars', 'props']
   
   

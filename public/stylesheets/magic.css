@@ -1,0 +1,16 @@
+textarea.magic {
+	padding: 0 !important;
+	width: 100% !important; height: 14px !important;
+	display: inline !important;
+	vertical-align: top !important;
+	padding: 3px 1px !important;
+	-webkit-appearance: none;
+}
+textarea.magic,
+textarea.magic:active,
+textarea.magic:hover,
+textarea.magic:focus {
+	border: none !important;
+	background: transparent !important; color: #000 !important;
+	outline: none !important;
+}
