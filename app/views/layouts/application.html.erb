@@ -10,6 +10,7 @@
 	<% js_files = [
 			{:src => 'prototype', :min => 'prototype.min'},
 			{:src => 's2', :min => 's2.min'},
+			{:src => 'touch'},
 			{:src => 'application'},
 		] %>
 	<%= javascript_include_tag js_files.collect{|file_h| file_h[:src] } unless ActionController::Base.perform_caching %>
