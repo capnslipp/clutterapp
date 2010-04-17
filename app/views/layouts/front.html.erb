@@ -8,6 +8,7 @@
 	<%= stylesheet_link_tag 'all', :media => 'all' if ActionController::Base.perform_caching %><%# all these are cached together by the StylesheetsController %>
 	<%= stylesheet_link_tag 'front', :media => 'all' %><%# can't cache this one, since the all.css will override the StylesheetsController#all action/route %>
 	<% js_files = [
+			{:src => 'xpath'},
 			{:src => 'prototype', :min => 'prototype.min'},
 			{:src => 's2', :min => 's2.min'},
 			{:src => 'application'},
