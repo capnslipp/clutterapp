@@ -1,3 +1,3 @@
-// ClutterApp main application JS
+// ClutterApp application-level setup and config
 
 CA = {};
