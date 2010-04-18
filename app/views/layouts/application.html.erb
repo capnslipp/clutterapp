@@ -16,7 +16,6 @@
 		] %>
 	<%= javascript_include_tag js_files.collect{|file_h| file_h[:src] } unless ActionController::Base.perform_caching %>
 	<%= javascript_include_tag js_files.collect{|file_h| file_h[:min] || file_h[:src] }, :cache => true if ActionController::Base.perform_caching %>
-	<%= javascript_include_tag 'item' if @enable_item_view_js %>
 	<%= render :partial => 'shared/analytics_header' if analytics? %>
 </head>
 <body>
