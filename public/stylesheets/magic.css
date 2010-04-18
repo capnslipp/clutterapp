@@ -1,8 +1,8 @@
 input.magic {
-	padding: 0 !important;
-	display: inline !important;
-	vertical-align: top !important;
-	padding: 2px 0px !important;
+	padding: 0;
+	display: inline;
+	vertical-align: top;
+	padding: 2px 0px;
 	-webkit-appearance: none;
 	
 	margin-right: -26px;
@@ -11,7 +11,7 @@ input.magic,
 input.magic:active,
 input.magic:hover,
 input.magic:focus {
-	border: none !important;
-	background: transparent !important; color: #000 !important;
-	outline: none !important;
+	border: none;
+	background: transparent; color: #000;
+	outline: none;
 }
