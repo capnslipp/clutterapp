@@ -136,19 +136,17 @@ CA.Prop = function(ref) {
 	};
 };
 
-var n = function() {
-	CA.Item.prototype.props = function() {
-		return this.body().select('> .cont > div.prop').collect(function(e) {
-			return CA.Prop(e);
-		});
-	};
-	
-	CA.Item.prototype.textProps = function() {
-		return this.body().select('> .cont > div.text.prop').collect(function(e) {
-			return CA.Prop(e);
-		});
-	};
-}();
+CA.Item.prototype.props = function() {
+	return this.body().select('> .cont > div.prop').collect(function(e) {
+		return CA.Prop(e);
+	});
+};
+
+CA.Item.prototype.textProps = function() {
+	return this.body().select('> .cont > div.text.prop').collect(function(e) {
+		return CA.Prop(e);
+	});
+};
 
 CA.Prop.prototype.input = function() {
 	var prevElement = this.element().previous();
@@ -157,6 +155,21 @@ CA.Prop.prototype.input = function() {
 	else
 		return null;
 };
+
+document.observe('keypress', function(event) {
+	if (CA.Item.active())
+		CA.Item.active().beFocused(event);
+});
+
+CA.Item.prototype.beFocused = function(resendEvent) {
+	var anyFocused = this.textProps().any(function(p) {
+		return p._focused == true;
+	});
+	if (!anyFocused) {
+		var input = this.textProps()[0].input();
+		input.focus();
+	}
+}
 
 CA.Item.prototype.visualActivate = function() {
 	this.bodyMorphActive();
@@ -173,6 +186,9 @@ CA.Item.prototype.visualActivate = function() {
 		
 		p.input().setStyle({position: 'absolute'});
 		p.element().setStyle({visibility: 'hidden'});
+		
+		p.input().observe('focus', function() { p._focused = true; });
+		p.input().observe('blur', function() { p._focused = false; });
 		
 		p.inputChanged();
 		p.input().observe('keypress', p.inputChanged.bind(p));
