@@ -195,16 +195,6 @@ function safeShow(elem) {
 		elem.show();
 }
 
-function showGoogleChromeFrame() {
-	$("#top-bar > .corner").fadeOut(1000);
-	
-	$('#fill')
-		.setCSS('z-index', 900)
-		.setCSS('opacity', 0)
-		.show()
-		.animate({opacity: 0.5, easing: 'linear'}, 4000);
-}
-
 
 ClutterApp.fill = {};
 
