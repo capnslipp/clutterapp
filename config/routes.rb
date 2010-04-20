@@ -47,9 +47,8 @@ ActionController::Routing::Routes.draw do |map|
     
   end
   
-  map.about 'about', :controller => 'front'
-  
-  #map.root :controller => 'front' # for now, we're just going to give a log-in form
+  # for now, we're just going to give a log-in form
+  #map.root :controller => 'front'
   map.root :controller => 'user_sessions',    :action => 'new',     :conditions => {:method => :get}
   
 end
