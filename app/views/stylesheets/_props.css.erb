@@ -137,7 +137,8 @@
 	
 	display: inline-block;
 	
-	background: <%= focus_back %>;
+	background: <%= focus_color * focus_back_color.a + bright_bg_color * (1.0 - focus_back_color.a) %>; /* for IE */
+	background: <%= focus_back_color.to_s(:css_rgba) %>;
 	border-width: 2px;
 	border-color: <%= focus_color %>;
 }

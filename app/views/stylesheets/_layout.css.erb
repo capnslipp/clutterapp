@@ -144,6 +144,7 @@ li { list-style-type: none; }
 .item > .cont > .edit.body {
 	margin: -12px 8px;
 	
+	background: <%= accent_color * 0.5 + bg_color * (1.0 - 0.5) %>; /* for IE */
 	background: <%= accent_color.with(:a => 0.5).to_s(:css_rgba) %>;
 	<%= border_radius_decl('16px') %>
 	border: 8px solid transparent;

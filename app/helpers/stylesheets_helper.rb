@@ -56,8 +56,8 @@ module StylesheetsHelper
   def focus_color
     inverted? ? FOCUS_COLOR.invert : FOCUS_COLOR
   end
-  def focus_back
-    focus_color.with(:a => 0.25).to_s(:css_rgba)
+  def focus_back_color
+    focus_color.with(:a => 0.25)
   end
   
   SHADOW_COLOR = Color.new(0x000000, 0.75)
