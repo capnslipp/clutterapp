@@ -63,11 +63,11 @@ li { list-style-type: none; }
 }
 .base.item > .pile > .body > .header > .pile.name { white-space: nowrap; }
 .base.item > .pile > .body > .header > a.pile.name { text-decoration: none; }
-.base.item > .pile > .body > .header > .pile.name .sym { opacity: 0.5; display: inline-block; font-size: 100%; margin-top: -4px; }
-.base.item > .pile > .body > .header > .owner.pile.name { opacity: 0.25; }
-.base.item > .pile > .body > .header > a.owner.pile.name:hover { opacity: 0.75; }
-.base.item > .pile > .body > .header > .ancestor.pile.name { opacity: 0.5; }
-.base.item > .pile > .body > .header > a.ancestor.pile.name:hover { opacity: 0.75; }
+.base.item > .pile > .body > .header > .pile.name .sym { <%= opacity(0.5) %>; display: inline-block; font-size: 100%; margin-top: -4px; }
+.base.item > .pile > .body > .header > .owner.pile.name { <%= opacity(0.25) %>; }
+.base.item > .pile > .body > .header > a.owner.pile.name:hover { <%= opacity(0.75) %>; }
+.base.item > .pile > .body > .header > .ancestor.pile.name { <%= opacity(0.5) %>; }
+.base.item > .pile > .body > .header > a.ancestor.pile.name:hover { <%= opacity(0.75) %>; }
 
 
 .base.item > .pile > .body > .action.stub { float: right; width: auto; border: none; }
@@ -211,8 +211,8 @@ li { list-style-type: none; }
 }
 .item > .cont > .body > .bullet .sym { font-size: 150%; }
 .item > .sub.pile > .body > .bullet .sym { font-size: 175%; margin-left: -3px; margin-top: -3px; }
-.item > .sub.pile > .body > .bullet a.sym { opacity: 0.5; }
-.item > .sub.pile > .body > .bullet a.sym:hover { opacity: 1.0; }
+.item > .sub.pile > .body > .bullet a.sym { <%= opacity(0.5) %>; }
+.item > .sub.pile > .body > .bullet a.sym:hover { <%= opacity(1.0) %>; }
 
 .item > .cont > .body > .action.stub,
 .item > .cont > .body > #action-bar,
@@ -232,8 +232,8 @@ li { list-style-type: none; }
 	display: inline-block;
 }
 .pile_ref > h1.name .sym { font-size: 100%; margin-top: -3px; }
-.pile_ref > h1.name a.sym { opacity: 0.5; }
-.pile_ref > h1.name a.sym:hover { opacity: 1.0; }
+.pile_ref > h1.name a.sym { <%= opacity(0.5) %>; }
+.pile_ref > h1.name a.sym:hover { <%= opacity(1.0) %>; }
 
 .share.status {
 	float: right;
@@ -246,7 +246,7 @@ li { list-style-type: none; }
 }
 .share.status .observe { color: <%= text_color.to_s %>; }
 .share.status .modify { color: <%= (accent_color * 0.5).to_s %>; }
-.share.status .inherit { opacity: 0.25; }
+.share.status .inherit { <%= opacity(0.25) %>; }
 
 
 

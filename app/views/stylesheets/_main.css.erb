@@ -42,7 +42,7 @@ body, input, textarea {
 a { color: <%= text_color %>; }
 
 h1, h2, h3, h4, h5, h6 { font-weight: bold; margin: 0; }
-h1 .sub, h2 .sub, h3 .sub, h4 .sub, h5 .sub, h6 .sub { font-size: 0.7em; opacity: 0.7; text-indent: 0.25em; }
+h1 .sub, h2 .sub, h3 .sub, h4 .sub, h5 .sub, h6 .sub { font-size: 0.7em; <%= opacity(0.7) %>; text-indent: 0.25em; }
 h1 { font-size: 20px; line-height: 24px; }
 h2, .section h1 { font-size: 18px; line-height: 24px; }
 h3, .section .section h1 { font-size: 18px; line-height: 18px; color: <%= wash_color %>; }

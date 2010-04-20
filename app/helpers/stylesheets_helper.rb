@@ -109,6 +109,13 @@ module StylesheetsHelper
   const_reader :css_direction_quartet
   
   
+  def opacity(val)
+    val = val.to_f
+    ie_val = (val * 100).to_i
+    "-ms-filter:'progid:DXImageTransform.Microsoft.Alpha(Opacity=#{ie_val})'; filter: alpha(opacity=#{ie_val}); opacity: #{val}"
+  end
+  
+  
 protected
   
   def inverted?; false; end
