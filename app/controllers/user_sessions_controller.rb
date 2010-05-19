@@ -9,6 +9,7 @@ class UserSessionsController < ApplicationController
   
   def create
     @user_session = UserSession.new(params[:user_session])
+    @user_session.remember_me = !(params[:user_session][:dont_remember_me].to_i != 0)
     
     if @user_session.save
       redirect_to home_url

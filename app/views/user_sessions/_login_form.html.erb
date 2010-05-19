@@ -13,7 +13,7 @@
 	</table>
 	
 	<div class="line">
-		<%= f.check_box :dont_remember_me, :value => !@user_session.remember_me %>
+		<%= f.check_box :dont_remember_me, :value => @user_session.dont_remember_me %>
 		<%= f.label :dont_remember_me, '<em>automatically log out</em> at the end of this browser session' %>
 	</div>
 	
