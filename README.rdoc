@@ -1,0 +1,51 @@
+= ClutterApp
+
+ClutterApp is an open-ended, dirt-stupid, limitlessly-hierarchical personal-information-manager web app (a mouthful, huh?).
+
+The main installation is at http://clutterapp.com, where you <i>[will soon be able to]</i> find out more information about the project and try it out, <i>[but for now you'll have trust us that it's killer and install it to try it out]</i>.
+
+
+
+== Requirements
+
+A webserver running:
+* Ruby 1.8.7
+* Rails 2.3.5 (2.3.8 will likely work as well)
+* the authlogic gem (http://rubygems.org/gems/authlogic)
+* the jrails gems (http://rubygems.org/gems/jrails)
+
+
+
+== Installation
+
+Coming Soon
+
+For now, replacing all instances of "\_fill_in_" in the project with reasonable values (some of which can be garnered from a fresh Rails project) should work.
+
+
+
+== Contributing
+
+You're encouraged to contribute to ClutterApp in any way you please. All changes will be evaluated and considered, so don't be shy!
+
+Issues may be filed for bugs, feature requests, etc. at http://github.com/slippyd/clutterapp/issues.
+
+
+=== Contributors
+
+* Slippy Douglas (http://slippydouglas.com)
+* employees and contractors of ClutterApp, LLC
+
+
+
+== License
+
+(The MIT License)
+
+Copyright (c) 2006-2010 ClutterApp, LLC
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
