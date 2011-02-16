@@ -14,7 +14,7 @@ env_replace = {
 ENV['RAILS_ENV'] = env_replace[ENV['RAILS_ENV']] if env_replace.has_key?(ENV['RAILS_ENV'])
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.11' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -48,7 +48,7 @@ Rails::Initializer.run do |config|
   # config.plugins = [ :exception_notification, :ssl_requirement, :all ]
 
   # Add additional load paths for your own custom dirs
-  # config.load_paths += %W( #{RAILS_ROOT}/extras )
+  # config.autoload_paths += %W( #{RAILS_ROOT}/extras )
 
   # Force all environments to use the same logger level
   # (by default production uses :info, the others :debug)
@@ -69,7 +69,7 @@ Rails::Initializer.run do |config|
   # Make sure the secret is at least 30 characters and all random, 
   # no regular words or you'll be exposed to dictionary attacks.
   config.action_controller.session = {
-    :session_key => '_clutter_session',
+    :key => '_clutter_session',
     :secret      => '2154905dcd0f9af6d0289bf1a81085354b9fe06d552585b47e956139cee10aa82208b4486a25eef8412dd178405e69ffae71c6bdba73dfe5827980233a5efd38'
   }
 
