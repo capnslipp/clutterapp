@@ -25,11 +25,12 @@ require 'pp'
 
 
 if File.exists?(File.join(RAILS_ROOT,'tmp', 'debug.txt'))
-  File.open('/Users/slippyd/.rdebugrc', File::CREAT|File::EXCL) do
+  rdebugrc_path = File.expand_path('~/.rdebugrc')
+  File.open(rdebugrc_path, File::CREAT|File::EXCL) do
     puts 'set autoeval'
     puts 'set autolist'
     puts 'set autoreload'
-  end unless File.exists?('/Users/slippyd/.rdebugrc')
+  end unless File.exists?(rdebugrc_path)
   
   require 'ruby-debug'
   Debugger.wait_connection = true
