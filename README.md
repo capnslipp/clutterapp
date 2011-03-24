@@ -1,48 +1,51 @@
-= ClutterApp
+# ClutterApp
 
-ClutterApp is an open-ended, dirt-stupid, limitlessly-hierarchical personal-information-manager web app (a mouthful, huh?).
+ClutterApp is an open-ended, dirt-stupid, limitlessly-hierarchical personal-information-manager, in the form of a Rails web app.
 
-The main installation is at http://clutterapp.com, where you <i>[will soon be able to]</i> find out more information about the project and try it out, <i>[but for now you'll have trust us that it's killer and install it to try it out]</i>.
+My own personal installation is at [clutterapp.com](http://clutterapp.com), where you can _[or will soon be able to]_ find out more information about the project and try it out _(but for now you'll have trust us that it's killer and install it to try it out)_.
 
 
 
-== Requirements
+## Requirements
 
 A webserver running:
+
 * Ruby 1.8.7
-* Rails 2.3.5 (2.3.8 will likely work as well)
-* the authlogic gem (http://rubygems.org/gems/authlogic)
-* the jrails gems (http://rubygems.org/gems/jrails)
+* Rails 2.3.11
+* the authlogic gem ([rubygems.org/gems/authlogic](http://rubygems.org/gems/authlogic))
+* the jrails gems ([rubygems.org/gems/jrails](http://rubygems.org/gems/jrails))
 
 
 
-== Installation
+## Installation
 
-Coming Soon
+_(Coming Soon)_
 
-For now, replacing all instances of "\_fill_in_" in the project with reasonable values (some of which can be garnered from a fresh Rails project) should work.
+For now, replacing all instances of &lsquo;`_fill_in_`&rsquo; in the project with reasonable values (some of which can be garnered from a fresh Rails project) should work.
 
 
 
-== Contributing
+## Contributing
 
 You're encouraged to contribute to ClutterApp in any way you please. All changes will be evaluated and considered, so don't be shy!
 
-Issues may be filed for bugs, feature requests, etc. at http://github.com/slippyd/clutterapp/issues.
+Issues may be filed for bugs, feature requests, etc. at [github.com/clutterapp/clutterapp/issues](http://github.com/clutterapp/clutterapp/issues).
 
 
-=== Contributors
+### Contributors
 
-* Slippy Douglas (http://slippydouglas.com)
-* employees and contractors of ClutterApp, LLC
+* **Slippy Douglas** ([slippydouglas.com](http://slippydouglas.com))
+* **ClutterApp, LLC**, _et al._
 
 
+---
 
-== License
 
-(The MIT License)
+## License
 
-Copyright (c) 2006-2010 ClutterApp, LLC
+_(The MIT License)_
+
+Copyright &copy; 2006-2011 ClutterApp, LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
