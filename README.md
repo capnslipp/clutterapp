@@ -36,8 +36,8 @@ Although ClutterApp is [Slipp D's baby](http://instagr.am/p/Q5yjaHDUGb/), it has
 
 The full list of contributors in this codebase (via `git log --all --format='%aN (%aE)' | sort -u`) is:
 
-* **Slipp D. Thompson** ([<img src="readme/graphics/font-awesome.icon-github.bk-tr.s84+8.png" height="16" align="absmiddle" style="height: 1.2em;" alt="GitHub"/>](http://github.com/slippyd/) | [<img src="readme/graphics/font-awesome.icon-home.bk-tr.s84+8.png" height="16" align="absmiddle" style="height: 1.2em;" alt="slippyd.com"/>](http://slippyd.com))
-* **Josh Vera** ([<img src="readme/graphics/font-awesome.icon-github.bk-tr.s84+8.png" height="16" align="absmiddle" style="height: 1.2em;" alt="GitHub"/>](http://github.com/joshvera/) | [<img src="readme/graphics/font-awesome.icon-home.bk-tr.s84+8.png" height="16" align="absmiddle" style="height: 1.2em;" alt="joshvera.com"/>](http://www.joshvera.com))
+* **Slipp D. Thompson** ([<img src="https://raw.github.com/clutterapp/clutterapp/master/readme/graphics/font-awesome.icon-github.bk-tr.s84+8.png" height="16" align="absmiddle" style="height: 1.2em;" alt="GitHub"/>](http://github.com/slippyd/) | [<img src="https://raw.github.com/clutterapp/clutterapp/master/readme/graphics/font-awesome.icon-home.bk-tr.s84+8.png" height="16" align="absmiddle" style="height: 1.2em;" alt="slippyd.com"/>](http://slippyd.com))
+* **Josh Vera** ([<img src="https://raw.github.com/clutterapp/clutterapp/master/readme/graphics/font-awesome.icon-github.bk-tr.s84+8.png" height="16" align="absmiddle" style="height: 1.2em;" alt="GitHub"/>](http://github.com/joshvera/) | [<img src="https://raw.github.com/clutterapp/clutterapp/master/readme/graphics/font-awesome.icon-home.bk-tr.s84+8.png" height="16" align="absmiddle" style="height: 1.2em;" alt="joshvera.com"/>](http://www.joshvera.com))
 
 
 ---
