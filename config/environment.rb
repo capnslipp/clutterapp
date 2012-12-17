@@ -38,7 +38,7 @@ Rails::Initializer.run do |config|
   # config.gem "sqlite3-ruby", :lib => "sqlite3"
   # config.gem "aws-s3", :lib => "aws/s3"
   config.gem 'slippyd-colorist', :lib => 'colorist', :version => '>=0.0.5'
-  config.gem 'authlogic'
+  config.gem 'authlogic', :version => '~> 2.0'
   config.gem 'jrails'
   # config.gem for 'rspec', 'rpsec-rails', and 'thoughbot-factorygirl' are in config/environments/test.rb
   
